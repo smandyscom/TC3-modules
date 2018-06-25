@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <POU Name="RunCommandBlock" Id="{892bc60d-59f0-47f4-bc89-125a337e43f8}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunCommandBlock
+VAR_INPUT
+	//cbBlock : CommandBlockBase;
+	ptBlock : POINTER TO CommandBlockBase:=0;
+END_VAR
+VAR_OUTPUT
+	bDone : bool;
+END_VAR
+VAR
+	ptBlockPosition : POINTER TO CommandBlockPos;
+	// common
+	refAxis : POINTER TO AXIS_REF;
+	speedInmm : LREAL;
+	accInmms:LREAL;
+	decInmms:LREAL;
+	torqueLimitInPercentage:LREAL;
+	
+	bPtExecute : POINTER TO BOOL;
+	bPtDone : POINTER TO BOOL;
+	bPtBusy : POINTER TO BOOL;
+	bPtError : POINTER TO BOOL;
+	
+	//function blocks
+	fbMoveAbs: MC_MoveAbsolute;
+	fbMoveHome: MC_Home;
+	fbMcPower: MC_Power;
+	fbMcReset : MC_Reset;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF ptBlock=0 THEN
+	RETURN;
+END_IF
+
+bDone:=FALSE;//reset
+
+ptBlockPosition:=ptBlock;//casting
+
+CASE ptBlock^.COMMAND_TYPE OF
+eCommandTypes.POSITION:	
+//Position command
+bPtExecute:=ADR(fbMoveAbs.Execute);
+bPtDone:=ADR(fbMoveAbs.Done);
+bPtBusy:=ADR(fbMoveAbs.Busy);
+bPtError:=ADR(fbMoveAbs.Error);
+;
+eCommandTypes.ZRET:
+//Home command
+;
+ELSE
+	return;
+END_CASE
+
+//parameter writing
+refAxis:= ADR(GVL.AXIS_CONTEXT[ptBlock^.AXIS_ID]);
+speedInmm:=(LWORD_TO_LREAL(ptBlock^.SPEED)/1000);
+accInmms:=((speedInmm)/(LWORD_TO_LREAL(ptBlock^.ACC_TIME)/1000));
+decInmms:=((speedInmm)/(LWORD_TO_LREAL(ptBlock^.DEC_TIME)/1000));
+torqueLimitInPercentage:=((LWORD_TO_LREAL(ptBlock^.TORQUE_LIMIT)/100));
+
+//Power and alarm handling(auto
+fbMcPower(
+	Axis:= refAxis^, 
+	Enable:= , 
+	Enable_Positive:= , 
+	Enable_Negative:= , 
+	Override:= , 
+	BufferMode:= , 
+	Options:= , 
+	Status=> , 
+	Busy=> , 
+	Active=> , 
+	Error=> , 
+	ErrorID=> );
+fbMcReset(
+	Axis:= refAxis^, 
+	Execute:= false, 
+	Done=> , 
+	Busy=> , 
+	Error=> , 
+	ErrorID=> );
+	
+//Execute
+fbMoveAbs(
+	Axis:= refAxis^, 
+	Execute:= , 
+	Position:= (LWORD_TO_LREAL(ptBlockPosition^.COORDINATE)/1000), 
+	Velocity:= speedInmm, 
+	Acceleration:= accInmms, 
+	Deceleration:= decInmms, 
+	Jerk:= , 
+	BufferMode:= , 
+	Options:= , 
+	Done=> , 
+	Busy=> , 
+	Active=> , 
+	CommandAborted=> , 
+	Error=> , 
+	ErrorID=> );
+	
+bPtExecute^ := NOT (bPtError^) AND (fbMcPower.Enable);
+
+
+	
+IF bPtDone^ THEN
+	ptBlock:=0; //reset
+	bPtExecute^ :=FALSE;//reset
+	bPtDone^:=false;
+	bDone:=TRUE;
+END_IF]]></ST>
+    </Implementation>
+    <LineIds Name="RunCommandBlock">
+      <LineId Id="294" Count="2" />
+      <LineId Id="366" Count="0" />
+      <LineId Id="297" Count="2" />
+      <LineId Id="307" Count="1" />
+      <LineId Id="310" Count="1" />
+      <LineId Id="371" Count="1" />
+      <LineId Id="405" Count="1" />
+      <LineId Id="335" Count="6" />
+      <LineId Id="448" Count="0" />
+      <LineId Id="450" Count="0" />
+      <LineId Id="452" Count="4" />
+      <LineId Id="481" Count="0" />
+      <LineId Id="461" Count="19" />
+      <LineId Id="376" Count="0" />
+      <LineId Id="482" Count="1" />
+      <LineId Id="379" Count="14" />
+      <LineId Id="377" Count="0" />
+      <LineId Id="344" Count="0" />
+      <LineId Id="441" Count="0" />
+      <LineId Id="440" Count="0" />
+      <LineId Id="408" Count="0" />
+      <LineId Id="395" Count="0" />
+      <LineId Id="345" Count="2" />
+      <LineId Id="484" Count="0" />
+      <LineId Id="374" Count="0" />
+      <LineId Id="169" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
