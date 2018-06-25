@@ -1,13 +1,59 @@
-<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.0.36">
-  <POU Name="MAIN" Id="{c5d24ec2-dcd4-432d-b366-2840b187b342}">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <POU Name="MAIN" Id="{c5d24ec2-dcd4-432d-b366-2840b187b342}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
+
+cbBlock1 : CommandBlockBase;
+cbBlock2 : CommandBlockBase;
+
+cbBlock3 : CommandBlockPos;
+cbBlock4 : CommandBlockPos;
+
+ptBlock : POINTER TO CommandBlockBase := ADR(cbBlock1);	
+ptBlockPos : POINTER TO CommandBlockPos;
+
 END_VAR
-]]>
-    </Declaration>
+]]></Declaration>
     <Implementation>
-      <ST><![CDATA[]]></ST>
+      <ST><![CDATA[cbBlock1.AXIS_ID:=5;
+ptBlock:=ADR(cbBlock1);
+
+cbBlock2:=ptBlock^; // value assignment?
+//change cbBlock1 , watch if cbBlock2 changed
+
+ptBlock := ADR(cbBlock3); //if possible mophism
+
+cbBlock3.COORDINATE:=1234;
+
+ptBlockPos:=ptBlock;
+cbBlock4:=ptBlockPos^;//check
+
+
+//may access violation??
+//ptBlockPos:=ADR(cbBlock1);
+//ptBlockPos^.COORDINATE:=5555; //may violation
+
+TEST2();]]></ST>
     </Implementation>
+    <LineIds Name="MAIN">
+      <LineId Id="2" Count="0" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="21" Count="0" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="29" Count="0" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="31" Count="1" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="35" Count="1" />
+      <LineId Id="16" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>
