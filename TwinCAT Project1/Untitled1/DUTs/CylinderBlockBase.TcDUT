@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+  <DUT Name="CylinderBlockBase" Id="{a7f2c0a0-130d-49dc-9a1a-61a74525891a}">
+    <Declaration><![CDATA[TYPE CylinderBlockBase :
+STRUCT
+	// Monitor part
+	BIT_WARNING : BIT;
+	BIT_A_MATCH : BIT;
+	BIT_B_MATCH : BIT;
+	BIT_WARN_SUPPRESS : BIT;
+	
+	BIT_DONE : BIT;
+	
+	STATUS_WORD : WORD;
+	// Control part
+	COMMAND_CACHED : eCylinderCommands;
+	LAST_COMMAND : eCylinderCommands;
+	
+	// Context part , all of them should be retained
+	
+	TMR_WATCH_DOG : TON ; //Watch dog timer
+	TMR_DELAY_TO_A : TON;
+	TMR_DELAY_TO_B : TON;
+	
+	A_SENSOR_USED_COUNT : WORD;
+	B_SENSOR_USED_COUNT : WORD;
+	
+	//ACT_A_1 : WORD ; // address of actuator 1 , in form of id in the I/O pool
+	//ACT_A_2 : WORD ; 
+	//ACT_B_1 : WORD ; 
+	//ACT_B_2 : WORD ;
+	
+	//Link part
+	//aSample: ARRAY [*] OF INT; variable length
+	
+	ACT_A AT %Q* : ARRAY[1..2] OF BOOL;
+	ACT_B AT %Q* : ARRAY[1..2] OF BOOL;
+	
+	SENSOR_A AT %I* : ARRAY[1..4] OF BOOL;
+	SENSOR_B AT %I* : ARRAY[1..4] OF BOOL;
+	
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
