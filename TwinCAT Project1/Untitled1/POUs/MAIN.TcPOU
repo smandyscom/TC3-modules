@@ -15,7 +15,7 @@ ptBlockPos : POINTER TO CommandBlockPos;
 
 cylinderBlock : CylinderBlockBase;
 
-	fbCylinder: ServiceCylinder;
+	//fbCylinder: ServiceCylinder;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -40,7 +40,7 @@ cbBlock4:=ptBlockPos^;//check
 TEST2();
 TEST_CYLINDER();
 
-fbCylinder(ptBlock:= ADR(cylinderBlock));]]></ST>
+//fbCylinder(ptBlock:= ADR(cylinderBlock));]]></ST>
     </Implementation>
     <LineIds Name="MAIN">
       <LineId Id="2" Count="0" />

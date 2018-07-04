@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+  <POU Name="ExecuteCylinder" Id="{11dec6ea-9e30-46a6-91c5-0fe02040b602}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK ExecuteCylinder
+VAR_INPUT
+	ptBlock : POINTER TO CylinderBlockBase;
+	Command : eCylinderCommands;
+END_VAR
+VAR_OUTPUT
+	bDone : BOOL ;
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// store command
+ptBlock^.COMMAND_CACHED := Command;
+
+bDone := ptBlock^.BIT_DONE AND NOT ptBlock^.BIT_WARNING AND (ptBlock^.COMMAND_CACHED = ptBlock^.LAST_COMMAND);
+
+//reset surpress
+IF bDone THEN
+	ptBlock^.BIT_WARN_SUPPRESS := FALSE;
+END_IF]]></ST>
+    </Implementation>
+    <LineIds Name="ExecuteCylinder">
+      <LineId Id="18" Count="0" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="20" Count="1" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="22" Count="2" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

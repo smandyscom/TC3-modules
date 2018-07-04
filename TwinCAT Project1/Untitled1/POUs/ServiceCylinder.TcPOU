@@ -9,7 +9,7 @@ VAR_OUTPUT
 END_VAR
 VAR
 	nCounter : WORD := 0;
-	bMatched : BOOL;
+	bMatched : BOOL := false;
 	
 	tmrWatchDog: TON;
 END_VAR
@@ -33,7 +33,7 @@ END_FOR
 // if watch dog had been reset due to command changed in previous scan
 // restart
 IF NOT ptBlock^.TMR_WATCH_DOG.IN THEN
-	ptBlock^.TMR_WATCH_DOG.IN := true;
+	ptBlock^.TMR_WATCH_DOG.IN := TRUE;
 END_IF
 
 // once command changes , reset timer counter
@@ -56,6 +56,8 @@ IF ptBlock^.COMMAND_CACHED <> ptBlock^.LAST_COMMAND THEN
 END_IF
 
 
+//reset
+bMatched := FALSE;
 // Check if match
 CASE ptBlock^.COMMAND_CACHED OF
 	eCylinderCommands.NO_COMMAND:
@@ -63,12 +65,12 @@ CASE ptBlock^.COMMAND_CACHED OF
 	
 	eCylinderCommands.COMMAND_A:
 	IF ptBlock^.TMR_DELAY_TO_A.Q THEN
-		bMatched:= (ptBlock^.BIT_A_MATCH ) AND (NOT ptBlock^.BIT_B_MATCH );
+		bMatched:= (ptBlock^.BIT_A_MATCH ) AND (NOT ptBlock^.BIT_B_MATCH or ptBlock^.B_SENSOR_USED_COUNT=0);
 	END_IF
 	
 	eCylinderCommands.COMMAND_B:
 	IF ptBlock^.TMR_DELAY_TO_B.Q THEN
-		bMatched:= (NOT ptBlock^.BIT_A_MATCH ) AND (ptBlock^.BIT_B_MATCH );
+		bMatched:= (NOT ptBlock^.BIT_A_MATCH OR ptBlock^.A_SENSOR_USED_COUNT=0) AND (ptBlock^.BIT_B_MATCH );
 	END_IF
 		
 END_CASE
@@ -105,7 +107,10 @@ ptBlock^.LAST_COMMAND := ptBlock^.COMMAND_CACHED;
       <LineId Id="85" Count="0" />
       <LineId Id="39" Count="0" />
       <LineId Id="24" Count="0" />
-      <LineId Id="42" Count="2" />
+      <LineId Id="42" Count="0" />
+      <LineId Id="109" Count="0" />
+      <LineId Id="108" Count="0" />
+      <LineId Id="43" Count="1" />
       <LineId Id="48" Count="0" />
       <LineId Id="57" Count="0" />
       <LineId Id="104" Count="0" />
