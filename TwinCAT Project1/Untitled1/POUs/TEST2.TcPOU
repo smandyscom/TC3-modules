@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
   <POU Name="TEST2" Id="{f8b57de7-b0e5-49ae-a899-350ad1b9c6c9}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM TEST2
 VAR
 	cbCommand : CommandBlockPos;
 	
-	fbRunCommand : RunCommandBlock;
+	fbRunCommand : ExecuteCommandBlock;
 	fbPower : MC_Power;
 	
 	state : WORD;

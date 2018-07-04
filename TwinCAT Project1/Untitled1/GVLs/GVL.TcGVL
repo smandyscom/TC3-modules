@@ -1,10 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
   <GVL Name="GVL" Id="{e607aa11-c301-416f-9cbc-bc4f43af5299}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
-VAR_GLOBAL
+VAR_GLOBAL PERSISTENT
 	
 	AXIS_CONTEXT: ARRAY[1..16] OF AXIS_REF;
+	CYLINDER_CONTEXT : ARRAY[1..32] OF CylinderBlockBase;
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>

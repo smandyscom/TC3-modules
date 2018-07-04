@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
   <POU Name="MAIN" Id="{c5d24ec2-dcd4-432d-b366-2840b187b342}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
@@ -13,20 +13,23 @@ cbBlock4 : CommandBlockPos;
 ptBlock : POINTER TO CommandBlockBase := ADR(cbBlock1);	
 ptBlockPos : POINTER TO CommandBlockPos;
 
+cylinderBlock : CylinderBlockBase;
+
+	fbCylinder: ServiceCylinder;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[cbBlock1.AXIS_ID:=5;
-ptBlock:=ADR(cbBlock1);
+MAIN.ptBlock:=ADR(cbBlock1);
 
-cbBlock2:=ptBlock^; // value assignment?
+cbBlock2:=MAIN.ptBlock^; // value assignment?
 //change cbBlock1 , watch if cbBlock2 changed
 
-ptBlock := ADR(cbBlock3); //if possible mophism
+MAIN.ptBlock := ADR(cbBlock3); //if possible mophism
 
 cbBlock3.COORDINATE:=1234;
 
-ptBlockPos:=ptBlock;
+ptBlockPos:=MAIN.ptBlock;
 cbBlock4:=ptBlockPos^;//check
 
 
@@ -34,7 +37,10 @@ cbBlock4:=ptBlockPos^;//check
 //ptBlockPos:=ADR(cbBlock1);
 //ptBlockPos^.COORDINATE:=5555; //may violation
 
-TEST2();]]></ST>
+TEST2();
+TEST_CYLINDER();
+
+fbCylinder(ptBlock:= ADR(cylinderBlock));]]></ST>
     </Implementation>
     <LineIds Name="MAIN">
       <LineId Id="2" Count="0" />
@@ -53,6 +59,8 @@ TEST2();]]></ST>
       <LineId Id="22" Count="0" />
       <LineId Id="33" Count="0" />
       <LineId Id="35" Count="1" />
+      <LineId Id="50" Count="0" />
+      <LineId Id="53" Count="1" />
       <LineId Id="16" Count="0" />
     </LineIds>
   </POU>

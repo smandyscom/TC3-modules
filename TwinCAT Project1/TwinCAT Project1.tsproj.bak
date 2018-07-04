@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4022.16">
+<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4020.39">
 	<DataTypes>
 		<DataType>
 			<Name GUID="{18071995-0000-0000-0000-000000000035}" TcBaseType="true" HideType="true">UINTARR2</Name>
@@ -1320,11 +1320,20 @@ External Setpoint Generation:
 				</Relation>
 			</Relations>
 		</DataType>
+		<DataType>
+			<Name GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..2] OF BOOL</Name>
+			<BitSize>16</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000030}">BOOL</BaseType>
+			<ArrayInfo>
+				<LBound>1</LBound>
+				<Elements>2</Elements>
+			</ArrayInfo>
+		</DataType>
 	</DataTypes>
 	<Project ProjectGUID="{D120B6BC-AD5B-445D-915C-3D83448743C8}" Target64Bit="true" ShowHideConfigurations="#x306">
 		<System>
 			<Tasks>
-				<Task Id="3" Priority="20" CycleTime="100000" AmsPort="350" AdtTasks="true">
+				<Task Id="3" Priority="20" CycleTime="100000" AmsPort="350">
 					<Name>PlcTask</Name>
 				</Task>
 			</Tasks>
@@ -1575,7 +1584,7 @@ External Setpoint Generation:
 			</NC>
 		</Motion>
 		<Plc>
-			<Project GUID="{EBF730F5-EB70-496D-B80F-3EF457609040}" Name="Untitled1" PrjFilePath="Untitled1\Untitled1.plcproj" TmcFilePath="Untitled1\Untitled1.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
+			<Project GUID="{EBF730F5-EB70-496D-B80F-3EF457609040}" Name="Untitled1" PrjFilePath="Untitled1\Untitled1.plcproj" TmcFilePath="Untitled1\Untitled1.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e">
 				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2">
 					<Name>Untitled1 Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
@@ -2365,55 +2374,6 @@ External Setpoint Generation:
 								</Comment>
 							</SubVar>
 						</Var>
-						<Var>
-							<Name>TEST2.fbRunCommand.refAxis.NcToPlc</Name>
-							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
-							<SubVar>
-								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
-0  = INACTIVE:		axis has no job
-1  = RUNNING:		axis is executing a motion job
-2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
-3  = PHASE_VELOCONST:	axis is moving at constant velocity
-4  = PHASE_ACCPOS:	axis is accelerating
-5  = PHASE_ACCNEG:	axis is decelerating
-Slaves only:
-11 = PREPHASE:		slave axis is in a motion pre-phase
-12 = SYNCHRONIZING:	slave axis is synchronizing
-13 = SYNCHRONOUS:	slave axis is moving synchronously
-External Setpoint Generation:
-41 = EXTSETGEN_MODE1:	external setpoint generation active
-42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
-0: idle
-1: start homing
-2: searching home switch
-3: stopping on home switch
-4: moving off home switch
-5: searching sync pulse
-6: stopping after homing
-]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
-0: axis is a single axis (not coupled)
-1: axis is a master axis
-2: axis is master and slave
-3: axis is a slave axis
-]]>
-								</Comment>
-							</SubVar>
-						</Var>
 					</Vars>
 					<Vars VarGrpType="2">
 						<Name>PlcTask Outputs</Name>
@@ -2482,8 +2442,356 @@ External Setpoint Generation:
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 						<Var>
-							<Name>TEST2.fbRunCommand.refAxis.PlcToNc</Name>
-							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
+							<Name>GVL.CYLINDER_CONTEXT[1].ACT_A</Name>
+							<Comment>
+								<![CDATA[aSample: ARRAY [*] OF INT; variable length]]>
+							</Comment>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[1].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[2].ACT_A</Name>
+							<Comment>
+								<![CDATA[aSample: ARRAY [*] OF INT; variable length]]>
+							</Comment>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[2].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[3].ACT_A</Name>
+							<Comment>
+								<![CDATA[aSample: ARRAY [*] OF INT; variable length]]>
+							</Comment>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[3].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[4].ACT_A</Name>
+							<Comment>
+								<![CDATA[aSample: ARRAY [*] OF INT; variable length]]>
+							</Comment>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[4].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[5].ACT_A</Name>
+							<Comment>
+								<![CDATA[aSample: ARRAY [*] OF INT; variable length]]>
+							</Comment>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[5].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[6].ACT_A</Name>
+							<Comment>
+								<![CDATA[aSample: ARRAY [*] OF INT; variable length]]>
+							</Comment>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[6].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[7].ACT_A</Name>
+							<Comment>
+								<![CDATA[aSample: ARRAY [*] OF INT; variable length]]>
+							</Comment>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[7].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[8].ACT_A</Name>
+							<Comment>
+								<![CDATA[aSample: ARRAY [*] OF INT; variable length]]>
+							</Comment>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[8].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[9].ACT_A</Name>
+							<Comment>
+								<![CDATA[aSample: ARRAY [*] OF INT; variable length]]>
+							</Comment>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[9].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[10].ACT_A</Name>
+							<Comment>
+								<![CDATA[aSample: ARRAY [*] OF INT; variable length]]>
+							</Comment>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[10].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[11].ACT_A</Name>
+							<Comment>
+								<![CDATA[aSample: ARRAY [*] OF INT; variable length]]>
+							</Comment>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[11].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[12].ACT_A</Name>
+							<Comment>
+								<![CDATA[aSample: ARRAY [*] OF INT; variable length]]>
+							</Comment>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[12].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[13].ACT_A</Name>
+							<Comment>
+								<![CDATA[aSample: ARRAY [*] OF INT; variable length]]>
+							</Comment>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[13].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[14].ACT_A</Name>
+							<Comment>
+								<![CDATA[aSample: ARRAY [*] OF INT; variable length]]>
+							</Comment>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[14].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[15].ACT_A</Name>
+							<Comment>
+								<![CDATA[aSample: ARRAY [*] OF INT; variable length]]>
+							</Comment>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[15].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[16].ACT_A</Name>
+							<Comment>
+								<![CDATA[aSample: ARRAY [*] OF INT; variable length]]>
+							</Comment>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[16].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[17].ACT_A</Name>
+							<Comment>
+								<![CDATA[aSample: ARRAY [*] OF INT; variable length]]>
+							</Comment>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[17].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[18].ACT_A</Name>
+							<Comment>
+								<![CDATA[aSample: ARRAY [*] OF INT; variable length]]>
+							</Comment>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[18].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[19].ACT_A</Name>
+							<Comment>
+								<![CDATA[aSample: ARRAY [*] OF INT; variable length]]>
+							</Comment>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[19].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[20].ACT_A</Name>
+							<Comment>
+								<![CDATA[aSample: ARRAY [*] OF INT; variable length]]>
+							</Comment>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[20].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[21].ACT_A</Name>
+							<Comment>
+								<![CDATA[aSample: ARRAY [*] OF INT; variable length]]>
+							</Comment>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[21].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[22].ACT_A</Name>
+							<Comment>
+								<![CDATA[aSample: ARRAY [*] OF INT; variable length]]>
+							</Comment>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[22].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[23].ACT_A</Name>
+							<Comment>
+								<![CDATA[aSample: ARRAY [*] OF INT; variable length]]>
+							</Comment>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[23].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[24].ACT_A</Name>
+							<Comment>
+								<![CDATA[aSample: ARRAY [*] OF INT; variable length]]>
+							</Comment>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[24].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[25].ACT_A</Name>
+							<Comment>
+								<![CDATA[aSample: ARRAY [*] OF INT; variable length]]>
+							</Comment>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[25].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[26].ACT_A</Name>
+							<Comment>
+								<![CDATA[aSample: ARRAY [*] OF INT; variable length]]>
+							</Comment>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[26].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[27].ACT_A</Name>
+							<Comment>
+								<![CDATA[aSample: ARRAY [*] OF INT; variable length]]>
+							</Comment>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[27].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[28].ACT_A</Name>
+							<Comment>
+								<![CDATA[aSample: ARRAY [*] OF INT; variable length]]>
+							</Comment>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[28].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[29].ACT_A</Name>
+							<Comment>
+								<![CDATA[aSample: ARRAY [*] OF INT; variable length]]>
+							</Comment>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[29].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[30].ACT_A</Name>
+							<Comment>
+								<![CDATA[aSample: ARRAY [*] OF INT; variable length]]>
+							</Comment>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[30].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[31].ACT_A</Name>
+							<Comment>
+								<![CDATA[aSample: ARRAY [*] OF INT; variable length]]>
+							</Comment>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[31].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[32].ACT_A</Name>
+							<Comment>
+								<![CDATA[aSample: ARRAY [*] OF INT; variable length]]>
+							</Comment>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.CYLINDER_CONTEXT[32].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
 						</Var>
 					</Vars>
 					<TaskPouOids>
