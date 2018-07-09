@@ -65,7 +65,7 @@ CASE ptBlock^.COMMAND_CACHED OF
 	
 	eCylinderCommands.COMMAND_A:
 	IF ptBlock^.TMR_DELAY_TO_A.Q THEN
-		bMatched:= (ptBlock^.BIT_A_MATCH ) AND (NOT ptBlock^.BIT_B_MATCH or ptBlock^.B_SENSOR_USED_COUNT=0);
+		bMatched:= (ptBlock^.BIT_A_MATCH ) AND (NOT ptBlock^.BIT_B_MATCH OR ptBlock^.B_SENSOR_USED_COUNT=0);
 	END_IF
 	
 	eCylinderCommands.COMMAND_B:

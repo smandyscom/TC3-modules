@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+  <DUT Name="Block128Words" Id="{70a9b25d-e2b9-4462-acba-4de7a7efdb2a}">
+    <Declaration><![CDATA[TYPE Block128Words :
+STRUCT
+	reserved : array[1..128] of word;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

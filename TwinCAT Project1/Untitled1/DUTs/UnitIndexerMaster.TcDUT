@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+  <DUT Name="UnitIndexerMaster" Id="{4e22941b-cab4-4ec7-873b-1c5ab67c30f9}">
+    <Declaration><![CDATA[TYPE UnitIndexerMaster EXTENDS UnitBase :
+	//6
+STRUCT
+	guidUpstream : DWORD;//16-17
+	slaveLinkageStatus : DWORD;//18-19
+	//
+	motionBankIndex : WORD;//20
+	reserved : ARRAY[1..11] OF WORD; // 21-31
+	// 64bytes , 32 word occupation here
+	
+	//isSyncEngaged : BOOL; //32
+	//matIsValidStatus : DWORD;
+	//matSyncDone : DWORD;
+	//slaveWorkingSignal : DWORD;
+	//syncWord : WORD; //sync is working , sync first time
+	
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

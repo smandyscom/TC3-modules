@@ -13,9 +13,17 @@ cbBlock4 : CommandBlockPos;
 ptBlock : POINTER TO CommandBlockBase := ADR(cbBlock1);	
 ptBlockPos : POINTER TO CommandBlockPos;
 
-cylinderBlock : CylinderBlockBase;
+aSize : INT;
 
-	//fbCylinder: ServiceCylinder;
+
+memoryPool : ARRAY[1..1024] OF WORD;
+
+ptRunIndexerMaster : POINTER TO RunUnitIndexerMaster;
+ptRunGeneric : POINTER TO RunUnitGeneric;
+
+ptUnitGeneric : POINTER TO UnitBase;
+ptUnitIndexerMaster : POINTER TO UnitIndexerMaster;
+
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -39,8 +47,32 @@ cbBlock4:=ptBlockPos^;//check
 
 TEST2();
 TEST_CYLINDER();
+TEST_UNIT_VIRTUAL();
 
-//fbCylinder(ptBlock:= ADR(cylinderBlock));]]></ST>
+aSize := SIZEOF(GVL.UNIT_CONTEXTs[1]);
+aSize := SIZEOF(UnitBase);
+aSize := SIZEOF(UnitIndexerMaster);
+//fbCylinder(ptBlock:= ADR(cylinderBlock));
+
+//fbRunIndexerMaster(ptBlock:= );
+
+
+//no need
+//ptRunIndexerMaster := ADR(memoryPool[1]); // fine?
+//ptRunGeneric := ADR(memoryPool[1+SIZEOF(ptRunIndexerMaster)]);
+
+//ptRunIndexerMaster^();
+//ptRunGeneric^();
+
+
+//possible manipulate memory allocation
+ptUnitGeneric := ADR(memoryPool[1]);
+ptUnitIndexerMaster := ADR(memoryPool[1+SIZEOF(ptUnitGeneric^)]);
+
+ptUnitGeneric^.alarmCode := 99;  //
+ptUnitIndexerMaster^.motionBankIndex := 5;
+
+]]></ST>
     </Implementation>
     <LineIds Name="MAIN">
       <LineId Id="2" Count="0" />
@@ -60,7 +92,24 @@ TEST_CYLINDER();
       <LineId Id="33" Count="0" />
       <LineId Id="35" Count="1" />
       <LineId Id="50" Count="0" />
-      <LineId Id="53" Count="1" />
+      <LineId Id="53" Count="0" />
+      <LineId Id="68" Count="1" />
+      <LineId Id="73" Count="0" />
+      <LineId Id="77" Count="0" />
+      <LineId Id="54" Count="0" />
+      <LineId Id="80" Count="1" />
+      <LineId Id="84" Count="0" />
+      <LineId Id="94" Count="1" />
+      <LineId Id="85" Count="0" />
+      <LineId Id="89" Count="0" />
+      <LineId Id="92" Count="0" />
+      <LineId Id="90" Count="0" />
+      <LineId Id="93" Count="0" />
+      <LineId Id="98" Count="0" />
+      <LineId Id="106" Count="1" />
+      <LineId Id="99" Count="0" />
+      <LineId Id="102" Count="3" />
+      <LineId Id="100" Count="1" />
       <LineId Id="16" Count="0" />
     </LineIds>
   </POU>

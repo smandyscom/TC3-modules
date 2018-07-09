@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+  <POU Name="RunUnitGeneric" Id="{a108e392-1419-4492-a6fc-c3186312016b}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunUnitGeneric
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+	state : WORD;
+END_VAR
+VAR
+	ptMine : POINTER TO UNITBASE;
+	ptParent : POINTER TO UNITBASE;
+	
+	parentControlWord : WORD; //read-only
+	myControlWord : WORD; //scan-in/out
+	
+	isTransit : BOOL ;
+	workingTimer : LTON;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//link parent
+//if parent is valid (>= 1
+IF ptMine^.parent >= 1 THEN
+	ptParent := ADR(GVL.UNIT_CONTEXTS[ptMine^.parent]);
+	parentControlWord := ptParent^.controlWord;
+END_IF
+
+myControlWord := ptMine^.controlWord;
+
+//Catch parent's pause status
+IF parentControlWord.ucPause AND NOT myControlWord.ucLastParentStatus THEN
+	myControlWord.ucPause := TRUE;
+END_IF
+
+IF NOT myControlWord.ucLastParentStatus AND parentControlWord.ucPause THEN
+	myControlWord.ucPause := FALSE;
+END_IF
+
+myControlWord.ucLastParentStatus := parentControlWord.ucPause;
+
+//Serial transition
+IF ptMine^.serialTransition AND (ptMine^.state = ptMine^.nextState) THEN
+	ptMine^.nextState := ptMine^.state +1 ;
+END_IF
+
+//Reset transition word
+IF ptMine^.nextState <> ptMine^.state THEN
+	ptMine^.transitionByte := 0;
+	ptMine^.serialTransition := FALSE;
+	ptMine^.alarmCode := 0;
+END_IF
+
+
+
+//transit condition
+isTransit := (NOT myControlWord.ucEnStep OR (myControlWord.ucEnStep AND myControlWord.ucTrigStep)) AND NOT myControlWord.ucPause;
+
+IF ptMine^.state <> ptMine^.nextState THEN
+	IF  isTransit THEN
+		ptMine^.state := ptMine^.nextState;
+		state := ptMine^.state; // valid output 
+	ELSE
+		state := 16#FFFF;
+	END_IF
+ELSE 
+	state := ptMine^.state;
+END_IF
+
+//Reset trigger step
+myControlWord.ucTrigStep := FALSE;
+
+//scan-out
+ptMine^.controlWord := myControlWord;
+
+//Timer
+workingTimer(IN:=,PT:=,Q=>,ET=>);]]></ST>
+    </Implementation>
+    <Method Name="FB_init" Id="{1054404a-900b-4aa2-9841-9d1387599ab2}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	
+	ptBlock : POINTER TO UnitBase;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ptMine := ptBlock;]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="RunUnitGeneric">
+      <LineId Id="162" Count="2" />
+      <LineId Id="166" Count="0" />
+      <LineId Id="165" Count="0" />
+      <LineId Id="94" Count="0" />
+      <LineId Id="97" Count="3" />
+      <LineId Id="114" Count="5" />
+      <LineId Id="101" Count="0" />
+      <LineId Id="120" Count="1" />
+      <LineId Id="102" Count="0" />
+      <LineId Id="123" Count="2" />
+      <LineId Id="103" Count="0" />
+      <LineId Id="126" Count="1" />
+      <LineId Id="129" Count="0" />
+      <LineId Id="167" Count="0" />
+      <LineId Id="131" Count="0" />
+      <LineId Id="130" Count="0" />
+      <LineId Id="128" Count="0" />
+      <LineId Id="104" Count="0" />
+      <LineId Id="133" Count="1" />
+      <LineId Id="105" Count="1" />
+      <LineId Id="136" Count="0" />
+      <LineId Id="146" Count="0" />
+      <LineId Id="155" Count="1" />
+      <LineId Id="149" Count="0" />
+      <LineId Id="151" Count="1" />
+      <LineId Id="137" Count="0" />
+      <LineId Id="143" Count="0" />
+      <LineId Id="141" Count="0" />
+      <LineId Id="138" Count="0" />
+      <LineId Id="107" Count="0" />
+      <LineId Id="157" Count="2" />
+      <LineId Id="161" Count="0" />
+      <LineId Id="160" Count="0" />
+      <LineId Id="108" Count="1" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="RunUnitGeneric.FB_init">
+      <LineId Id="7" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

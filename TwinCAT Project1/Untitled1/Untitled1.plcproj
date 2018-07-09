@@ -15,10 +15,19 @@
     <LibraryReferences>{a3ee82cf-dd82-4766-9d9c-b0f1c9a4fad4}</LibraryReferences>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DUTs\Block128Words.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Block64Words.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\CommandBlockBase.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\CommandBlockPos.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\ContextUnitBase.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\CylinderBlockBase.TcDUT">
@@ -30,7 +39,32 @@
     <Compile Include="DUTs\eCylinderCommands.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\SlotMaterialData.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\SlotHeader.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\UnitAoiHandshaking.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\UnitBase.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\UnitController.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\UnitIndexerMaster.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\UnitIndexerSlave.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="GVLs\GVL.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="GVLs\GVL_CONSTANT_UNITS.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
@@ -46,6 +80,12 @@
     <Compile Include="POUs\ExecuteCommandBlock.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\RunUnitGeneric.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\RunUnitIndexerMaster.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\ServiceCylinder.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -53,6 +93,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\TEST_CYLINDER.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\TEST_UNIT_VIRTUAL.TcPOU">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -92,8 +135,8 @@
   <ProjectExtensions>
     <PlcProjectOptions>
       <XmlArchive>
-  <Data>
-    <o xml:space="preserve" t="OptionKey">
+        <Data>
+          <o xml:space="preserve" t="OptionKey">
       <v n="Name">"&lt;ProjectRoot&gt;"</v>
       <d n="SubKeys" t="Hashtable" ckt="String" cvt="OptionKey">
         <v>{40450F57-0AA3-4216-96F3-5444ECB29763}</v>
@@ -114,13 +157,13 @@
       </d>
       <d n="Values" t="Hashtable" />
     </o>
-  </Data>
-  <TypeList>
-    <Type n="Hashtable">System.Collections.Hashtable</Type>
-    <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
-    <Type n="String">System.String</Type>
-  </TypeList>
-</XmlArchive>
+        </Data>
+        <TypeList>
+          <Type n="Hashtable">System.Collections.Hashtable</Type>
+          <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
+          <Type n="String">System.String</Type>
+        </TypeList>
+      </XmlArchive>
     </PlcProjectOptions>
   </ProjectExtensions>
 </Project>

@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+  <DUT Name="ContextUnitBase" Id="{95123ff5-5e9c-49bc-b8dd-a2fb3cf1ac1a}">
+    <Declaration><![CDATA[TYPE ContextUnitBase :
+	//32Bytes , 16Word occupation
+STRUCT
+	reserved1 : WORD; //0
+	state : WORD;
+	alarmCode : WORD;
+	controlWord : WORD; //3
+	//
+	nextState : WORD;
+	serialTransition : BOOL;
+	transitionByte : BYTE;
+	materialBase : WORD;
+	materialCount : WORD;//7
+	//
+	reserved2 : DWORD;//8-9
+	workingTimerCache : DWORD; //10-11 
+	//
+	reservedRest : ARRAY[1..4] OF WORD;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
