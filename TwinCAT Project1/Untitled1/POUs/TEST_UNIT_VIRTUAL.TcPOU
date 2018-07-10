@@ -3,10 +3,10 @@
   <POU Name="TEST_UNIT_VIRTUAL" Id="{def1cb56-2e92-494b-9c8e-90184f6eb8a7}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM TEST_UNIT_VIRTUAL
 VAR
-	fbParent : RunUnitGeneric(ptBlock:= ADR(GVL.UNIT_CONTEXTS[1]));
-	fbChild : RunUnitGeneric(ptBlock:= ADR(GVL.UNIT_CONTEXTS[2]));
+	fbParent : RunUnitGeneric(ptBlock:= ADR(GVL.LOCAL_UNIT_CONTEXTS[1]));
+	fbChild : RunUnitGeneric(ptBlock:= ADR(GVL.LOCAL_UNIT_CONTEXTS[2]));
 	
-	ptBlock : POINTER TO UnitBase := ADR(GVL.UNIT_CONTEXTS[2]);
+	ptBlock : POINTER TO UnitBase := ADR(GVL.LOCAL_UNIT_CONTEXTS[2]);
 	
 	testCondition : bool ;
 END_VAR

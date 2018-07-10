@@ -11,6 +11,9 @@ VAR
 	ptMine : POINTER TO UNITBASE;
 	ptParent : POINTER TO UNITBASE;
 	
+	ptSlotBase : POINTER TO MaterialBlock;
+	ptSlotLast : POINTER to materialBlock;
+	
 	parentControlWord : WORD; //read-only
 	myControlWord : WORD; //scan-in/out
 	
@@ -21,8 +24,11 @@ END_VAR
     <Implementation>
       <ST><![CDATA[//link parent
 //if parent is valid (>= 1
-IF ptMine^.parent >= 1 THEN
-	ptParent := ADR(GVL.UNIT_CONTEXTS[ptMine^.parent]);
+IF ptMine^.parent >= 1  THEN
+	ptParent := ADR(GVL.LOCAL_UNIT_CONTEXTS[ptMine^.parent]);
+END_IF
+
+IF ptParent <> 0 THEN
 	parentControlWord := ptParent^.controlWord;
 END_IF
 
@@ -86,13 +92,31 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[ptMine := ptBlock;]]></ST>
+        <ST><![CDATA[ptMine := ptBlock;
+
+
+
+//initialize 
+IF ptMine^.parent = 0 THEN
+	ptMine^.parent := 1;
+END_IF
+IF ptMine^.materialBase = 0 THEN
+	ptMine^.materialBase := 1;
+END_IF
+IF ptMine^.materialCount =0 THEN
+	ptMine^.materialCount := 1;
+END_IF
+
+
+//link material slot
+ptSlotBase := ADR(GVL.MATERIAL_SLOTS[ptMine^.materialBase]);
+ptSlotLast := ADR(GVL.MATERIAL_SLOTS[ptMine^.materialBase + ptMine^.materialCount - 1]);]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="RunUnitGeneric">
       <LineId Id="162" Count="2" />
       <LineId Id="166" Count="0" />
-      <LineId Id="165" Count="0" />
+      <LineId Id="168" Count="3" />
       <LineId Id="94" Count="0" />
       <LineId Id="97" Count="3" />
       <LineId Id="114" Count="5" />
@@ -127,6 +151,16 @@ END_VAR
       <LineId Id="9" Count="0" />
     </LineIds>
     <LineIds Name="RunUnitGeneric.FB_init">
+      <LineId Id="10" Count="1" />
+      <LineId Id="13" Count="1" />
+      <LineId Id="21" Count="0" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="26" Count="2" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="29" Count="1" />
+      <LineId Id="17" Count="3" />
+      <LineId Id="31" Count="0" />
       <LineId Id="7" Count="0" />
     </LineIds>
   </POU>

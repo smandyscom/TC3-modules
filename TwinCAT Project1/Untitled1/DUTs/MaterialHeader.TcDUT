@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+  <DUT Name="MaterialHeader" Id="{7f5b5b3f-1e16-4ac5-b989-293e7d15c1ee}">
+    <Declaration><![CDATA[TYPE MaterialHeader :
+STRUCT
+	wordOut : WORD; //0
+	syncAction : WORD; //1
+	wordIn : WORD;//2
+	id : DWORD;//3-4
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

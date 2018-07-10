@@ -7,15 +7,123 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
+	ptMineIndexerMaster : POINTER TO UnitIndexerMaster ;
+	//upstream linkage
+	
+	//Working registers
+	
+	matIsValidStatus : DWORD;
+	matSyncDone : DWORD;
+	
+	slaveWorkingSignal : ARRAY[1..32] OF BOOL; // collect slave working signal , possible to access externally?
+	
+	nCounter : INT;
+	condition : BOOL;
+	
+	isSyncEngaged : BOOL; //inform downstream i am ready
+	isLastSlotOccupied : BOOL; //indicate if last slot occupied
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[SUPER^(); // call base class's execution
 
+IF ptMineIndexerMaster = 0 THEN
+	ptMineIndexerMaster := SUPER^.ptMine;
+END_IF
+
+CASE SUPER^.state OF
+	0:
+		//check material synchronization to Databse
+		//raise working signals for all linked slave
+		FOR nCounter:=1 TO 32 BY 1 DO
+			slaveWorkingSignal[nCounter] := (ptMineIndexerMaster^.slaveLinkageStatus AND SHL(16#1,nCounter-1)) <> 0 ;
+		END_FOR
+		ptMine^.serialTransition := TRUE;
+	1:
+		//if all working status meets , transition
+		//all working signal should be zero
+		condition :=TRUE;
+		FOR nCounter:=1 TO 32 BY 1 DO
+			condition := condition AND NOT slaveWorkingSignal[nCounter];
+		END_FOR
+		IF condition THEN
+			ptMine^.serialTransition := TRUE;
+			
+			
+			isLastSlotOccupied := (ptSlotLast^.wordOut AND SHL(16#1,scIsValid)) <> 0; //check out last slot status
+			ptMineIndexerMaster^.isSyncEngaged := isLastSlotOccupied;//ready to synchronizing (communicate with downstream
+		END_IF
+	2:
+		//2 modes
+		// a. synchronize with downstream only, go with pull upstream if avialable
+		// b. synchronize with down/upstream both
+	
+		//listen to move
+		ptMine^.serialTransition :=  (NOT isLastSlotOccupied) OR (NOT ptMineIndexerMaster^.isSyncEngaged AND isLastSlotOccupied);
+		
+		//once going pull upstream working together
+		//IF ptMine^.serialTransition THEN
+			
+		//END_IF
+		
+	3:
+		//do shifting movement
+END_CASE
+
 ]]></ST>
     </Implementation>
+    <Method Name="FB_init" Id="{b6ef164b-1316-42c1-8dbc-2d2d314e57b5}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	
+	ptBlock : POINTER TO UnitBase;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
     <LineIds Name="RunUnitIndexerMaster">
+      <LineId Id="13" Count="0" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="27" Count="1" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="14" Count="1" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="51" Count="0" />
+      <LineId Id="57" Count="0" />
+      <LineId Id="53" Count="1" />
+      <LineId Id="56" Count="0" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="21" Count="0" />
+      <LineId Id="47" Count="0" />
+      <LineId Id="46" Count="0" />
+      <LineId Id="29" Count="0" />
+      <LineId Id="43" Count="1" />
+      <LineId Id="48" Count="1" />
+      <LineId Id="82" Count="1" />
+      <LineId Id="86" Count="0" />
+      <LineId Id="84" Count="0" />
+      <LineId Id="50" Count="0" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="87" Count="0" />
+      <LineId Id="89" Count="1" />
+      <LineId Id="88" Count="0" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="68" Count="0" />
+      <LineId Id="70" Count="0" />
+      <LineId Id="75" Count="0" />
+      <LineId Id="71" Count="0" />
+      <LineId Id="73" Count="1" />
+      <LineId Id="72" Count="0" />
+      <LineId Id="22" Count="1" />
+      <LineId Id="16" Count="0" />
       <LineId Id="10" Count="1" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="RunUnitIndexerMaster.FB_init">
       <LineId Id="9" Count="0" />
     </LineIds>
   </POU>

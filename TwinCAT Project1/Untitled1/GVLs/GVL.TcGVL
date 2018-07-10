@@ -14,7 +14,9 @@ VAR_GLOBAL PERSISTENT
 	//signal context
 	
 	//128Words block area
-	UNIT_CONTEXTS AT%M* : ARRAY[1..32] OF Block128words;
+	LOCAL_UNIT_CONTEXTS AT%M* : ARRAY[1..32] OF Block128words;
+	MATERIAL_SLOTS AT%M* : ARRAY[1..16] of Block128Words;
+	//external unit contexts
 	//material slots
 
 END_VAR]]></Declaration>

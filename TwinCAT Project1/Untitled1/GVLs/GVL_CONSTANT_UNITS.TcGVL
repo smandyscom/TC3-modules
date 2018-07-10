@@ -17,6 +17,7 @@
 	ucWorkingOverride : INT :=4;
 	ucMaterialOverride : INT :=5;
 	ucLastParentStatus : INT :=7;
+	
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>

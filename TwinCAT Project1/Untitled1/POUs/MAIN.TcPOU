@@ -48,8 +48,9 @@ cbBlock4:=ptBlockPos^;//check
 TEST2();
 TEST_CYLINDER();
 TEST_UNIT_VIRTUAL();
+TEST_UNIT_MASTER();
 
-aSize := SIZEOF(GVL.UNIT_CONTEXTs[1]);
+aSize := SIZEOF(GVL.LOCAL_UNIT_CONTEXTS[1]);
 aSize := SIZEOF(UnitBase);
 aSize := SIZEOF(UnitIndexerMaster);
 //fbCylinder(ptBlock:= ADR(cylinderBlock));
@@ -70,7 +71,6 @@ ptUnitGeneric := ADR(memoryPool[1]);
 ptUnitIndexerMaster := ADR(memoryPool[1+SIZEOF(ptUnitGeneric^)]);
 
 ptUnitGeneric^.alarmCode := 99;  //
-ptUnitIndexerMaster^.motionBankIndex := 5;
 
 ]]></ST>
     </Implementation>
@@ -93,6 +93,7 @@ ptUnitIndexerMaster^.motionBankIndex := 5;
       <LineId Id="35" Count="1" />
       <LineId Id="50" Count="0" />
       <LineId Id="53" Count="0" />
+      <LineId Id="110" Count="0" />
       <LineId Id="68" Count="1" />
       <LineId Id="73" Count="0" />
       <LineId Id="77" Count="0" />
@@ -109,7 +110,7 @@ ptUnitIndexerMaster^.motionBankIndex := 5;
       <LineId Id="106" Count="1" />
       <LineId Id="99" Count="0" />
       <LineId Id="102" Count="3" />
-      <LineId Id="100" Count="1" />
+      <LineId Id="101" Count="0" />
       <LineId Id="16" Count="0" />
     </LineIds>
   </POU>

@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+  <POU Name="TEST_UNIT_MASTER" Id="{e52701ab-3d6a-4aa0-bffd-71a5234ebd5a}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM TEST_UNIT_MASTER
+VAR
+	fbMaster : RunUnitIndexerMaster(ptBlock := ADR(GVL.LOCAL_UNIT_CONTEXTS[3]));
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbMaster();]]></ST>
+    </Implementation>
+    <LineIds Name="TEST_UNIT_MASTER">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

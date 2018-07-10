@@ -39,6 +39,12 @@
     <Compile Include="DUTs\eCylinderCommands.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\MaterialBlock.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\MaterialHeader.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\SlotMaterialData.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -64,6 +70,14 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="GVLs\GVL_BIT_MASK.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="GVLs\GVL_CONSTANT_SLOTS.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
     <Compile Include="GVLs\GVL_CONSTANT_UNITS.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
@@ -72,6 +86,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\ExecuteCylinder.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\InitBitMasks.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\MAIN.TcPOU">
@@ -93,6 +110,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\TEST_CYLINDER.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\TEST_UNIT_MASTER.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\TEST_UNIT_VIRTUAL.TcPOU">
