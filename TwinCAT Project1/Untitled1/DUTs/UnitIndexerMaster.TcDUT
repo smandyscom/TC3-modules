@@ -10,7 +10,7 @@ STRUCT
 	reserved : ARRAY[1..12] OF WORD; // 20-31
 	// 64bytes , 32 word occupation here
 	
-	isSyncEngaged : BOOL; //32
+	//isSyncEngaged : BOOL; //32
 	//matIsValidStatus : DWORD;
 	//matSyncDone : DWORD;
 	//slaveWorkingSignal : DWORD;

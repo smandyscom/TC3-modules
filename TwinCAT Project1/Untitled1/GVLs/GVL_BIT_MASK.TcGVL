@@ -1,8 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
-  <GVL Name="GVL_BIT_MASK" Id="{4e6dcb52-c7bf-4e4d-a886-114462ccedb4}">
-    <Declaration><![CDATA[VAR_GLOBAL 
-	bitMasks : ARRAY[1..32] OF DWORD;
-END_VAR]]></Declaration>
-  </GVL>
-</TcPlcObject>

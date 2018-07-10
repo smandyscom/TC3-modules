@@ -7,8 +7,8 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-	ptMineIndexerMaster : POINTER TO UnitIndexerMaster ;
-	//upstream linkage
+	ptContextMaster : POINTER TO UnitIndexerMaster ;//context linkage
+	ptUpstreamMaster : POINTER TO RunUnitIndexerMaster;//upstream linkage
 	
 	//Working registers
 	
@@ -20,23 +20,22 @@ VAR
 	nCounter : INT;
 	condition : BOOL;
 	
-	isSyncEngaged : BOOL; //inform downstream i am ready
+	//4 step handshaking , face to downstream
+	syncEngaged AT%M* : BOOL; //inform downstream i am ready
+	syncAcknowledged AT%M* : BOOL; //downstream replied starting ackowledge
+	
 	isLastSlotOccupied : BOOL; //indicate if last slot occupied
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[SUPER^(); // call base class's execution
 
-IF ptMineIndexerMaster = 0 THEN
-	ptMineIndexerMaster := SUPER^.ptMine;
-END_IF
-
 CASE SUPER^.state OF
 	0:
 		//check material synchronization to Databse
 		//raise working signals for all linked slave
 		FOR nCounter:=1 TO 32 BY 1 DO
-			slaveWorkingSignal[nCounter] := (ptMineIndexerMaster^.slaveLinkageStatus AND SHL(16#1,nCounter-1)) <> 0 ;
+			slaveWorkingSignal[nCounter] := (ptContextMaster^.slaveLinkageStatus AND SHL(16#1,nCounter-1)) <> 0 ;
 		END_FOR
 		ptMine^.serialTransition := TRUE;
 	1:
@@ -46,20 +45,27 @@ CASE SUPER^.state OF
 		FOR nCounter:=1 TO 32 BY 1 DO
 			condition := condition AND NOT slaveWorkingSignal[nCounter];
 		END_FOR
-		IF condition THEN
+		IF condition AND NOT syncAcknowledged THEN
 			ptMine^.serialTransition := TRUE;
 			
 			
 			isLastSlotOccupied := (ptSlotLast^.wordOut AND SHL(16#1,scIsValid)) <> 0; //check out last slot status
-			ptMineIndexerMaster^.isSyncEngaged := isLastSlotOccupied;//ready to synchronizing (communicate with downstream
+			syncEngaged := isLastSlotOccupied;//ready to synchronizing (communicate with downstream
 		END_IF
 	2:
 		//2 modes
 		// a. synchronize with downstream only, go with pull upstream if avialable
 		// b. synchronize with down/upstream both
 	
+		// pull by downstream (set on then check off
+		// pull upstream (check on then reset
+		
 		//listen to move
-		ptMine^.serialTransition :=  (NOT isLastSlotOccupied) OR (NOT ptMineIndexerMaster^.isSyncEngaged AND isLastSlotOccupied);
+		ptMine^.serialTransition :=  (NOT isLastSlotOccupied) OR (syncAcknowledged AND isLastSlotOccupied);
+		
+		IF syncAcknowledged THEN
+			syncEngaged := FALSE; //off
+		END_IF
 		
 		//once going pull upstream working together
 		//IF ptMine^.serialTransition THEN
@@ -79,52 +85,67 @@ VAR_INPUT
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
 	
 	ptBlock : POINTER TO UnitBase;
+	ptUpstream : POINTER TO RunUnitIndexerMaster := 0;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[ptContextMaster := ptMine; //linkage and casting
+ptUpstreamMaster := ptUpstream;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ProxyMode" Id="{33b629b5-5210-4d2f-9d83-0eef6582dc16}">
+      <Declaration><![CDATA[METHOD ProxyMode : BOOL
+VAR_INPUT
+	netId : T_AmsNetID;
+	port : T_AmsPort := 851;
+END_VAR
+VAR
+	fbAdsRead : ADSREAD;
+	fbAdsWrite : ADSWRITE;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//do ADS data exchanging only
+fbAdsRead(
+	NETID:= netId, 
+	PORT:= port, 
+	IDXGRP:= TO_UDINT(eUpstreamComm.indexGroup), 
+	IDXOFFS:= TO_UDINT(eUpstreamComm.offsetUpstreamSyncEngaged), 
+	LEN:= SIZEOF(syncEngaged), 
+	DESTADDR:= ADR(syncEngaged), 
+	READ:= not fbAdsRead.BUSY, 
+	TMOUT:= , 
+	BUSY=> , 
+	ERR=> , 
+	ERRID=> );
+	
+fbAdsWrite(
+	NETID:= netId, 
+	PORT:= port, 
+	IDXGRP:= TO_UDINT(eUpstreamComm.indexGroup), 
+	IDXOFFS:= TO_UDINT(eUpstreamComm.offsetUpstreamSyncAckowledged), 
+	LEN:= SIZEOF(syncAcknowledged), 
+	SRCADDR:= ADR(syncAcknowledged), 
+	WRITE:= NOT fbAdsWrite.BUSY, 
+	TMOUT:= , 
+	BUSY=> , 
+	ERR=> , 
+	ERRID=> );]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="RunUnitIndexerMaster">
-      <LineId Id="13" Count="0" />
-      <LineId Id="25" Count="0" />
-      <LineId Id="27" Count="1" />
-      <LineId Id="26" Count="0" />
-      <LineId Id="14" Count="1" />
-      <LineId Id="20" Count="0" />
-      <LineId Id="51" Count="0" />
-      <LineId Id="57" Count="0" />
-      <LineId Id="53" Count="1" />
-      <LineId Id="56" Count="0" />
-      <LineId Id="17" Count="0" />
-      <LineId Id="21" Count="0" />
-      <LineId Id="47" Count="0" />
-      <LineId Id="46" Count="0" />
-      <LineId Id="29" Count="0" />
-      <LineId Id="43" Count="1" />
-      <LineId Id="48" Count="1" />
-      <LineId Id="82" Count="1" />
-      <LineId Id="86" Count="0" />
-      <LineId Id="84" Count="0" />
-      <LineId Id="50" Count="0" />
-      <LineId Id="18" Count="0" />
-      <LineId Id="87" Count="0" />
-      <LineId Id="89" Count="1" />
-      <LineId Id="88" Count="0" />
-      <LineId Id="19" Count="0" />
-      <LineId Id="68" Count="0" />
-      <LineId Id="70" Count="0" />
-      <LineId Id="75" Count="0" />
-      <LineId Id="71" Count="0" />
-      <LineId Id="73" Count="1" />
-      <LineId Id="72" Count="0" />
-      <LineId Id="22" Count="1" />
-      <LineId Id="16" Count="0" />
-      <LineId Id="10" Count="1" />
+      <LineId Id="154" Count="0" />
+      <LineId Id="159" Count="46" />
       <LineId Id="9" Count="0" />
     </LineIds>
     <LineIds Name="RunUnitIndexerMaster.FB_init">
+      <LineId Id="12" Count="0" />
       <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="RunUnitIndexerMaster.ProxyMode">
+      <LineId Id="8" Count="13" />
+      <LineId Id="26" Count="10" />
+      <LineId Id="5" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
