@@ -5,9 +5,9 @@
 {attribute 'strict'}
 TYPE eUpstreamComm : 
 (
-	indexGroup := 0,
-	offsetUpstreamSyncEngaged := 0,
-	offsetUpstreamSyncAckowledged := 0
+	indexGroup := eAdsIndexGroups.PLCADS_RWM,
+	offsetUpstreamSyncEngaged := 127,
+	offsetUpstreamSyncAckowledged := 128
 );
 END_TYPE
 ]]></Declaration>

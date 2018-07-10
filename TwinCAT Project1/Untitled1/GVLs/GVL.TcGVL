@@ -2,9 +2,9 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
   <GVL Name="GVL" Id="{e607aa11-c301-416f-9cbc-bc4f43af5299}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
-VAR_GLOBAL PERSISTENT
-	adsValue1 AT%MB0 : BYTE ;
-	adsValue2 AT%MB1 : Byte ; 
+VAR_GLOBAL 
+	simuSyncEngaged AT%MB127 : BOOL;
+	simuSyncAcknowledged AT%MB128 : BOOL;
 	
 	AXIS_CONTEXT: ARRAY[1..16] OF AXIS_REF;
 	

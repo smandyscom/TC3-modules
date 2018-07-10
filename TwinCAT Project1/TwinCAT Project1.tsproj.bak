@@ -2639,6 +2639,20 @@ External Setpoint Generation:
 							<Name>GVL.CYLINDER_CONTEXT[32].SENSOR_B</Name>
 							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
 						</Var>
+						<Var>
+							<Name>TEST_UNIT_MASTER.fbVirtual.syncAcknowledged</Name>
+							<Comment>
+								<![CDATA[downstream replied starting ackowledge]]>
+							</Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>TEST_UNIT_MASTER.fbMaster.syncAcknowledged</Name>
+							<Comment>
+								<![CDATA[downstream replied starting ackowledge]]>
+							</Comment>
+							<Type>BOOL</Type>
+						</Var>
 					</Vars>
 					<Vars VarGrpType="2">
 						<Name>PlcTask Outputs</Name>
@@ -3217,6 +3231,20 @@ aSample: ARRAY [*] OF INT; variable length]]>
 						<Var>
 							<Name>GVL.CYLINDER_CONTEXT[32].ACT_B</Name>
 							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>TEST_UNIT_MASTER.fbVirtual.syncEngaged</Name>
+							<Comment>
+								<![CDATA[inform downstream i am ready]]>
+							</Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>TEST_UNIT_MASTER.fbMaster.syncEngaged</Name>
+							<Comment>
+								<![CDATA[inform downstream i am ready]]>
+							</Comment>
+							<Type>BOOL</Type>
 						</Var>
 					</Vars>
 					<TaskPouOids>

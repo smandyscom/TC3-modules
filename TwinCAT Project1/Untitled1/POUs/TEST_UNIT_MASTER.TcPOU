@@ -6,13 +6,15 @@ VAR
 	fbVirtual : RunUnitIndexerMaster(ptBlock:= ADR(GVL.LOCAL_UNIT_CONTEXTS[4]),
 									 ptUpstream:=0);
 	fbMaster : RunUnitIndexerMaster(ptBlock:= ADR(GVL.LOCAL_UNIT_CONTEXTS[3]),
-									ptUpstream := ADR(GVL.LOCAL_UNIT_CONTEXTS[4]));
+									ptUpstream := ADR(fbVirtual));
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[fbMaster();]]></ST>
+      <ST><![CDATA[fbVirtual.ProxyMode(netID:= '10.221.24.70.1.1',port :=851);
+fbMaster();]]></ST>
     </Implementation>
     <LineIds Name="TEST_UNIT_MASTER">
+      <LineId Id="15" Count="0" />
       <LineId Id="5" Count="0" />
     </LineIds>
   </POU>

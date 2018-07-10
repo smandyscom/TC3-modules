@@ -33,6 +33,9 @@
     <Compile Include="DUTs\CylinderBlockBase.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\eAdsIndexGroups.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\eCommandTypes.TcDUT">
       <SubType>Code</SubType>
     </Compile>
