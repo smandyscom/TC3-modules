@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+  <DUT Name="eAdsIndexGroups" Id="{0a06d35c-a65f-40e1-8b6a-b2d5f8884c9c}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE eAdsIndexGroups :
+(
+	RESERVED1 := 16#0,
+	RESERVED2 := 16#FFF,
+	PLC_ADS_PARA := 16#1000,
+	PLC_ADS_STAT := 16#2000,
+	PLC_ADS_UNIT := 16#3000,
+	//%M fields
+	PLCADS_RWM := 16#4020,
+	PLCADS_RWMX := 16#4021,
+	PLCADS_IGR_RMSIZE := 16#4025,
+	PLCADS_IGR_RWRB := 16#4030,
+	PLCADS_IGR_RRSIZE := 16#4035,
+	PLCADS_IGR_RWDB := 16#4040,
+	PLCADS_IGR_RDSIZE := 16#4045,
+	//$I,Q fields
+	PLCADS_RWI := 16#F020,
+	PLCADS_RWQ := 16#F030
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
