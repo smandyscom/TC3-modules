@@ -3,21 +3,23 @@
   <GVL Name="GVL" Id="{e607aa11-c301-416f-9cbc-bc4f43af5299}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
 VAR_GLOBAL 
+	//test usage
 	simuSyncEngaged AT%MB127 : BOOL;
 	simuSyncAcknowledged AT%MB128 : BOOL;
 	
-	AXIS_CONTEXT: ARRAY[1..16] OF AXIS_REF;
-	
-	//64Words block area
-	//axisContext
-	CYLINDER_CONTEXT : ARRAY[1..32] OF CylinderBlockBase;
+	//64Words block area 
+	//Actuator
+	axisControls: ARRAY[1..16] OF RunAxis;
+	cylinderControls : ARRAY[1..32] OF RunCylinder;
 	//signal context
 	
 	//128Words block area
-	LOCAL_UNIT_CONTEXTS AT%M* : ARRAY[1..32] OF Block128words;
-	MATERIAL_SLOTS AT%M* : ARRAY[1..16] of Block128Words;
-	//external unit contexts
-	//material slots
+	unitControls : ARRAY[1..32] OF Block128words;
+
+	//Flag memory area
+	//Manual mode
+	//for those context blocks , used to intercommunicate with HMI
+	MATERIAL_SLOTS AT%M* : ARRAY[1..16] OF Block128Words;
 
 END_VAR]]></Declaration>
   </GVL>

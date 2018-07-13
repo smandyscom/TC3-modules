@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
   <DUT Name="CommandBlockBase" Id="{44762155-a4ee-4688-ad57-0991b5877603}">
     <Declaration><![CDATA[TYPE CommandBlockBase :
 STRUCT	
 	AXIS_ID: WORD;
 	COMMAND_TYPE:eCommandTypes;
-	SPEED:LWORD; // in 0.001mm
+	SPEED:LWORD; // in 0.001mm , fixed point
 	ACC_TIME:LWORD; // in ms
 	DEC_TIME:LWORD; // in ms
 	TORQUE_LIMIT:LWORD; // in 0.01 percentage

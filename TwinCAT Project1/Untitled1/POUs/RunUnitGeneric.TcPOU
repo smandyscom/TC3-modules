@@ -25,7 +25,7 @@ END_VAR
       <ST><![CDATA[//link parent
 //if parent is valid (>= 1
 IF ptMine^.parent >= 1  THEN
-	ptParent := ADR(GVL.LOCAL_UNIT_CONTEXTS[ptMine^.parent]);
+	ptParent := ADR(GVL.unitControls[ptMine^.parent]);
 END_IF
 
 IF ptParent <> 0 THEN

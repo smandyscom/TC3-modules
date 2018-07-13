@@ -15,6 +15,9 @@
     <LibraryReferences>{a3ee82cf-dd82-4766-9d9c-b0f1c9a4fad4}</LibraryReferences>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DUTs\AxisBase.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\Block128Words.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -22,6 +25,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\CommandBlockBase.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\CommandBlockGeneric.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\CommandBlockPos.TcDUT">
@@ -63,6 +69,9 @@
     <Compile Include="DUTs\UnitBase.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\UnitBlockGeneric.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\UnitController.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -93,7 +102,16 @@
     <Compile Include="POUs\MAIN.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\ExecuteCommandBlock.TcPOU">
+    <Compile Include="POUs\RunAxis.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\RunCommandBlock.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\POU.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\RunLifterCelluar.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\RunUnitGeneric.TcPOU">
@@ -102,20 +120,26 @@
     <Compile Include="POUs\RunUnitIndexerMaster.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\ServiceCylinder.TcPOU">
+    <Compile Include="POUs\RunUnitIndexerMasterCelluarA.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\TEST2.TcPOU">
+    <Compile Include="POUs\RunCylinder.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\TEST_COMMAND_BLOCK.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\TEST_CYLINDER.TcPOU">
       <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
     <Compile Include="POUs\TEST_UNIT_MASTER.TcPOU">
       <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
     <Compile Include="POUs\TEST_UNIT_VIRTUAL.TcPOU">
       <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
   </ItemGroup>
   <ItemGroup>

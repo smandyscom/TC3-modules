@@ -6,7 +6,7 @@ VAR
 	fbParent : RunUnitGeneric(ptBlock:= ADR(GVL.LOCAL_UNIT_CONTEXTS[1]));
 	fbChild : RunUnitGeneric(ptBlock:= ADR(GVL.LOCAL_UNIT_CONTEXTS[2]));
 	
-	ptBlock : POINTER TO UnitBase := ADR(GVL.LOCAL_UNIT_CONTEXTS[2]);
+	ptBlock : POINTER TO UnitBase := ADR(GVL.unitControls[2]);
 	
 	testCondition : bool ;
 END_VAR

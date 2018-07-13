@@ -24,6 +24,7 @@ ptRunGeneric : POINTER TO RunUnitGeneric;
 ptUnitGeneric : POINTER TO UnitBase;
 ptUnitIndexerMaster : POINTER TO UnitIndexerMaster;
 
+
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -45,12 +46,12 @@ cbBlock4:=ptBlockPos^;//check
 //ptBlockPos:=ADR(cbBlock1);
 //ptBlockPos^.COORDINATE:=5555; //may violation
 
-TEST2();
-TEST_CYLINDER();
+//TEST2();
+//TEST_CYLINDER();
 //TEST_UNIT_VIRTUAL();
-TEST_UNIT_MASTER();
+//TEST_UNIT_MASTER();
 
-aSize := SIZEOF(GVL.LOCAL_UNIT_CONTEXTS[1]);
+aSize := SIZEOF(GVL.unitControls[1]);
 aSize := SIZEOF(UnitBase);
 aSize := SIZEOF(UnitIndexerMaster);
 //fbCylinder(ptBlock:= ADR(cylinderBlock));
@@ -71,7 +72,6 @@ ptUnitGeneric := ADR(memoryPool[1]);
 ptUnitIndexerMaster := ADR(memoryPool[1+SIZEOF(ptUnitGeneric^)]);
 
 ptUnitGeneric^.alarmCode := 99;  //
-
 ]]></ST>
     </Implementation>
     <Method Name="FB_init" Id="{9aee4cb1-a42d-4360-bcd2-e6043699c579}">
@@ -121,7 +121,6 @@ END_VAR
       <LineId Id="106" Count="1" />
       <LineId Id="99" Count="0" />
       <LineId Id="102" Count="3" />
-      <LineId Id="101" Count="0" />
       <LineId Id="16" Count="0" />
     </LineIds>
     <LineIds Name="MAIN.FB_init">

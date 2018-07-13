@@ -1320,24 +1320,6 @@ External Setpoint Generation:
 				</Relation>
 			</Relations>
 		</DataType>
-		<DataType>
-			<Name GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..4] OF BOOL</Name>
-			<BitSize>32</BitSize>
-			<BaseType GUID="{18071995-0000-0000-0000-000000000030}">BOOL</BaseType>
-			<ArrayInfo>
-				<LBound>1</LBound>
-				<Elements>4</Elements>
-			</ArrayInfo>
-		</DataType>
-		<DataType>
-			<Name GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..2] OF BOOL</Name>
-			<BitSize>16</BitSize>
-			<BaseType GUID="{18071995-0000-0000-0000-000000000030}">BOOL</BaseType>
-			<ArrayInfo>
-				<LBound>1</LBound>
-				<Elements>2</Elements>
-			</ArrayInfo>
-		</DataType>
 	</DataTypes>
 	<Project ProjectGUID="{D120B6BC-AD5B-445D-915C-3D83448743C8}" Target64Bit="true" ShowHideConfigurations="#x306">
 		<System>
@@ -1600,7 +1582,7 @@ External Setpoint Generation:
 					<Vars VarGrpType="1">
 						<Name>PlcTask Inputs</Name>
 						<Var>
-							<Name>GVL.AXIS_CONTEXT[1].NcToPlc</Name>
+							<Name>GVL.axisControls[1].Axis.NcToPlc</Name>
 							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 							<SubVar>
 								<Name>AxisState</Name>
@@ -1649,7 +1631,7 @@ External Setpoint Generation:
 							</SubVar>
 						</Var>
 						<Var>
-							<Name>GVL.AXIS_CONTEXT[2].NcToPlc</Name>
+							<Name>GVL.axisControls[2].Axis.NcToPlc</Name>
 							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 							<SubVar>
 								<Name>AxisState</Name>
@@ -1698,7 +1680,7 @@ External Setpoint Generation:
 							</SubVar>
 						</Var>
 						<Var>
-							<Name>GVL.AXIS_CONTEXT[3].NcToPlc</Name>
+							<Name>GVL.axisControls[3].Axis.NcToPlc</Name>
 							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 							<SubVar>
 								<Name>AxisState</Name>
@@ -1747,7 +1729,7 @@ External Setpoint Generation:
 							</SubVar>
 						</Var>
 						<Var>
-							<Name>GVL.AXIS_CONTEXT[4].NcToPlc</Name>
+							<Name>GVL.axisControls[4].Axis.NcToPlc</Name>
 							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 							<SubVar>
 								<Name>AxisState</Name>
@@ -1796,7 +1778,7 @@ External Setpoint Generation:
 							</SubVar>
 						</Var>
 						<Var>
-							<Name>GVL.AXIS_CONTEXT[5].NcToPlc</Name>
+							<Name>GVL.axisControls[5].Axis.NcToPlc</Name>
 							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 							<SubVar>
 								<Name>AxisState</Name>
@@ -1845,7 +1827,7 @@ External Setpoint Generation:
 							</SubVar>
 						</Var>
 						<Var>
-							<Name>GVL.AXIS_CONTEXT[6].NcToPlc</Name>
+							<Name>GVL.axisControls[6].Axis.NcToPlc</Name>
 							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 							<SubVar>
 								<Name>AxisState</Name>
@@ -1894,7 +1876,7 @@ External Setpoint Generation:
 							</SubVar>
 						</Var>
 						<Var>
-							<Name>GVL.AXIS_CONTEXT[7].NcToPlc</Name>
+							<Name>GVL.axisControls[7].Axis.NcToPlc</Name>
 							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 							<SubVar>
 								<Name>AxisState</Name>
@@ -1943,7 +1925,7 @@ External Setpoint Generation:
 							</SubVar>
 						</Var>
 						<Var>
-							<Name>GVL.AXIS_CONTEXT[8].NcToPlc</Name>
+							<Name>GVL.axisControls[8].Axis.NcToPlc</Name>
 							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 							<SubVar>
 								<Name>AxisState</Name>
@@ -1992,7 +1974,7 @@ External Setpoint Generation:
 							</SubVar>
 						</Var>
 						<Var>
-							<Name>GVL.AXIS_CONTEXT[9].NcToPlc</Name>
+							<Name>GVL.axisControls[9].Axis.NcToPlc</Name>
 							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 							<SubVar>
 								<Name>AxisState</Name>
@@ -2041,7 +2023,7 @@ External Setpoint Generation:
 							</SubVar>
 						</Var>
 						<Var>
-							<Name>GVL.AXIS_CONTEXT[10].NcToPlc</Name>
+							<Name>GVL.axisControls[10].Axis.NcToPlc</Name>
 							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 							<SubVar>
 								<Name>AxisState</Name>
@@ -2090,7 +2072,7 @@ External Setpoint Generation:
 							</SubVar>
 						</Var>
 						<Var>
-							<Name>GVL.AXIS_CONTEXT[11].NcToPlc</Name>
+							<Name>GVL.axisControls[11].Axis.NcToPlc</Name>
 							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 							<SubVar>
 								<Name>AxisState</Name>
@@ -2139,7 +2121,7 @@ External Setpoint Generation:
 							</SubVar>
 						</Var>
 						<Var>
-							<Name>GVL.AXIS_CONTEXT[12].NcToPlc</Name>
+							<Name>GVL.axisControls[12].Axis.NcToPlc</Name>
 							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 							<SubVar>
 								<Name>AxisState</Name>
@@ -2188,7 +2170,7 @@ External Setpoint Generation:
 							</SubVar>
 						</Var>
 						<Var>
-							<Name>GVL.AXIS_CONTEXT[13].NcToPlc</Name>
+							<Name>GVL.axisControls[13].Axis.NcToPlc</Name>
 							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 							<SubVar>
 								<Name>AxisState</Name>
@@ -2237,7 +2219,7 @@ External Setpoint Generation:
 							</SubVar>
 						</Var>
 						<Var>
-							<Name>GVL.AXIS_CONTEXT[14].NcToPlc</Name>
+							<Name>GVL.axisControls[14].Axis.NcToPlc</Name>
 							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 							<SubVar>
 								<Name>AxisState</Name>
@@ -2286,7 +2268,7 @@ External Setpoint Generation:
 							</SubVar>
 						</Var>
 						<Var>
-							<Name>GVL.AXIS_CONTEXT[15].NcToPlc</Name>
+							<Name>GVL.axisControls[15].Axis.NcToPlc</Name>
 							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 							<SubVar>
 								<Name>AxisState</Name>
@@ -2335,7 +2317,7 @@ External Setpoint Generation:
 							</SubVar>
 						</Var>
 						<Var>
-							<Name>GVL.AXIS_CONTEXT[16].NcToPlc</Name>
+							<Name>GVL.axisControls[16].Axis.NcToPlc</Name>
 							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 							<SubVar>
 								<Name>AxisState</Name>
@@ -2382,886 +2364,92 @@ External Setpoint Generation:
 ]]>
 								</Comment>
 							</SubVar>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[1].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[1].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[2].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[2].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[3].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[3].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[4].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[4].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[5].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[5].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[6].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[6].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[7].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[7].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[8].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[8].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[9].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[9].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[10].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[10].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[11].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[11].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[12].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[12].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[13].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[13].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[14].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[14].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[15].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[15].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[16].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[16].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[17].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[17].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[18].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[18].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[19].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[19].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[20].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[20].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[21].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[21].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[22].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[22].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[23].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[23].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[24].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[24].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[25].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[25].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[26].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[26].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[27].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[27].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[28].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[28].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[29].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[29].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[30].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[30].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[31].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[31].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[32].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[32].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>TEST_UNIT_MASTER.fbVirtual.syncAcknowledged</Name>
-							<Comment>
-								<![CDATA[downstream replied starting ackowledge , face to downstream]]>
-							</Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>TEST_UNIT_MASTER.fbMaster.syncAcknowledged</Name>
-							<Comment>
-								<![CDATA[downstream replied starting ackowledge , face to downstream]]>
-							</Comment>
-							<Type>BOOL</Type>
 						</Var>
 					</Vars>
 					<Vars VarGrpType="2">
 						<Name>PlcTask Outputs</Name>
 						<Var>
-							<Name>GVL.AXIS_CONTEXT[1].PlcToNc</Name>
+							<Name>GVL.axisControls[1].Axis.PlcToNc</Name>
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 						<Var>
-							<Name>GVL.AXIS_CONTEXT[2].PlcToNc</Name>
+							<Name>GVL.axisControls[2].Axis.PlcToNc</Name>
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 						<Var>
-							<Name>GVL.AXIS_CONTEXT[3].PlcToNc</Name>
+							<Name>GVL.axisControls[3].Axis.PlcToNc</Name>
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 						<Var>
-							<Name>GVL.AXIS_CONTEXT[4].PlcToNc</Name>
+							<Name>GVL.axisControls[4].Axis.PlcToNc</Name>
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 						<Var>
-							<Name>GVL.AXIS_CONTEXT[5].PlcToNc</Name>
+							<Name>GVL.axisControls[5].Axis.PlcToNc</Name>
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 						<Var>
-							<Name>GVL.AXIS_CONTEXT[6].PlcToNc</Name>
+							<Name>GVL.axisControls[6].Axis.PlcToNc</Name>
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 						<Var>
-							<Name>GVL.AXIS_CONTEXT[7].PlcToNc</Name>
+							<Name>GVL.axisControls[7].Axis.PlcToNc</Name>
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 						<Var>
-							<Name>GVL.AXIS_CONTEXT[8].PlcToNc</Name>
+							<Name>GVL.axisControls[8].Axis.PlcToNc</Name>
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 						<Var>
-							<Name>GVL.AXIS_CONTEXT[9].PlcToNc</Name>
+							<Name>GVL.axisControls[9].Axis.PlcToNc</Name>
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 						<Var>
-							<Name>GVL.AXIS_CONTEXT[10].PlcToNc</Name>
+							<Name>GVL.axisControls[10].Axis.PlcToNc</Name>
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 						<Var>
-							<Name>GVL.AXIS_CONTEXT[11].PlcToNc</Name>
+							<Name>GVL.axisControls[11].Axis.PlcToNc</Name>
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 						<Var>
-							<Name>GVL.AXIS_CONTEXT[12].PlcToNc</Name>
+							<Name>GVL.axisControls[12].Axis.PlcToNc</Name>
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 						<Var>
-							<Name>GVL.AXIS_CONTEXT[13].PlcToNc</Name>
+							<Name>GVL.axisControls[13].Axis.PlcToNc</Name>
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 						<Var>
-							<Name>GVL.AXIS_CONTEXT[14].PlcToNc</Name>
+							<Name>GVL.axisControls[14].Axis.PlcToNc</Name>
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 						<Var>
-							<Name>GVL.AXIS_CONTEXT[15].PlcToNc</Name>
+							<Name>GVL.axisControls[15].Axis.PlcToNc</Name>
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 						<Var>
-							<Name>GVL.AXIS_CONTEXT[16].PlcToNc</Name>
+							<Name>GVL.axisControls[16].Axis.PlcToNc</Name>
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[1].ACT_A</Name>
-							<Comment>
-								<![CDATA[ACT_A_1 : WORD ; // address of actuator 1 , in form of id in the I/O pool
-ACT_A_2 : WORD ; 
-ACT_B_1 : WORD ; 
-ACT_B_2 : WORD ;
-Link part
-aSample: ARRAY [*] OF INT; variable length]]>
-							</Comment>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[1].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[2].ACT_A</Name>
-							<Comment>
-								<![CDATA[ACT_A_1 : WORD ; // address of actuator 1 , in form of id in the I/O pool
-ACT_A_2 : WORD ; 
-ACT_B_1 : WORD ; 
-ACT_B_2 : WORD ;
-Link part
-aSample: ARRAY [*] OF INT; variable length]]>
-							</Comment>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[2].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[3].ACT_A</Name>
-							<Comment>
-								<![CDATA[ACT_A_1 : WORD ; // address of actuator 1 , in form of id in the I/O pool
-ACT_A_2 : WORD ; 
-ACT_B_1 : WORD ; 
-ACT_B_2 : WORD ;
-Link part
-aSample: ARRAY [*] OF INT; variable length]]>
-							</Comment>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[3].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[4].ACT_A</Name>
-							<Comment>
-								<![CDATA[ACT_A_1 : WORD ; // address of actuator 1 , in form of id in the I/O pool
-ACT_A_2 : WORD ; 
-ACT_B_1 : WORD ; 
-ACT_B_2 : WORD ;
-Link part
-aSample: ARRAY [*] OF INT; variable length]]>
-							</Comment>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[4].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[5].ACT_A</Name>
-							<Comment>
-								<![CDATA[ACT_A_1 : WORD ; // address of actuator 1 , in form of id in the I/O pool
-ACT_A_2 : WORD ; 
-ACT_B_1 : WORD ; 
-ACT_B_2 : WORD ;
-Link part
-aSample: ARRAY [*] OF INT; variable length]]>
-							</Comment>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[5].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[6].ACT_A</Name>
-							<Comment>
-								<![CDATA[ACT_A_1 : WORD ; // address of actuator 1 , in form of id in the I/O pool
-ACT_A_2 : WORD ; 
-ACT_B_1 : WORD ; 
-ACT_B_2 : WORD ;
-Link part
-aSample: ARRAY [*] OF INT; variable length]]>
-							</Comment>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[6].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[7].ACT_A</Name>
-							<Comment>
-								<![CDATA[ACT_A_1 : WORD ; // address of actuator 1 , in form of id in the I/O pool
-ACT_A_2 : WORD ; 
-ACT_B_1 : WORD ; 
-ACT_B_2 : WORD ;
-Link part
-aSample: ARRAY [*] OF INT; variable length]]>
-							</Comment>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[7].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[8].ACT_A</Name>
-							<Comment>
-								<![CDATA[ACT_A_1 : WORD ; // address of actuator 1 , in form of id in the I/O pool
-ACT_A_2 : WORD ; 
-ACT_B_1 : WORD ; 
-ACT_B_2 : WORD ;
-Link part
-aSample: ARRAY [*] OF INT; variable length]]>
-							</Comment>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[8].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[9].ACT_A</Name>
-							<Comment>
-								<![CDATA[ACT_A_1 : WORD ; // address of actuator 1 , in form of id in the I/O pool
-ACT_A_2 : WORD ; 
-ACT_B_1 : WORD ; 
-ACT_B_2 : WORD ;
-Link part
-aSample: ARRAY [*] OF INT; variable length]]>
-							</Comment>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[9].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[10].ACT_A</Name>
-							<Comment>
-								<![CDATA[ACT_A_1 : WORD ; // address of actuator 1 , in form of id in the I/O pool
-ACT_A_2 : WORD ; 
-ACT_B_1 : WORD ; 
-ACT_B_2 : WORD ;
-Link part
-aSample: ARRAY [*] OF INT; variable length]]>
-							</Comment>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[10].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[11].ACT_A</Name>
-							<Comment>
-								<![CDATA[ACT_A_1 : WORD ; // address of actuator 1 , in form of id in the I/O pool
-ACT_A_2 : WORD ; 
-ACT_B_1 : WORD ; 
-ACT_B_2 : WORD ;
-Link part
-aSample: ARRAY [*] OF INT; variable length]]>
-							</Comment>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[11].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[12].ACT_A</Name>
-							<Comment>
-								<![CDATA[ACT_A_1 : WORD ; // address of actuator 1 , in form of id in the I/O pool
-ACT_A_2 : WORD ; 
-ACT_B_1 : WORD ; 
-ACT_B_2 : WORD ;
-Link part
-aSample: ARRAY [*] OF INT; variable length]]>
-							</Comment>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[12].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[13].ACT_A</Name>
-							<Comment>
-								<![CDATA[ACT_A_1 : WORD ; // address of actuator 1 , in form of id in the I/O pool
-ACT_A_2 : WORD ; 
-ACT_B_1 : WORD ; 
-ACT_B_2 : WORD ;
-Link part
-aSample: ARRAY [*] OF INT; variable length]]>
-							</Comment>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[13].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[14].ACT_A</Name>
-							<Comment>
-								<![CDATA[ACT_A_1 : WORD ; // address of actuator 1 , in form of id in the I/O pool
-ACT_A_2 : WORD ; 
-ACT_B_1 : WORD ; 
-ACT_B_2 : WORD ;
-Link part
-aSample: ARRAY [*] OF INT; variable length]]>
-							</Comment>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[14].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[15].ACT_A</Name>
-							<Comment>
-								<![CDATA[ACT_A_1 : WORD ; // address of actuator 1 , in form of id in the I/O pool
-ACT_A_2 : WORD ; 
-ACT_B_1 : WORD ; 
-ACT_B_2 : WORD ;
-Link part
-aSample: ARRAY [*] OF INT; variable length]]>
-							</Comment>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[15].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[16].ACT_A</Name>
-							<Comment>
-								<![CDATA[ACT_A_1 : WORD ; // address of actuator 1 , in form of id in the I/O pool
-ACT_A_2 : WORD ; 
-ACT_B_1 : WORD ; 
-ACT_B_2 : WORD ;
-Link part
-aSample: ARRAY [*] OF INT; variable length]]>
-							</Comment>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[16].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[17].ACT_A</Name>
-							<Comment>
-								<![CDATA[ACT_A_1 : WORD ; // address of actuator 1 , in form of id in the I/O pool
-ACT_A_2 : WORD ; 
-ACT_B_1 : WORD ; 
-ACT_B_2 : WORD ;
-Link part
-aSample: ARRAY [*] OF INT; variable length]]>
-							</Comment>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[17].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[18].ACT_A</Name>
-							<Comment>
-								<![CDATA[ACT_A_1 : WORD ; // address of actuator 1 , in form of id in the I/O pool
-ACT_A_2 : WORD ; 
-ACT_B_1 : WORD ; 
-ACT_B_2 : WORD ;
-Link part
-aSample: ARRAY [*] OF INT; variable length]]>
-							</Comment>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[18].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[19].ACT_A</Name>
-							<Comment>
-								<![CDATA[ACT_A_1 : WORD ; // address of actuator 1 , in form of id in the I/O pool
-ACT_A_2 : WORD ; 
-ACT_B_1 : WORD ; 
-ACT_B_2 : WORD ;
-Link part
-aSample: ARRAY [*] OF INT; variable length]]>
-							</Comment>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[19].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[20].ACT_A</Name>
-							<Comment>
-								<![CDATA[ACT_A_1 : WORD ; // address of actuator 1 , in form of id in the I/O pool
-ACT_A_2 : WORD ; 
-ACT_B_1 : WORD ; 
-ACT_B_2 : WORD ;
-Link part
-aSample: ARRAY [*] OF INT; variable length]]>
-							</Comment>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[20].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[21].ACT_A</Name>
-							<Comment>
-								<![CDATA[ACT_A_1 : WORD ; // address of actuator 1 , in form of id in the I/O pool
-ACT_A_2 : WORD ; 
-ACT_B_1 : WORD ; 
-ACT_B_2 : WORD ;
-Link part
-aSample: ARRAY [*] OF INT; variable length]]>
-							</Comment>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[21].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[22].ACT_A</Name>
-							<Comment>
-								<![CDATA[ACT_A_1 : WORD ; // address of actuator 1 , in form of id in the I/O pool
-ACT_A_2 : WORD ; 
-ACT_B_1 : WORD ; 
-ACT_B_2 : WORD ;
-Link part
-aSample: ARRAY [*] OF INT; variable length]]>
-							</Comment>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[22].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[23].ACT_A</Name>
-							<Comment>
-								<![CDATA[ACT_A_1 : WORD ; // address of actuator 1 , in form of id in the I/O pool
-ACT_A_2 : WORD ; 
-ACT_B_1 : WORD ; 
-ACT_B_2 : WORD ;
-Link part
-aSample: ARRAY [*] OF INT; variable length]]>
-							</Comment>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[23].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[24].ACT_A</Name>
-							<Comment>
-								<![CDATA[ACT_A_1 : WORD ; // address of actuator 1 , in form of id in the I/O pool
-ACT_A_2 : WORD ; 
-ACT_B_1 : WORD ; 
-ACT_B_2 : WORD ;
-Link part
-aSample: ARRAY [*] OF INT; variable length]]>
-							</Comment>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[24].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[25].ACT_A</Name>
-							<Comment>
-								<![CDATA[ACT_A_1 : WORD ; // address of actuator 1 , in form of id in the I/O pool
-ACT_A_2 : WORD ; 
-ACT_B_1 : WORD ; 
-ACT_B_2 : WORD ;
-Link part
-aSample: ARRAY [*] OF INT; variable length]]>
-							</Comment>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[25].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[26].ACT_A</Name>
-							<Comment>
-								<![CDATA[ACT_A_1 : WORD ; // address of actuator 1 , in form of id in the I/O pool
-ACT_A_2 : WORD ; 
-ACT_B_1 : WORD ; 
-ACT_B_2 : WORD ;
-Link part
-aSample: ARRAY [*] OF INT; variable length]]>
-							</Comment>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[26].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[27].ACT_A</Name>
-							<Comment>
-								<![CDATA[ACT_A_1 : WORD ; // address of actuator 1 , in form of id in the I/O pool
-ACT_A_2 : WORD ; 
-ACT_B_1 : WORD ; 
-ACT_B_2 : WORD ;
-Link part
-aSample: ARRAY [*] OF INT; variable length]]>
-							</Comment>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[27].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[28].ACT_A</Name>
-							<Comment>
-								<![CDATA[ACT_A_1 : WORD ; // address of actuator 1 , in form of id in the I/O pool
-ACT_A_2 : WORD ; 
-ACT_B_1 : WORD ; 
-ACT_B_2 : WORD ;
-Link part
-aSample: ARRAY [*] OF INT; variable length]]>
-							</Comment>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[28].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[29].ACT_A</Name>
-							<Comment>
-								<![CDATA[ACT_A_1 : WORD ; // address of actuator 1 , in form of id in the I/O pool
-ACT_A_2 : WORD ; 
-ACT_B_1 : WORD ; 
-ACT_B_2 : WORD ;
-Link part
-aSample: ARRAY [*] OF INT; variable length]]>
-							</Comment>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[29].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[30].ACT_A</Name>
-							<Comment>
-								<![CDATA[ACT_A_1 : WORD ; // address of actuator 1 , in form of id in the I/O pool
-ACT_A_2 : WORD ; 
-ACT_B_1 : WORD ; 
-ACT_B_2 : WORD ;
-Link part
-aSample: ARRAY [*] OF INT; variable length]]>
-							</Comment>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[30].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[31].ACT_A</Name>
-							<Comment>
-								<![CDATA[ACT_A_1 : WORD ; // address of actuator 1 , in form of id in the I/O pool
-ACT_A_2 : WORD ; 
-ACT_B_1 : WORD ; 
-ACT_B_2 : WORD ;
-Link part
-aSample: ARRAY [*] OF INT; variable length]]>
-							</Comment>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[31].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[32].ACT_A</Name>
-							<Comment>
-								<![CDATA[ACT_A_1 : WORD ; // address of actuator 1 , in form of id in the I/O pool
-ACT_A_2 : WORD ; 
-ACT_B_1 : WORD ; 
-ACT_B_2 : WORD ;
-Link part
-aSample: ARRAY [*] OF INT; variable length]]>
-							</Comment>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.CYLINDER_CONTEXT[32].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>TEST_UNIT_MASTER.fbVirtual.syncEngaged</Name>
-							<Comment>
-								<![CDATA[inform downstream i am ready , face to downstream]]>
-							</Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>TEST_UNIT_MASTER.fbMaster.syncEngaged</Name>
-							<Comment>
-								<![CDATA[inform downstream i am ready , face to downstream]]>
-							</Comment>
-							<Type>BOOL</Type>
 						</Var>
 					</Vars>
+					<UnrestoredVarLinks ImportTime="2018-07-13T15:03:54">
+						<OwnerA Name="OutputSrc" Prefix="TIPC^Untitled1^Untitled1 Instance" Type="2">
+							<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Simu">
+								<Link VarA="GVL.axisControls[1].PlcToNc" TypeA="MC.PLCTONC_AXIS_REF" InOutA="1" GuidA="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" VarB="Inputs^FromPlc" RestoreInfo="ANotFound"/>
+							</OwnerB>
+						</OwnerA>
+						<OwnerA Name="InputDst" Prefix="TIPC^Untitled1^Untitled1 Instance" Type="1">
+							<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Simu">
+								<Link VarA="GVL.axisControls[1].NcToPlc" TypeA="MC.NCTOPLC_AXIS_REF" InOutA="0" GuidA="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" VarB="Outputs^ToPlc" RestoreInfo="ANotFound"/>
+							</OwnerB>
+						</OwnerA>
+					</UnrestoredVarLinks>
 					<TaskPouOids>
 						<TaskPouOid Prio="20" OTCID="#x08502001"/>
 					</TaskPouOids>
 				</Instance>
 			</Project>
 		</Plc>
-		<Io/>
 	</Project>
-	<Mappings>
-		<MappingInfo Identifier="{05000010-2001-0850-1000-040300205008}" Id="#x02030010" Watchdog="14000000040000000400000004000000"/>
-		<OwnerA Name="TIPC^Untitled1^Untitled1 Instance">
-			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Simu">
-				<Link VarA="PlcTask Inputs^GVL.AXIS_CONTEXT[1].NcToPlc" VarB="Outputs^ToPlc"/>
-				<Link VarA="PlcTask Outputs^GVL.AXIS_CONTEXT[1].PlcToNc" VarB="Inputs^FromPlc"/>
-			</OwnerB>
-		</OwnerA>
-	</Mappings>
 </TcSmProject>
