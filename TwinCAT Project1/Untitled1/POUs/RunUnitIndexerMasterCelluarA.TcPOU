@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+  <POU Name="RunUnitIndexerMasterCelluarA" Id="{8c290897-f573-4530-b2b8-1a75c3433cf9}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunUnitIndexerMasterCelluarA EXTENDS RunUnitIndexerMaster
+VAR_INPUT
+	// conveyor related , Fast + Slow = pitch
+	ptCommandFast : POINTER TO CommandBlockPos;
+	ptCommandSlow : POINTER TO CommandBlockPos;
+	ptCommandTriggerRaise: POINTER TO CommandBlockPos; //trigger point
+	ptCommandCheckRaise : POINTER TO commandBlockPos; //if not all lifter done until then , stop conveyor motion
+	//lifter
+	ptCommandLifterHit : ARRAY[1..3] OF POINTER TO CommandBlockPos; // raise to hit
+	ptCommandLifterRelease : ARRAY[1..3] OF POINTER TO CommandBlockPos; //release
+	ptCommandLifterWorking : ARRAY[1..3] OF POINTER TO CommandBlockPos; //lift carrier to working position
+	//sensor
+	ptObstacleSensorStatus : ARRAY[1..3] OF POINTER TO BOOL; //fibers
+	ptReachSensorStatus : ARRAY[1..3] OF POINTER TO BOOL; //approximities
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	fbReadPosition : MC_ReadActualPosition;
+	fbMoveAbsFast : MC_MoveAbsolute;
+	fbMoveAbsSlowHit : MC_MoveAbsolute;
+	fbSensorStop : MC_Stop;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//implement state 3
+
+SUPER^(); //run indexer master
+
+//executing function blocks
+fbReadPosition(
+	Axis:= ptAxisMaster^, 
+	Enable:= fbMoveAbsFast.Execute, 
+	Valid=> , 
+	Busy=> , 
+	Error=> , 
+	ErrorID=> , 
+	Position=> );
+
+fbMoveAbsSlowHit(
+	Axis:= ptAxisMaster^, 
+	Execute:= fbMoveAbsFast.Execute, 
+	Position:= ptCommandSlow^.COORDINATE/1000, 
+	Velocity:= ptCommandSlow^.SPEED/1000, 
+	Acceleration:= ptCommandSlow^.ACC_TIME/1000, 
+	Deceleration:= ptCommandSlow^.DEC_TIME/1000, 
+	Jerk:= , 
+	BufferMode:= MC_BlendingNext, 
+	Options:= , 
+	Done=> , 
+	Busy=> , 
+	Active=> , 
+	CommandAborted=> , 
+	Error=> , 
+	ErrorID=> );
+
+fbMoveAbsFast(
+	Axis:= ptAxisMaster^, 
+	Execute:= , 
+	Position:= , 
+	Velocity:= , 
+	Acceleration:= , 
+	Deceleration:= , 
+	Jerk:= , 
+	BufferMode:= , 
+	Options:= , 
+	Done=> , 
+	Busy=> , 
+	Active=> , 
+	CommandAborted=> , 
+	Error=> , 
+	ErrorID=> );
+
+fbSensorStop(
+	Axis:= ptAxisMaster^, 
+	Execute:= , 
+	Deceleration:= , 
+	Jerk:= , 
+	Options:= , 
+	Done=> , 
+	Busy=> , 
+	Active=> , 
+	CommandAborted=> , 
+	Error=> , 
+	ErrorID=> );	
+	
+CASE SUPER^.state OF
+	3:
+	fbMoveAbsFast.Execute := TRUE; //start to go
+	4:
+	//until trigger raise reached , trigger all lifter to move
+	5:
+	//until check raise reached , check if all lifter done
+	6: 
+	//all lifter done , execute buffer mode
+	100:
+	//any lifter fails , execute stop ( or not)
+END_CASE]]></ST>
+    </Implementation>
+    <LineIds Name="RunUnitIndexerMasterCelluarA">
+      <LineId Id="14" Count="2" />
+      <LineId Id="78" Count="0" />
+      <LineId Id="51" Count="0" />
+      <LineId Id="53" Count="6" />
+      <LineId Id="52" Count="0" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="35" Count="14" />
+      <LineId Id="60" Count="0" />
+      <LineId Id="62" Count="15" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="79" Count="0" />
+      <LineId Id="81" Count="10" />
+      <LineId Id="80" Count="0" />
+      <LineId Id="17" Count="1" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="92" Count="1" />
+      <LineId Id="102" Count="5" />
+      <LineId Id="98" Count="0" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

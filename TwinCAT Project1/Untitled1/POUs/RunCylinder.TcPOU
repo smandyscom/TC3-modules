@@ -1,0 +1,169 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+  <POU Name="RunCylinder" Id="{a99bf5d1-aaa3-4095-9742-005d9ab3fed8}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunCylinder
+VAR_INPUT
+	
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR_IN_OUT
+	Comm : CylinderBlockBase;	
+END_VAR
+VAR	
+	A_SENSOR_USED_COUNT : WORD;
+	B_SENSOR_USED_COUNT : WORD;
+	
+	ACT_A AT %Q* : ARRAY[1..2] OF BOOL;
+	ACT_B AT %Q* : ARRAY[1..2] OF BOOL;
+	
+	SENSOR_A AT %I* : ARRAY[1..4] OF BOOL;
+	SENSOR_B AT %I* : ARRAY[1..4] OF BOOL;
+
+	nCounter : WORD := 0;
+	bMatched : BOOL := false;
+	
+	TMR_WATCH_DOG : TON ; //Watch dog timer
+	TMR_DELAY_TO_A : TON;
+	TMR_DELAY_TO_B : TON;
+	
+	BIT_WARNING : BIT; //0
+	BIT_A_MATCH : BIT; //1
+	BIT_B_MATCH : BIT; //2
+	BIT_WARN_SUPPRESS : BIT; //3 , (Control)
+	
+	BIT_DONE : BIT; //5
+	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//Run timers
+TMR_WATCH_DOG(IN:= , PT:= WORD_TO_TIME(Comm.timeWatchDog), Q=> , ET=> );
+TMR_DELAY_TO_A(IN:= , PT:= WORD_TO_TIME(Comm.timeDelayToA), Q=> , ET=> );
+TMR_DELAY_TO_B(IN:= , PT:= WORD_TO_TIME(Comm.timeDelayToB), Q=> , ET=> );
+
+//scan-in
+Comm.STATUS_WORD.3 := BIT_WARN_SUPPRESS;
+
+// scan all sensor status
+BIT_A_MATCH := TRUE;
+FOR nCounter := 1 TO A_SENSOR_USED_COUNT BY 1 DO
+	BIT_A_MATCH := (BIT_A_MATCH AND SENSOR_A[nCounter]);
+END_FOR
+BIT_B_MATCH := TRUE;
+FOR nCounter := 1 TO B_SENSOR_USED_COUNT BY 1 DO
+	BIT_B_MATCH := (BIT_B_MATCH AND SENSOR_B[nCounter]);
+END_FOR
+
+// if watch dog had been reset due to command changed in previous scan
+// restart
+IF NOT TMR_WATCH_DOG.IN THEN
+	TMR_WATCH_DOG.IN := TRUE;
+END_IF
+
+// once command changes , reset timer counter
+IF Comm.COMMAND_CACHED <> Comm.LAST_COMMAND THEN
+	//ptBlock^.TMR_WATCH_DOG.IN:=false;	//invalid , do not across a scan
+	TMR_WATCH_DOG.IN:=FALSE;
+	TMR_DELAY_TO_A.IN := (Comm.COMMAND_CACHED=eCylinderCommands.COMMAND_A); //active A delay timer
+	TMR_DELAY_TO_B.IN := (Comm.COMMAND_CACHED=eCylinderCommands.COMMAND_B); //if no sensor B , active B delay timer
+	
+	//reset done/warn
+	BIT_DONE := FALSE;
+	BIT_WARNING := FALSE;
+	
+	//output process
+	FOR nCounter:=1 TO 2 BY 1 DO
+		ACT_A[nCounter] := (Comm.COMMAND_CACHED = eCylinderCommands.COMMAND_A);
+		ACT_B[nCounter] := (Comm.COMMAND_CACHED = eCylinderCommands.COMMAND_B);
+	END_FOR
+	
+END_IF
+
+
+//reset
+bMatched := FALSE;
+// Check if match
+CASE Comm.COMMAND_CACHED OF
+	eCylinderCommands.NO_COMMAND:
+	bMatched:= TRUE;
+	
+	eCylinderCommands.COMMAND_A:
+	IF TMR_DELAY_TO_A.Q THEN
+		bMatched:= (BIT_A_MATCH ) AND (NOT BIT_B_MATCH OR B_SENSOR_USED_COUNT=0);
+	END_IF
+	
+	eCylinderCommands.COMMAND_B:
+	IF TMR_DELAY_TO_B.Q THEN
+		bMatched:= (NOT BIT_A_MATCH OR A_SENSOR_USED_COUNT=0) AND (BIT_B_MATCH );
+	END_IF
+		
+END_CASE
+
+// status update
+BIT_DONE := bMatched OR (NOT bMatched AND BIT_WARN_SUPPRESS AND TMR_WATCH_DOG.Q);
+BIT_WARNING := NOT bMatched AND NOT BIT_WARN_SUPPRESS AND TMR_WATCH_DOG.Q;
+
+
+// cache last command
+Comm.LAST_COMMAND := Comm.COMMAND_CACHED;
+
+
+//scan-out status
+comm.STATUS_WORD.0 := BIT_WARNING;
+comm.STATUS_WORD.1 := BIT_A_MATCH;
+comm.STATUS_WORD.2 := BIT_B_MATCH;
+comm.STATUS_WORD.5 := BIT_DONE;]]></ST>
+    </Implementation>
+    <Method Name="Execute" Id="{13693201-8c27-444e-bbfc-9d5e6a727077}">
+      <Declaration><![CDATA[METHOD Execute : BOOL
+VAR_INPUT
+	Command : eCylinderCommands;
+END_VAR
+VAR_OUTPUT
+	bDone : BOOL ;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// store command
+Comm.COMMAND_CACHED := Command;
+
+bDone := BIT_DONE AND NOT BIT_WARNING AND (Comm.COMMAND_CACHED = Comm.LAST_COMMAND);
+
+//reset surpress
+IF bDone THEN
+	Comm.STATUS_WORD.3 := FALSE;
+END_IF
+
+Execute:=bDone; //return]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{41827ab5-0173-413a-8bd3-19090e017f80}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="RunCylinder">
+      <LineId Id="144" Count="3" />
+      <LineId Id="239" Count="0" />
+      <LineId Id="241" Count="0" />
+      <LineId Id="240" Count="0" />
+      <LineId Id="148" Count="62" />
+      <LineId Id="233" Count="5" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="RunCylinder.Execute">
+      <LineId Id="9" Count="9" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="RunCylinder.FB_init">
+      <LineId Id="7" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

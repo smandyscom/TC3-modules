@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+  <DUT Name="AxisBase" Id="{c71fae35-4ccc-4e8a-a2d5-e324c41e50b7}">
+    <Declaration><![CDATA[TYPE AxisBase :
+STRUCT
+	MONITOR_OPERATION :WORD; //0 ,status of servoOn,alarmClear (PLC->HMI
+	reserved1 : WORD;//1
+	POS_COMMAND : DWORD; //2-3 , 
+	RUN_STATUS : WORD; //4 ,  runningWithServoOn , servoReady
+	reserved2 : WORD;//5
+	WARNINGS : DWORD;//6-7 ,
+	ALARMS: DWORD;//8-9	   ,  64Bits error code
+	COMMAND_STATUS : WORD; //10 , not implemented
+	reserved3: WORD; //11
+	POS_STATUS:WORD;//12 , not implemented
+	reserved4: WORD;//13
+	POS_FEEDBACK : DWORD;//14-15
+	SPD_FEEDBACK : DWORD;//16-17
+	TOR_FEEDBACK : DWORD;//18-19
+	MON_CONTROL_WORD:WORD;//20 , focused
+	reserved5 : ARRAY[1..3] OF WORD;//21-23
+	
+	OPERATION_OPERATION : WORD;//24 , operation of servoOn,alarmClear (HMI->PLC
+	
+	//Depreciated variables suitable for MechtrolinkIII
+	//Address
+	//AxisTYpe
+	//LimitPlus
+	//LimitMinus
+	//SpeedMax
+	//PosTolearance
+	
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

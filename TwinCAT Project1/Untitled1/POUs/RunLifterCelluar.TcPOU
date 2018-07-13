@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+  <POU Name="RunLifterCelluar" Id="{8e8fc5f3-47f1-4079-a3ab-596940aadfbf}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunLifterCelluar
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	//lifter
+	ptCommandLifterHit : POINTER TO CommandBlockPos; // raise to hit
+	ptCommandLifterRelease : POINTER TO CommandBlockPos; //release
+	ptCommandLifterWorking : POINTER TO CommandBlockPos; //lift carrier to working position
+	//sensor
+	ptObstacleSensorStatus : POINTER TO BOOL; //fibers
+	ptReachSensorStatus : POINTER TO BOOL; //approximities
+	//slot status
+	ptPreivousSlotValid : POINTER TO BOOL;
+	//axis
+	ptAxis : POINTER TO RunAxis;
+	//cylinder
+	ptCylinder : POINTER TO RunCylinder;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="AsStopper" Id="{54b07d97-f47e-4127-8e83-df24e9bcff85}">
+      <Declaration><![CDATA[METHOD AsStopper : BOOL
+VAR_INPUT
+	Execute : BOOL;
+END_VAR
+VAR_OUTPUT
+	Done:BOOL;
+END_VAR
+VAR
+	needRaise : BOOl;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//condition to execute :
+//previous slot is valid and
+//execute and
+//obstacle not existed
+
+needRaise := execute AND ptPreivousSlotValid^;
+
+ptAxis^.ExecuteCommandBlock(
+ptBlock:= ptCommandLifterHit, 
+execute:= execute AND ptPreivousSlotValid^ AND NOT Done, 
+done=> Done);	
+
+//no need to raise
+//or need to raise and successfully done	
+Done := (fbRise.Execute AND fbRise.Done) OR (NOT ptPreivousSlotValid^);
+	
+AsStopper := Done; //return]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{a4e43bb3-b045-4468-b1e1-3d38f2c0d86a}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//initializing , link related commandblock/sensor/cylinder]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="RunLifterCelluar">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="RunLifterCelluar.AsStopper">
+      <LineId Id="30" Count="2" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="54" Count="1" />
+      <LineId Id="47" Count="0" />
+      <LineId Id="50" Count="0" />
+      <LineId Id="48" Count="1" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="51" Count="1" />
+      <LineId Id="34" Count="2" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="RunLifterCelluar.FB_init">
+      <LineId Id="7" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

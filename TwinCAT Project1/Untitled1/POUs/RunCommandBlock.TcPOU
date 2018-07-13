@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+  <POU Name="RunCommandBlock" Id="{892bc60d-59f0-47f4-bc89-125a337e43f8}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunCommandBlock
+VAR_INPUT
+	ptBlock : POINTER TO CommandBlockBase:=0; //execute when non-null
+END_VAR
+VAR_OUTPUT
+	bDone : bool;
+END_VAR
+VAR
+	ptBlockPosition : POINTER TO CommandBlockPos;
+	// common
+	refAxis : POINTER TO AXIS_REF;
+	speedInmm : LREAL;
+	accInmms:LREAL;
+	decInmms:LREAL;
+	torqueLimitInPercentage:LREAL;
+	//switch to different MC block
+	ptMcExecute : POINTER TO BOOL;
+	ptMcDone : POINTER TO BOOL;
+	ptMcBusy : POINTER TO BOOL;
+	ptMcError : POINTER TO BOOL;
+	
+	//function blocks
+	fbMoveAbs: MC_MoveAbsolute;
+	fbMoveHome: MC_Home;
+	//fbMcPower: MC_Power;
+	//fbMcReset : MC_Reset;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//1. Do parameter translating
+//2. Do command routing
+//3. Control execute flow
+
+IF ptBlock=0 THEN
+	RETURN;
+END_IF
+
+bDone:=FALSE;//reset
+
+ptBlockPosition:=ptBlock;//casting
+
+CASE ptBlock^.COMMAND_TYPE OF
+eCommandTypes.POSITION:	
+//Position command
+ptMcExecute:=ADR(fbMoveAbs.Execute);
+ptMcDone:=ADR(fbMoveAbs.Done);
+ptMcBusy:=ADR(fbMoveAbs.Busy);
+ptMcError:=ADR(fbMoveAbs.Error);
+;
+eCommandTypes.ZRET:
+//Home command
+;
+ELSE
+	return;
+END_CASE
+
+//parameter writing
+refAxis:= ADR(GVL.axisControls[RunCommandBlock.ptBlock^.AXIS_ID]);
+speedInmm:=(LWORD_TO_LREAL(ptBlock^.SPEED)/1000);
+accInmms:=((speedInmm)/(LWORD_TO_LREAL(ptBlock^.ACC_TIME)/1000));
+decInmms:=((speedInmm)/(LWORD_TO_LREAL(ptBlock^.DEC_TIME)/1000));
+torqueLimitInPercentage:=((LWORD_TO_LREAL(ptBlock^.TORQUE_LIMIT)/100));
+	
+//Execute
+fbMoveAbs(
+	Axis:= refAxis^, 
+	Execute:= , 
+	Position:= (LWORD_TO_LREAL(ptBlockPosition^.COORDINATE)/1000), 
+	Velocity:= speedInmm, 
+	Acceleration:= accInmms, 
+	Deceleration:= decInmms, 
+	Jerk:= , 
+	BufferMode:= , 
+	Options:= , 
+	Done=> , 
+	Busy=> , 
+	Active=> , 
+	CommandAborted=> , 
+	Error=> , 
+	ErrorID=> );
+fbMoveHome(
+	Axis:= refAxis^, 
+	Execute:= , 
+	Position:= , 
+	HomingMode:= , 
+	BufferMode:= , 
+	Options:= , 
+	bCalibrationCam:= , 
+	Done=> , 
+	Busy=> , 
+	Active=> , 
+	CommandAborted=> , 
+	Error=> , 
+	ErrorID=> );	
+	
+//auto stop execute when error , would do raising edge again when error eliminated
+ptMcExecute^ := NOT (ptMcError^) AND NOT (ptMcDone^);
+
+bDone := ptMcDone^;
+
+IF bDone THEN
+	ptBlock := 0;//cut link
+END_IF	
+
+//IF ptMcDone^ THEN
+//	ptBlock:=0; //link cut
+//	ptMcExecute^ :=FALSE;//reset
+//	ptMcDone^:=FALSE; //why??
+//	bDone:=TRUE;
+//END_IF]]></ST>
+    </Implementation>
+    <Method Name="Execute" Id="{d691a2d4-8441-4dea-bd6c-d2cd023e0b35}">
+      <Declaration><![CDATA[METHOD Execute : BOOL
+VAR_INPUT
+	
+	command : POINTER TO CommandBlockBase:=0; 
+END_VAR
+VAR_OUTPUT
+	
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF ptBlock =0 THEN
+	ptBlock := command;
+END_IF
+
+Execute:=bDone;
+
+IF bDone THEN
+	bDone := FALSE;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="RunCommandBlock">
+      <LineId Id="833" Count="1" />
+      <LineId Id="831" Count="1" />
+      <LineId Id="755" Count="45" />
+      <LineId Id="812" Count="0" />
+      <LineId Id="814" Count="12" />
+      <LineId Id="813" Count="0" />
+      <LineId Id="801" Count="4" />
+      <LineId Id="828" Count="0" />
+      <LineId Id="830" Count="0" />
+      <LineId Id="829" Count="0" />
+      <LineId Id="827" Count="0" />
+      <LineId Id="806" Count="5" />
+      <LineId Id="169" Count="0" />
+    </LineIds>
+    <LineIds Name="RunCommandBlock.Execute">
+      <LineId Id="7" Count="7" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

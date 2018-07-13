@@ -1,0 +1,266 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+  <POU Name="RunAxis" Id="{1e355049-017f-4f7f-88a6-a7040666a5c5}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunAxis
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+	
+END_VAR
+VAR_IN_OUT
+	Comm : AxisBase; // public interface
+END_VAR
+VAR	
+	Axis : AXIS_REF;
+	 
+	fbMoveAbs : MC_MoveAbsolute;
+	fbMoveHome : MC_Home;
+	fbPower : MC_Power;
+	fbReset: MC_Reset;
+	
+	//Status reading
+	fbReadParameter: MC_ReadParameter;
+	fbReadActualPosition : MC_ReadActualPosition;
+	fbReadStatus : MC_ReadStatus;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbMoveAbs(
+	Axis:= Axis, 
+	Execute:= , 
+	Position:= , 
+	Velocity:= , 
+	Acceleration:= , 
+	Deceleration:= , 
+	Jerk:= , 
+	BufferMode:= , 
+	Options:= , 
+	Done=> , 
+	Busy=> , 
+	Active=> , 
+	CommandAborted=> , 
+	Error=> , 
+	ErrorID=> );
+	
+fbMoveHome(
+	Axis:= Axis, 
+	Execute:= , 
+	Position:= , 
+	HomingMode:= , 
+	BufferMode:= , 
+	Options:= , 
+	bCalibrationCam:= , 
+	Done=> , 
+	Busy=> , 
+	Active=> , 
+	CommandAborted=> , 
+	Error=> , 
+	ErrorID=> );
+	
+fbPower(
+	Axis:= Axis, 
+	Enable:= , 
+	Enable_Positive:= , 
+	Enable_Negative:= , 
+	Override:= , 
+	BufferMode:= , 
+	Options:= , 
+	Status=> , 
+	Busy=> , 
+	Active=> , 
+	Error=> , 
+	ErrorID=> );
+	
+fbReset(
+	Axis:= Axis, 
+	Execute:= , 
+	Done=> , 
+	Busy=> , 
+	Error=> , 
+	ErrorID=> );
+	
+//Status reading and update
+fbReadParameter(
+	Axis:= Axis, 
+	Enable:= TRUE, 
+	ParameterNumber:= ActualVelocity, 
+	ReadMode:= , 
+	Valid=> , 
+	Busy=> , 
+	Error=> , 
+	ErrorID=> , 
+	Value=> );
+comm.SPD_FEEDBACK := LREAL_TO_DWORD(fbReadParameter.Value*1000);
+fbReadParameter(
+	Axis:= Axis, 
+	Enable:= TRUE, 
+	ParameterNumber:= CommandedPosition, 
+	ReadMode:= , 
+	Valid=> , 
+	Busy=> , 
+	Error=> , 
+	ErrorID=> , 
+	Value=> );
+comm.POS_COMMAND := LREAL_TO_DWORD(fbReadParameter.Value*1000);
+fbReadActualPosition(
+	Axis:= axis, 
+	Enable:= TRUE, 
+	Valid=> , 
+	Busy=> , 
+	Error=> , 
+	ErrorID=> , 
+	Position=> );
+comm.POS_FEEDBACK := LREAL_TO_DWORD(fbReadActualPosition.Position*1000);
+
+fbReadStatus(
+	Axis:= axis, 
+	Enable:= TRUE, 
+	Valid=> , 
+	Busy=> , 
+	Error=> , 
+	ErrorID=> , 
+	ErrorStop=> , 
+	Disabled=> , 
+	Stopping=> , 
+	StandStill=> , 
+	DiscreteMotion=> , 
+	ContinuousMotion=> , 
+	SynchronizedMotion=> , 
+	Homing=> , 
+	ConstantVelocity=> , 
+	Accelerating=> , 
+	Decelerating=> , 
+	Status=> );
+
+comm.MON_CONTROL_WORD.0 := fbPower.Enable; //servo on
+comm.MON_CONTROL_WORD.15 := fbReset.Execute; // alarm clear
+comm.RUN_STATUS.1 := fbReadStatus.StandStill; //run with servo on
+comm.RUN_STATUS.3 := not fbReadStatus.Error; //Servo ready]]></ST>
+    </Implementation>
+    <Method Name="ExecuteCommandBlock" Id="{248fd65c-916e-4c41-b72b-91932f742cc7}">
+      <Declaration><![CDATA[METHOD ExecuteCommandBlock : BOOL
+VAR_INPUT
+	ptBlock : POINTER TO CommandBlockGeneric;
+	execute : BOOL; //used to do mutex
+END_VAR
+VAR
+	// Common Parameters
+	speedInmm : LREAL;
+	accInmms:LREAL;
+	decInmms:LREAL;
+	torqueLimitInPercentage:LREAL;
+	//MC block routing
+	ptMcExecute : POINTER TO BOOL;
+	ptMcDone : POINTER TO BOOL;
+	ptMcBusy : POINTER TO BOOL;
+	ptMcError : POINTER TO BOOL;
+END_VAR
+VAR_OUTPUT
+	done:bool;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//1. Do parameter translating
+//2. Do command routing
+//3. Control execute flow
+
+IF NOT execute THEN
+	RETURN;
+END_IF
+
+//parameter writing
+speedInmm:=(LWORD_TO_LREAL(ptBlock^.base.SPEED)/1000);
+accInmms:=((speedInmm)/(LWORD_TO_LREAL(ptBlock^.base.ACC_TIME)/1000));
+decInmms:=((speedInmm)/(LWORD_TO_LREAL(ptBlock^.base.DEC_TIME)/1000));
+torqueLimitInPercentage:=((LWORD_TO_LREAL(ptBlock^.base.TORQUE_LIMIT)/100));
+
+//command routing
+CASE ptBlock^.base.COMMAND_TYPE OF
+eCommandTypes.POSITION:	
+//Position command
+ptMcExecute:=ADR(fbMoveAbs.Execute);
+ptMcDone:=ADR(fbMoveAbs.Done);
+ptMcBusy:=ADR(fbMoveAbs.Busy);
+ptMcError:=ADR(fbMoveAbs.Error);
+
+fbMoveAbs.Velocity := speedInmm;
+//...
+fbMoveAbs.Position := LWORD_TO_LREAL(ptBlock^.position.COORDINATE/1000); //
+
+;
+eCommandTypes.ZRET:
+//Home command
+ptMcExecute:=ADR(fbMoveHome.Execute);
+ptMcDone:=ADR(fbMoveHome.Done);
+ptMcBusy:=ADR(fbMoveHome.Busy);
+ptMcError:=ADR(fbMoveHome.Error);
+;
+ELSE
+	return;
+END_CASE
+
+//auto stop execute when error , would do raising edge again when error eliminated
+ptMcExecute^ := NOT (ptMcError^) AND NOT (ptMcDone^);
+
+done := ptMcDone^;
+
+ExecuteCommandBlock:=done;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{5aeba573-47c3-411b-9f3d-8af6b6892223}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="RunAxis">
+      <LineId Id="91" Count="53" />
+      <LineId Id="148" Count="0" />
+      <LineId Id="153" Count="10" />
+      <LineId Id="165" Count="8" />
+      <LineId Id="175" Count="1" />
+      <LineId Id="198" Count="6" />
+      <LineId Id="174" Count="0" />
+      <LineId Id="224" Count="0" />
+      <LineId Id="164" Count="0" />
+      <LineId Id="206" Count="17" />
+      <LineId Id="225" Count="0" />
+      <LineId Id="227" Count="0" />
+      <LineId Id="230" Count="0" />
+      <LineId Id="229" Count="0" />
+      <LineId Id="228" Count="0" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="RunAxis.ExecuteCommandBlock">
+      <LineId Id="22" Count="1" />
+      <LineId Id="20" Count="1" />
+      <LineId Id="18" Count="1" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="57" Count="0" />
+      <LineId Id="53" Count="3" />
+      <LineId Id="45" Count="1" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="28" Count="5" />
+      <LineId Id="58" Count="0" />
+      <LineId Id="60" Count="0" />
+      <LineId Id="59" Count="0" />
+      <LineId Id="61" Count="1" />
+      <LineId Id="34" Count="2" />
+      <LineId Id="41" Count="3" />
+      <LineId Id="37" Count="3" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="63" Count="0" />
+      <LineId Id="66" Count="3" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="RunAxis.FB_init">
+      <LineId Id="7" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
