@@ -6,23 +6,24 @@ VAR_INPUT
 	// conveyor related , Fast + Slow = pitch
 	ptCommandFast : POINTER TO CommandBlockPos;
 	ptCommandSlow : POINTER TO CommandBlockPos;
+	ptCommandExtend : POINTER TO CommandBlockPos;
+	//Checkpoints
 	ptCommandTriggerRaise: POINTER TO CommandBlockPos; //trigger point
 	ptCommandCheckRaise : POINTER TO commandBlockPos; //if not all lifter done until then , stop conveyor motion
-	//lifter
-	ptCommandLifterHit : ARRAY[1..3] OF POINTER TO CommandBlockPos; // raise to hit
-	ptCommandLifterRelease : ARRAY[1..3] OF POINTER TO CommandBlockPos; //release
-	ptCommandLifterWorking : ARRAY[1..3] OF POINTER TO CommandBlockPos; //lift carrier to working position
-	//sensor
-	ptObstacleSensorStatus : ARRAY[1..3] OF POINTER TO BOOL; //fibers
-	ptReachSensorStatus : ARRAY[1..3] OF POINTER TO BOOL; //approximities
+	ptCommandCheckReach : POINTER TO commandBlockPos;
+	//Lifters
+	lifters : ARRAY[1..3] OF POINTER TO RunLifterCelluar;
 END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-	fbReadPosition : MC_ReadActualPosition;
-	fbMoveAbsFast : MC_MoveAbsolute;
-	fbMoveAbsSlowHit : MC_MoveAbsolute;
-	fbSensorStop : MC_Stop;
+	bFast : BOOL;
+	bSlow : BOOL;
+	bExtend : BOOL;
+	
+	nCounter  : INT ;
+	allLifterDone : BOOL;
+	allLifterReach: BOOL;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -30,94 +31,94 @@ END_VAR
 
 SUPER^(); //run indexer master
 
-//executing function blocks
-fbReadPosition(
-	Axis:= ptAxisMaster^, 
-	Enable:= fbMoveAbsFast.Execute, 
-	Valid=> , 
-	Busy=> , 
-	Error=> , 
-	ErrorID=> , 
-	Position=> );
+//Buffer modes
+ptAxisMaster^.ExecuteCommandBlock(ptBlock := ptCommandFast,
+	Execute:= bFast,
+	Done=>);
+ptAxisMaster^.ExecuteCommandBlock(ptBlock := ptCommandSlow,
+	Execute:= bSlow,
+	Done=>);
+ptAxisMaster^.ExecuteCommandBlock(ptBlock := ptCommandExtend,
+	Execute:= bExtend,
+	Done=>);
 
-fbMoveAbsSlowHit(
-	Axis:= ptAxisMaster^, 
-	Execute:= fbMoveAbsFast.Execute, 
-	Position:= ptCommandSlow^.COORDINATE/1000, 
-	Velocity:= ptCommandSlow^.SPEED/1000, 
-	Acceleration:= ptCommandSlow^.ACC_TIME/1000, 
-	Deceleration:= ptCommandSlow^.DEC_TIME/1000, 
-	Jerk:= , 
-	BufferMode:= MC_BlendingNext, 
-	Options:= , 
-	Done=> , 
-	Busy=> , 
-	Active=> , 
-	CommandAborted=> , 
-	Error=> , 
-	ErrorID=> );
+allLifterDone := TRUE; //reset
+FOR nCounter:=1 TO 3 BY 1 DO
+	lifters[nCounter]^.AsStopper(Execute:= ptAxisMaster^.PositionFeedback >= DWORD_TO_LREAL(ptCommandTriggerRaise^.COORDINATE/1000),
+		Done=>,
+		Error=>);
+	allLifterDone := allLifterDone AND lifters[nCounter]^.AsStopper.Done; //collect overall result
+END_FOR
 
-fbMoveAbsFast(
-	Axis:= ptAxisMaster^, 
-	Execute:= , 
-	Position:= , 
-	Velocity:= , 
-	Acceleration:= , 
-	Deceleration:= , 
-	Jerk:= , 
-	BufferMode:= , 
-	Options:= , 
-	Done=> , 
-	Busy=> , 
-	Active=> , 
-	CommandAborted=> , 
-	Error=> , 
-	ErrorID=> );
-
-fbSensorStop(
-	Axis:= ptAxisMaster^, 
-	Execute:= , 
-	Deceleration:= , 
-	Jerk:= , 
-	Options:= , 
-	Done=> , 
-	Busy=> , 
-	Active=> , 
-	CommandAborted=> , 
-	Error=> , 
-	ErrorID=> );	
+//Before check point
+ptAxisMaster^.ExecuteCommandBlock(ptBlock:=ptCommandSlow,
+	Execute:=allLifterDone AND ptAxisMaster^.PositionFeedback < DWORD_TO_LREAL(ptCommandCheckRaise^.COORDINATE/1000),
+	Done =>);
+	
 	
 CASE SUPER^.state OF
 	3:
-	fbMoveAbsFast.Execute := TRUE; //start to go
+	//reset pos command to zero
+	bFast := TRUE; //start to go
 	4:
 	//until trigger raise reached , trigger all lifter to move
+	IF ptAxisMaster^.PositionFeedback < DWORD_TO_LREAL(ptCommandCheckRaise^.COORDINATE/1000) THEN
+		//transition
+	END_IF
 	5:
 	//until check raise reached , check if all lifter done
+	IF allLifterDone AND ptAxisMaster^.PositionFeedback < DWORD_TO_LREAL(ptCommandCheckRaise^.COORDINATE/1000) THEN
+		//success transition
+	ELSIF ptAxisMaster^.PositionFeedback < DWORD_TO_LREAL(ptCommandCheckRaise^.COORDINATE/1000) THEN
+		//lifter comes error
+	END_IF
 	6: 
-	//all lifter done , execute buffer mode
+	// check reach
+	IF allLifterReach AND ptAxisMaster^.PositionFeedback < DWORD_TO_LREAL(ptCommandCheckReach^.COORDINATE/1000) THEN
+		//success transition
+	ELSIF ptAxisMaster^.PositionFeedback >= DWORD_TO_LREAL(ptCommandCheckReach^.COORDINATE/1000) THEN
+		//need walk further more	
+	END_IF
 	100:
 	//any lifter fails , execute stop ( or not)
 END_CASE]]></ST>
     </Implementation>
     <LineIds Name="RunUnitIndexerMasterCelluarA">
       <LineId Id="14" Count="2" />
-      <LineId Id="78" Count="0" />
-      <LineId Id="51" Count="0" />
-      <LineId Id="53" Count="6" />
-      <LineId Id="52" Count="0" />
-      <LineId Id="24" Count="0" />
-      <LineId Id="35" Count="14" />
-      <LineId Id="60" Count="0" />
-      <LineId Id="62" Count="15" />
-      <LineId Id="25" Count="0" />
-      <LineId Id="79" Count="0" />
-      <LineId Id="81" Count="10" />
-      <LineId Id="80" Count="0" />
+      <LineId Id="190" Count="0" />
+      <LineId Id="138" Count="0" />
+      <LineId Id="140" Count="1" />
+      <LineId Id="184" Count="5" />
+      <LineId Id="142" Count="0" />
+      <LineId Id="153" Count="0" />
+      <LineId Id="143" Count="0" />
+      <LineId Id="146" Count="0" />
+      <LineId Id="148" Count="1" />
+      <LineId Id="154" Count="0" />
+      <LineId Id="147" Count="0" />
+      <LineId Id="150" Count="0" />
+      <LineId Id="158" Count="0" />
+      <LineId Id="151" Count="0" />
+      <LineId Id="155" Count="0" />
+      <LineId Id="157" Count="0" />
+      <LineId Id="156" Count="0" />
+      <LineId Id="139" Count="0" />
       <LineId Id="17" Count="1" />
+      <LineId Id="179" Count="0" />
       <LineId Id="20" Count="0" />
       <LineId Id="92" Count="1" />
-      <LineId Id="102" Count="5" />
+      <LineId Id="159" Count="2" />
+      <LineId Id="102" Count="1" />
+      <LineId Id="162" Count="0" />
+      <LineId Id="164" Count="0" />
+      <LineId Id="177" Count="1" />
+      <LineId Id="168" Count="0" />
+      <LineId Id="104" Count="1" />
+      <LineId Id="170" Count="0" />
+      <LineId Id="172" Count="0" />
+      <LineId Id="174" Count="1" />
+      <LineId Id="173" Count="0" />
+      <LineId Id="106" Count="1" />
       <LineId Id="98" Count="0" />
       <LineId Id="9" Count="0" />
     </LineIds>

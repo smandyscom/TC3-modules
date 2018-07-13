@@ -31,10 +31,11 @@ VAR_INPUT
 	Execute : BOOL;
 END_VAR
 VAR_OUTPUT
-	Done:BOOL;
+	//neither Done nor Error : Transition
+	Done:BOOL;	//successfully
+	Error:BOOL; //blocked
 END_VAR
 VAR
-	needRaise : BOOl;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -43,17 +44,24 @@ END_VAR
 //execute and
 //obstacle not existed
 
-needRaise := execute AND ptPreivousSlotValid^;
+IF NOT Execute THEN
+	Done := FALSE;
+	Error := FALSE;
+	RETURN;
+END_IF
+
 
 ptAxis^.ExecuteCommandBlock(
 ptBlock:= ptCommandLifterHit, 
-execute:= execute AND ptPreivousSlotValid^ AND NOT Done, 
-done=> Done);	
+execute:= ptPreivousSlotValid^ AND NOT ptObstacleSensorStatus^, 
+done=> );	
 
+//Done:
 //no need to raise
 //or need to raise and successfully done	
-Done := (fbRise.Execute AND fbRise.Done) OR (NOT ptPreivousSlotValid^);
-	
+Done :=  (ptPreivousSlotValid^ AND ptAxis^.ExecuteCommandBlock.done) OR (NOT ptPreivousSlotValid^);
+Error :=  ptPreivousSlotValid^ AND ptObstacleSensorStatus^;
+
 AsStopper := Done; //return]]></ST>
       </Implementation>
     </Method>
@@ -74,13 +82,20 @@ END_VAR
     <LineIds Name="RunLifterCelluar.AsStopper">
       <LineId Id="30" Count="2" />
       <LineId Id="28" Count="0" />
-      <LineId Id="54" Count="1" />
+      <LineId Id="56" Count="0" />
+      <LineId Id="62" Count="1" />
+      <LineId Id="58" Count="1" />
+      <LineId Id="57" Count="0" />
+      <LineId Id="54" Count="0" />
       <LineId Id="47" Count="0" />
       <LineId Id="50" Count="0" />
       <LineId Id="48" Count="1" />
       <LineId Id="33" Count="0" />
+      <LineId Id="64" Count="0" />
       <LineId Id="51" Count="1" />
-      <LineId Id="34" Count="2" />
+      <LineId Id="34" Count="1" />
+      <LineId Id="65" Count="0" />
+      <LineId Id="36" Count="0" />
       <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="RunLifterCelluar.FB_init">

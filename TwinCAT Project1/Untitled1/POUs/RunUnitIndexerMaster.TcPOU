@@ -13,7 +13,7 @@ VAR
 	
 	ptUpstreamMaster : POINTER TO RunUnitIndexerMaster;//upstream linkage
 	
-	ptAxisMaster : POINTER TO AXIS_REF; //axis reference
+	ptAxisMaster : POINTER TO RunAxis; //axis reference
 	
 	//Working registers
 	matIsValidStatus : DWORD;

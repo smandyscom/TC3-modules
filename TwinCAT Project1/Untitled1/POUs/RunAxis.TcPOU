@@ -5,7 +5,7 @@
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
-	
+	PositionFeedback : LREAL;
 END_VAR
 VAR_IN_OUT
 	Comm : AxisBase; // public interface
@@ -109,8 +109,8 @@ fbReadActualPosition(
 	Busy=> , 
 	Error=> , 
 	ErrorID=> , 
-	Position=> );
-comm.POS_FEEDBACK := LREAL_TO_DWORD(fbReadActualPosition.Position*1000);
+	Position=> PositionFeedback);
+comm.POS_FEEDBACK := LREAL_TO_DWORD(PositionFeedback*1000);
 
 fbReadStatus(
 	Axis:= axis, 
