@@ -14,7 +14,8 @@ VAR
 	Comm : AxisBase; // public interface
 	Axis : AXIS_REF;
 	 
-	fbMoveAbs : MC_MoveAbsolute;
+	nCounter : int :=0;
+	fbMoveAbs : ARRAY[1..3] OF MC_MoveAbsolute; //preset n buffers available
 	fbMoveHome : MC_Home;
 	fbPower : MC_Power;
 	fbReset: MC_Reset;
@@ -23,11 +24,15 @@ VAR
 	fbReadParameter: MC_ReadParameter;
 	fbReadActualPosition : MC_ReadActualPosition;
 	fbReadStatus : MC_ReadStatus;
+	Done: INT;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[
-fbMoveAbs(
+//execute founction blocks
+//TODO , possible to configure how many buffer used
+FOR nCounter:=1 TO 3 BY 1 DO
+fbMoveAbs[nCounter](
 	Axis:= Axis, 
 	Execute:= , 
 	Position:= , 
@@ -43,6 +48,8 @@ fbMoveAbs(
 	CommandAborted=> , 
 	Error=> , 
 	ErrorID=> );
+END_FOR
+
 	
 fbMoveHome(
 	Axis:= Axis, 
@@ -147,6 +154,7 @@ comm.ALARMS := fbReadStatus.ErrorID; //error code]]></ST>
 VAR_INPUT
 	ptBlock : POINTER TO CommandBlockGeneric;
 	execute : BOOL; //used to do mutex
+	bufferIndex: INT :=1;
 END_VAR
 VAR
 	// Common Parameters
@@ -187,14 +195,14 @@ torqueLimitInPercentage:=((LWORD_TO_LREAL(ptBlock^.base.TORQUE_LIMIT)/100));
 CASE ptBlock^.base.COMMAND_TYPE OF
 eCommandTypes.POSITION:	
 //Position command
-ptMcExecute:=ADR(fbMoveAbs.Execute);
-ptMcDone:=ADR(fbMoveAbs.Done);
-ptMcBusy:=ADR(fbMoveAbs.Busy);
-ptMcError:=ADR(fbMoveAbs.Error);
+ptMcExecute:=ADR(fbMoveAbs[bufferIndex].Execute);
+ptMcDone:=ADR(fbMoveAbs[bufferIndex].Done);
+ptMcBusy:=ADR(fbMoveAbs[bufferIndex].Busy);
+ptMcError:=ADR(fbMoveAbs[bufferIndex].Error);
 
-fbMoveAbs.Velocity := speedInmm;
+fbMoveAbs[bufferIndex].Velocity := speedInmm;
 //...
-fbMoveAbs.Position := LWORD_TO_LREAL(ptBlock^.position.COORDINATE/1000); //
+fbMoveAbs[bufferIndex].Position := LWORD_TO_LREAL(ptBlock^.position.COORDINATE/1000); //
 
 ;
 eCommandTypes.ZRET:
@@ -228,7 +236,14 @@ END_VAR
       </Implementation>
     </Method>
     <LineIds Name="RunAxis">
-      <LineId Id="279" Count="30" />
+      <LineId Id="362" Count="0" />
+      <LineId Id="388" Count="0" />
+      <LineId Id="310" Count="0" />
+      <LineId Id="361" Count="0" />
+      <LineId Id="346" Count="14" />
+      <LineId Id="314" Count="0" />
+      <LineId Id="279" Count="0" />
+      <LineId Id="295" Count="14" />
       <LineId Id="121" Count="0" />
       <LineId Id="253" Count="0" />
       <LineId Id="122" Count="22" />

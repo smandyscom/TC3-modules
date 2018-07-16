@@ -21,6 +21,7 @@ CASE state OF
 	0:
 	fbRunAxis^.ExecuteCommandBlock(ptBlock:=ptCommand1,
 		execute:= NOT bDone,
+		bufferIndex:=1,
 		done=> bDone);
 	IF bDone THEN
 		bDone := FALSE;
@@ -29,6 +30,7 @@ CASE state OF
 	1:
 	fbRunAxis^.ExecuteCommandBlock(ptBlock:=ptCommand2,
 		execute:= NOT bDone,
+		bufferIndex:=1,
 		done=> bDone);
 	IF bDone THEN
 		bDone := FALSE;
@@ -42,12 +44,16 @@ END_CASE]]></ST>
       <LineId Id="8" Count="0" />
       <LineId Id="11" Count="0" />
       <LineId Id="17" Count="0" />
-      <LineId Id="19" Count="2" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="44" Count="0" />
+      <LineId Id="20" Count="1" />
       <LineId Id="25" Count="0" />
       <LineId Id="22" Count="1" />
       <LineId Id="13" Count="0" />
       <LineId Id="24" Count="0" />
-      <LineId Id="26" Count="5" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="45" Count="0" />
+      <LineId Id="27" Count="4" />
       <LineId Id="12" Count="0" />
       <LineId Id="5" Count="0" />
     </LineIds>

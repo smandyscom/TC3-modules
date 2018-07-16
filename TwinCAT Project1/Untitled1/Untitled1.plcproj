@@ -119,10 +119,10 @@
     </Compile>
     <Compile Include="POUs\TEST_AXIS.TcPOU">
       <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
     <Compile Include="POUs\TEST_BUFFERING.TcPOU">
       <SubType>Code</SubType>
-      <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
     <Compile Include="POUs\TEST_COMMAND_BLOCK.TcPOU">
       <SubType>Code</SubType>
