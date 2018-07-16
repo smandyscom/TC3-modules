@@ -57,10 +57,7 @@
     <Compile Include="DUTs\MaterialHeader.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\SlotMaterialData.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\SlotHeader.TcDUT">
+    <Compile Include="DUTs\SignalBlockBase.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\UnitAoiHandshaking.TcDUT">
@@ -96,38 +93,40 @@
     <Compile Include="PlcTask.TcTTO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\ExecuteCylinder.TcPOU">
+    <Compile Include="POUs\Foundation\RunAxis.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Foundation\RunCylinder.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Foundation\RunSignal.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Foundation\RunUnitGeneric.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Foundation\RunUnitIndexerMaster.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\MAIN.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\RunAxis.TcPOU">
+    <Compile Include="POUs\Stations\RunLifterCelluar.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\RunCommandBlock.TcPOU">
+    <Compile Include="POUs\Stations\RunUnitIndexerMasterCelluarA.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\POU.TcPOU">
+    <Compile Include="POUs\TEST_AXIS.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\RunLifterCelluar.TcPOU">
+    <Compile Include="POUs\TEST_BUFFERING.TcPOU">
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\RunUnitGeneric.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\RunUnitIndexerMaster.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\RunUnitIndexerMasterCelluarA.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\RunCylinder.TcPOU">
-      <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
     <Compile Include="POUs\TEST_COMMAND_BLOCK.TcPOU">
       <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
     <Compile Include="POUs\TEST_CYLINDER.TcPOU">
       <SubType>Code</SubType>
@@ -145,6 +144,8 @@
   <ItemGroup>
     <Folder Include="DUTs" />
     <Folder Include="GVLs" />
+    <Folder Include="POUs\Foundation" />
+    <Folder Include="POUs\Stations" />
     <Folder Include="VISUs" />
     <Folder Include="POUs" />
   </ItemGroup>

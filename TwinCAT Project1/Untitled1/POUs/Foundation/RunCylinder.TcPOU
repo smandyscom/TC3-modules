@@ -8,9 +8,11 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR_IN_OUT
-	Comm : CylinderBlockBase;	
+	
 END_VAR
-VAR	
+VAR		
+	Comm : CylinderBlockBase;	
+
 	A_SENSOR_USED_COUNT : WORD;
 	B_SENSOR_USED_COUNT : WORD;
 	

@@ -8,9 +8,10 @@ VAR_OUTPUT
 	PositionFeedback : LREAL;
 END_VAR
 VAR_IN_OUT
-	Comm : AxisBase; // public interface
+	
 END_VAR
 VAR	
+	Comm : AxisBase; // public interface
 	Axis : AXIS_REF;
 	 
 	fbMoveAbs : MC_MoveAbsolute;
@@ -25,7 +26,8 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[fbMoveAbs(
+      <ST><![CDATA[
+fbMoveAbs(
 	Axis:= Axis, 
 	Execute:= , 
 	Position:= , 
@@ -57,13 +59,14 @@ fbMoveHome(
 	Error=> , 
 	ErrorID=> );
 	
+//default mode
 fbPower(
 	Axis:= Axis, 
 	Enable:= , 
 	Enable_Positive:= , 
 	Enable_Negative:= , 
 	Override:= , 
-	BufferMode:= , 
+	BufferMode:= MC_BlendingNext, 
 	Options:= , 
 	Status=> , 
 	Busy=> , 
@@ -132,10 +135,12 @@ fbReadStatus(
 	Decelerating=> , 
 	Status=> );
 
+//Read status
 comm.MON_CONTROL_WORD.0 := fbPower.Enable; //servo on
 comm.MON_CONTROL_WORD.15 := fbReset.Execute; // alarm clear
 comm.RUN_STATUS.1 := fbReadStatus.StandStill; //run with servo on
-comm.RUN_STATUS.3 := not fbReadStatus.Error; //Servo ready]]></ST>
+comm.RUN_STATUS.3 := NOT fbReadStatus.Error; //Servo ready
+comm.ALARMS := fbReadStatus.ErrorID; //error code]]></ST>
     </Implementation>
     <Method Name="ExecuteCommandBlock" Id="{248fd65c-916e-4c41-b72b-91932f742cc7}">
       <Declaration><![CDATA[METHOD ExecuteCommandBlock : BOOL
@@ -154,6 +159,7 @@ VAR
 	ptMcDone : POINTER TO BOOL;
 	ptMcBusy : POINTER TO BOOL;
 	ptMcError : POINTER TO BOOL;
+
 END_VAR
 VAR_OUTPUT
 	done:bool;
@@ -167,6 +173,9 @@ END_VAR
 IF NOT execute THEN
 	RETURN;
 END_IF
+
+
+
 
 //parameter writing
 speedInmm:=(LWORD_TO_LREAL(ptBlock^.base.SPEED)/1000);
@@ -219,7 +228,10 @@ END_VAR
       </Implementation>
     </Method>
     <LineIds Name="RunAxis">
-      <LineId Id="91" Count="53" />
+      <LineId Id="279" Count="30" />
+      <LineId Id="121" Count="0" />
+      <LineId Id="253" Count="0" />
+      <LineId Id="122" Count="22" />
       <LineId Id="148" Count="0" />
       <LineId Id="153" Count="10" />
       <LineId Id="165" Count="8" />
@@ -230,10 +242,12 @@ END_VAR
       <LineId Id="164" Count="0" />
       <LineId Id="206" Count="17" />
       <LineId Id="225" Count="0" />
+      <LineId Id="254" Count="0" />
       <LineId Id="227" Count="0" />
       <LineId Id="230" Count="0" />
       <LineId Id="229" Count="0" />
       <LineId Id="228" Count="0" />
+      <LineId Id="255" Count="0" />
       <LineId Id="9" Count="0" />
     </LineIds>
     <LineIds Name="RunAxis.ExecuteCommandBlock">
@@ -241,6 +255,7 @@ END_VAR
       <LineId Id="20" Count="1" />
       <LineId Id="18" Count="1" />
       <LineId Id="13" Count="0" />
+      <LineId Id="93" Count="2" />
       <LineId Id="57" Count="0" />
       <LineId Id="53" Count="3" />
       <LineId Id="45" Count="1" />

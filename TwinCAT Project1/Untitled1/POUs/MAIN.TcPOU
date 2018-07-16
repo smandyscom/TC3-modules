@@ -50,6 +50,8 @@ cbBlock4:=ptBlockPos^;//check
 //TEST_CYLINDER();
 //TEST_UNIT_VIRTUAL();
 //TEST_UNIT_MASTER();
+TEST_AXIS();
+//TEST_BUFFERING();
 
 aSize := SIZEOF(GVL.unitControls[1]);
 aSize := SIZEOF(UnitBase);
@@ -105,7 +107,10 @@ END_VAR
       <LineId Id="50" Count="0" />
       <LineId Id="53" Count="0" />
       <LineId Id="110" Count="0" />
-      <LineId Id="68" Count="1" />
+      <LineId Id="68" Count="0" />
+      <LineId Id="137" Count="0" />
+      <LineId Id="136" Count="0" />
+      <LineId Id="69" Count="0" />
       <LineId Id="73" Count="0" />
       <LineId Id="77" Count="0" />
       <LineId Id="54" Count="0" />

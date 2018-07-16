@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+  <POU Name="TEST_BUFFERING" Id="{b3f04993-5876-444e-93e2-12f05fde09bf}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM TEST_BUFFERING
+VAR
+	fbRunAxis : POINTER TO RunAxis := ADR(GVL.axisControls[1]);
+	fbBlending1 : MC_MoveAbsolute;
+	fbBlending2 : MC_MoveAbsolute;
+	
+	ptCommand1 : POINTER TO CommandBlockGeneric := ADR(GVL.commandBlocks[8]);
+	ptCommand2 : POINTER TO CommandBlockGeneric := ADR(GVL.commandBlocks[9]);
+	ptCommand3 : POINTER TO CommandBlockGeneric := ADR(GVL.commandBlocks[10]);
+	
+	state : INT;
+	bDone : BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbRunAxis^();
+
+//master move
+fbRunAxis^.ExecuteCommandBlock(ptBlock:=ptCommand1,
+		execute:= NOT bDone,
+		done=> bDone);
+
+	
+CASE state OF
+	0:
+		state :=1;
+	1:
+	fbRunAxis^.ExecuteCommandBlock(ptBlock:=ptCommand2,
+		execute:= NOT bDone,
+		done=> bDone);
+	IF bDone THEN
+		bDone := FALSE;
+		state :=0;
+	END_IF
+END_CASE]]></ST>
+    </Implementation>
+    <LineIds Name="TEST_BUFFERING">
+      <LineId Id="56" Count="0" />
+      <LineId Id="63" Count="0" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="54" Count="1" />
+      <LineId Id="57" Count="1" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="36" Count="1" />
+      <LineId Id="43" Count="0" />
+      <LineId Id="45" Count="7" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

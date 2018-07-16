@@ -2,16 +2,18 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
   <GVL Name="GVL" Id="{e607aa11-c301-416f-9cbc-bc4f43af5299}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
-VAR_GLOBAL 
+VAR_GLOBAL RETAIN
 	//test usage
 	simuSyncEngaged AT%MB127 : BOOL;
 	simuSyncAcknowledged AT%MB128 : BOOL;
 	
 	//64Words block area 
-	//Actuator
-	axisControls: ARRAY[1..16] OF RunAxis;
+	//Actuator/Sensor
+	axisControls: ARRAY[1..8] OF RunAxis;
 	cylinderControls : ARRAY[1..32] OF RunCylinder;
-	//signal context
+	signalControls : ARRAY[1..16] OF RunSignal;
+	//Command Blocks
+	commandBlocks : ARRAY[1..128] OF CommandBlockGeneric;
 	
 	//128Words block area
 	unitControls : ARRAY[1..32] OF Block128words;

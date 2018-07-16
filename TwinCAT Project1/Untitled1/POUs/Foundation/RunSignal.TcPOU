@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+  <POU Name="RunSignal" Id="{2f1f5cd2-5e24-47f9-8ea9-a8607aa3166e}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunSignal
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR_IN_OUT
+	Comm : SignalBlockBase;
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <LineIds Name="RunSignal">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

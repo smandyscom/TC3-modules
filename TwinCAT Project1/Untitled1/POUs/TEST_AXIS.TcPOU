@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+  <POU Name="TEST_AXIS" Id="{98ddbbdb-ba71-4026-957c-5163f7a8a335}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM TEST_AXIS
+VAR
+	fbRunAxis : POINTER TO RunAxis := ADR(GVL.axisControls[1]);
+	
+	ptCommand1 : POINTER TO CommandBlockGeneric := ADR(GVL.commandBlocks[1]);
+	ptCommand2 : POINTER TO CommandBlockGeneric := ADR(GVL.commandBlocks[2]);
+	
+	state : INT;
+	bDone : BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbRunAxis^(); //service running
+
+
+//pattern 1
+CASE state OF
+	0:
+	fbRunAxis^.ExecuteCommandBlock(ptBlock:=ptCommand1,
+		execute:= NOT bDone,
+		done=> bDone);
+	IF bDone THEN
+		bDone := FALSE;
+		state :=1;
+	END_IF
+	1:
+	fbRunAxis^.ExecuteCommandBlock(ptBlock:=ptCommand2,
+		execute:= NOT bDone,
+		done=> bDone);
+	IF bDone THEN
+		bDone := FALSE;
+		state :=0;
+	END_IF
+END_CASE]]></ST>
+    </Implementation>
+    <LineIds Name="TEST_AXIS">
+      <LineId Id="7" Count="0" />
+      <LineId Id="32" Count="1" />
+      <LineId Id="8" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="19" Count="2" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="22" Count="1" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="26" Count="5" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
