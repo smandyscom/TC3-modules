@@ -157,11 +157,6 @@ VAR_INPUT
 	bufferIndex: INT :=1;
 END_VAR
 VAR
-	// Common Parameters
-	speedInmm : LREAL;
-	accInmms:LREAL;
-	decInmms:LREAL;
-	torqueLimitInPercentage:LREAL;
 	//MC block routing
 	ptMcExecute : POINTER TO BOOL;
 	ptMcDone : POINTER TO BOOL;
@@ -178,18 +173,6 @@ END_VAR
 //2. Do command routing
 //3. Control execute flow
 
-IF NOT execute THEN
-	RETURN;
-END_IF
-
-
-
-
-//parameter writing
-speedInmm:=(LWORD_TO_LREAL(ptBlock^.base.SPEED)/1000);
-accInmms:=((speedInmm)/(LWORD_TO_LREAL(ptBlock^.base.ACC_TIME)/1000));
-decInmms:=((speedInmm)/(LWORD_TO_LREAL(ptBlock^.base.DEC_TIME)/1000));
-torqueLimitInPercentage:=((LWORD_TO_LREAL(ptBlock^.base.TORQUE_LIMIT)/100));
 
 //command routing
 CASE ptBlock^.base.COMMAND_TYPE OF
@@ -200,10 +183,16 @@ ptMcDone:=ADR(fbMoveAbs[bufferIndex].Done);
 ptMcBusy:=ADR(fbMoveAbs[bufferIndex].Busy);
 ptMcError:=ADR(fbMoveAbs[bufferIndex].Error);
 
-fbMoveAbs[bufferIndex].Velocity := speedInmm;
-//...
-fbMoveAbs[bufferIndex].Position := LWORD_TO_LREAL(ptBlock^.position.COORDINATE/1000); //
+//set once
+IF NOT fbMoveAbs[bufferIndex].Busy THEN
+	//parameter writing
+fbMoveAbs[bufferIndex].Velocity := (LWORD_TO_LREAL(ptBlock^.base.SPEED)/1000);
+fbMoveAbs[bufferIndex].Acceleration:= (fbMoveAbs[bufferIndex].Velocity/(LWORD_TO_LREAL(ptBlock^.base.ACC_TIME)/1000));
+fbMoveAbs[bufferIndex].Deceleration:= (fbMoveAbs[bufferIndex].Velocity/(LWORD_TO_LREAL(ptBlock^.base.DEC_TIME)/1000));
+fbMoveAbs[bufferIndex].Position := (LWORD_TO_LREAL(ptBlock^.position.COORDINATE)/1000); //
+END_IF
 
+//torque limit
 ;
 eCommandTypes.ZRET:
 //Home command
@@ -216,8 +205,15 @@ ELSE
 	return;
 END_CASE
 
+IF NOT execute THEN
+	ptMcExecute^ := FALSE; //reset MC_Block
+	RETURN;
+END_IF
+
+
+
 //auto stop execute when error , would do raising edge again when error eliminated
-ptMcExecute^ := NOT (ptMcError^) AND NOT (ptMcDone^);
+ptMcExecute^ := NOT (ptMcError^);
 
 done := ptMcDone^;
 
@@ -266,27 +262,15 @@ END_VAR
       <LineId Id="9" Count="0" />
     </LineIds>
     <LineIds Name="RunAxis.ExecuteCommandBlock">
-      <LineId Id="22" Count="1" />
-      <LineId Id="20" Count="1" />
-      <LineId Id="18" Count="1" />
-      <LineId Id="13" Count="0" />
-      <LineId Id="93" Count="2" />
-      <LineId Id="57" Count="0" />
-      <LineId Id="53" Count="3" />
-      <LineId Id="45" Count="1" />
-      <LineId Id="14" Count="0" />
-      <LineId Id="28" Count="5" />
-      <LineId Id="58" Count="0" />
-      <LineId Id="60" Count="0" />
-      <LineId Id="59" Count="0" />
-      <LineId Id="61" Count="1" />
-      <LineId Id="34" Count="2" />
-      <LineId Id="41" Count="3" />
-      <LineId Id="37" Count="3" />
-      <LineId Id="11" Count="0" />
-      <LineId Id="63" Count="0" />
-      <LineId Id="66" Count="3" />
-      <LineId Id="12" Count="0" />
+      <LineId Id="296" Count="2" />
+      <LineId Id="374" Count="0" />
+      <LineId Id="306" Count="8" />
+      <LineId Id="382" Count="0" />
+      <LineId Id="375" Count="1" />
+      <LineId Id="378" Count="3" />
+      <LineId Id="377" Count="0" />
+      <LineId Id="367" Count="0" />
+      <LineId Id="318" Count="25" />
       <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="RunAxis.FB_init">

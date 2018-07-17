@@ -25,44 +25,17 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Method Name="AsStopper" Id="{54b07d97-f47e-4127-8e83-df24e9bcff85}">
-      <Declaration><![CDATA[METHOD AsStopper : BOOL
+    <Method Name="CheckReach" Id="{67fa871c-5756-49a6-b887-c646b2442d16}">
+      <Declaration><![CDATA[METHOD CheckReach : BOOL
 VAR_INPUT
-	Execute : BOOL;
 END_VAR
 VAR_OUTPUT
 	//neither Done nor Error : Transition
 	Done:BOOL;	//successfully
-	Error:BOOL; //blocked
-END_VAR
-VAR
-END_VAR
-]]></Declaration>
+END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[//condition to execute :
-//previous slot is valid and
-//execute and
-//obstacle not existed
-
-IF NOT Execute THEN
-	Done := FALSE;
-	Error := FALSE;
-	RETURN;
-END_IF
-
-
-ptAxis^.ExecuteCommandBlock(
-ptBlock:= ptCommandLifterHit, 
-execute:= ptPreivousSlotValid^ AND NOT ptObstacleSensorStatus^, 
-done=> );	
-
-//Done:
-//no need to raise
-//or need to raise and successfully done	
-Done :=  (ptPreivousSlotValid^ AND ptAxis^.ExecuteCommandBlock.done) OR (NOT ptPreivousSlotValid^);
-Error :=  ptPreivousSlotValid^ AND ptObstacleSensorStatus^;
-
-AsStopper := Done; //return]]></ST>
+        <ST><![CDATA[//TODO , slot valid and reach sensor status or not slot valid
+Done := ptReachSensorStatus^;]]></ST>
       </Implementation>
     </Method>
     <Method Name="FB_init" Id="{a4e43bb3-b045-4468-b1e1-3d38f2c0d86a}">
@@ -76,30 +49,85 @@ END_VAR
         <ST><![CDATA[//initializing , link related commandblock/sensor/cylinder]]></ST>
       </Implementation>
     </Method>
+    <Method Name="RaiseStopper" Id="{54b07d97-f47e-4127-8e83-df24e9bcff85}">
+      <Declaration><![CDATA[METHOD RaiseStopper : BOOL
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+	//neither Done nor Error : Transition
+	Done:BOOL;	//successfully
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//condition to execute :
+//previous slot is valid and
+//execute and
+//obstacle not existed
+
+//plus my slot is empty
+ptAxis^.ExecuteCommandBlock(
+ptBlock:= ptCommandLifterHit, 
+execute:= TRUE,//ptPreivousSlotValid^ AND NOT ptObstacleSensorStatus^, 
+bufferIndex:=1,
+done=> );	
+
+//Done:
+//no need to raise
+//or need to raise and successfully done	
+//Done :=  (ptPreivousSlotValid^ AND ptAxis^.ExecuteCommandBlock.done) OR (NOT ptPreivousSlotValid^);
+Done :=done;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ReleaseStopper" Id="{ed98965b-88bf-4ac2-b044-882d7fe9f646}">
+      <Declaration><![CDATA[METHOD ReleaseStopper : BOOL
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+	Done:BOOL;	//successfully
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ptAxis^.ExecuteCommandBlock(
+ptBlock:= ptCommandLifterRelease, 
+execute:= TRUE,//ptPreivousSlotValid^ AND NOT ptObstacleSensorStatus^, 
+bufferIndex:=1,
+done=> Done);	
+
+]]></ST>
+      </Implementation>
+    </Method>
     <LineIds Name="RunLifterCelluar">
       <LineId Id="9" Count="0" />
     </LineIds>
-    <LineIds Name="RunLifterCelluar.AsStopper">
-      <LineId Id="30" Count="2" />
-      <LineId Id="28" Count="0" />
-      <LineId Id="56" Count="0" />
-      <LineId Id="62" Count="1" />
-      <LineId Id="58" Count="1" />
-      <LineId Id="57" Count="0" />
-      <LineId Id="54" Count="0" />
-      <LineId Id="47" Count="0" />
-      <LineId Id="50" Count="0" />
-      <LineId Id="48" Count="1" />
-      <LineId Id="33" Count="0" />
-      <LineId Id="64" Count="0" />
-      <LineId Id="51" Count="1" />
-      <LineId Id="34" Count="1" />
-      <LineId Id="65" Count="0" />
-      <LineId Id="36" Count="0" />
+    <LineIds Name="RunLifterCelluar.CheckReach">
+      <LineId Id="9" Count="0" />
       <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="RunLifterCelluar.FB_init">
       <LineId Id="7" Count="0" />
+    </LineIds>
+    <LineIds Name="RunLifterCelluar.RaiseStopper">
+      <LineId Id="30" Count="2" />
+      <LineId Id="57" Count="0" />
+      <LineId Id="54" Count="0" />
+      <LineId Id="47" Count="0" />
+      <LineId Id="50" Count="0" />
+      <LineId Id="48" Count="0" />
+      <LineId Id="77" Count="0" />
+      <LineId Id="49" Count="0" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="64" Count="0" />
+      <LineId Id="51" Count="1" />
+      <LineId Id="34" Count="0" />
+      <LineId Id="78" Count="0" />
+      <LineId Id="35" Count="0" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="RunLifterCelluar.ReleaseStopper">
+      <LineId Id="9" Count="5" />
+      <LineId Id="5" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

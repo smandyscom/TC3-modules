@@ -50,8 +50,8 @@ cbBlock4:=ptBlockPos^;//check
 //TEST_CYLINDER();
 //TEST_UNIT_VIRTUAL();
 //TEST_UNIT_MASTER();
-TEST_AXIS();
-//TEST_BUFFERING();
+//TEST_AXIS();
+TEST_BUFFERING();
 
 aSize := SIZEOF(GVL.unitControls[1]);
 aSize := SIZEOF(UnitBase);

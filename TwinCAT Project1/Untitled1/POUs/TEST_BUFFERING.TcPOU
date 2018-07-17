@@ -4,15 +4,18 @@
     <Declaration><![CDATA[PROGRAM TEST_BUFFERING
 VAR
 	fbRunAxis : POINTER TO RunAxis := ADR(GVL.axisControls[1]);
-	fbBlending1 : MC_MoveAbsolute;
-	fbBlending2 : MC_MoveAbsolute;
+	
 	
 	ptCommand1 : POINTER TO CommandBlockGeneric := ADR(GVL.commandBlocks[8]);
 	ptCommand2 : POINTER TO CommandBlockGeneric := ADR(GVL.commandBlocks[9]);
 	ptCommand3 : POINTER TO CommandBlockGeneric := ADR(GVL.commandBlocks[10]);
 	
 	state : INT;
-	bDone : BOOL;
+	
+	bAction : bool;
+	bDone1 : BOOL;
+	bDone2 : BOOL;
+	bDone3 : BOOL;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -20,17 +23,18 @@ END_VAR
 
 //master move with serveral buffers
 fbRunAxis^.ExecuteCommandBlock(ptBlock:=ptCommand1,
-		execute:= NOT bDone,
+		execute:= bAction,
 		bufferIndex:=1,
-		done=> bDone);
-
-	
-CASE state OF
-	0:
-		state :=1;
-	1:
-
-END_CASE]]></ST>
+		done=> bDone1);
+fbRunAxis^.ExecuteCommandBlock(ptBlock:=ptCommand2,
+		execute:= (fbRunAxis^.PositionFeedback >= 250) ,
+		bufferIndex:=2,
+		done=> bDone2);
+fbRunAxis^.ExecuteCommandBlock(ptBlock:=ptCommand3,
+		execute:= (fbRunAxis^.PositionFeedback >=350) ,
+		bufferIndex:=3,
+		done=> bDone3);
+	]]></ST>
     </Implementation>
     <LineIds Name="TEST_BUFFERING">
       <LineId Id="56" Count="0" />
@@ -39,12 +43,9 @@ END_CASE]]></ST>
       <LineId Id="54" Count="0" />
       <LineId Id="78" Count="0" />
       <LineId Id="55" Count="0" />
-      <LineId Id="57" Count="1" />
-      <LineId Id="15" Count="0" />
-      <LineId Id="36" Count="1" />
-      <LineId Id="43" Count="0" />
-      <LineId Id="45" Count="0" />
-      <LineId Id="52" Count="0" />
+      <LineId Id="57" Count="0" />
+      <LineId Id="79" Count="6" />
+      <LineId Id="58" Count="0" />
       <LineId Id="5" Count="0" />
     </LineIds>
   </POU>

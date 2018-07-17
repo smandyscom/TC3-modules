@@ -6,6 +6,9 @@ VAR_GLOBAL RETAIN
 	//test usage
 	simuSyncEngaged AT%MB127 : BOOL;
 	simuSyncAcknowledged AT%MB128 : BOOL;
+
+	//
+	fakeInput AT%I* : bool;
 	
 	//64Words block area 
 	//Actuator/Sensor
