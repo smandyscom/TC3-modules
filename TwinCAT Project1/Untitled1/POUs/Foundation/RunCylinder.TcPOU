@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
   <POU Name="RunCylinder" Id="{a99bf5d1-aaa3-4095-9742-005d9ab3fed8}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunCylinder
 VAR_INPUT
@@ -11,8 +11,11 @@ VAR_IN_OUT
 	
 END_VAR
 VAR		
-	Comm : CylinderBlockBase;	
+	//Comm : CylinderBlockBase;	
 
+	COMMAND_CACHED : eCylinderCommands; //1 , HMI->PLC
+	LAST_COMMAND : eCylinderCommands;   //2 , 
+	
 	A_SENSOR_USED_COUNT : WORD;
 	B_SENSOR_USED_COUNT : WORD;
 	
@@ -64,11 +67,11 @@ IF NOT TMR_WATCH_DOG.IN THEN
 END_IF
 
 // once command changes , reset timer counter
-IF Comm.COMMAND_CACHED <> Comm.LAST_COMMAND THEN
+IF COMMAND_CACHED <> LAST_COMMAND THEN
 	//ptBlock^.TMR_WATCH_DOG.IN:=false;	//invalid , do not across a scan
 	TMR_WATCH_DOG.IN:=FALSE;
-	TMR_DELAY_TO_A.IN := (Comm.COMMAND_CACHED=eCylinderCommands.COMMAND_A); //active A delay timer
-	TMR_DELAY_TO_B.IN := (Comm.COMMAND_CACHED=eCylinderCommands.COMMAND_B); //if no sensor B , active B delay timer
+	TMR_DELAY_TO_A.IN := (COMMAND_CACHED=eCylinderCommands.COMMAND_A); //active A delay timer
+	TMR_DELAY_TO_B.IN := (COMMAND_CACHED=eCylinderCommands.COMMAND_B); //if no sensor B , active B delay timer
 	
 	//reset done/warn
 	BIT_DONE := FALSE;
@@ -76,8 +79,8 @@ IF Comm.COMMAND_CACHED <> Comm.LAST_COMMAND THEN
 	
 	//output process
 	FOR nCounter:=1 TO 2 BY 1 DO
-		ACT_A[nCounter] := (Comm.COMMAND_CACHED = eCylinderCommands.COMMAND_A);
-		ACT_B[nCounter] := (Comm.COMMAND_CACHED = eCylinderCommands.COMMAND_B);
+		ACT_A[nCounter] := (COMMAND_CACHED = eCylinderCommands.COMMAND_A);
+		ACT_B[nCounter] := (COMMAND_CACHED = eCylinderCommands.COMMAND_B);
 	END_FOR
 	
 END_IF
@@ -86,7 +89,7 @@ END_IF
 //reset
 bMatched := FALSE;
 // Check if match
-CASE Comm.COMMAND_CACHED OF
+CASE COMMAND_CACHED OF
 	eCylinderCommands.NO_COMMAND:
 	bMatched:= TRUE;
 	
@@ -108,14 +111,14 @@ BIT_WARNING := NOT bMatched AND NOT BIT_WARN_SUPPRESS AND TMR_WATCH_DOG.Q;
 
 
 // cache last command
-Comm.LAST_COMMAND := Comm.COMMAND_CACHED;
+LAST_COMMAND := COMMAND_CACHED;
 
 
 //scan-out status
-comm.STATUS_WORD.0 := BIT_WARNING;
-comm.STATUS_WORD.1 := BIT_A_MATCH;
-comm.STATUS_WORD.2 := BIT_B_MATCH;
-comm.STATUS_WORD.5 := BIT_DONE;]]></ST>
+//comm.STATUS_WORD.0 := BIT_WARNING;
+//comm.STATUS_WORD.1 := BIT_A_MATCH;
+//comm.STATUS_WORD.2 := BIT_B_MATCH;
+//comm.STATUS_WORD.5 := BIT_DONE;]]></ST>
     </Implementation>
     <Method Name="Execute" Id="{13693201-8c27-444e-bbfc-9d5e6a727077}">
       <Declaration><![CDATA[METHOD Execute : BOOL

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
   <GVL Name="GVL" Id="{e607aa11-c301-416f-9cbc-bc4f43af5299}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
 VAR_GLOBAL RETAIN
@@ -16,7 +16,7 @@ VAR_GLOBAL RETAIN
 	cylinderControls : ARRAY[1..32] OF RunCylinder;
 	signalControls : ARRAY[1..16] OF RunSignal;
 	//Command Blocks
-	commandBlocks : ARRAY[1..128] OF CommandBlockGeneric;
+	commandBlocks : ARRAY[1..128] OF ParameterSet;
 	
 	//128Words block area
 	unitControls : ARRAY[1..32] OF Block128words;

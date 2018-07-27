@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4020.39">
+<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4022.16">
 	<DataTypes>
 		<DataType>
 			<Name GUID="{18071995-0000-0000-0000-000000000035}" TcBaseType="true" HideType="true">UINTARR2</Name>
@@ -4776,15 +4776,15 @@ External Setpoint Generation:
 			</Properties>
 		</DataType>
 		<DataType>
-			<Name GUID="{DE486EC1-9595-4FFD-B541-E9B09476E870}" Namespace="Tc2_MC2" AutoDeleteType="true">ST_PowerOptions</Name>
+			<Name GUID="{CD782EB2-4C70-4048-B338-2B12DC387B5B}" Namespace="Tc2_MC2" AutoDeleteType="true">ST_PowerOptions</Name>
 			<BitSize>0</BitSize>
 			<BaseType GUID="{FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF}"/>
 			<Hides>
-				<Hide GUID="{95F0AD8C-FC4C-436E-AE47-84B9C6B53A4E}"/>
+				<Hide GUID="{DE486EC1-9595-4FFD-B541-E9B09476E870}"/>
 			</Hides>
 		</DataType>
 		<DataType>
-			<Name GUID="{33BB728E-DC50-4AFE-B376-4AFAE057ABB8}" Namespace="Tc2_MC2" AutoDeleteType="true">MC_Power</Name>
+			<Name GUID="{1D1486AC-DE08-48D3-99A8-D42C14AB4D97}" Namespace="Tc2_MC2" AutoDeleteType="true">MC_Power</Name>
 			<BitSize>896</BitSize>
 			<SubItem>
 				<Name>Axis</Name>
@@ -4881,7 +4881,7 @@ External Setpoint Generation:
 			</SubItem>
 			<SubItem>
 				<Name>Options</Name>
-				<Type GUID="{DE486EC1-9595-4FFD-B541-E9B09476E870}" Namespace="Tc2_MC2">ST_PowerOptions</Type>
+				<Type GUID="{CD782EB2-4C70-4048-B338-2B12DC387B5B}" Namespace="Tc2_MC2">ST_PowerOptions</Type>
 				<BitSize>0</BitSize>
 				<BitOffs>272</BitOffs>
 				<Properties>
@@ -4976,7 +4976,7 @@ External Setpoint Generation:
 				</Property>
 			</Properties>
 			<Hides>
-				<Hide GUID="{428FF6E1-2074-4A30-AAAF-DA32F0727C28}"/>
+				<Hide GUID="{33BB728E-DC50-4AFE-B376-4AFAE057ABB8}"/>
 			</Hides>
 		</DataType>
 		<DataType>
@@ -7248,7 +7248,7 @@ External Setpoint Generation:
 			</SubItem>
 		</DataType>
 		<DataType>
-			<Name GUID="{E8268DEE-6128-485A-ACC2-B6CD4B76BD61}" AutoDeleteType="true">RunAxis</Name>
+			<Name GUID="{24B14BB9-BF1C-4F67-A1FA-44E3F2CD782D}" AutoDeleteType="true">RunAxis</Name>
 			<BitSize>50752</BitSize>
 			<SubItem>
 				<Name>PositionFeedback</Name>
@@ -7307,7 +7307,7 @@ External Setpoint Generation:
 			</SubItem>
 			<SubItem>
 				<Name>fbPower</Name>
-				<Type GUID="{33BB728E-DC50-4AFE-B376-4AFAE057ABB8}" Namespace="Tc2_MC2">MC_Power</Type>
+				<Type GUID="{1D1486AC-DE08-48D3-99A8-D42C14AB4D97}" Namespace="Tc2_MC2">MC_Power</Type>
 				<BitSize>896</BitSize>
 				<BitOffs>41536</BitOffs>
 			</SubItem>
@@ -7408,7 +7408,7 @@ External Setpoint Generation:
 				</Property>
 			</Properties>
 			<Hides>
-				<Hide GUID="{EE30526D-970D-4474-8B86-F52359C25A9E}"/>
+				<Hide GUID="{E8268DEE-6128-485A-ACC2-B6CD4B76BD61}"/>
 			</Hides>
 		</DataType>
 		<DataType>
@@ -7418,7 +7418,7 @@ External Setpoint Generation:
 Actuator/Sensor]]>
 			</Comment>
 			<BitSize>406016</BitSize>
-			<BaseType GUID="{E8268DEE-6128-485A-ACC2-B6CD4B76BD61}">RunAxis</BaseType>
+			<BaseType GUID="{24B14BB9-BF1C-4F67-A1FA-44E3F2CD782D}">RunAxis</BaseType>
 			<ArrayInfo>
 				<LBound>1</LBound>
 				<Elements>8</Elements>
@@ -7704,19 +7704,19 @@ Actuator/Sensor]]>
 			</ArrayInfo>
 		</DataType>
 		<DataType>
-			<Name GUID="{5B630B8A-77DD-4896-97EB-DB47F7AB2809}" AutoDeleteType="true">SignalBlockBase</Name>
+			<Name GUID="{41B117D7-39B5-4685-88B9-8E47F4E48273}" AutoDeleteType="true">SignalBlockBase</Name>
 			<BitSize>0</BitSize>
 			<BaseType GUID="{FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF}"/>
 			<Hides>
-				<Hide GUID="{4157B446-E5CB-4E60-86B1-6CDEDB08EC69}"/>
+				<Hide GUID="{5B630B8A-77DD-4896-97EB-DB47F7AB2809}"/>
 			</Hides>
 		</DataType>
 		<DataType>
-			<Name GUID="{76FCA35C-F2F9-47F5-B5AE-0ED1B5887A49}" AutoDeleteType="true">RunSignal</Name>
+			<Name GUID="{B607E618-FAAB-4A53-B0C6-38434A974BBF}" AutoDeleteType="true">RunSignal</Name>
 			<BitSize>128</BitSize>
 			<SubItem>
 				<Name>Comm</Name>
-				<Type GUID="{5B630B8A-77DD-4896-97EB-DB47F7AB2809}" ReferenceTo="true">SignalBlockBase</Type>
+				<Type GUID="{41B117D7-39B5-4685-88B9-8E47F4E48273}" ReferenceTo="true">SignalBlockBase</Type>
 				<BitSize>64</BitSize>
 				<BitOffs>64</BitOffs>
 				<Properties>
@@ -7733,13 +7733,13 @@ Actuator/Sensor]]>
 				</Property>
 			</Properties>
 			<Hides>
-				<Hide GUID="{FFA10171-4CAB-4187-8907-6920BDCA9383}"/>
+				<Hide GUID="{76FCA35C-F2F9-47F5-B5AE-0ED1B5887A49}"/>
 			</Hides>
 		</DataType>
 		<DataType>
 			<Name IecBaseType="true">ARRAY [1..16] OF RunSignal</Name>
 			<BitSize>2048</BitSize>
-			<BaseType GUID="{76FCA35C-F2F9-47F5-B5AE-0ED1B5887A49}">RunSignal</BaseType>
+			<BaseType GUID="{B607E618-FAAB-4A53-B0C6-38434A974BBF}">RunSignal</BaseType>
 			<ArrayInfo>
 				<LBound>1</LBound>
 				<Elements>16</Elements>
@@ -8980,7 +8980,7 @@ External Setpoint Generation:
 		</Motion>
 		<Plc>
 			<Project GUID="{EBF730F5-EB70-496D-B80F-3EF457609040}" Name="Untitled1" PrjFilePath="Untitled1\Untitled1.plcproj" TmcFilePath="Untitled1\Untitled1.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="Untitled1\Untitled1.tmc">
 					<Name>Untitled1 Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Vars VarGrpType="1">
@@ -9425,7 +9425,7 @@ External Setpoint Generation:
 								<![CDATA[64Words block area 
 Actuator/Sensor]]>
 							</Comment>
-							<Type GUID="{1996EDEC-9613-4245-B242-8820FF17D4AA}">ARRAY [1..8] OF RunAxis</Type>
+							<Type GUID="{2ADAA5AD-7A55-8D72-A903-373E198A15BD}">ARRAY [1..8] OF RunAxis</Type>
 							<InOut>7</InOut>
 							<SubVar>
 								<Name>GVL.axisControls[1]^Comm</Name>
@@ -34782,7 +34782,7 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>GVL.signalControls</Name>
-							<Type GUID="{86C75ACA-B664-4EBE-95F9-0B880C8ECC17}">ARRAY [1..16] OF RunSignal</Type>
+							<Type GUID="{1445BF17-336D-F8AF-46B5-592DE6720F77}">ARRAY [1..16] OF RunSignal</Type>
 							<InOut>7</InOut>
 						</Var>
 						<Var>
@@ -49221,7 +49221,7 @@ External Setpoint Generation:
 			</Project>
 		</Plc>
 		<Io>
-			<Device DevType="111" DevFlags="#x0003" AmsPort="28673" AmsNetId="10.221.24.70.2.1" RemoteName="Device 1 (EtherCAT)" Id="1">
+			<Device Disabled="true" DevType="111" DevFlags="#x0003" AmsPort="28673" AmsNetId="10.221.24.70.2.1" RemoteName="Device 1 (EtherCAT)" Id="1">
 				<Name>Device 1 (EtherCAT)</Name>
 				<AddressInfo>
 					<Ccat>

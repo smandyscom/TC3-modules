@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
   <POU Name="RunAxis" Id="{1e355049-017f-4f7f-88a6-a7040666a5c5}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunAxis
 VAR_INPUT
+	
 END_VAR
 VAR_OUTPUT
 	PositionFeedback : LREAL;
@@ -11,7 +12,6 @@ VAR_IN_OUT
 	
 END_VAR
 VAR	
-	Comm : AxisBase; // public interface
 	Axis : AXIS_REF;
 	 
 	nCounter : int :=0;
@@ -24,7 +24,8 @@ VAR
 	fbReadParameter: MC_ReadParameter;
 	fbReadActualPosition : MC_ReadActualPosition;
 	fbReadStatus : MC_ReadStatus;
-	Done: INT;
+	
+	//bMonitoring : bool;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -100,7 +101,7 @@ fbReadParameter(
 	Error=> , 
 	ErrorID=> , 
 	Value=> );
-comm.SPD_FEEDBACK := LREAL_TO_DWORD(fbReadParameter.Value*1000);
+//comm.SPD_FEEDBACK := LREAL_TO_DWORD(fbReadParameter.Value*1000);
 fbReadParameter(
 	Axis:= Axis, 
 	Enable:= TRUE, 
@@ -111,7 +112,7 @@ fbReadParameter(
 	Error=> , 
 	ErrorID=> , 
 	Value=> );
-comm.POS_COMMAND := LREAL_TO_DWORD(fbReadParameter.Value*1000);
+//comm.POS_COMMAND := LREAL_TO_DWORD(fbReadParameter.Value*1000);
 fbReadActualPosition(
 	Axis:= axis, 
 	Enable:= TRUE, 
@@ -120,7 +121,7 @@ fbReadActualPosition(
 	Error=> , 
 	ErrorID=> , 
 	Position=> PositionFeedback);
-comm.POS_FEEDBACK := LREAL_TO_DWORD(PositionFeedback*1000);
+//comm.POS_FEEDBACK := LREAL_TO_DWORD(PositionFeedback*1000);
 
 fbReadStatus(
 	Axis:= axis, 
@@ -143,16 +144,16 @@ fbReadStatus(
 	Status=> );
 
 //Read status
-comm.MON_CONTROL_WORD.0 := fbPower.Enable; //servo on
-comm.MON_CONTROL_WORD.15 := fbReset.Execute; // alarm clear
-comm.RUN_STATUS.1 := fbReadStatus.StandStill; //run with servo on
-comm.RUN_STATUS.3 := NOT fbReadStatus.Error; //Servo ready
-comm.ALARMS := fbReadStatus.ErrorID; //error code]]></ST>
+//comm.MON_CONTROL_WORD.0 := fbPower.Enable; //servo on
+//comm.MON_CONTROL_WORD.15 := fbReset.Execute; // alarm clear
+//comm.RUN_STATUS.1 := fbReadStatus.StandStill; //run with servo on
+//comm.RUN_STATUS.3 := NOT fbReadStatus.Error; //Servo ready
+//comm.ALARMS := fbReadStatus.ErrorID; //error code]]></ST>
     </Implementation>
-    <Method Name="ExecuteCommandBlock" Id="{248fd65c-916e-4c41-b72b-91932f742cc7}">
-      <Declaration><![CDATA[METHOD ExecuteCommandBlock : BOOL
+    <Method Name="ExecuteParameter" Id="{248fd65c-916e-4c41-b72b-91932f742cc7}">
+      <Declaration><![CDATA[METHOD ExecuteParameter : BOOL
 VAR_INPUT
-	ptBlock : POINTER TO CommandBlockGeneric;
+	ptBlock : POINTER TO ParameterSet;
 	execute : BOOL; //used to do mutex
 	bufferIndex: INT :=1;
 END_VAR
@@ -173,51 +174,53 @@ END_VAR
 //2. Do command routing
 //3. Control execute flow
 
-
 //command routing
-CASE ptBlock^.base.COMMAND_TYPE OF
+CASE ptBlock^.command OF
 eCommandTypes.POSITION:	
-//Position command
-ptMcExecute:=ADR(fbMoveAbs[bufferIndex].Execute);
-ptMcDone:=ADR(fbMoveAbs[bufferIndex].Done);
-ptMcBusy:=ADR(fbMoveAbs[bufferIndex].Busy);
-ptMcError:=ADR(fbMoveAbs[bufferIndex].Error);
-
-//set once
-IF NOT fbMoveAbs[bufferIndex].Busy THEN
-	//parameter writing
-fbMoveAbs[bufferIndex].Velocity := (LWORD_TO_LREAL(ptBlock^.base.SPEED)/1000);
-fbMoveAbs[bufferIndex].Acceleration:= (fbMoveAbs[bufferIndex].Velocity/(LWORD_TO_LREAL(ptBlock^.base.ACC_TIME)/1000));
-fbMoveAbs[bufferIndex].Deceleration:= (fbMoveAbs[bufferIndex].Velocity/(LWORD_TO_LREAL(ptBlock^.base.DEC_TIME)/1000));
-fbMoveAbs[bufferIndex].Position := (LWORD_TO_LREAL(ptBlock^.position.COORDINATE)/1000); //
-END_IF
-
+	//Position command
+	ptMcExecute:=ADR(fbMoveAbs[bufferIndex].Execute);
+	ptMcDone:=ADR(fbMoveAbs[bufferIndex].Done);
+	ptMcBusy:=ADR(fbMoveAbs[bufferIndex].Busy);
+	ptMcError:=ADR(fbMoveAbs[bufferIndex].Error);
+	//set once
+	IF NOT fbMoveAbs[bufferIndex].Busy THEN
+		//parameter writing
+		fbMoveAbs[bufferIndex].Velocity := ptBlock^.parameter.position.Velocity;
+		fbMoveAbs[bufferIndex].Acceleration:= ptBlock^.parameter.position.Acceleration;
+		fbMoveAbs[bufferIndex].Deceleration:= ptBlock^.parameter.position.Deceleration;
+		fbMoveAbs[bufferIndex].Position := ptBlock^.parameter.position.Position;
+	END_IF
 //torque limit
 ;
 eCommandTypes.ZRET:
-//Home command
-ptMcExecute:=ADR(fbMoveHome.Execute);
-ptMcDone:=ADR(fbMoveHome.Done);
-ptMcBusy:=ADR(fbMoveHome.Busy);
-ptMcError:=ADR(fbMoveHome.Error);
+	//Home command
+	ptMcExecute:=ADR(fbMoveHome.Execute);
+	ptMcDone:=ADR(fbMoveHome.Done);
+	ptMcBusy:=ADR(fbMoveHome.Busy);
+	ptMcError:=ADR(fbMoveHome.Error);
+
+	IF NOT fbMoveHome.Busy THEN
+		//parameter writing
+		fbMoveHome.Position := ptBlock^.parameter.home.Position;
+		fbMoveHome.HomingMode := ptBlock^.parameter.home.Mode;
+	END_IF
 ;
 ELSE
 	return;
 END_CASE
 
 IF NOT execute THEN
+	//stop
 	ptMcExecute^ := FALSE; //reset MC_Block
 	RETURN;
 END_IF
-
-
 
 //auto stop execute when error , would do raising edge again when error eliminated
 ptMcExecute^ := NOT (ptMcError^);
 
 done := ptMcDone^;
 
-ExecuteCommandBlock:=done;]]></ST>
+ExecuteParameter:=done; //return value]]></ST>
       </Implementation>
     </Method>
     <Method Name="FB_init" Id="{5aeba573-47c3-411b-9f3d-8af6b6892223}">
@@ -244,12 +247,14 @@ END_VAR
       <LineId Id="253" Count="0" />
       <LineId Id="122" Count="22" />
       <LineId Id="148" Count="0" />
-      <LineId Id="153" Count="10" />
+      <LineId Id="153" Count="9" />
+      <LineId Id="416" Count="0" />
       <LineId Id="165" Count="8" />
-      <LineId Id="175" Count="1" />
+      <LineId Id="175" Count="0" />
+      <LineId Id="415" Count="0" />
       <LineId Id="198" Count="6" />
       <LineId Id="174" Count="0" />
-      <LineId Id="224" Count="0" />
+      <LineId Id="414" Count="0" />
       <LineId Id="164" Count="0" />
       <LineId Id="206" Count="17" />
       <LineId Id="225" Count="0" />
@@ -261,16 +266,27 @@ END_VAR
       <LineId Id="255" Count="0" />
       <LineId Id="9" Count="0" />
     </LineIds>
-    <LineIds Name="RunAxis.ExecuteCommandBlock">
+    <LineIds Name="RunAxis.ExecuteParameter">
       <LineId Id="296" Count="2" />
-      <LineId Id="374" Count="0" />
-      <LineId Id="306" Count="8" />
-      <LineId Id="382" Count="0" />
+      <LineId Id="403" Count="0" />
+      <LineId Id="307" Count="0" />
+      <LineId Id="405" Count="0" />
+      <LineId Id="309" Count="5" />
       <LineId Id="375" Count="1" />
       <LineId Id="378" Count="3" />
       <LineId Id="377" Count="0" />
       <LineId Id="367" Count="0" />
-      <LineId Id="318" Count="25" />
+      <LineId Id="319" Count="7" />
+      <LineId Id="406" Count="0" />
+      <LineId Id="401" Count="0" />
+      <LineId Id="411" Count="0" />
+      <LineId Id="409" Count="1" />
+      <LineId Id="408" Count="0" />
+      <LineId Id="327" Count="5" />
+      <LineId Id="412" Count="0" />
+      <LineId Id="333" Count="2" />
+      <LineId Id="338" Count="4" />
+      <LineId Id="413" Count="0" />
       <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="RunAxis.FB_init">
