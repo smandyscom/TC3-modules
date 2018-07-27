@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <DUT Name="ParameterGeneric" Id="{795faded-e60d-41d7-8539-48c85ef38a11}">
+    <Declaration><![CDATA[TYPE ParameterGeneric :
+UNION
+	position : ParametersPosition;
+	home : ParametersHome;
+END_UNION
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

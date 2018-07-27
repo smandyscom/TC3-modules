@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Refactors>
+  <Renames>
+    <RenamedSymbol>
+      <Type guid="a108e392-1419-4492-a6fc-c3186312016b">RunUnitGeneric</Type>
+      <From>myControlWord</From>
+      <To>ControlWord</To>
+    </RenamedSymbol>
+    <RenamedSymbol>
+      <Type guid="a108e392-1419-4492-a6fc-c3186312016b">RunUnitGeneric</Type>
+      <From>serialTransition</From>
+      <To>bSerialTransition</To>
+    </RenamedSymbol>
+  </Renames>
+</Refactors>

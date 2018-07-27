@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <DUT Name="eUpstreamComm" Id="{fc112c8e-d256-4f09-ab0d-72667210437a}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE eUpstreamComm : 
+(
+	indexGroup := eAdsIndexGroups.PLCADS_RWM,
+	offsetUpstreamSyncEngaged := 127,
+	offsetUpstreamSyncAckowledged := 128
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

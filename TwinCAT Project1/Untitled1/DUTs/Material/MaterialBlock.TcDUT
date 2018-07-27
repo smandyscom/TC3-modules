@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <DUT Name="MaterialBlock" Id="{8bc725df-9215-4403-8bfc-761ebea6ca5e}">
+    <Declaration><![CDATA[TYPE MaterialBlock EXTENDS MaterialHeader :
+STRUCT
+	data : ARRAY[1..112] of WORD;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

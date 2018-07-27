@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <DUT Name="UnitBase" Id="{df6981cd-3f6e-4429-8877-edaaff2c86c9}">
+    <Declaration><![CDATA[TYPE UnitBase :
+	//32Bytes , 16Word occupation
+STRUCT
+	parent : WORD := 1; //0
+	state : WORD;
+	alarmCode : WORD;
+	
+	//Bit0 , enable step control
+	//Bit1 , trigger step control
+	//Bit2 , pause state
+	//Bit3 , (indexer slave) direct off working signal
+	//Bit4 , (indexer slave) working signal override
+	//Bit5 , (indexer slave) material is valid
+	//Bit6 , 
+	//Bit7 , last pause parent status
+	controlWord : WORD; //3
+	//
+	nextState : WORD; //4
+	serialTransition : BOOL; //5.0
+	transitionByte : BYTE; //5.1
+	materialBase : WORD; //6
+	materialCount : WORD;//7
+	//
+	reserved2 : DWORD;//8-9
+	workingTimerCache : DWORD; //10-11 , used to reflect timer couting
+	//
+	reservedRest : ARRAY[1..4] OF WORD;
+END_STRUCT
+END_TYPE
+
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

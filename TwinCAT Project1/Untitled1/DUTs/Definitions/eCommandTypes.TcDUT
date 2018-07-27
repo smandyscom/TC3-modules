@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <DUT Name="eCommandTypes" Id="{fa388b91-8966-4e52-bc41-23d3150b895c}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE eCommandTypes :
+(
+	NO_OPERATION := 0,
+	POSITION:=1,
+	ZRET:=3
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

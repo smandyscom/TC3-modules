@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <DUT Name="ParameterSet" Id="{7787d46e-2a5f-4431-8438-c57dc843a3f1}">
+    <Declaration><![CDATA[TYPE ParameterSet :
+STRUCT
+	command : eCommandTypes;
+	parameter : ParameterGeneric;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
