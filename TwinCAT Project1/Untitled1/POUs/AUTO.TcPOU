@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <POU Name="AUTO" Id="{97a26fb9-68ff-461f-aa24-f8d33d7f3452}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM AUTO
+VAR
+	
+//declare stations
+
+//
+nCounter : int ;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF NOT GVL.bObjectsInitialized THEN
+	//all station initialize (build relationship) , machine spcific configuration
+END_IF
+
+]]></ST>
+    </Implementation>
+    <LineIds Name="AUTO">
+      <LineId Id="5" Count="0" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="18" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

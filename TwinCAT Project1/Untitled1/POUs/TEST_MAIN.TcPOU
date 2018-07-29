@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
-  <POU Name="MAIN" Id="{c5d24ec2-dcd4-432d-b366-2840b187b342}" SpecialFunc="None">
-    <Declaration><![CDATA[PROGRAM MAIN
+  <POU Name="TEST_MAIN" Id="{c5d24ec2-dcd4-432d-b366-2840b187b342}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM TEST_MAIN
 VAR
 
 cbBlock1 : CommandBlockBase;
@@ -106,7 +106,7 @@ END_VAR
         <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="MAIN">
+    <LineIds Name="TEST_MAIN">
       <LineId Id="2" Count="0" />
       <LineId Id="18" Count="0" />
       <LineId Id="30" Count="0" />
@@ -157,7 +157,7 @@ END_VAR
       <LineId Id="102" Count="3" />
       <LineId Id="16" Count="0" />
     </LineIds>
-    <LineIds Name="MAIN.FB_init">
+    <LineIds Name="TEST_MAIN.FB_init">
       <LineId Id="7" Count="0" />
     </LineIds>
   </POU>

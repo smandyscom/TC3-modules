@@ -21,6 +21,10 @@ VAR_GLOBAL RETAIN
 	//128Words block area
 	unitControls : ARRAY[1..32] OF Block128words;
 
+	stations : ARRAY[1..32] OF RunUnitGeneric(argParent:= 0, argSlotBase:= 0, argSlotLast:= 0);
+	
+	bObjectsInitialized : bool;
+	
 	//Flag memory area
 	//Manual mode
 	//for those context blocks , used to intercommunicate with HMI

@@ -100,6 +100,21 @@ SlotLast := argSlotLast;
 ]]></ST>
       </Implementation>
     </Method>
+    <Method Name="Initialize" Id="{54b8cb88-45e4-469a-a3ac-c4ff2e84617d}">
+      <Declaration><![CDATA[METHOD Initialize : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//clear state,next state
+IF State=16#FF THEN
+	State :=0;
+	NextState:=0;
+	Initialize := true;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
     <LineIds Name="RunUnitGeneric">
       <LineId Id="222" Count="4" />
       <LineId Id="231" Count="25" />
@@ -114,6 +129,13 @@ SlotLast := argSlotLast;
       <LineId Id="10" Count="1" />
       <LineId Id="41" Count="0" />
       <LineId Id="13" Count="1" />
+      <LineId Id="7" Count="0" />
+    </LineIds>
+    <LineIds Name="RunUnitGeneric.Initialize">
+      <LineId Id="5" Count="0" />
+      <LineId Id="8" Count="1" />
+      <LineId Id="12" Count="1" />
+      <LineId Id="10" Count="0" />
       <LineId Id="7" Count="0" />
     </LineIds>
   </POU>

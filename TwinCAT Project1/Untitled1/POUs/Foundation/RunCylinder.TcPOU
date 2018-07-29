@@ -3,8 +3,8 @@
   <POU Name="RunCylinder" Id="{a99bf5d1-aaa3-4095-9742-005d9ab3fed8}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunCylinder
 VAR			
-	A_SENSOR_USED_COUNT : INT;
-	B_SENSOR_USED_COUNT : INT;	
+	A_SENSOR_USED_COUNT : INT := 0;
+	B_SENSOR_USED_COUNT : INT :=0 ;	
 
 	COMMAND_CACHED : eCylinderCommands; //1 , HMI->PLC
 	LAST_COMMAND : eCylinderCommands;   //2 , 
