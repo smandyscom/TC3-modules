@@ -94,6 +94,9 @@
     <Compile Include="PlcTask.TcTTO">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\AUTO.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Foundation\RunAxis.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -109,7 +112,7 @@
     <Compile Include="POUs\Foundation\RunUnitIndexerMaster.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\MAIN.TcPOU">
+    <Compile Include="POUs\TEST_MAIN.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Stations\RunLifterCelluar.TcPOU">

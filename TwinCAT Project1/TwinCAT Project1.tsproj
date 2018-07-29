@@ -8835,7 +8835,7 @@ External Setpoint Generation:
 			</SubItem>
 		</DataType>
 		<DataType>
-			<Name GUID="{FA782EF0-69DF-4E91-B01B-506EA9B8CBA8}" AutoDeleteType="true">RunAxis</Name>
+			<Name GUID="{D0FBAC9E-1509-4483-8C64-8100A8BCE29B}" AutoDeleteType="true">RunAxis</Name>
 			<BitSize>57088</BitSize>
 			<SubItem>
 				<Name>PositionFeedback</Name>
@@ -8925,14 +8925,6 @@ External Setpoint Generation:
 					<Type GUID="{4C83E4A7-80D7-4088-B95E-85E0913C0666}" PointerTo="1">ParameterSet</Type>
 					<BitSize>64</BitSize>
 				</Parameter>
-				<Parameter>
-					<Name>execute</Name>
-					<Comment>
-						<![CDATA[used to do mutex]]>
-					</Comment>
-					<Type GUID="{18071995-0000-0000-0000-000000000030}">BOOL</Type>
-					<BitSize>8</BitSize>
-				</Parameter>
 			</Method>
 			<Method>
 				<Name>ExecuteParameterBuffer</Name>
@@ -8944,15 +8936,10 @@ External Setpoint Generation:
 					<BitSize>64</BitSize>
 				</Parameter>
 				<Parameter>
-					<Name>execute</Name>
-					<Comment>
-						<![CDATA[used to do mutex]]>
-					</Comment>
-					<Type GUID="{18071995-0000-0000-0000-000000000030}">BOOL</Type>
-					<BitSize>8</BitSize>
-				</Parameter>
-				<Parameter>
 					<Name>bufferIndex</Name>
+					<Comment>
+						<![CDATA[execute : BOOL; //used to do mutex]]>
+					</Comment>
 					<Type GUID="{18071995-0000-0000-0000-000000000006}">INT</Type>
 					<BitSize>16</BitSize>
 				</Parameter>
@@ -8987,7 +8974,7 @@ External Setpoint Generation:
 				</Property>
 			</Properties>
 			<Hides>
-				<Hide GUID="{C7FD7600-C10A-4D42-93F2-B371957E5AAF}"/>
+				<Hide GUID="{FA782EF0-69DF-4E91-B01B-506EA9B8CBA8}"/>
 			</Hides>
 		</DataType>
 		<DataType>
@@ -8997,7 +8984,7 @@ External Setpoint Generation:
 Actuator/Sensor]]>
 			</Comment>
 			<BitSize>456704</BitSize>
-			<BaseType GUID="{FA782EF0-69DF-4E91-B01B-506EA9B8CBA8}">RunAxis</BaseType>
+			<BaseType GUID="{D0FBAC9E-1509-4483-8C64-8100A8BCE29B}">RunAxis</BaseType>
 			<ArrayInfo>
 				<LBound>1</LBound>
 				<Elements>8</Elements>
@@ -10942,7 +10929,7 @@ External Setpoint Generation:
 								<![CDATA[64Words block area 
 Actuator/Sensor]]>
 							</Comment>
-							<Type GUID="{A0414678-6B58-C993-91E0-C1E15AA6838C}">ARRAY [1..8] OF RunAxis</Type>
+							<Type GUID="{B70EDC4A-54BE-1B01-348B-C229BA83F578}">ARRAY [1..8] OF RunAxis</Type>
 							<InOut>7</InOut>
 							<SubVar>
 								<Name>GVL.axisControls[1]^Axis^NcToPlc^AxisState</Name>

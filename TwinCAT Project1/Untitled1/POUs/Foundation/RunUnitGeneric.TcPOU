@@ -110,9 +110,10 @@ END_VAR
 IF State=16#FF THEN
 	State :=0;
 	NextState:=0;
-	Initialize := true;
+	
 END_IF
-]]></ST>
+
+Initialize := (State = 16#FF);]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="RunUnitGeneric">
@@ -136,6 +137,7 @@ END_IF
       <LineId Id="8" Count="1" />
       <LineId Id="12" Count="1" />
       <LineId Id="10" Count="0" />
+      <LineId Id="14" Count="0" />
       <LineId Id="7" Count="0" />
     </LineIds>
   </POU>
