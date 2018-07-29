@@ -2,30 +2,20 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
   <POU Name="RunCylinder" Id="{a99bf5d1-aaa3-4095-9742-005d9ab3fed8}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunCylinder
-VAR_INPUT
-	
-END_VAR
-VAR_OUTPUT
-END_VAR
-VAR_IN_OUT
-	
-END_VAR
-VAR		
-	//Comm : CylinderBlockBase;	
+VAR			
+	A_SENSOR_USED_COUNT : INT;
+	B_SENSOR_USED_COUNT : INT;	
 
 	COMMAND_CACHED : eCylinderCommands; //1 , HMI->PLC
 	LAST_COMMAND : eCylinderCommands;   //2 , 
-	
-	A_SENSOR_USED_COUNT : WORD;
-	B_SENSOR_USED_COUNT : WORD;
-	
+		
 	ACT_A AT %Q* : ARRAY[1..2] OF BOOL;
 	ACT_B AT %Q* : ARRAY[1..2] OF BOOL;
 	
 	SENSOR_A AT %I* : ARRAY[1..4] OF BOOL;
 	SENSOR_B AT %I* : ARRAY[1..4] OF BOOL;
 
-	nCounter : WORD := 0;
+	nCounter : INT := 0;
 	bMatched : BOOL := false;
 	
 	TMR_WATCH_DOG : TON ; //Watch dog timer
@@ -43,12 +33,9 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[//Run timers
-TMR_WATCH_DOG(IN:= , PT:= WORD_TO_TIME(Comm.timeWatchDog), Q=> , ET=> );
-TMR_DELAY_TO_A(IN:= , PT:= WORD_TO_TIME(Comm.timeDelayToA), Q=> , ET=> );
-TMR_DELAY_TO_B(IN:= , PT:= WORD_TO_TIME(Comm.timeDelayToB), Q=> , ET=> );
-
-//scan-in
-Comm.STATUS_WORD.3 := BIT_WARN_SUPPRESS;
+TMR_WATCH_DOG(IN:= , PT:= , Q=> , ET=> );
+TMR_DELAY_TO_A(IN:= , PT:= , Q=> , ET=> );
+TMR_DELAY_TO_B(IN:= , PT:= , Q=> , ET=> );
 
 // scan all sensor status
 BIT_A_MATCH := TRUE;
@@ -123,23 +110,23 @@ LAST_COMMAND := COMMAND_CACHED;
     <Method Name="Execute" Id="{13693201-8c27-444e-bbfc-9d5e6a727077}">
       <Declaration><![CDATA[METHOD Execute : BOOL
 VAR_INPUT
-	Command : eCylinderCommands;
+	argCommand : eCylinderCommands;
 END_VAR
-VAR_OUTPUT
-	bDone : BOOL ;
+VAR
+	outDone : BOOL ;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[// store command
-Comm.COMMAND_CACHED := Command;
+COMMAND_CACHED := argCommand;
 
-bDone := BIT_DONE AND NOT BIT_WARNING AND (Comm.COMMAND_CACHED = Comm.LAST_COMMAND);
+outDone := BIT_DONE AND NOT BIT_WARNING AND (COMMAND_CACHED = LAST_COMMAND);
 
 //reset surpress
-IF bDone THEN
-	Comm.STATUS_WORD.3 := FALSE;
+IF outDone THEN
+	BIT_WARN_SUPPRESS := FALSE;
 END_IF
 
-Execute:=bDone; //return]]></ST>
+Execute:=outDone; //return]]></ST>
       </Implementation>
     </Method>
     <Method Name="FB_init" Id="{41827ab5-0173-413a-8bd3-19090e017f80}">
@@ -148,18 +135,22 @@ VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
 	
+	argASensorUsed : INT := 0;
+	argBSensorUsed : INT := 0;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[A_SENSOR_USED_COUNT := argASensorUsed;
+B_SENSOR_USED_COUNT := argBSensorUsed;
+
+//given timer initial value
+TMR_WATCH_DOG.PT := T#200MS;
+TMR_DELAY_TO_A.PT := T#200MS;
+TMR_DELAY_TO_B.PT := T#200MS;]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="RunCylinder">
-      <LineId Id="144" Count="3" />
-      <LineId Id="239" Count="0" />
-      <LineId Id="241" Count="0" />
-      <LineId Id="240" Count="0" />
-      <LineId Id="148" Count="62" />
+      <LineId Id="144" Count="66" />
       <LineId Id="233" Count="5" />
       <LineId Id="9" Count="0" />
     </LineIds>
@@ -168,7 +159,10 @@ END_VAR
       <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="RunCylinder.FB_init">
+      <LineId Id="20" Count="1" />
+      <LineId Id="14" Count="0" />
       <LineId Id="7" Count="0" />
+      <LineId Id="15" Count="2" />
     </LineIds>
   </POU>
 </TcPlcObject>

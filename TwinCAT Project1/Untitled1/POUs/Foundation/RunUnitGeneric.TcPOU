@@ -11,14 +11,11 @@ VAR_INPUT
 	bMaterialOverride : BIT;
 END_VAR
 VAR_OUTPUT
-	State : INT;
-	NextState : INT;
-	AlarmCode : INT;
+	State : INT := 0;
+	NextState : INT := 0;
+	AlarmCode : INT := 0;
 END_VAR
-VAR
-	//Comm : UnitBlockGeneric;	
-	//ptMine : POINTER TO UNITBASE;
-	
+VAR	
 	Parent : POINTER TO RunUnitGeneric;
 	
 	SlotBase : POINTER TO MaterialBlock;
@@ -35,9 +32,9 @@ END_VAR
     <Implementation>
       <ST><![CDATA[//link parent
 //if parent is valid (>= 1
-IF ptMine^.parent <> 0  THEN
-	ptParent := ADR(GVL.unitControls[ptMine^.parent]);
-END_IF
+//IF ptMine^.parent <> 0  THEN
+//	ptParent := ADR(GVL.unitControls[ptMine^.parent]);
+//END_IF
 
 //ControlWord := ptMine^.controlWord;
 
@@ -88,29 +85,19 @@ VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
 	
-	ptBlock : POINTER TO UnitBase;
+	argParent : POINTER TO RunUnitGeneric;
+	argSlotBase : POINTER TO MaterialBlock;
+	argSlotLast : POINTER TO MaterialBlock;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[ptMine := ptBlock;
+        <ST><![CDATA[//initialize 
+Parent := argParent;
+SlotBase := argSlotBase;
+SlotLast := argSlotLast;
 
 
-
-//initialize 
-IF ptMine^.parent = 0 THEN
-	ptMine^.parent := 1;
-END_IF
-IF ptMine^.materialBase = 0 THEN
-	ptMine^.materialBase := 1;
-END_IF
-IF ptMine^.materialCount =0 THEN
-	ptMine^.materialCount := 1;
-END_IF
-
-
-//link material slot
-ptSlotBase := ADR(GVL.MATERIAL_SLOTS[ptMine^.materialBase]);
-ptSlotLast := ADR(GVL.MATERIAL_SLOTS[ptMine^.materialBase + ptMine^.materialCount - 1]);]]></ST>
+]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="RunUnitGeneric">
@@ -123,16 +110,10 @@ ptSlotLast := ADR(GVL.MATERIAL_SLOTS[ptMine^.materialBase + ptMine^.materialCoun
       <LineId Id="9" Count="0" />
     </LineIds>
     <LineIds Name="RunUnitGeneric.FB_init">
+      <LineId Id="43" Count="0" />
       <LineId Id="10" Count="1" />
+      <LineId Id="41" Count="0" />
       <LineId Id="13" Count="1" />
-      <LineId Id="21" Count="0" />
-      <LineId Id="25" Count="0" />
-      <LineId Id="23" Count="0" />
-      <LineId Id="26" Count="2" />
-      <LineId Id="15" Count="0" />
-      <LineId Id="29" Count="1" />
-      <LineId Id="17" Count="3" />
-      <LineId Id="31" Count="0" />
       <LineId Id="7" Count="0" />
     </LineIds>
   </POU>

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
   <POU Name="RunUnitIndexerMasterCelluarA" Id="{8c290897-f573-4530-b2b8-1a75c3433cf9}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunUnitIndexerMasterCelluarA EXTENDS RunUnitIndexerMaster
 VAR_INPUT
@@ -36,15 +36,15 @@ END_VAR
 SUPER^(); //run indexer master
 
 //Buffer modes
-ptAxisMaster^.ExecuteCommandBlock(ptBlock := ptCommandFast,
+Axis^.ExecuteCommandBlock(ptBlock := ptCommandFast,
 	Execute:= fastExecute,
 	bufferIndex:=1,
 	Done=>fastDone);
-ptAxisMaster^.ExecuteCommandBlock(ptBlock := ptCommandSlow,
+Axis^.ExecuteCommandBlock(ptBlock := ptCommandSlow,
 	Execute:= slowExecute,
 	bufferIndex:=2,
 	Done=>slowDone);
-ptAxisMaster^.ExecuteCommandBlock(ptBlock := ptCommandExtend,
+Axis^.ExecuteCommandBlock(ptBlock := ptCommandExtend,
 	Execute:= extendExecute,
 	bufferIndex:=3,
 	Done=>extendDone);
@@ -66,7 +66,7 @@ CASE SUPER^.state OF
 
 	4:
 	//until trigger raise reached , trigger all lifter to move
-	IF ptAxisMaster^.PositionFeedback >= (DWORD_TO_LREAL(ptCommandTriggerRaise^.COORDINATE)/1000) THEN
+	IF Axis^.PositionFeedback >= (DWORD_TO_LREAL(ptCommandTriggerRaise^.COORDINATE)/1000) THEN
 		//drive stoppers
 		allDone := TRUE; //reset
 		FOR nCounter:=1 TO 3 BY 1 DO
@@ -74,17 +74,17 @@ CASE SUPER^.state OF
 			allDone := allDone AND bDoneCache; //collect overall result
 		END_FOR
 		
-		IF ptAxisMaster^.PositionFeedback >= (DWORD_TO_LREAL(ptCommandCheckRaise^.COORDINATE)/1000) AND allDone THEN
+		IF Axis^.PositionFeedback >= (DWORD_TO_LREAL(ptCommandCheckRaise^.COORDINATE)/1000) AND allDone THEN
 			slowExecute:=TRUE;
 			//serial transition
-		ELSIF ptAxisMaster^.PositionFeedback >= (DWORD_TO_LREAL(ptCommandCheckRaise^.COORDINATE)/1000) AND NOT allDone THEN
+		ELSIF Axis^.PositionFeedback >= (DWORD_TO_LREAL(ptCommandCheckRaise^.COORDINATE)/1000) AND NOT allDone THEN
 			//raising stopper fails
 			//raise alarm , and move to recovery state	
 		END_IF
 		
 	END_IF
 	5:
-	IF ptAxisMaster^.PositionFeedback >= (DWORD_TO_LREAL(ptCommandCheckReach^.COORDINATE)/1000) THEN
+	IF Axis^.PositionFeedback >= (DWORD_TO_LREAL(ptCommandCheckReach^.COORDINATE)/1000) THEN
 		allDone := TRUE; //reset
 		FOR nCounter:=1 TO 3 BY 1 DO
 			lifters[nCounter]^.CheckReach(Done=>bDoneCache);

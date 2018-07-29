@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
   <POU Name="MAIN" Id="{c5d24ec2-dcd4-432d-b366-2840b187b342}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
@@ -24,7 +24,8 @@ ptRunGeneric : POINTER TO RunUnitGeneric;
 ptUnitGeneric : POINTER TO UnitBase;
 ptUnitIndexerMaster : POINTER TO UnitIndexerMaster;
 
-
+bInitialized : BOOL ;
+nCounter : int ;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -51,6 +52,24 @@ cbBlock4:=ptBlockPos^;//check
 //TEST_UNIT_VIRTUAL();
 //TEST_UNIT_MASTER();
 //TEST_AXIS();
+IF NOT bInitialized THEN
+	FOR nCounter:=8 TO 10 BY 1 DO
+		GVL.commandBlocks[nCounter].command := eCommandTypes.POSITION;
+		GVL.commandBlocks[nCounter].parameter.position.Acceleration := 4000;
+		GVL.commandBlocks[nCounter].parameter.position.Deceleration := 4000;
+
+	END_FOR
+	GVL.commandBlocks[8].parameter.position.Position := 300;
+	GVL.commandBlocks[8].parameter.position.Velocity := 400;
+	
+	GVL.commandBlocks[9].parameter.position.Position := 400;
+	GVL.commandBlocks[9].parameter.position.Velocity := 100;
+	
+	GVL.commandBlocks[10].parameter.position.Position := 800;
+	GVL.commandBlocks[10].parameter.position.Velocity := 400;
+	
+	bInitialized := true;
+END_IF
 TEST_BUFFERING();
 
 aSize := SIZEOF(GVL.unitControls[1]);
@@ -109,6 +128,16 @@ END_VAR
       <LineId Id="110" Count="0" />
       <LineId Id="68" Count="0" />
       <LineId Id="137" Count="0" />
+      <LineId Id="163" Count="0" />
+      <LineId Id="170" Count="0" />
+      <LineId Id="172" Count="0" />
+      <LineId Id="174" Count="0" />
+      <LineId Id="176" Count="1" />
+      <LineId Id="173" Count="0" />
+      <LineId Id="169" Count="0" />
+      <LineId Id="178" Count="0" />
+      <LineId Id="180" Count="7" />
+      <LineId Id="165" Count="0" />
       <LineId Id="136" Count="0" />
       <LineId Id="69" Count="0" />
       <LineId Id="73" Count="0" />

@@ -41,7 +41,7 @@ fbMoveAbs[nCounter](
 	Acceleration:= , 
 	Deceleration:= , 
 	Jerk:= , 
-	BufferMode:= , 
+	BufferMode:= MC_BlendingPrevious, 
 	Options:= , 
 	Done=> , 
 	Busy=> , 
@@ -150,11 +150,22 @@ fbReadStatus(
 //comm.RUN_STATUS.3 := NOT fbReadStatus.Error; //Servo ready
 //comm.ALARMS := fbReadStatus.ErrorID; //error code]]></ST>
     </Implementation>
-    <Method Name="ExecuteParameter" Id="{248fd65c-916e-4c41-b72b-91932f742cc7}">
+    <Method Name="ExecuteParameter" Id="{71f56729-8e13-4b1e-a80c-858adc37a723}">
       <Declaration><![CDATA[METHOD ExecuteParameter : BOOL
 VAR_INPUT
 	ptBlock : POINTER TO ParameterSet;
-	execute : BOOL; //used to do mutex
+	//execute : BOOL; //used to do mutex
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ExecuteParameter:=ExecuteParameterBuffer(ptBlock:= ptBlock, bufferIndex:= 1);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ExecuteParameterBuffer" Id="{248fd65c-916e-4c41-b72b-91932f742cc7}">
+      <Declaration><![CDATA[METHOD ExecuteParameterBuffer : BOOL
+VAR_INPUT
+	ptBlock : POINTER TO ParameterSet;
+	//execute : BOOL; //used to do mutex
 	bufferIndex: INT :=1;
 END_VAR
 VAR
@@ -164,9 +175,6 @@ VAR
 	ptMcBusy : POINTER TO BOOL;
 	ptMcError : POINTER TO BOOL;
 
-END_VAR
-VAR_OUTPUT
-	done:bool;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -209,18 +217,22 @@ ELSE
 	return;
 END_CASE
 
-IF NOT execute THEN
+//IF NOT execute THEN
 	//stop
-	ptMcExecute^ := FALSE; //reset MC_Block
-	RETURN;
-END_IF
+	//ptMcExecute^ := FALSE; //reset MC_Block
+	//RETURN;
+//END_IF
 
 //auto stop execute when error , would do raising edge again when error eliminated
-ptMcExecute^ := NOT (ptMcError^);
+ptMcExecute^ := NOT (ptMcError^) AND NOT ptMcDone^;
 
-done := ptMcDone^;
+//done := ptMcDone^;
+ExecuteParameterBuffer:=ptMcDone^; //return value
 
-ExecuteParameter:=done; //return value]]></ST>
+//auto-reset ? 
+//IF ptMcDone^ THEN
+//	ptMcExecute^ := FALSE;
+//END_IF]]></ST>
       </Implementation>
     </Method>
     <Method Name="FB_init" Id="{5aeba573-47c3-411b-9f3d-8af6b6892223}">
@@ -267,6 +279,9 @@ END_VAR
       <LineId Id="9" Count="0" />
     </LineIds>
     <LineIds Name="RunAxis.ExecuteParameter">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="RunAxis.ExecuteParameterBuffer">
       <LineId Id="296" Count="2" />
       <LineId Id="403" Count="0" />
       <LineId Id="307" Count="0" />
@@ -286,8 +301,11 @@ END_VAR
       <LineId Id="412" Count="0" />
       <LineId Id="333" Count="2" />
       <LineId Id="338" Count="4" />
-      <LineId Id="413" Count="0" />
       <LineId Id="5" Count="0" />
+      <LineId Id="435" Count="0" />
+      <LineId Id="432" Count="0" />
+      <LineId Id="431" Count="0" />
+      <LineId Id="433" Count="1" />
     </LineIds>
     <LineIds Name="RunAxis.FB_init">
       <LineId Id="7" Count="0" />

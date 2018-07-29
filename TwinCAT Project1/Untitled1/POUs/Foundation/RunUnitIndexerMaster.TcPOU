@@ -1,25 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
   <POU Name="RunUnitIndexerMaster" Id="{2551b589-75e5-432e-8b87-41fecbcdc1e1}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunUnitIndexerMaster EXTENDS RunUnitGeneric
 VAR_INPUT
-	syncAcknowledged AT%I* : BOOL; //downstream replied starting ackowledge , face to downstream
+	syncAcknowledged : BOOL; //downstream replied starting ackowledge , face to downstream
+	
+	slaveLinkageStatus : ARRAY[1..32] of bool; // configuration
+	slaveWorkingSignal : ARRAY[1..32] OF BOOL; // collect slave working signal , possible to access externally?
 END_VAR
 VAR_OUTPUT
-	syncEngaged AT%Q* : BOOL; //inform downstream i am ready , face to downstream
+	syncEngaged : BOOL; //inform downstream i am ready , face to downstream
+	syncMaterialId : int;
 END_VAR
-VAR
-	ptContextMaster : POINTER TO UnitIndexerMaster ;//context linkage
+VAR	
 	
-	ptUpstreamMaster : POINTER TO RunUnitIndexerMaster;//upstream linkage
 	
-	ptAxisMaster : POINTER TO RunAxis; //axis reference
+	Upstream : POINTER TO RunUnitIndexerMaster;//upstream linkage
+	Axis : POINTER TO RunAxis; //axis reference
 	
 	//Working registers
 	matIsValidStatus : DWORD;
 	matSyncDone : DWORD;
 	
-	slaveWorkingSignal : ARRAY[1..32] OF BOOL; // collect slave working signal , possible to access externally?
 	
 	nCounter : INT;
 	condition : BOOL;
@@ -35,9 +37,9 @@ CASE SUPER^.state OF
 		//check material synchronization to Databse
 		//raise working signals for all linked slave
 		FOR nCounter:=1 TO 32 BY 1 DO
-			slaveWorkingSignal[nCounter] := (ptContextMaster^.slaveLinkageStatus AND SHL(16#1,nCounter-1)) <> 0 ;
+			slaveWorkingSignal[nCounter] := slaveLinkageStatus[nCounter];
 		END_FOR
-		ptMine^.serialTransition := TRUE;
+		bSerialTransition := TRUE;
 	1:
 		//if all working status meets , transition
 		//all working signal should be zero
@@ -46,10 +48,10 @@ CASE SUPER^.state OF
 			condition := condition AND NOT slaveWorkingSignal[nCounter];
 		END_FOR
 		IF condition AND NOT syncAcknowledged THEN
-			ptMine^.serialTransition := TRUE;
+			bSerialTransition := TRUE;
 			
 			
-			isLastSlotOccupied := (ptSlotLast^.wordOut AND SHL(16#1,scIsValid)) <> 0; //check out last slot status
+			isLastSlotOccupied := SlotLast^.wordOut.0; //check out last slot status
 			syncEngaged := isLastSlotOccupied;//ready to synchronizing (communicate with downstream
 		END_IF
 	2:
@@ -61,7 +63,7 @@ CASE SUPER^.state OF
 		// pull upstream (check on then reset
 		
 		//listen to move
-		ptMine^.serialTransition :=  (NOT isLastSlotOccupied) OR (syncAcknowledged AND isLastSlotOccupied);
+		bSerialTransition :=  (NOT isLastSlotOccupied) OR (syncAcknowledged AND isLastSlotOccupied);
 		
 		//seted by downstream
 		IF syncAcknowledged THEN
@@ -69,8 +71,8 @@ CASE SUPER^.state OF
 		END_IF
 		
 		//once going pull upstream working together
-		IF ptMine^.serialTransition AND ptUpstreamMaster <> 0 THEN
-			ptUpstreamMaster^.syncAcknowledged := ptUpstreamMaster^.syncEngaged;
+		IF bSerialTransition AND Upstream <> 0 THEN
+			Upstream^.syncAcknowledged := Upstream^.syncEngaged;
 		END_IF
 		
 	3:
@@ -78,8 +80,8 @@ CASE SUPER^.state OF
 END_CASE
 
 // Handshaking sequence (face to upstream
-IF ptUpstreamMaster <> 0 AND_THEN NOT ptUpstreamMaster^.syncEngaged THEN
-	ptUpstreamMaster^.syncAcknowledged := FALSE; //reset upstream
+IF Upstream <> 0 AND_THEN NOT Upstream^.syncEngaged THEN
+	Upstream^.syncAcknowledged := FALSE; //reset upstream
 END_IF
 ]]></ST>
     </Implementation>
@@ -89,15 +91,24 @@ VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
 	
-	ptBlock : POINTER TO UnitBase;
-	ptUpstream : POINTER TO RunUnitIndexerMaster := 0;
-	ptAxis : POINTER TO RunAxis;
+	argParent : POINTER TO RunUnitGeneric;
+	argSlotBase : POINTER TO MaterialBlock;
+	argSlotLast : POINTER TO MaterialBlock;
+	
+	argAxis : POINTER TO RunAxis;
+	argUpstream : POINTER TO RunUnitIndexerMaster;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[//ptContextMaster := ptMine; //linkage and casting
-ptUpstreamMaster := ptUpstream;
-ptAxisMaster := ptAxis;]]></ST>
+        <ST><![CDATA[//initialize 
+Parent := argParent;
+SlotBase := argSlotBase;
+SlotLast := argSlotLast;
+
+Axis := argAxis;
+Upstream := argUpstream;
+
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="ProxyMode" Id="{33b629b5-5210-4d2f-9d83-0eef6582dc16}">
@@ -141,21 +152,15 @@ fbAdsWrite(
       </Implementation>
     </Method>
     <LineIds Name="RunUnitIndexerMaster">
-      <LineId Id="154" Count="0" />
-      <LineId Id="159" Count="32" />
-      <LineId Id="220" Count="0" />
-      <LineId Id="192" Count="5" />
-      <LineId Id="212" Count="0" />
-      <LineId Id="211" Count="0" />
-      <LineId Id="200" Count="5" />
-      <LineId Id="214" Count="0" />
-      <LineId Id="216" Count="1" />
-      <LineId Id="215" Count="0" />
+      <LineId Id="295" Count="52" />
       <LineId Id="9" Count="0" />
     </LineIds>
     <LineIds Name="RunUnitIndexerMaster.FB_init">
-      <LineId Id="12" Count="0" />
-      <LineId Id="22" Count="0" />
+      <LineId Id="34" Count="3" />
+      <LineId Id="43" Count="0" />
+      <LineId Id="42" Count="0" />
+      <LineId Id="41" Count="0" />
+      <LineId Id="38" Count="0" />
       <LineId Id="9" Count="0" />
     </LineIds>
     <LineIds Name="RunUnitIndexerMaster.ProxyMode">

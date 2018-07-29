@@ -1,29 +1,57 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
   <POU Name="RunLifterCelluar" Id="{8e8fc5f3-47f1-4079-a3ab-596940aadfbf}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK RunLifterCelluar
+    <Declaration><![CDATA[FUNCTION_BLOCK RunLifterCelluar EXTENDS RunUnitGeneric
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
 END_VAR
-VAR
+VAR	
+	//actuator
+	//axis
+	Axis : POINTER TO RunAxis;
+	//cylinder
+	Cylinder : POINTER TO RunCylinder;
+	
 	//lifter
-	ptCommandLifterHit : POINTER TO CommandBlockPos; // raise to hit
-	ptCommandLifterRelease : POINTER TO CommandBlockPos; //release
-	ptCommandLifterWorking : POINTER TO CommandBlockPos; //lift carrier to working position
+	ptCommandLifterHit : POINTER TO ParameterSet; // raise to hit
+	ptCommandLifterRelease : POINTER TO ParameterSet; //release
+	ptCommandLifterWorking : POINTER TO ParameterSet; //lift carrier to working position
 	//sensor
 	ptObstacleSensorStatus : POINTER TO BOOL; //fibers
 	ptReachSensorStatus : POINTER TO BOOL; //approximities
 	//slot status
 	ptPreivousSlotValid : POINTER TO BOOL;
-	//axis
-	ptAxis : POINTER TO RunAxis;
-	//cylinder
-	ptCylinder : POINTER TO RunCylinder;
+	
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[]]></ST>
+      <ST><![CDATA[
+CASE State OF
+	0:
+	
+	bSerialTransition := Axis^.ExecuteParameter(ptCommandLifterRelease,NOT bSerialTransition);
+
+	0:
+	//if execute flag on
+	bSerialTransition := Axis^.ExecuteParameter(ptBlock:=ptCommandLifterHit,
+		execute := NOT ptCommandLifterHit^);
+	1:
+	//once reach sensor detected , n
+	bSerialTransition := ptReachSensorStatus^;
+	2:
+	//hold
+	bSerialTransition := Cylinder^.Execute(eCylinderCommands.COMMAND_B);
+	3:
+	//to working position
+	bSerialTransition := Axis^.ExecuteParameter(ptCommandLifterWorking,NOT bSerialTransition);
+	4:
+	//if release flag on
+	bSerialTransition := Axis^.ExecuteParameter(ptCommandLifterHit,NOT bSerialTransition);
+	5:
+	//release holder
+	bSerialTransition := Cylinder^.Execute(eCylinderCommands.COMMAND_A);
+END_CASE]]></ST>
     </Implementation>
     <Method Name="CheckReach" Id="{67fa871c-5756-49a6-b887-c646b2442d16}">
       <Declaration><![CDATA[METHOD CheckReach : BOOL
@@ -67,7 +95,7 @@ END_VAR
 //obstacle not existed
 
 //plus my slot is empty
-ptAxis^.ExecuteCommandBlock(
+Axis^.ExecuteCommandBlock(
 ptBlock:= ptCommandLifterHit, 
 execute:= TRUE,//ptPreivousSlotValid^ AND NOT ptObstacleSensorStatus^, 
 bufferIndex:=1,
@@ -89,7 +117,7 @@ VAR_OUTPUT
 	Done:BOOL;	//successfully
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[ptAxis^.ExecuteCommandBlock(
+        <ST><![CDATA[Axis^.ExecuteCommandBlock(
 ptBlock:= ptCommandLifterRelease, 
 execute:= TRUE,//ptPreivousSlotValid^ AND NOT ptObstacleSensorStatus^, 
 bufferIndex:=1,
@@ -99,7 +127,29 @@ done=> Done);
       </Implementation>
     </Method>
     <LineIds Name="RunLifterCelluar">
+      <LineId Id="40" Count="0" />
       <LineId Id="9" Count="0" />
+      <LineId Id="125" Count="0" />
+      <LineId Id="127" Count="0" />
+      <LineId Id="129" Count="0" />
+      <LineId Id="126" Count="0" />
+      <LineId Id="41" Count="0" />
+      <LineId Id="43" Count="0" />
+      <LineId Id="95" Count="0" />
+      <LineId Id="99" Count="0" />
+      <LineId Id="97" Count="0" />
+      <LineId Id="102" Count="0" />
+      <LineId Id="104" Count="1" />
+      <LineId Id="108" Count="0" />
+      <LineId Id="106" Count="0" />
+      <LineId Id="109" Count="0" />
+      <LineId Id="112" Count="0" />
+      <LineId Id="110" Count="1" />
+      <LineId Id="113" Count="1" />
+      <LineId Id="116" Count="0" />
+      <LineId Id="119" Count="0" />
+      <LineId Id="117" Count="0" />
+      <LineId Id="42" Count="0" />
     </LineIds>
     <LineIds Name="RunLifterCelluar.CheckReach">
       <LineId Id="9" Count="0" />
