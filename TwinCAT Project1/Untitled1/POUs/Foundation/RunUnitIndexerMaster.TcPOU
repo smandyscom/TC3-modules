@@ -34,8 +34,7 @@ END_VAR
 
 CASE SUPER^.state OF
 	0:
-		//check material synchronization to Databse
-		//raise working signals for all linked slave
+		
 		FOR nCounter:=1 TO 32 BY 1 DO
 			slaveWorkingSignal[nCounter] := slaveLinkageStatus[nCounter];
 		END_FOR
@@ -47,12 +46,13 @@ CASE SUPER^.state OF
 		FOR nCounter:=1 TO 32 BY 1 DO
 			condition := condition AND NOT slaveWorkingSignal[nCounter];
 		END_FOR
+		//TODO
+		//check material synchronization to Databse
+		//raise working signals for all linked slave
 		IF condition AND NOT syncAcknowledged THEN
 			bSerialTransition := TRUE;
-			
-			
+						
 			isLastSlotOccupied := SlotLast^.wordOut.0; //check out last slot status
-			syncEngaged := isLastSlotOccupied;//ready to synchronizing (communicate with downstream
 		END_IF
 	2:
 		//2 modes
@@ -62,12 +62,16 @@ CASE SUPER^.state OF
 		// pull by downstream (set on then check off
 		// pull upstream (check on then reset
 		
+		IF isLastSlotOccupied AND NOT syncEngaged THEN
+			syncEngaged := TRUE;//ready to synchronizing (communicate with downstream
+		END_IF
+		
 		//listen to move
 		bSerialTransition :=  (NOT isLastSlotOccupied) OR (syncAcknowledged AND isLastSlotOccupied);
 		
 		//seted by downstream
 		IF syncAcknowledged THEN
-			syncEngaged := FALSE; //off
+			syncEngaged := FALSE; //reset
 		END_IF
 		
 		//once going pull upstream working together
@@ -152,7 +156,19 @@ fbAdsWrite(
       </Implementation>
     </Method>
     <LineIds Name="RunUnitIndexerMaster">
-      <LineId Id="295" Count="52" />
+      <LineId Id="295" Count="4" />
+      <LineId Id="301" Count="10" />
+      <LineId Id="387" Count="0" />
+      <LineId Id="385" Count="1" />
+      <LineId Id="312" Count="2" />
+      <LineId Id="316" Count="0" />
+      <LineId Id="318" Count="8" />
+      <LineId Id="378" Count="0" />
+      <LineId Id="380" Count="1" />
+      <LineId Id="379" Count="0" />
+      <LineId Id="327" Count="2" />
+      <LineId Id="382" Count="2" />
+      <LineId Id="333" Count="14" />
       <LineId Id="9" Count="0" />
     </LineIds>
     <LineIds Name="RunUnitIndexerMaster.FB_init">

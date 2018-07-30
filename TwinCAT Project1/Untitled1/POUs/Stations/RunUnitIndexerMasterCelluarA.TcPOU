@@ -3,31 +3,35 @@
   <POU Name="RunUnitIndexerMasterCelluarA" Id="{8c290897-f573-4530-b2b8-1a75c3433cf9}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunUnitIndexerMasterCelluarA EXTENDS RunUnitIndexerMaster
 VAR_INPUT
-	// conveyor related , Fast + Slow = pitch
-	ptCommandFast : POINTER TO CommandBlockPos;
-	ptCommandSlow : POINTER TO CommandBlockPos;
-	ptCommandExtend : POINTER TO CommandBlockPos;
-	//Checkpoints
-	ptCommandTriggerRaise: POINTER TO CommandBlockPos; //trigger point
-	ptCommandCheckRaise : POINTER TO commandBlockPos; //if not all lifter done until then , slowdown conveyor motion
-	ptCommandCheckReach : POINTER TO commandBlockPos;
-	//Lifters
-	lifters : ARRAY[1..3] OF POINTER TO RunLifterCelluar;
+	allHit : BOOL;
+	allReach : BOOL;
+	allRelease : BOOL;
 END_VAR
 VAR_OUTPUT
+	triggerHit : BOOL;
+	triggerRelease : BOOL;
 END_VAR
 VAR
+	// conveyor related , Fast + Slow = pitch
+	ptCommandFast : POINTER TO ParameterSet;
+	ptCommandSlow : POINTER TO ParameterSet;
+	
+	//Checkpoints
+	ptCommandTriggerRaise: POINTER TO ParameterSet; //trigger point
+	ptCommandCheckRaise : POINTER TO ParameterSet; //if not all lifter done until then , slowdown conveyor motion
+	//Lifters
+	//lifters : ARRAY[1..3] OF POINTER TO RunLifterCelluar;
+	commandSetZero : ParameterSet;
+	commandFinalGoal : ParameterSet;
+
 	fastExecute : BOOL;
 	slowExecute : BOOL;
-	extendExecute : BOOL;
+	finalGoalExecute : BOOL;
 	
 	fastDone : BOOL;
 	slowDone: BOOL;
-	extendDone : BOOL;
-	
-	nCounter  : INT ;
-	bDoneCache:BOOL;
-	allDone : BOOL;
+	finalGoalDone : BOOL;
+			
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -36,121 +40,170 @@ END_VAR
 SUPER^(); //run indexer master
 
 //Buffer modes
-Axis^.ExecuteCommandBlock(ptBlock := ptCommandFast,
-	Execute:= fastExecute,
-	bufferIndex:=1,
-	Done=>fastDone);
-Axis^.ExecuteCommandBlock(ptBlock := ptCommandSlow,
-	Execute:= slowExecute,
-	bufferIndex:=2,
-	Done=>slowDone);
-Axis^.ExecuteCommandBlock(ptBlock := ptCommandExtend,
-	Execute:= extendExecute,
-	bufferIndex:=3,
-	Done=>extendDone);
+IF NOT fastDone AND fastExecute THEN
+	fastDone := Axis^.ExecuteParameterBuffer(ptCommandFast,
+	bufferIndex:=1);
+END_IF
+IF NOT slowDone AND slowExecute THEN
+	slowDone := Axis^.ExecuteParameterBuffer(ptCommandSlow,
+	bufferIndex:=2);
+END_IF
+IF NOT finalGoalDone AND finalGoalExecute THEN
+	finalGoalDone := Axis^.ExecuteParameterBuffer(ADR(commandFinalGoal),
+	bufferIndex:=3);
+END_IF
 
-CASE SUPER^.state OF
-	3:
-	//reset lifter
-	allDone := TRUE; //reset
-	FOR nCounter:=1 TO 3 BY 1 DO
-		lifters[nCounter]^.ReleaseStopper(Done=>bDoneCache);
-		allDone := allDone AND bDoneCache; //collect overall result
-	END_FOR
+
+IF bSerialTransition AND State = 1 THEN
+	NextState := 16#10; //state override : release lifters
+END_IF
+
+IF State >=3 AND State <=5 AND_THEN Upstream<>0 AND Upstream^.syncEngaged AND NOT Upstream^.syncAcknowledged THEN
+	//pull upstream if valid
+	Upstream^.syncAcknowledged := TRUE;
+	//set-up final goal
+	commandFinalGoal.command := eCommandTypes.POSITION;
+	commandFinalGoal.parameter.position.Velocity := ptCommandFast^.parameter.position.Velocity;
+	commandFinalGoal.parameter.position.Acceleration := ptCommandFast^.parameter.position.Acceleration;
+	commandFinalGoal.parameter.position.Deceleration := ptCommandFast^.parameter.position.Deceleration;
+	commandFinalGoal.parameter.position.Position := Axis^.PositionFeedback + ptCommandFast^.parameter.position.Position + ptCommandSlow^.parameter.position.Position; //goal extended
 	
-	IF allDone THEN
-		//reset pos command to zero
-		fastExecute := TRUE; //start to go
-		//serial transition
-	END_IF
+END_IF
 
+CASE State OF
+	//-------------------------release lifters
+	16#10:
+	commandSetZero.command := eCommandTypes.SET_POSITION;
+	commandSetZero.parameter.position.Position := 0;
+	
+	IF NOT transitionByte.0 THEN
+		transitionByte.0 := Axis^.ExecuteParameter(ptBlock:= ADR(commandSetZero));//reset pos command to zero
+	END_IF
+	
+	IF allRelease AND transitionByte.0 THEN
+		//reset all 	
+		fastExecute := FALSE;
+		slowExecute := FALSE;
+		finalGoalExecute:=FALSE;
+
+		fastDone := FALSE;
+		slowDone := FALSE;
+		finalGoalDone:=FALSE;	
+	
+		NextState:=2; //merge back default sequence
+	END_IF
+	//------------------start running
+	3:
+	fastExecute := TRUE; //start to go
+	bSerialTransition:= TRUE; //serial transition
 	4:
-	//until trigger raise reached , trigger all lifter to move
-	IF Axis^.PositionFeedback >= (DWORD_TO_LREAL(ptCommandTriggerRaise^.COORDINATE)/1000) THEN
-		//drive stoppers
-		allDone := TRUE; //reset
-		FOR nCounter:=1 TO 3 BY 1 DO
-			lifters[nCounter]^.RaiseStopper(Done=>bDoneCache);
-			allDone := allDone AND bDoneCache; //collect overall result
-		END_FOR
+	IF Axis^.PositionFeedback >= ptCommandTriggerRaise^.parameter.position.Position THEN
 		
-		IF Axis^.PositionFeedback >= (DWORD_TO_LREAL(ptCommandCheckRaise^.COORDINATE)/1000) AND allDone THEN
-			slowExecute:=TRUE;
-			//serial transition
-		ELSIF Axis^.PositionFeedback >= (DWORD_TO_LREAL(ptCommandCheckRaise^.COORDINATE)/1000) AND NOT allDone THEN
-			//raising stopper fails
-			//raise alarm , and move to recovery state	
-		END_IF
-		
+		triggerHit := TRUE;//until trigger raise reached , trigger all lifter to move
+		bSerialTransition:= TRUE; //serial transition
+	//Else : on-going , not trigger lifter
 	END_IF
 	5:
-	IF Axis^.PositionFeedback >= (DWORD_TO_LREAL(ptCommandCheckReach^.COORDINATE)/1000) THEN
-		allDone := TRUE; //reset
-		FOR nCounter:=1 TO 3 BY 1 DO
-			lifters[nCounter]^.CheckReach(Done=>bDoneCache);
-			allDone := allDone AND bDoneCache; //collect overall result
-		END_FOR
-		
-		IF NOT allDone THEN
-			//need do extension
-			extendExecute:=TRUE;
-			//serial transition
-		ELSIF allDone AND slowDone THEN
-			// finished , wait bSlow done
+	IF Axis^.PositionFeedback >= ptCommandCheckRaise^.parameter.position.Position THEN
+		IF allHit THEN
+			slowExecute:=TRUE;//able to slowdown to hit
+			bSerialTransition:= TRUE; //serial transition
+		ELSE
+			//NextState := 16#E0;	//any lifter fails
+			//raise reminder
 		END_IF
-		
+	//Else : on going , not reached the check point
 	END_IF
 	6:
-	// on extension , only one oppertunity
-	IF extendDone THEN
-		allDone := TRUE; //reset
-		FOR nCounter:=1 TO 3 BY 1 DO
-			lifters[nCounter]^.CheckReach(Done=>bDoneCache);
-			allDone := allDone AND bDoneCache; //collect overall result
-		END_FOR
-		
-		IF allDone THEN
-			//success
-		ELSE THEN
-			//failed	
-		END_IF
-//ELSE , wait motion done	
+	IF Upstream<>0 AND_THEN Upstream^.syncAcknowledged THEN
+		finalGoalExecute:=TRUE;//need do extension
+		bSerialTransition:= TRUE; //serial transition
+	ELSE
+		NextState := 16#20;//not pulled upstream , done
 	END_IF
-	
-	16#100:
+	7:
+	// on extension , only one oppertunity
+	IF finalGoalDone THEN
+		NextState := 16#20;//done
+	//ELSE , wait motion done	
+	END_IF
+	//------------------------end of running
+	16#20:
+	IF allReach THEN
+		NextState :=1; //since working signal raised by individual lifter?
+	ELSE	
+		//NextState := 16#F0;//failed
+		//raise reminder		
+	END_IF
+	//------------------------error states
+	16#E0:
 	//(lifter raise fails)recovery , call raise stopper again , if fails , raise alarm again
 	//any lifter fails , execute stop ( or not)
-	16#200:
+	16#F0:
 	//(all reach fails)recovery
 	
 END_CASE]]></ST>
     </Implementation>
+    <Method Name="FB_init" Id="{96d07f02-073e-4434-a75c-09e5135212ba}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	
+	argParent : POINTER TO RunUnitGeneric;
+	argSlotBase : POINTER TO MaterialBlock;
+	argSlotLast : POINTER TO MaterialBlock;
+	
+	argAxis : POINTER TO RunAxis;
+	argUpstream : POINTER TO RunUnitIndexerMaster;
+		
+	argCommandFast : POINTER TO ParameterSet;
+	argCommandSlow : POINTER TO ParameterSet;
+	
+	argCommandTriggerRaise: POINTER TO ParameterSet; //trigger point
+	argCommandCheckRaise : POINTER TO ParameterSet; //if not all lifter done until then , slowdown conveyor motion
+	
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//initialize 
+Parent := argParent;
+SlotBase := argSlotBase;
+SlotLast := argSlotLast;
+
+Axis := argAxis;
+Upstream := argUpstream;
+//
+ptCommandFast := argCommandFast;
+ptCommandSlow := argCommandSlow;
+ptCommandTriggerRaise := argCommandTriggerRaise; //trigger point
+ptCommandCheckRaise :=argCommandCheckRaise; //if not all lifter done until then , slowdown conveyor motion]]></ST>
+      </Implementation>
+    </Method>
     <LineIds Name="RunUnitIndexerMasterCelluarA">
-      <LineId Id="567" Count="16" />
-      <LineId Id="587" Count="1" />
-      <LineId Id="658" Count="1" />
-      <LineId Id="661" Count="0" />
-      <LineId Id="665" Count="1" />
-      <LineId Id="664" Count="0" />
-      <LineId Id="660" Count="0" />
-      <LineId Id="667" Count="1" />
-      <LineId Id="672" Count="1" />
-      <LineId Id="669" Count="0" />
-      <LineId Id="589" Count="0" />
-      <LineId Id="592" Count="38" />
-      <LineId Id="638" Count="0" />
-      <LineId Id="640" Count="4" />
-      <LineId Id="646" Count="0" />
-      <LineId Id="650" Count="0" />
-      <LineId Id="647" Count="0" />
-      <LineId Id="649" Count="0" />
-      <LineId Id="648" Count="0" />
-      <LineId Id="652" Count="0" />
-      <LineId Id="639" Count="0" />
-      <LineId Id="631" Count="3" />
-      <LineId Id="653" Count="2" />
-      <LineId Id="635" Count="0" />
+      <LineId Id="1233" Count="45" />
+      <LineId Id="1363" Count="0" />
+      <LineId Id="1357" Count="0" />
+      <LineId Id="1360" Count="0" />
+      <LineId Id="1362" Count="0" />
+      <LineId Id="1366" Count="0" />
+      <LineId Id="1364" Count="0" />
+      <LineId Id="1367" Count="1" />
+      <LineId Id="1358" Count="0" />
+      <LineId Id="1280" Count="19" />
+      <LineId Id="1369" Count="0" />
+      <LineId Id="1300" Count="21" />
+      <LineId Id="1370" Count="0" />
+      <LineId Id="1322" Count="7" />
       <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="RunUnitIndexerMasterCelluarA.FB_init">
+      <LineId Id="15" Count="5" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="34" Count="1" />
+      <LineId Id="38" Count="0" />
+      <LineId Id="32" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

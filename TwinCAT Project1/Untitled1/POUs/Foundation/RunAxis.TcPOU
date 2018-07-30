@@ -19,6 +19,7 @@ VAR
 	fbMoveHome : MC_Home;
 	fbPower : MC_Power;
 	fbReset: MC_Reset;
+	fbSetPosition: MC_SetPosition;
 	
 	//Status reading
 	fbReadParameter: MC_ReadParameter;
@@ -30,8 +31,19 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[
+fbSetPosition(
+	Axis:= Axis, 
+	Execute:= , 
+	Position:= , 
+	Mode:= , 
+	Options:= , 
+	Done=> , 
+	Busy=> , 
+	Error=> , 
+	ErrorID=> );
+
 //execute founction blocks
-//TODO , possible to configure how many buffer used
+//possible to configure how many buffer used
 FOR nCounter:=1 TO 3 BY 1 DO
 fbMoveAbs[nCounter](
 	Axis:= Axis, 
@@ -213,26 +225,27 @@ eCommandTypes.ZRET:
 		fbMoveHome.HomingMode := ptBlock^.parameter.home.Mode;
 	END_IF
 ;
+eCommandTypes.SET_POSITION:
+	ptMcExecute:=ADR(fbSetPosition.Execute);
+	ptMcDone:=ADR(fbSetPosition.Done);
+	ptMcBusy:=ADR(fbSetPosition.Busy);
+	ptMcError:=ADR(fbSetPosition.Error);
+	
+	IF NOT fbSetPosition.Busy THEN
+		//parameter writing
+		fbSetPosition.Position := ptBlock^.parameter.position.Position;
+	END_IF
+	
 ELSE
 	return;
 END_CASE
-
-//IF NOT execute THEN
-	//stop
-	//ptMcExecute^ := FALSE; //reset MC_Block
-	//RETURN;
-//END_IF
 
 //auto stop execute when error , would do raising edge again when error eliminated
 ptMcExecute^ := NOT (ptMcError^) AND NOT ptMcDone^;
 
 //done := ptMcDone^;
 ExecuteParameterBuffer:=ptMcDone^; //return value
-
-//auto-reset ? 
-//IF ptMcDone^ THEN
-//	ptMcExecute^ := FALSE;
-//END_IF]]></ST>
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="FB_init" Id="{5aeba573-47c3-411b-9f3d-8af6b6892223}">
@@ -247,6 +260,9 @@ END_VAR
       </Implementation>
     </Method>
     <LineIds Name="RunAxis">
+      <LineId Id="443" Count="0" />
+      <LineId Id="446" Count="8" />
+      <LineId Id="444" Count="0" />
       <LineId Id="362" Count="0" />
       <LineId Id="388" Count="0" />
       <LineId Id="310" Count="0" />
@@ -297,15 +313,19 @@ END_VAR
       <LineId Id="411" Count="0" />
       <LineId Id="409" Count="1" />
       <LineId Id="408" Count="0" />
-      <LineId Id="327" Count="5" />
-      <LineId Id="412" Count="0" />
-      <LineId Id="333" Count="2" />
+      <LineId Id="327" Count="0" />
+      <LineId Id="450" Count="0" />
+      <LineId Id="452" Count="2" />
+      <LineId Id="451" Count="0" />
+      <LineId Id="455" Count="1" />
+      <LineId Id="458" Count="0" />
+      <LineId Id="460" Count="0" />
+      <LineId Id="459" Count="0" />
+      <LineId Id="457" Count="0" />
+      <LineId Id="328" Count="2" />
       <LineId Id="338" Count="4" />
       <LineId Id="5" Count="0" />
-      <LineId Id="435" Count="0" />
-      <LineId Id="432" Count="0" />
-      <LineId Id="431" Count="0" />
-      <LineId Id="433" Count="1" />
+      <LineId Id="434" Count="0" />
     </LineIds>
     <LineIds Name="RunAxis.FB_init">
       <LineId Id="7" Count="0" />

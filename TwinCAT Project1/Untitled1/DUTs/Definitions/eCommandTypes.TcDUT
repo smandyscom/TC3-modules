@@ -7,7 +7,9 @@ TYPE eCommandTypes :
 (
 	NO_OPERATION := 0,
 	POSITION:=1,
-	ZRET:=3
+	ZRET:=3,
+	
+	SET_POSITION:=16#FF
 );
 END_TYPE
 ]]></Declaration>
