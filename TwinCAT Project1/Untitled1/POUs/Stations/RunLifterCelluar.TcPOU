@@ -29,7 +29,8 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
+      <ST><![CDATA[SUPER^();
+
 CASE State OF
 	//-------------------------Hit
 	0:
@@ -42,10 +43,10 @@ CASE State OF
 	2:
 	//once reach sensor detected , n
 	bSerialTransition := ptReachSensorStatus^;
-	2:
+	3:
 	//hold
 	bSerialTransition := Cylinder^.Execute(eCylinderCommands.COMMAND_B);
-	3:
+	4:
 	//to working position
 	IF Axis^.ExecuteParameter(ptCommandLifterWorking)THEN
 		//dispatching work to station
@@ -64,7 +65,7 @@ CASE State OF
 	16#22:
 	//release holder
 	bSerialTransition := Cylinder^.Execute(eCylinderCommands.COMMAND_A);
-	16#22:
+	16#23:
 	IF Axis^.ExecuteParameter(ptCommandLifterRelease) THEN
 		NextState := 0;
 	END_IF
@@ -82,6 +83,10 @@ VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
 
+	argParent : POINTER TO RunUnitGeneric;
+	argSlotBase : POINTER TO MaterialBlock;
+	argSlotLast : POINTER TO MaterialBlock;
+	
 	argAxis : POINTER TO RunAxis;
 	argCylinder : POINTER TO RunCylinder;
 	
@@ -92,11 +97,16 @@ VAR_INPUT
 	argObstacleSensor : POINTER TO BOOL;
 	argReachSensor : POINTER TO BOOL;
 	
-	argSlotValid : POINTER TO BOOL;
+	//argSlotValid : POINTER TO BOOL;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[//initializing , link related commandblock/sensor/cylinder
+        <ST><![CDATA[//initialize 
+Parent := argParent;
+SlotBase := argSlotBase;
+SlotLast := argSlotLast;
+
+//initializing , link related commandblock/sensor/cylinder
 
 
 //actuator
@@ -113,7 +123,7 @@ ptCommandLifterWorking := argWorking; //lift carrier to working position
 ptObstacleSensorStatus := argObstacleSensor; //fibers
 ptReachSensorStatus :=argReachSensor; //approximities
 //slot status
-ptPreivousSlotValid :=argSlotValid;]]></ST>
+//ptPreivousSlotValid :=argSlotValid;]]></ST>
       </Implementation>
     </Method>
     <Method Name="Initialize" Id="{21db5a00-f7a1-4530-94de-d799f1b897b9}">
@@ -136,6 +146,7 @@ Initialize := SUPER^.Initialize(); //call base method]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="RunLifterCelluar">
+      <LineId Id="196" Count="0" />
       <LineId Id="40" Count="0" />
       <LineId Id="9" Count="0" />
       <LineId Id="190" Count="0" />
@@ -170,6 +181,8 @@ Initialize := SUPER^.Initialize(); //call base method]]></ST>
       <LineId Id="42" Count="0" />
     </LineIds>
     <LineIds Name="RunLifterCelluar.FB_init">
+      <LineId Id="49" Count="2" />
+      <LineId Id="47" Count="1" />
       <LineId Id="7" Count="0" />
       <LineId Id="17" Count="15" />
       <LineId Id="16" Count="0" />

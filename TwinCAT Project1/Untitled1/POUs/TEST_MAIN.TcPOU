@@ -25,7 +25,25 @@ ptUnitGeneric : POINTER TO UnitBase;
 ptUnitIndexerMaster : POINTER TO UnitIndexerMaster;
 
 bInitialized : BOOL ;
-nCounter : int ;
+nCounter : INT ;
+
+simuObstacleSensor : BOOL;
+simuReachSensor : BOOL;
+
+lifterCelluarA : RunLifterCelluar(argParent:= ADR(lifterCelluarA), 
+argSlotBase:= ADR(GVL.MATERIAL_SLOTS[1]), 
+argSlotLast:= ADR(GVL.MATERIAL_SLOTS[2]),
+argAxis:= ADR(GVL.axisControls[1]),
+argCylinder:=ADR(GVL.cylinderControls[1]),
+argHit:=ADR(GVL.commandBlocks[16]),
+argRelease:=ADR(GVL.commandBlocks[17]),
+argWorking:=ADR(GVL.commandBlocks[18]),
+argObstacleSensor:= ADR(simuObstacleSensor),
+argReachSensor:= ADR(simuReachSensor)
+);
+
+simuStation : RunUnitGeneric(argParent:= ADR(simuStation), argSlotBase:= ADR(GVL.MATERIAL_SLOTS[1]), argSlotLast:= ADR(GVL.MATERIAL_SLOTS[1]));
+
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -53,11 +71,11 @@ cbBlock4:=ptBlockPos^;//check
 //TEST_UNIT_MASTER();
 //TEST_AXIS();
 IF NOT bInitialized THEN
-	FOR nCounter:=8 TO 10 BY 1 DO
+	FOR nCounter:=8 TO 18 BY 1 DO
 		GVL.commandBlocks[nCounter].command := eCommandTypes.POSITION;
 		GVL.commandBlocks[nCounter].parameter.position.Acceleration := 4000;
 		GVL.commandBlocks[nCounter].parameter.position.Deceleration := 4000;
-
+		GVL.commandBlocks[nCounter].parameter.position.Velocity := 100;
 	END_FOR
 	GVL.commandBlocks[8].parameter.position.Position := 300;
 	GVL.commandBlocks[8].parameter.position.Velocity := 400;
@@ -68,10 +86,42 @@ IF NOT bInitialized THEN
 	GVL.commandBlocks[10].parameter.position.Position := 800;
 	GVL.commandBlocks[10].parameter.position.Velocity := 400;
 	
-	bInitialized := true;
+	bInitialized := TRUE;
+	
+	GVL.commandBlocks[16].parameter.position.Position := 100;
+	GVL.commandBlocks[17].parameter.position.Position := 0;
+	GVL.commandBlocks[18].parameter.position.Position := 200;
+	//
+	
 END_IF
-TEST_BUFFERING();
-TEST_CYLINDER();
+//TEST_BUFFERING();
+//TEST_CYLINDER();
+
+GVL.axisControls[1]();
+GVL.cylinderControls[1]();
+
+simuStation(
+	bEnStep:= , 
+	bTrigStep:= , 
+	bPause:= , 
+	bIsBypassed:= , 
+	bWorkingOverride:= , 
+	bMaterialOverride:= , 
+	State=> , 
+	NextState=> , 
+	AlarmCode=> );
+lifterCelluarA(
+	bEnStep:= , 
+	bTrigStep:= , 
+	bPause:= , 
+	bIsBypassed:= , 
+	bWorkingOverride:= , 
+	bMaterialOverride:= , 
+	State=> , 
+	NextState=> , 
+	AlarmCode=> , 
+	mHit:= , 
+	mRelease:= );
 //fbCylinder(ptBlock:= ADR(cylinderBlock));
 
 //fbRunIndexerMaster(ptBlock:= );
@@ -118,14 +168,25 @@ ptUnitGeneric^.alarmCode := 99;  //
       <LineId Id="170" Count="0" />
       <LineId Id="172" Count="0" />
       <LineId Id="174" Count="0" />
-      <LineId Id="176" Count="1" />
+      <LineId Id="176" Count="0" />
+      <LineId Id="274" Count="0" />
       <LineId Id="173" Count="0" />
       <LineId Id="169" Count="0" />
       <LineId Id="178" Count="0" />
       <LineId Id="180" Count="7" />
+      <LineId Id="214" Count="0" />
+      <LineId Id="271" Count="1" />
+      <LineId Id="275" Count="0" />
+      <LineId Id="215" Count="1" />
       <LineId Id="165" Count="0" />
       <LineId Id="136" Count="0" />
       <LineId Id="54" Count="0" />
+      <LineId Id="268" Count="2" />
+      <LineId Id="267" Count="0" />
+      <LineId Id="246" Count="8" />
+      <LineId Id="245" Count="0" />
+      <LineId Id="256" Count="10" />
+      <LineId Id="255" Count="0" />
       <LineId Id="80" Count="1" />
       <LineId Id="84" Count="0" />
       <LineId Id="94" Count="1" />
