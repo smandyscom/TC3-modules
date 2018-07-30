@@ -25,6 +25,10 @@ END_VAR
 //if bAction set to off when executing second command?
 //return;
 
+//for second buffering-use block , just raise execute once , then would be buffered
+//0x4292 : "Command not be executed because the command buffer is full filled" The command is rejected because the command buffer is full filled.
+//1 buffer followed only
+
 IF NOT bDone1 THEN
 	bDone1 := fbRunAxis^.ExecuteParameterBuffer(ptBlock:=ptCommand1,
 		bufferIndex:=1);
@@ -33,6 +37,8 @@ IF NOT bDone2 AND (fbRunAxis^.PositionFeedback >= 250)  THEN
 	bDone2 := fbRunAxis^.ExecuteParameterBuffer(ptBlock:=ptCommand2,
 		bufferIndex:=2);
 END_IF
+
+//block3 should be execute after block1 done
 IF NOT bDone3  AND (fbRunAxis^.PositionFeedback >=350)  THEN
 	bDone3 := fbRunAxis^.ExecuteParameterBuffer(ptBlock:=ptCommand3,
 		bufferIndex:=3);
@@ -45,13 +51,17 @@ END_IF
       <LineId Id="14" Count="0" />
       <LineId Id="102" Count="0" />
       <LineId Id="123" Count="0" />
+      <LineId Id="140" Count="1" />
       <LineId Id="122" Count="0" />
+      <LineId Id="158" Count="1" />
       <LineId Id="104" Count="0" />
       <LineId Id="107" Count="0" />
       <LineId Id="105" Count="1" />
       <LineId Id="109" Count="0" />
       <LineId Id="115" Count="0" />
       <LineId Id="111" Count="1" />
+      <LineId Id="161" Count="0" />
+      <LineId Id="160" Count="0" />
       <LineId Id="110" Count="0" />
       <LineId Id="119" Count="0" />
       <LineId Id="121" Count="0" />

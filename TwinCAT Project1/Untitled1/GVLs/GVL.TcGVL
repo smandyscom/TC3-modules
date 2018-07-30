@@ -13,14 +13,12 @@ VAR_GLOBAL RETAIN
 	//64Words block area 
 	//Actuator/Sensor
 	axisControls: ARRAY[1..8] OF RunAxis;
-	cylinderControls : ARRAY[1..32] OF RunCylinder(argASensorUsed:=0,argBSensorUsed:=0);
+	cylinderControls : ARRAY[1..32] OF RunCylinder;
 	signalControls : ARRAY[1..16] OF RunSignal;
 	//Command Blocks
 	commandBlocks : ARRAY[1..128] OF ParameterSet;
 	
 	//128Words block area
-	unitControls : ARRAY[1..32] OF Block128words;
-
 	stations : ARRAY[1..32] OF RunUnitGeneric(argParent:= 0, argSlotBase:= 0, argSlotLast:= 0);
 	
 	bObjectsInitialized : bool;

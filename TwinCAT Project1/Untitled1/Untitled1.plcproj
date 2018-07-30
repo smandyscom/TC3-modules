@@ -134,7 +134,6 @@
     </Compile>
     <Compile Include="POUs\TEST_CYLINDER.TcPOU">
       <SubType>Code</SubType>
-      <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
     <Compile Include="POUs\TEST_UNIT_MASTER.TcPOU">
       <SubType>Code</SubType>

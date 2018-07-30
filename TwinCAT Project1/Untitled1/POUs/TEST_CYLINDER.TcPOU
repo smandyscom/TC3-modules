@@ -1,35 +1,35 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
   <POU Name="TEST_CYLINDER" Id="{9ae041d2-c241-42ec-9562-72f082a519e8}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM TEST_CYLINDER
 VAR
 	state : INT;
 	
 	
-	fbServiceCylinder: RunCylinder;
-	fbCommandCylinder: ExecuteCylinder;
+	fbServiceCylinder: POINTER TO RunCylinder := ADR(GVL.cylinderControls[1]);
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[fbServiceCylinder(Comm:= ADR(gvl.cylinderControls[1]));
+      <ST><![CDATA[fbServiceCylinder^();
 
 CASE state OF
 	0:
-	fbCommandCylinder(ptBlock:= ADR(gvl.cylinderControls[1]), Command:= eCylinderCommands.COMMAND_A, bDone=> );
-	IF fbCommandCylinder.bDone THEN
-		state := 1;
+	IF fbServiceCylinder^.Execute(argCommand:= eCylinderCommands.COMMAND_B ) THEN
+		state :=1;
 	END_IF
 	1:
-	fbCommandCylinder(ptBlock:= ADR(gvl.cylinderControls[1]), Command:= eCylinderCommands.COMMAND_B, bDone=> );
-	IF fbCommandCylinder.bDone THEN
-		state := 0;
+	IF fbServiceCylinder^.Execute(argCommand:= eCylinderCommands.COMMAND_A ) THEN
+		state :=0;
 	END_IF
 END_CASE]]></ST>
     </Implementation>
     <LineIds Name="TEST_CYLINDER">
       <LineId Id="20" Count="2" />
       <LineId Id="24" Count="0" />
-      <LineId Id="26" Count="7" />
+      <LineId Id="29" Count="0" />
+      <LineId Id="42" Count="1" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="44" Count="1" />
       <LineId Id="23" Count="0" />
       <LineId Id="5" Count="0" />
     </LineIds>
