@@ -3,12 +3,14 @@
   <POU Name="RunLifterCelluar" Id="{8e8fc5f3-47f1-4079-a3ab-596940aadfbf}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunLifterCelluar EXTENDS RunUnitGeneric
 VAR_INPUT
-	mHit : BOOL ;
-	mRelease : BOOL;
+	
 END_VAR
 VAR_OUTPUT
 END_VAR
 VAR	
+	mHit : BOOL ;
+	mRelease : BOOL;	
+
 	//actuator
 	//axis
 	Axis : POINTER TO RunAxis;
@@ -22,8 +24,6 @@ VAR
 	//sensor
 	ptObstacleSensorStatus : POINTER TO BOOL; //fibers
 	ptReachSensorStatus : POINTER TO BOOL; //approximities
-	//slot status
-	ptPreivousSlotValid : POINTER TO BOOL;
 	
 	working : BOOL; //dispatch work to working station
 END_VAR
@@ -97,7 +97,6 @@ VAR_INPUT
 	argObstacleSensor : POINTER TO BOOL;
 	argReachSensor : POINTER TO BOOL;
 	
-	//argSlotValid : POINTER TO BOOL;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -145,6 +144,63 @@ END_CASE
 Initialize := SUPER^.Initialize(); //call base method]]></ST>
       </Implementation>
     </Method>
+    <Property Name="IsHit" Id="{e0692fcd-15a1-46c6-afa7-94c322fff347}">
+      <Declaration><![CDATA[PROPERTY IsHit : BOOL]]></Declaration>
+      <Get Name="Get" Id="{fdd265c2-710a-432f-ad01-ec9705bca363}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IsHit:=(State>=2);]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{7a560d78-67b8-481d-a3ed-fa95474172fc}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[mHit:=IsHit;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="IsReach" Id="{d41045a5-c35c-430e-a3de-7371ac4ffbaa}">
+      <Declaration><![CDATA[PROPERTY IsReach : BOOL]]></Declaration>
+      <Get Name="Get" Id="{a51fad5f-357d-457f-b551-b86b1d002f46}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IsReach:=(State >=3);]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{a5a7024c-9984-4ef2-90d1-b3fb44e39c62}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="IsReleased" Id="{8a5fb771-9a59-4615-855d-21d9081d9a0c}">
+      <Declaration><![CDATA[PROPERTY IsReleased : BOOL]]></Declaration>
+      <Get Name="Get" Id="{0af4cc5b-449f-42dc-9493-6795ae7b5ee5}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IsReleased:=(State=0);]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{7b43cc5c-feb6-4805-827d-1371ddb8fb9e}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[mRelease := isReleased;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
     <LineIds Name="RunLifterCelluar">
       <LineId Id="196" Count="0" />
       <LineId Id="40" Count="0" />
@@ -198,6 +254,24 @@ Initialize := SUPER^.Initialize(); //call base method]]></ST>
       <LineId Id="8" Count="0" />
       <LineId Id="18" Count="0" />
       <LineId Id="17" Count="0" />
+    </LineIds>
+    <LineIds Name="RunLifterCelluar.IsHit.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="RunLifterCelluar.IsHit.Set">
+      <LineId Id="7" Count="0" />
+    </LineIds>
+    <LineIds Name="RunLifterCelluar.IsReach.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="RunLifterCelluar.IsReach.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="RunLifterCelluar.IsReleased.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="RunLifterCelluar.IsReleased.Set">
+      <LineId Id="7" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

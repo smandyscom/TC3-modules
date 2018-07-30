@@ -55,6 +55,7 @@ END_IF
 
 
 IF bSerialTransition AND State = 1 THEN
+	triggerRelease:=TRUE;
 	NextState := 16#10; //state override : release lifters
 END_IF
 
@@ -90,6 +91,8 @@ CASE State OF
 		slowDone := FALSE;
 		finalGoalDone:=FALSE;	
 	
+		triggerRelease:=FALSE;
+		
 		NextState:=2; //merge back default sequence
 	END_IF
 	//------------------start running
@@ -106,11 +109,12 @@ CASE State OF
 	5:
 	IF Axis^.PositionFeedback >= ptCommandCheckRaise^.parameter.position.Position THEN
 		IF allHit THEN
+			triggerHit:=false;
 			slowExecute:=TRUE;//able to slowdown to hit
 			bSerialTransition:= TRUE; //serial transition
 		ELSE
 			//NextState := 16#E0;	//any lifter fails
-			//raise reminder
+			// reminder
 		END_IF
 	//Else : on going , not reached the check point
 	END_IF
@@ -129,11 +133,11 @@ CASE State OF
 	END_IF
 	//------------------------end of running
 	16#20:
-	IF allReach THEN
+	IF allReach THEN	
 		NextState :=1; //since working signal raised by individual lifter?
 	ELSE	
 		//NextState := 16#F0;//failed
-		//raise reminder		
+		// reminder		
 	END_IF
 	//------------------------error states
 	16#E0:
@@ -181,7 +185,9 @@ ptCommandCheckRaise :=argCommandCheckRaise; //if not all lifter done until then 
       </Implementation>
     </Method>
     <LineIds Name="RunUnitIndexerMasterCelluarA">
-      <LineId Id="1233" Count="45" />
+      <LineId Id="1233" Count="19" />
+      <LineId Id="1375" Count="0" />
+      <LineId Id="1253" Count="25" />
       <LineId Id="1363" Count="0" />
       <LineId Id="1357" Count="0" />
       <LineId Id="1360" Count="0" />
@@ -190,7 +196,10 @@ ptCommandCheckRaise :=argCommandCheckRaise; //if not all lifter done until then 
       <LineId Id="1364" Count="0" />
       <LineId Id="1367" Count="1" />
       <LineId Id="1358" Count="0" />
-      <LineId Id="1280" Count="19" />
+      <LineId Id="1376" Count="1" />
+      <LineId Id="1280" Count="15" />
+      <LineId Id="1378" Count="0" />
+      <LineId Id="1296" Count="3" />
       <LineId Id="1369" Count="0" />
       <LineId Id="1300" Count="21" />
       <LineId Id="1370" Count="0" />

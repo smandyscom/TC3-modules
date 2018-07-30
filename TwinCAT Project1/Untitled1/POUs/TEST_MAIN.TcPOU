@@ -146,9 +146,7 @@ lifterCelluarA(
 	bMaterialOverride:= , 
 	State=> , 
 	NextState=> , 
-	AlarmCode=> , 
-	mHit:= , 
-	mRelease:= );
+	AlarmCode=> );
 masterCelluarA(
 	bEnStep:= , 
 	bTrigStep:= , 
@@ -163,12 +161,13 @@ masterCelluarA(
 	slaveLinkageStatus:= , 
 	slaveWorkingSignal:= , 
 	syncEngaged=> , 
-	syncMaterialId=> , 
-	allHit:= , 
-	allReach:= , 
-	allRelease:= , 
-	triggerHit=> , 
-	triggerRelease=> );
+	syncMaterialId=> );
+//lifterCelluarA.IsHit := masterCelluarA.triggerHit;
+//lifterCelluarA.IsReleased := masterCelluarA.triggerRelease;
+masterCelluarA.allHit := lifterCelluarA.IsHit;
+masterCelluarA.allReach := lifterCelluarA.IsReach;
+masterCelluarA.allRelease := lifterCelluarA.IsReleased;
+
 //fbCylinder(ptBlock:= ADR(cylinderBlock));
 
 //fbRunIndexerMaster(ptBlock:= );
@@ -240,10 +239,15 @@ ptUnitGeneric^.alarmCode := 99;  //
       <LineId Id="267" Count="0" />
       <LineId Id="246" Count="8" />
       <LineId Id="245" Count="0" />
-      <LineId Id="256" Count="10" />
+      <LineId Id="256" Count="8" />
       <LineId Id="255" Count="0" />
-      <LineId Id="307" Count="18" />
+      <LineId Id="307" Count="13" />
       <LineId Id="306" Count="0" />
+      <LineId Id="328" Count="0" />
+      <LineId Id="357" Count="0" />
+      <LineId Id="356" Count="0" />
+      <LineId Id="358" Count="1" />
+      <LineId Id="327" Count="0" />
       <LineId Id="80" Count="1" />
       <LineId Id="84" Count="0" />
       <LineId Id="94" Count="1" />
