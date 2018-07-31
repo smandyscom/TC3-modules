@@ -186,6 +186,7 @@ VAR
 	ptMcDone : POINTER TO BOOL;
 	ptMcBusy : POINTER TO BOOL;
 	ptMcError : POINTER TO BOOL;
+	ptMcCommandAbort : POINTER TO BOOL;
 
 END_VAR
 ]]></Declaration>
@@ -202,6 +203,7 @@ eCommandTypes.POSITION:
 	ptMcDone:=ADR(fbMoveAbs[bufferIndex].Done);
 	ptMcBusy:=ADR(fbMoveAbs[bufferIndex].Busy);
 	ptMcError:=ADR(fbMoveAbs[bufferIndex].Error);
+	ptMcCommandAbort := ADR(fbMoveAbs[bufferIndex].CommandAborted);
 	//set once
 	IF NOT fbMoveAbs[bufferIndex].Busy THEN
 		//parameter writing
@@ -209,6 +211,10 @@ eCommandTypes.POSITION:
 		fbMoveAbs[bufferIndex].Acceleration:= ptBlock^.parameter.position.Acceleration;
 		fbMoveAbs[bufferIndex].Deceleration:= ptBlock^.parameter.position.Deceleration;
 		fbMoveAbs[bufferIndex].Position := ptBlock^.parameter.position.Position;
+	END_IF
+	
+	IF bufferIndex>=2 THEN
+		fbMoveAbs[bufferIndex].BufferMode := MC_BlendingPrevious;
 	END_IF
 //torque limit
 ;
@@ -218,7 +224,8 @@ eCommandTypes.ZRET:
 	ptMcDone:=ADR(fbMoveHome.Done);
 	ptMcBusy:=ADR(fbMoveHome.Busy);
 	ptMcError:=ADR(fbMoveHome.Error);
-
+	ptMcCommandAbort := ADR(fbMoveHome.CommandAborted);
+	
 	IF NOT fbMoveHome.Busy THEN
 		//parameter writing
 		fbMoveHome.Position := ptBlock^.parameter.home.Position;
@@ -230,6 +237,7 @@ eCommandTypes.SET_POSITION:
 	ptMcDone:=ADR(fbSetPosition.Done);
 	ptMcBusy:=ADR(fbSetPosition.Busy);
 	ptMcError:=ADR(fbSetPosition.Error);
+	ptMcCommandAbort := ADR(fbSetPosition.Done);// fake
 	
 	IF NOT fbSetPosition.Busy THEN
 		//parameter writing
@@ -241,7 +249,7 @@ ELSE
 END_CASE
 
 //auto stop execute when error , would do raising edge again when error eliminated
-ptMcExecute^ := NOT (ptMcError^) AND NOT ptMcDone^;
+ptMcExecute^ := NOT ptMcError^ AND NOT ptMcDone^ AND NOT ptMcCommandAbort^;
 
 //done := ptMcDone^;
 ExecuteParameterBuffer:=ptMcDone^; //return value
@@ -303,13 +311,16 @@ END_VAR
       <LineId Id="307" Count="0" />
       <LineId Id="405" Count="0" />
       <LineId Id="309" Count="5" />
+      <LineId Id="466" Count="0" />
       <LineId Id="375" Count="1" />
       <LineId Id="378" Count="3" />
       <LineId Id="377" Count="0" />
       <LineId Id="367" Count="0" />
+      <LineId Id="461" Count="3" />
       <LineId Id="319" Count="7" />
-      <LineId Id="406" Count="0" />
+      <LineId Id="467" Count="0" />
       <LineId Id="401" Count="0" />
+      <LineId Id="468" Count="0" />
       <LineId Id="411" Count="0" />
       <LineId Id="409" Count="1" />
       <LineId Id="408" Count="0" />
@@ -317,7 +328,9 @@ END_VAR
       <LineId Id="450" Count="0" />
       <LineId Id="452" Count="2" />
       <LineId Id="451" Count="0" />
-      <LineId Id="455" Count="1" />
+      <LineId Id="455" Count="0" />
+      <LineId Id="469" Count="0" />
+      <LineId Id="456" Count="0" />
       <LineId Id="458" Count="0" />
       <LineId Id="460" Count="0" />
       <LineId Id="459" Count="0" />

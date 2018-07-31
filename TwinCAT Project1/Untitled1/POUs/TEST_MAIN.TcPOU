@@ -162,8 +162,8 @@ masterCelluarA(
 	slaveWorkingSignal:= , 
 	syncEngaged=> , 
 	syncMaterialId=> );
-//lifterCelluarA.IsHit := masterCelluarA.triggerHit;
-//lifterCelluarA.IsReleased := masterCelluarA.triggerRelease;
+lifterCelluarA.IsHit := masterCelluarA.triggerHit;
+lifterCelluarA.IsReleased := masterCelluarA.triggerRelease;
 masterCelluarA.allHit := lifterCelluarA.IsHit;
 masterCelluarA.allReach := lifterCelluarA.IsReach;
 masterCelluarA.allRelease := lifterCelluarA.IsReleased;
