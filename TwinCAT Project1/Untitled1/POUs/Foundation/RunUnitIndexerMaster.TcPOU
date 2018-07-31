@@ -42,6 +42,11 @@ CASE SUPER^.state OF
 	1:
 		//if all working status meets , transition
 		//all working signal should be zero
+		//seted by downstream
+		IF syncEngaged AND syncAcknowledged THEN
+			syncEngaged := FALSE; //reset
+		END_IF
+		
 		condition :=TRUE;
 		FOR nCounter:=1 TO 32 BY 1 DO
 			condition := condition AND NOT slaveWorkingSignal[nCounter];
@@ -69,15 +74,12 @@ CASE SUPER^.state OF
 		//listen to move
 		bSerialTransition :=  (NOT isLastSlotOccupied) OR (syncAcknowledged AND isLastSlotOccupied);
 		
-		//seted by downstream
-		IF syncAcknowledged THEN
-			syncEngaged := FALSE; //reset
-		END_IF
+		
 		
 		//once going pull upstream working together
-		IF bSerialTransition AND Upstream <> 0 THEN
-			Upstream^.syncAcknowledged := Upstream^.syncEngaged;
-		END_IF
+		//IF bSerialTransition AND Upstream <> 0 THEN
+		//	Upstream^.syncAcknowledged := Upstream^.syncEngaged;
+		//END_IF
 		
 	3:
 		//do shifting movement
@@ -157,7 +159,10 @@ fbAdsWrite(
     </Method>
     <LineIds Name="RunUnitIndexerMaster">
       <LineId Id="295" Count="4" />
-      <LineId Id="301" Count="10" />
+      <LineId Id="301" Count="6" />
+      <LineId Id="390" Count="2" />
+      <LineId Id="388" Count="1" />
+      <LineId Id="308" Count="3" />
       <LineId Id="387" Count="0" />
       <LineId Id="385" Count="1" />
       <LineId Id="312" Count="2" />
@@ -167,7 +172,6 @@ fbAdsWrite(
       <LineId Id="380" Count="1" />
       <LineId Id="379" Count="0" />
       <LineId Id="327" Count="2" />
-      <LineId Id="382" Count="2" />
       <LineId Id="333" Count="14" />
       <LineId Id="9" Count="0" />
     </LineIds>

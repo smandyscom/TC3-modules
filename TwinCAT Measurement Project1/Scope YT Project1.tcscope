@@ -5,7 +5,7 @@
   <IsWizardTemplate>false</IsWizardTemplate>
   <LayoutString>&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;Layout&gt;
-  &lt;Window Guid="97332cdc-477f-498a-a8da-59f3e238ae5a" LastFocused="131773896469874776" DockedSize="200" PopupSize="0" FloatingLocation="-1, -1" FloatingSize="550, 400" LastOpenDockSituation="Document" LastFixedDockSituation="Document" LastFixedDockLocation="Right" LastFloatingWindowGuid="00000000-0000-0000-0000-000000000000" LastDockContainerCount="0" LastDockContainerIndex="0" DockedWorkingSize="250, 400" DockedWindowGroupGuid="00000000-0000-0000-0000-000000000000" DockedIndexInWindowGroup="0" DockedSplitPath="0" DocumentWorkingSize="250, 400" DocumentWindowGroupGuid="e3627557-a720-4c2a-9af0-d310b5d3d828" DocumentIndexInWindowGroup="0" DocumentSplitPath="0" FloatingWorkingSize="250, 400" FloatingWindowGroupGuid="00000000-0000-0000-0000-000000000000" FloatingIndexInWindowGroup="0" FloatingSplitPath="0" /&gt;
+  &lt;Window Guid="97332cdc-477f-498a-a8da-59f3e238ae5a" LastFocused="131774919424482113" DockedSize="200" PopupSize="0" FloatingLocation="-1, -1" FloatingSize="550, 400" LastOpenDockSituation="Document" LastFixedDockSituation="Document" LastFixedDockLocation="Right" LastFloatingWindowGuid="00000000-0000-0000-0000-000000000000" LastDockContainerCount="0" LastDockContainerIndex="0" DockedWorkingSize="250, 400" DockedWindowGroupGuid="00000000-0000-0000-0000-000000000000" DockedIndexInWindowGroup="0" DockedSplitPath="0" DocumentWorkingSize="250, 400" DocumentWindowGroupGuid="e3627557-a720-4c2a-9af0-d310b5d3d828" DocumentIndexInWindowGroup="0" DocumentSplitPath="0" FloatingWorkingSize="250, 400" FloatingWindowGroupGuid="00000000-0000-0000-0000-000000000000" FloatingIndexInWindowGroup="0" FloatingSplitPath="0" /&gt;
   &lt;DocumentContainer Dock="5"&gt;
     &lt;SplitLayoutSystem WorkingSize="250, 400" SplitMode="0"&gt;
       &lt;ControlLayoutSystem WorkingSize="250, 400" Guid="e3627557-a720-4c2a-9af0-d310b5d3d828" Collapsed="0" SelectedControl="97332cdc-477f-498a-a8da-59f3e238ae5a"&gt;
@@ -108,16 +108,16 @@
           </Style>
           <Channels>
             <ScopeChannelSerializable>
-              <Name>ActPos</Name>
+              <Name>ActPos(1)</Name>
               <IdentHandle>1</IdentHandle>
               <Acquisition>
                 <DataType>REAL64</DataType>
-                <IndexGroup>16641</IndexGroup>
+                <IndexGroup>16642</IndexGroup>
                 <IndexOffset>65538</IndexOffset>
                 <Unit />
                 <TargetPort>501</TargetPort>
                 <VariableSize>8</VariableSize>
-                <SymbolName>Axes.Simu.ActPos</SymbolName>
+                <SymbolName>Axes.Axis 2.ActPos</SymbolName>
                 <SymbolComment></SymbolComment>
                 <IsSymbolBased>true</IsSymbolBased>
                 <FileHandle>0</FileHandle>
@@ -157,27 +157,18 @@
                 <MqttValueByteOffset>4294967295</MqttValueByteOffset>
                 <MqttCmdTopic>unknown</MqttCmdTopic>
                 <OpcUaAddress>
-                  <ServerUrl>
-                  </ServerUrl>
-                  <EndpointName>
-                  </EndpointName>
-                  <SecurityPolicyUri>
-                  </SecurityPolicyUri>
+                  <ServerUrl></ServerUrl>
+                  <EndpointName></EndpointName>
+                  <SecurityPolicyUri></SecurityPolicyUri>
                 </OpcUaAddress>
                 <OpcUaSymbol>
-                  <Name>
-                  </Name>
-                  <Path>
-                  </Path>
+                  <Name></Name>
+                  <Path></Path>
                   <BitSize>0</BitSize>
-                  <BaseType>
-                  </BaseType>
-                  <NodeClass>
-                  </NodeClass>
-                  <NodeId>
-                  </NodeId>
-                  <NamespaceName>
-                  </NamespaceName>
+                  <BaseType></BaseType>
+                  <NodeClass></NodeClass>
+                  <NodeId></NodeId>
+                  <NamespaceName></NamespaceName>
                   <IsArray>false</IsArray>
                   <IsMatrix>false</IsMatrix>
                   <Dimensions>0</Dimensions>
@@ -185,7 +176,7 @@
                 </OpcUaSymbol>
               </Acquisition>
               <Style>
-                <ColorValue>-32640</ColorValue>
+                <ColorValue>-16776961</ColorValue>
                 <SolidLine>true</SolidLine>
                 <Marks>false</Marks>
                 <LineWidth>1</LineWidth>
@@ -194,7 +185,7 @@
                 <BitMask>18446744073709551615</BitMask>
                 <ShowCursorValue>true</ShowCursorValue>
                 <Visible>true</Visible>
-                <MarkColorValue>-32640</MarkColorValue>
+                <MarkColorValue>-16776961</MarkColorValue>
                 <MarkSize>3</MarkSize>
                 <TimeShift>0</TimeShift>
                 <ScaleFactor>1</ScaleFactor>
@@ -204,7 +195,7 @@
                 <XScaleFactor>1</XScaleFactor>
                 <XBitMask>18446744073709551615</XBitMask>
                 <FillMode>0</FillMode>
-                <FillColorValue>855605376</FillColorValue>
+                <FillColorValue>838861055</FillColorValue>
                 <EndCap>false</EndCap>
                 <StartCap>false</StartCap>
                 <CapSize>3</CapSize>
@@ -241,8 +232,7 @@
                     <Name>None</Name>
                     <BaseName>UnitOfOne</BaseName>
                     <NameExtension />
-                    <Symbol>
-                    </Symbol>
+                    <Symbol></Symbol>
                     <BaseUnitString />
                     <UserPrefix>none</UserPrefix>
                   </UserUnit>
@@ -278,8 +268,7 @@
                     <Name>None</Name>
                     <BaseName>UnitOfOne</BaseName>
                     <NameExtension />
-                    <Symbol>
-                    </Symbol>
+                    <Symbol></Symbol>
                     <BaseUnitString />
                     <UserPrefix>none</UserPrefix>
                   </UserUnit>
@@ -290,16 +279,16 @@
               <SortPriority>-1</SortPriority>
             </ScopeChannelSerializable>
             <ScopeChannelSerializable>
-              <Name>ActVelo</Name>
+              <Name>ActVelo(1)</Name>
               <IdentHandle>2</IdentHandle>
               <Acquisition>
                 <DataType>REAL64</DataType>
-                <IndexGroup>16641</IndexGroup>
+                <IndexGroup>16642</IndexGroup>
                 <IndexOffset>65541</IndexOffset>
                 <Unit />
                 <TargetPort>501</TargetPort>
                 <VariableSize>8</VariableSize>
-                <SymbolName>Axes.Simu.ActVelo</SymbolName>
+                <SymbolName>Axes.Axis 2.ActVelo</SymbolName>
                 <SymbolComment></SymbolComment>
                 <IsSymbolBased>true</IsSymbolBased>
                 <FileHandle>0</FileHandle>
@@ -339,27 +328,18 @@
                 <MqttValueByteOffset>4294967295</MqttValueByteOffset>
                 <MqttCmdTopic>unknown</MqttCmdTopic>
                 <OpcUaAddress>
-                  <ServerUrl>
-                  </ServerUrl>
-                  <EndpointName>
-                  </EndpointName>
-                  <SecurityPolicyUri>
-                  </SecurityPolicyUri>
+                  <ServerUrl></ServerUrl>
+                  <EndpointName></EndpointName>
+                  <SecurityPolicyUri></SecurityPolicyUri>
                 </OpcUaAddress>
                 <OpcUaSymbol>
-                  <Name>
-                  </Name>
-                  <Path>
-                  </Path>
+                  <Name></Name>
+                  <Path></Path>
                   <BitSize>0</BitSize>
-                  <BaseType>
-                  </BaseType>
-                  <NodeClass>
-                  </NodeClass>
-                  <NodeId>
-                  </NodeId>
-                  <NamespaceName>
-                  </NamespaceName>
+                  <BaseType></BaseType>
+                  <NodeClass></NodeClass>
+                  <NodeId></NodeId>
+                  <NamespaceName></NamespaceName>
                   <IsArray>false</IsArray>
                   <IsMatrix>false</IsMatrix>
                   <Dimensions>0</Dimensions>
@@ -367,7 +347,7 @@
                 </OpcUaSymbol>
               </Acquisition>
               <Style>
-                <ColorValue>-16744448</ColorValue>
+                <ColorValue>-23296</ColorValue>
                 <SolidLine>true</SolidLine>
                 <Marks>false</Marks>
                 <LineWidth>1</LineWidth>
@@ -376,7 +356,7 @@
                 <BitMask>18446744073709551615</BitMask>
                 <ShowCursorValue>true</ShowCursorValue>
                 <Visible>true</Visible>
-                <MarkColorValue>-16744448</MarkColorValue>
+                <MarkColorValue>-23296</MarkColorValue>
                 <MarkSize>3</MarkSize>
                 <TimeShift>0</TimeShift>
                 <ScaleFactor>1</ScaleFactor>
@@ -386,7 +366,7 @@
                 <XScaleFactor>1</XScaleFactor>
                 <XBitMask>18446744073709551615</XBitMask>
                 <FillMode>0</FillMode>
-                <FillColorValue>838893568</FillColorValue>
+                <FillColorValue>855614720</FillColorValue>
                 <EndCap>false</EndCap>
                 <StartCap>false</StartCap>
                 <CapSize>3</CapSize>
@@ -423,8 +403,7 @@
                     <Name>None</Name>
                     <BaseName>UnitOfOne</BaseName>
                     <NameExtension />
-                    <Symbol>
-                    </Symbol>
+                    <Symbol></Symbol>
                     <BaseUnitString />
                     <UserPrefix>none</UserPrefix>
                   </UserUnit>
@@ -460,8 +439,7 @@
                     <Name>None</Name>
                     <BaseName>UnitOfOne</BaseName>
                     <NameExtension />
-                    <Symbol>
-                    </Symbol>
+                    <Symbol></Symbol>
                     <BaseUnitString />
                     <UserPrefix>none</UserPrefix>
                   </UserUnit>
@@ -486,7 +464,7 @@
         <HexValues>false</HexValues>
       </CursorModule>
       <Operating>
-        <DisplayWidth>100000000</DisplayWidth>
+        <DisplayWidth>240000000</DisplayWidth>
       </Operating>
       <ChartType>XT</ChartType>
       <SortPriority>-1</SortPriority>

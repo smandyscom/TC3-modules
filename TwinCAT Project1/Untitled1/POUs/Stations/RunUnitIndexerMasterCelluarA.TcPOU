@@ -67,7 +67,7 @@ IF State >=3 AND State <=5 AND_THEN Upstream<>0 AND Upstream^.syncEngaged AND NO
 	commandFinalGoal.parameter.position.Velocity := ptCommandFast^.parameter.position.Velocity;
 	commandFinalGoal.parameter.position.Acceleration := ptCommandFast^.parameter.position.Acceleration;
 	commandFinalGoal.parameter.position.Deceleration := ptCommandFast^.parameter.position.Deceleration;
-	commandFinalGoal.parameter.position.Position := Axis^.PositionFeedback + ptCommandFast^.parameter.position.Position + ptCommandSlow^.parameter.position.Position; //goal extended
+	commandFinalGoal.parameter.position.Position := Axis^.PositionFeedback + ptCommandSlow^.parameter.position.Position; //goal extended
 	
 END_IF
 
@@ -120,8 +120,11 @@ CASE State OF
 	END_IF
 	6:
 	IF Upstream<>0 AND_THEN Upstream^.syncAcknowledged THEN
-		finalGoalExecute:=TRUE;//need do extension
-		bSerialTransition:= TRUE; //serial transition
+		IF fastDone THEN
+			//wait first command block done , otherwise would raise 0x4292 (buffer fulled)
+			finalGoalExecute:=TRUE;//need do extension
+			bSerialTransition:= TRUE; //serial transition
+		END_IF
 	ELSE
 		NextState := 16#20;//not pulled upstream , done
 	END_IF
@@ -201,7 +204,13 @@ ptCommandCheckRaise :=argCommandCheckRaise; //if not all lifter done until then 
       <LineId Id="1378" Count="0" />
       <LineId Id="1296" Count="3" />
       <LineId Id="1369" Count="0" />
-      <LineId Id="1300" Count="21" />
+      <LineId Id="1300" Count="4" />
+      <LineId Id="1379" Count="0" />
+      <LineId Id="1386" Count="0" />
+      <LineId Id="1382" Count="0" />
+      <LineId Id="1385" Count="0" />
+      <LineId Id="1383" Count="0" />
+      <LineId Id="1307" Count="14" />
       <LineId Id="1370" Count="0" />
       <LineId Id="1322" Count="7" />
       <LineId Id="9" Count="0" />
