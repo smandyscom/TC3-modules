@@ -33,7 +33,7 @@ simuReachSensor : BOOL;
 lifterCelluarA : RunLifterCelluar(argParent:= ADR(lifterCelluarA), 
 argSlotBase:= ADR(GVL.MATERIAL_SLOTS[1]), 
 argSlotLast:= ADR(GVL.MATERIAL_SLOTS[2]),
-argAxis:= ADR(GVL.axisControls[1]),
+argAxis:= ADR(GVL.axisControls[4]),
 argCylinder:=ADR(GVL.cylinderControls[1]),
 argHit:=ADR(GVL.commandBlocks[16]),
 argRelease:=ADR(GVL.commandBlocks[17]),
@@ -55,7 +55,7 @@ argCommandCheckRaise:=0);
 masterCelluarA : RunUnitIndexerMasterCelluarA(argParent:= ADR(masterCelluarA), 
 argSlotBase:= ADR(GVL.MATERIAL_SLOTS[1]), 
 argSlotLast:= ADR(GVL.MATERIAL_SLOTS[2]),
-argAxis:=ADR(GVL.axisControls[2]),
+argAxis:=ADR(GVL.axisControls[1]),
 argUpstream:=ADR(masterProxy),
 argCommandFast:=ADR(GVL.commandBlocks[32]),
 argCommandSlow:=ADR(GVL.commandBlocks[33]),
@@ -108,9 +108,14 @@ IF NOT bInitialized THEN
 	
 	bInitialized := TRUE;
 	
-	GVL.commandBlocks[16].parameter.position.Position := 100;
+	FOR nCounter:=16 TO 18 BY 1 DO
+		GVL.commandBlocks[nCounter].parameter.position.Velocity :=35;
+		GVL.commandBlocks[nCounter].parameter.position.Acceleration :=1000;
+		GVL.commandBlocks[nCounter].parameter.position.Deceleration :=1000;
+	END_FOR
+	GVL.commandBlocks[16].parameter.position.Position := 5;
 	GVL.commandBlocks[17].parameter.position.Position := 0;
-	GVL.commandBlocks[18].parameter.position.Position := 200;
+	GVL.commandBlocks[18].parameter.position.Position := 20;
 	//
 	GVL.commandBlocks[32].parameter.position.Position :=350;
 	GVL.commandBlocks[32].parameter.position.Velocity :=400;
@@ -123,9 +128,10 @@ END_IF
 //TEST_BUFFERING();
 //TEST_CYLINDER();
 
-GVL.axisControls[1]();
-GVL.axisControls[2]();
-GVL.cylinderControls[1]();
+FOR nCounter:=1 TO 8 BY 1 DO
+	GVL.axisControls[nCounter]();
+	GVL.cylinderControls[nCounter]();
+END_FOR
 
 simuStation(
 	bEnStep:= , 
@@ -221,6 +227,9 @@ ptUnitGeneric^.alarmCode := 99;  //
       <LineId Id="178" Count="0" />
       <LineId Id="180" Count="7" />
       <LineId Id="214" Count="0" />
+      <LineId Id="430" Count="1" />
+      <LineId Id="433" Count="1" />
+      <LineId Id="432" Count="0" />
       <LineId Id="271" Count="1" />
       <LineId Id="275" Count="0" />
       <LineId Id="215" Count="1" />
@@ -233,9 +242,10 @@ ptUnitGeneric^.alarmCode := 99;  //
       <LineId Id="165" Count="0" />
       <LineId Id="136" Count="0" />
       <LineId Id="54" Count="0" />
-      <LineId Id="268" Count="1" />
-      <LineId Id="326" Count="0" />
-      <LineId Id="270" Count="0" />
+      <LineId Id="268" Count="0" />
+      <LineId Id="424" Count="0" />
+      <LineId Id="427" Count="1" />
+      <LineId Id="426" Count="0" />
       <LineId Id="267" Count="0" />
       <LineId Id="246" Count="8" />
       <LineId Id="245" Count="0" />
@@ -244,7 +254,7 @@ ptUnitGeneric^.alarmCode := 99;  //
       <LineId Id="307" Count="13" />
       <LineId Id="306" Count="0" />
       <LineId Id="328" Count="0" />
-      <LineId Id="357" Count="0" />
+      <LineId Id="435" Count="0" />
       <LineId Id="356" Count="0" />
       <LineId Id="358" Count="1" />
       <LineId Id="327" Count="0" />

@@ -19,18 +19,19 @@ VAR_GLOBAL RETAIN
 	commandBlocks : ARRAY[1..128] OF ParameterSet;
 	
 	//128Words block area
-	stations : ARRAY[1..32] OF POINTER TO RunUnitGeneric;
+	
 	
 	bObjectsInitialized : bool;
 	
 	//Flag memory area
 	//Manual mode
 	//for those context blocks , used to intercommunicate with HMI
-	MATERIAL_SLOTS AT%M* : ARRAY[1..16] OF Block128Words;
+	MATERIAL_SLOTS : ARRAY[1..3] OF Block128Words;
 
 END_VAR
 VAR_GLOBAL
 	axisControls: ARRAY[1..8] OF RunAxis;
+	stations : ARRAY[1..32] OF POINTER TO RunUnitGeneric;
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>

@@ -3,17 +3,59 @@
   <POU Name="AUTO" Id="{97a26fb9-68ff-461f-aa24-f8d33d7f3452}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM AUTO
 VAR
-	
-//declare stations
-
-//
-nCounter : int ;
+	//Stations
+	Controller : RunUnitGeneric(argParent:= Controller, argSlotBase:= 0, argSlotLast:= 0);
+	LifterCelluarA : ARRAY[1..3] OF RunLifterCelluar(argParent:= ADR(lifterCelluarA), 
+									argSlotBase:= ADR(GVL.MATERIAL_SLOTS[1]), 
+									argSlotLast:= ADR(GVL.MATERIAL_SLOTS[2]),
+									argAxis:= ADR(GVL.axisControls[1]),
+									argCylinder:=ADR(GVL.cylinderControls[1]),
+									argHit:=ADR(GVL.commandBlocks[16]),
+									argRelease:=ADR(GVL.commandBlocks[17]),
+									argWorking:=ADR(GVL.commandBlocks[18]),		
+									argObstacleSensor:= ADR(simuObstacleSensor),
+									argReachSensor:= ADR(simuReachSensor));
+	ConveyorMaster : RunUnitIndexerMasterCelluarA(argParent:= ADR(masterCelluarA), 
+												argSlotBase:= ADR(GVL.MATERIAL_SLOTS[1]), 
+												argSlotLast:= ADR(GVL.MATERIAL_SLOTS[2]),
+												argAxis:=ADR(GVL.axisControls[2]),
+												argUpstream:=ADR(masterProxy),		
+												argCommandFast:=ADR(GVL.commandBlocks[32]),
+												argCommandSlow:=ADR(GVL.commandBlocks[33]),
+												argCommandTriggerRaise:=ADR(GVL.commandBlocks[40]),
+												argCommandCheckRaise:=ADR(GVL.commandBlocks[41]));
+	//
+	nCounter : INT;
+	bAllInitialized:BOOL;
+	State : int;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF NOT GVL.bObjectsInitialized THEN
 	//all station initialize (build relationship) , machine spcific configuration
 END_IF
+
+CASE State OF
+	0:
+	bAllInitialized := TRUE;
+	FOR nCounter:=1 TO 32 BY 1 DO
+		IF gvl.stations[nCounter] <> 0 THEN
+			gvl.stations[nCounter]^.Initialize();
+		END_IF
+		// if every station comes to 16#FF
+		bAllInitialized := bAllInitialized AND (gvl.stations[nCounter]^.State = 16#FF);
+	END_FOR
+	1:
+	//working
+	FOR nCounter:=1 TO 32 BY 1 DO
+		IF gvl.stations[nCounter] <> 0 THEN
+			gvl.stations[nCounter]^();
+		END_IF
+		// if every station comes to 16#FF
+		bAllInitialized := bAllInitialized AND (gvl.stations[nCounter]^.State = 16#FF);
+	END_FOR
+	//TODO , if initialize request raised , change to State-0
+END_CASE
 
 ]]></ST>
     </Implementation>
@@ -22,7 +64,18 @@ END_IF
       <LineId Id="14" Count="0" />
       <LineId Id="12" Count="0" />
       <LineId Id="19" Count="0" />
-      <LineId Id="18" Count="0" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="81" Count="0" />
+      <LineId Id="84" Count="6" />
+      <LineId Id="83" Count="0" />
+      <LineId Id="91" Count="0" />
+      <LineId Id="100" Count="0" />
+      <LineId Id="94" Count="5" />
+      <LineId Id="93" Count="0" />
+      <LineId Id="101" Count="0" />
+      <LineId Id="82" Count="0" />
+      <LineId Id="72" Count="0" />
+      <LineId Id="78" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

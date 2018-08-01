@@ -39,6 +39,8 @@ END_VAR
 
 SUPER^(); //run indexer master
 
+//isLastSlotOccupied := true; always occupied , force to transmit to downstream
+
 //Buffer modes
 IF NOT fastDone AND fastExecute THEN
 	fastDone := Axis^.ExecuteParameterBuffer(ptCommandFast,
@@ -59,9 +61,12 @@ IF bSerialTransition AND State = 1 THEN
 	NextState := 16#10; //state override : release lifters
 END_IF
 
-IF State >=3 AND State <=5 AND_THEN Upstream<>0 AND Upstream^.syncEngaged AND NOT Upstream^.syncAcknowledged THEN
-	//pull upstream if valid
+IF State >=3 AND State <=7 AND_THEN Upstream<>0 AND Upstream^.syncEngaged AND NOT Upstream^.syncAcknowledged THEN
+	//pull upstream when ready
 	Upstream^.syncAcknowledged := TRUE;
+	//Data transmit
+	SlotBase^.wordOut.0 := TRUE; //is valid
+	SlotBase^.id := Upstream^.syncMaterialId;
 	//set-up final goal
 	commandFinalGoal.command := eCommandTypes.POSITION;
 	commandFinalGoal.parameter.position.Velocity := ptCommandFast^.parameter.position.Velocity;
@@ -119,14 +124,15 @@ CASE State OF
 	//Else : on going , not reached the check point
 	END_IF
 	6:
-	IF Upstream<>0 AND_THEN Upstream^.syncAcknowledged THEN
-		IF fastDone THEN
+	IF Upstream<>0 AND_THEN Upstream^.syncAcknowledged AND fastDone THEN
+		//IF fastDone THEN
 			//wait first command block done , otherwise would raise 0x4292 (buffer fulled)
 			finalGoalExecute:=TRUE;//need do extension
 			bSerialTransition:= TRUE; //serial transition
-		END_IF
-	ELSE
-		NextState := 16#20;//not pulled upstream , done
+		//END_IF
+	//ELSE
+		//TODO , not allowed , have to pull upstream anyway
+		//NextState := 16#20;//not pulled upstream , done
 	END_IF
 	7:
 	// on extension , only one oppertunity
@@ -188,9 +194,16 @@ ptCommandCheckRaise :=argCommandCheckRaise; //if not all lifter done until then 
       </Implementation>
     </Method>
     <LineIds Name="RunUnitIndexerMasterCelluarA">
-      <LineId Id="1233" Count="19" />
+      <LineId Id="1233" Count="2" />
+      <LineId Id="1392" Count="0" />
+      <LineId Id="1391" Count="0" />
+      <LineId Id="1236" Count="16" />
       <LineId Id="1375" Count="0" />
-      <LineId Id="1253" Count="25" />
+      <LineId Id="1253" Count="5" />
+      <LineId Id="1387" Count="0" />
+      <LineId Id="1389" Count="0" />
+      <LineId Id="1388" Count="0" />
+      <LineId Id="1259" Count="19" />
       <LineId Id="1363" Count="0" />
       <LineId Id="1357" Count="0" />
       <LineId Id="1360" Count="0" />
@@ -210,7 +223,9 @@ ptCommandCheckRaise :=argCommandCheckRaise; //if not all lifter done until then 
       <LineId Id="1382" Count="0" />
       <LineId Id="1385" Count="0" />
       <LineId Id="1383" Count="0" />
-      <LineId Id="1307" Count="14" />
+      <LineId Id="1307" Count="0" />
+      <LineId Id="1390" Count="0" />
+      <LineId Id="1308" Count="13" />
       <LineId Id="1370" Count="0" />
       <LineId Id="1322" Count="7" />
       <LineId Id="9" Count="0" />

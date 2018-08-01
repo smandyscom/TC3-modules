@@ -13,14 +13,18 @@ VAR
 
 	//actuator
 	//axis
-	Axis : POINTER TO RunAxis;
+	AxisVertical : POINTER TO RunAxis;
+	AxisHorizon : POINTER TO RunAxis;
 	//cylinder
 	Cylinder : POINTER TO RunCylinder;
 	
-	//lifter
+	//carrier mover(vertical
 	ptCommandLifterHit : POINTER TO ParameterSet; // raise to hit
 	ptCommandLifterRelease : POINTER TO ParameterSet; //release
 	ptCommandLifterWorking : POINTER TO ParameterSet; //lift carrier to working position
+	//carrier mover(horizon
+	ptCommandHorizonHit : POINTER TO ParameterSet;
+	ptCommandHorizonWorking : POINTER TO ParameterSet;
 	//sensor
 	ptObstacleSensorStatus : POINTER TO BOOL; //fibers
 	ptReachSensorStatus : POINTER TO BOOL; //approximities
@@ -40,7 +44,7 @@ CASE State OF
 	// 3. all sensor off
 	bSerialTransition := mHit AND NOT ptObstacleSensorStatus^ ;//if execute flag on
 	1:
-	bSerialTransition := Axis^.ExecuteParameter(ptBlock:=ptCommandLifterHit);
+	bSerialTransition := AxisVertical^.ExecuteParameter(ptBlock:=ptCommandLifterHit);
 	IF bSerialTransition THEN
 		mHit := FALSE; //reset
 	END_IF
@@ -52,7 +56,7 @@ CASE State OF
 	bSerialTransition := Cylinder^.Execute(eCylinderCommands.COMMAND_B);
 	4:
 	//to working position
-	IF Axis^.ExecuteParameter(ptCommandLifterWorking)THEN
+	IF AxisVertical^.ExecuteParameter(ptCommandLifterWorking)THEN
 		//dispatching work to station
 		working := TRUE;
 		NextState := 16#10;
@@ -65,12 +69,12 @@ CASE State OF
 		mRelease := FALSE;
 	END_IF
 	16#21:
-	bSerialTransition := Axis^.ExecuteParameter(ptCommandLifterHit);//if release flag on
+	bSerialTransition := AxisVertical^.ExecuteParameter(ptCommandLifterHit);//if release flag on
 	16#22:
 	//release holder
 	bSerialTransition := Cylinder^.Execute(eCylinderCommands.COMMAND_A);
 	16#23:
-	bSerialTransition :=  Axis^.ExecuteParameter(ptCommandLifterRelease);
+	bSerialTransition :=  AxisVertical^.ExecuteParameter(ptCommandLifterRelease);
 	16#24:
 	IF NOT ptReachSensorStatus^ THEN
 		//make sure all state reseted
@@ -117,7 +121,7 @@ SlotLast := argSlotLast;
 
 //actuator
 	//axis
-Axis := argAxis;
+AxisVertical := argAxis;
 //cylinder
 Cylinder := argCylinder;
 	
@@ -141,11 +145,14 @@ END_VAR
         <ST><![CDATA[
 CASE State OF
 	0:
+	//TODO , MC power off , on
 	bSerialTransition:=Cylinder^.Execute(eCylinderCommands.COMMAND_A);
 	1:
-	IF Axis^.ExecuteParameter(ptCommandLifterRelease) THEN
-		NextState := 16#FF;	
-	END_IF
+	bSerialTransition :=  AxisVertical^.ExecuteParameter(ptCommandLifterRelease);
+	2:
+	bSerialTransition := AxisHorizon^.ExecuteParameter(ptCommandHorizonHit);
+	3:
+	//How to decide occupied status? Preset all occupied status , then raising alarm to clear status?
 END_CASE
 
 Initialize := SUPER^.Initialize(); //call base method]]></ST>
@@ -209,43 +216,7 @@ END_VAR
       </Set>
     </Property>
     <LineIds Name="RunLifterCelluar">
-      <LineId Id="196" Count="0" />
-      <LineId Id="40" Count="0" />
-      <LineId Id="9" Count="0" />
-      <LineId Id="190" Count="0" />
-      <LineId Id="41" Count="0" />
-      <LineId Id="206" Count="3" />
-      <LineId Id="184" Count="0" />
-      <LineId Id="182" Count="1" />
-      <LineId Id="186" Count="2" />
-      <LineId Id="97" Count="0" />
-      <LineId Id="102" Count="0" />
-      <LineId Id="104" Count="1" />
-      <LineId Id="108" Count="0" />
-      <LineId Id="106" Count="0" />
-      <LineId Id="109" Count="0" />
-      <LineId Id="112" Count="0" />
-      <LineId Id="110" Count="0" />
-      <LineId Id="165" Count="0" />
-      <LineId Id="172" Count="0" />
-      <LineId Id="175" Count="0" />
-      <LineId Id="166" Count="0" />
-      <LineId Id="164" Count="0" />
-      <LineId Id="189" Count="0" />
-      <LineId Id="111" Count="0" />
-      <LineId Id="114" Count="0" />
-      <LineId Id="193" Count="2" />
-      <LineId Id="191" Count="1" />
-      <LineId Id="116" Count="0" />
-      <LineId Id="119" Count="0" />
-      <LineId Id="117" Count="0" />
-      <LineId Id="131" Count="0" />
-      <LineId Id="134" Count="0" />
-      <LineId Id="201" Count="1" />
-      <LineId Id="205" Count="0" />
-      <LineId Id="203" Count="1" />
-      <LineId Id="167" Count="3" />
-      <LineId Id="173" Count="1" />
+      <LineId Id="236" Count="52" />
       <LineId Id="42" Count="0" />
     </LineIds>
     <LineIds Name="RunLifterCelluar.FB_init">
@@ -259,10 +230,12 @@ END_VAR
       <LineId Id="6" Count="0" />
       <LineId Id="5" Count="0" />
       <LineId Id="7" Count="0" />
+      <LineId Id="26" Count="0" />
       <LineId Id="9" Count="1" />
-      <LineId Id="12" Count="0" />
-      <LineId Id="16" Count="0" />
       <LineId Id="14" Count="0" />
+      <LineId Id="23" Count="1" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="25" Count="0" />
       <LineId Id="8" Count="0" />
       <LineId Id="18" Count="0" />
       <LineId Id="17" Count="0" />

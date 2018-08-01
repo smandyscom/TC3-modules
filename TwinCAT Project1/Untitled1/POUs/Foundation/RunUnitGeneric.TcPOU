@@ -19,6 +19,7 @@ VAR
 	Parent : POINTER TO RunUnitGeneric;
 	
 	SlotBase : POINTER TO MaterialBlock;
+	SlotCount : int ;
 	SlotLast : POINTER TO MaterialBlock;
 	
 	bLastParentStatus : BIT; // memorize last parent status	
