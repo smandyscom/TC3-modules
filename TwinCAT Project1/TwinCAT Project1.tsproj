@@ -1614,19 +1614,19 @@ External Setpoint Generation:
 			</ArrayInfo>
 		</DataType>
 		<DataType>
-			<Name GUID="{EEE13975-18E6-47D7-9C7E-CDEC36778F75}" AutoDeleteType="true">SignalBlockBase</Name>
+			<Name GUID="{6C706598-D81C-4136-9FA2-55F7EA480EFA}" AutoDeleteType="true">SignalBlockBase</Name>
 			<BitSize>0</BitSize>
 			<BaseType GUID="{FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF}"/>
 			<Hides>
-				<Hide GUID="{4EB4C4CD-5AFB-4659-BD74-F9C5C3CB36C5}"/>
+				<Hide GUID="{EEE13975-18E6-47D7-9C7E-CDEC36778F75}"/>
 			</Hides>
 		</DataType>
 		<DataType>
-			<Name GUID="{7EE2C369-27B7-44A2-AB83-A93E6B27D466}" AutoDeleteType="true">RunSignal</Name>
+			<Name GUID="{E905A185-C7C5-4774-B661-916D23E44D2A}" AutoDeleteType="true">RunSignal</Name>
 			<BitSize>128</BitSize>
 			<SubItem>
 				<Name>Comm</Name>
-				<Type GUID="{EEE13975-18E6-47D7-9C7E-CDEC36778F75}" ReferenceTo="true">SignalBlockBase</Type>
+				<Type GUID="{6C706598-D81C-4136-9FA2-55F7EA480EFA}" ReferenceTo="true">SignalBlockBase</Type>
 				<BitSize>64</BitSize>
 				<BitOffs>64</BitOffs>
 				<Properties>
@@ -1643,13 +1643,13 @@ External Setpoint Generation:
 				</Property>
 			</Properties>
 			<Hides>
-				<Hide GUID="{05605E30-A803-49CE-9397-533EEC507363}"/>
+				<Hide GUID="{7EE2C369-27B7-44A2-AB83-A93E6B27D466}"/>
 			</Hides>
 		</DataType>
 		<DataType>
 			<Name IecBaseType="true">ARRAY [1..16] OF RunSignal</Name>
 			<BitSize>2048</BitSize>
-			<BaseType GUID="{7EE2C369-27B7-44A2-AB83-A93E6B27D466}">RunSignal</BaseType>
+			<BaseType GUID="{E905A185-C7C5-4774-B661-916D23E44D2A}">RunSignal</BaseType>
 			<ArrayInfo>
 				<LBound>1</LBound>
 				<Elements>16</Elements>
@@ -2180,7 +2180,7 @@ for those context blocks , used to intercommunicate with HMI]]>
 			</ArrayInfo>
 		</DataType>
 		<DataType>
-			<Name GUID="{18071995-0000-0000-0000-002000000004}" IecBaseType="true" AutoDeleteType="true" HideSubItems="true">ARRAY [0..3] OF BIT</Name>
+			<Name GUID="{18071995-0000-0000-0000-002000000004}" IecBaseType="true" BitType="true" AutoDeleteType="true" HideSubItems="true">ARRAY [0..3] OF BIT</Name>
 			<BitSize>4</BitSize>
 			<BaseType GUID="{18071995-0000-0000-0000-000000000010}">BIT</BaseType>
 			<ArrayInfo>
@@ -2198,7 +2198,7 @@ for those context blocks , used to intercommunicate with HMI]]>
 			</ArrayInfo>
 		</DataType>
 		<DataType>
-			<Name GUID="{18071995-0000-0000-0000-00200000000C}" IecBaseType="true" AutoDeleteType="true" HideSubItems="true">ARRAY [0..11] OF BIT</Name>
+			<Name GUID="{18071995-0000-0000-0000-00200000000C}" IecBaseType="true" BitType="true" AutoDeleteType="true" HideSubItems="true">ARRAY [0..11] OF BIT</Name>
 			<BitSize>12</BitSize>
 			<BaseType GUID="{18071995-0000-0000-0000-000000000010}">BIT</BaseType>
 			<ArrayInfo>
@@ -2207,7 +2207,7 @@ for those context blocks , used to intercommunicate with HMI]]>
 			</ArrayInfo>
 		</DataType>
 		<DataType>
-			<Name GUID="{18071995-0000-0000-0000-00200000000D}" IecBaseType="true" AutoDeleteType="true" HideSubItems="true">ARRAY [0..12] OF BIT</Name>
+			<Name GUID="{18071995-0000-0000-0000-00200000000D}" IecBaseType="true" BitType="true" AutoDeleteType="true" HideSubItems="true">ARRAY [0..12] OF BIT</Name>
 			<BitSize>13</BitSize>
 			<BaseType GUID="{18071995-0000-0000-0000-000000000010}">BIT</BaseType>
 			<ArrayInfo>
@@ -2216,7 +2216,7 @@ for those context blocks , used to intercommunicate with HMI]]>
 			</ArrayInfo>
 		</DataType>
 		<DataType>
-			<Name GUID="{18071995-0000-0000-0000-002000000002}" IecBaseType="true" AutoDeleteType="true" HideSubItems="true">ARRAY [0..1] OF BIT</Name>
+			<Name GUID="{18071995-0000-0000-0000-002000000002}" IecBaseType="true" BitType="true" AutoDeleteType="true" HideSubItems="true">ARRAY [0..1] OF BIT</Name>
 			<BitSize>2</BitSize>
 			<BaseType GUID="{18071995-0000-0000-0000-000000000010}">BIT</BaseType>
 			<ArrayInfo>
@@ -8493,7 +8493,7 @@ Actuator/Sensor]]>
 						</Var>
 						<Var>
 							<Name>GVL.signalControls</Name>
-							<Type GUID="{1839A266-D51D-1BA0-C1EE-2BE094684258}">ARRAY [1..16] OF RunSignal</Type>
+							<Type GUID="{1BEE139C-0728-238B-73B0-8257982F07C1}">ARRAY [1..16] OF RunSignal</Type>
 							<InOut>7</InOut>
 						</Var>
 						<Var>
@@ -12683,7 +12683,7 @@ for those context blocks , used to intercommunicate with HMI]]>
 								<ModuleIdent>190</ModuleIdent>
 								<Module Id="#x03090001" Type="FSOES" Class="190">
 									<Name>Module 1 (FSOES)</Name>
-									<ImageId>412</ImageId>
+									<ImageId>407</ImageId>
 									<ModuleData>02000000be00000000000c000000000000000000000000000000000000000000</ModuleData>
 									<PdoIndex>6656</PdoIndex>
 									<PdoIndex>5632</PdoIndex>
@@ -12768,7 +12768,7 @@ for those context blocks , used to intercommunicate with HMI]]>
 								<ModuleIdent>290</ModuleIdent>
 								<Module Id="#x03090002" Type="FSOES" Class="290">
 									<Name>Module 1 (FSOES)</Name>
-									<ImageId>412</ImageId>
+									<ImageId>407</ImageId>
 									<ModuleData>020000002201000000000c000000000000000000000000000000000000000000</ModuleData>
 									<PdoIndex>6656</PdoIndex>
 									<PdoIndex>5632</PdoIndex>
@@ -12780,7 +12780,7 @@ for those context blocks , used to intercommunicate with HMI]]>
 								<ModuleIdent>200</ModuleIdent>
 								<Module Id="#x03090003" Type="DO" Class="200">
 									<Name>Module 2 (DO)</Name>
-									<ImageId>412</ImageId>
+									<ImageId>407</ImageId>
 									<ModuleData>02000000c8000000000004000000000000000000000000000000000000000000</ModuleData>
 									<PdoIndex>5633</PdoIndex>
 								</Module>

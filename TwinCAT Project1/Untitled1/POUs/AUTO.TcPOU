@@ -4,7 +4,7 @@
     <Declaration><![CDATA[PROGRAM AUTO
 VAR
 	//Stations
-	Controller : RunUnitGeneric(argParent:= Controller, argSlotBase:= 0, argSlotLast:= 0);
+	Controller : RunUnitController(argParent:= Controller, argSlotBase:= 0, argSlotLast:= 0);
 	LifterCelluarA : ARRAY[1..3] OF RunLifterCelluar(argParent:= ADR(lifterCelluarA), 
 									argSlotBase:= ADR(GVL.MATERIAL_SLOTS[1]), 
 									argSlotLast:= ADR(GVL.MATERIAL_SLOTS[2]),

@@ -29,6 +29,9 @@ VAR
 	isTransit : BOOL ;
 	workingTimer : LTON;
 END_VAR
+VAR RETAIN
+	//settings area
+END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[//link parent

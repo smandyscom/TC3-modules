@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <POU Name="RunUnitController" Id="{dbefb355-befd-4ccc-b7d8-49a15cbd5d5f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunUnitController EXTENDS RunUnitGeneric
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	axisControls: ARRAY[1..8] OF RunAxis;
+	stations : ARRAY[1..32] OF POINTER TO RunUnitGeneric; //interconnected exteranlly
+	mode : eOperationModes;
+	
+	nCounter : INT;
+	bAllInitialized : bool;
+END_VAR
+VAR RETAIN
+	cylinderControls : ARRAY[1..32] OF RunCylinder;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[SUPER^();
+
+//routines
+THIS^.ScanError();//alarm/pause scan
+THIS^.ScanPauseRequest();
+
+//
+CASE mode OF	
+	eOperationModes.MANUAL:
+		//scan-in...
+		//manual
+		//scan-out...
+		THIS^.ManualMode();
+		RETURN;
+	eOperationModes.AUTO,eOperationModes.SEMI_AUTO:
+END_CASE
+
+
+//AUTO,SEMI-AUTO
+CASE State OF
+	0:
+	//initialize all stations
+	bAllInitialized := TRUE;
+	FOR nCounter:=1 TO 32 BY 1 DO
+		IF stations[nCounter] <> 0 THEN
+			gvl.stations[nCounter]^.Initialize();
+		END_IF
+		// if every station comes to 16#FF
+		bAllInitialized := bAllInitialized AND (gvl.stations[nCounter]^.State = 16#FF);
+	END_FOR
+	10:
+	//working
+	FOR nCounter:=1 TO 32 BY 1 DO
+		IF gvl.stations[nCounter] <> 0 THEN
+			gvl.stations[nCounter]^();
+		END_IF
+		// if every station comes to 16#FF
+		bAllInitialized := bAllInitialized AND (gvl.stations[nCounter]^.State = 16#FF);
+	END_FOR
+	//TODO , if initialize request raised , change to State-0
+	
+END_CASE]]></ST>
+    </Implementation>
+    <Method Name="Initialize" Id="{cb68dc91-f1ca-48a3-a360-7027131d9307}">
+      <Declaration><![CDATA[METHOD Initialize : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ManualMode" Id="{ce6e971a-3f9a-4616-be00-b8a22036226a}">
+      <Declaration><![CDATA[METHOD ManualMode : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ScanError" Id="{a0eb5aec-6465-4175-9953-8d5b0f3a2dc2}">
+      <Declaration><![CDATA[METHOD ScanError : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ScanPauseRequest" Id="{6f7e528e-ac65-4600-a978-7e93463d8474}">
+      <Declaration><![CDATA[METHOD ScanPauseRequest : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="RunUnitController">
+      <LineId Id="9" Count="0" />
+      <LineId Id="119" Count="0" />
+      <LineId Id="21" Count="1" />
+      <LineId Id="42" Count="0" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="93" Count="0" />
+      <LineId Id="32" Count="0" />
+      <LineId Id="34" Count="0" />
+      <LineId Id="36" Count="0" />
+      <LineId Id="35" Count="0" />
+      <LineId Id="41" Count="0" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="118" Count="0" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="37" Count="1" />
+      <LineId Id="95" Count="22" />
+      <LineId Id="17" Count="0" />
+    </LineIds>
+    <LineIds Name="RunUnitController.Initialize">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="RunUnitController.ManualMode">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="RunUnitController.ScanError">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="RunUnitController.ScanPauseRequest">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

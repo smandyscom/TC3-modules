@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <DUT Name="eOperationModes" Id="{9dd1a96a-947b-4696-86d6-dc7b92ffb21b}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE eOperationModes :
+(
+	AUTO := 0, //fully auto
+	SEMI_AUTO:=1, //working station trigger...etc
+	MANUAL:=2 //axis,cylinder setting/testing
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

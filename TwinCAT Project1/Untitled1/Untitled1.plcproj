@@ -106,6 +106,9 @@
     <Compile Include="POUs\Foundation\RunSignal.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Foundation\RunUnitController.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Foundation\RunUnitGeneric.TcPOU">
       <SubType>Code</SubType>
     </Compile>
