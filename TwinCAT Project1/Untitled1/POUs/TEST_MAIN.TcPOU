@@ -30,6 +30,9 @@ nCounter : INT ;
 simuObstacleSensor : BOOL;
 simuReachSensor : BOOL;
 
+tmpObstacleSensorat AT%I*  : BOOL;
+tmpReachSensor AT%I* : BOOL;
+
 lifterCelluarA : RunLifterCelluar(argParent:= ADR(lifterCelluarA), 
 argSlotBase:= ADR(GVL.MATERIAL_SLOTS[1]), 
 argSlotLast:= ADR(GVL.MATERIAL_SLOTS[2]),
@@ -113,17 +116,21 @@ IF NOT bInitialized THEN
 		GVL.commandBlocks[nCounter].parameter.position.Acceleration :=1000;
 		GVL.commandBlocks[nCounter].parameter.position.Deceleration :=1000;
 	END_FOR
-	GVL.commandBlocks[16].parameter.position.Position := 5;
+	GVL.commandBlocks[16].parameter.position.Position := 4.5;
 	GVL.commandBlocks[17].parameter.position.Position := 0;
 	GVL.commandBlocks[18].parameter.position.Position := 20;
 	//
 	GVL.commandBlocks[32].parameter.position.Position :=350;
-	GVL.commandBlocks[32].parameter.position.Velocity :=400;
+	GVL.commandBlocks[32].parameter.position.Velocity :=250;
 	
 	GVL.commandBlocks[33].parameter.position.Position :=410;
+	GVL.commandBlocks[33].parameter.position.Velocity :=100;
 	
-	GVL.commandBlocks[40].parameter.position.Position :=300;
+	GVL.commandBlocks[40].parameter.position.Position :=260;
 	GVL.commandBlocks[41].parameter.position.Position :=340;
+	
+	lifterCelluarA.ptObstacleSensorStatus := ADR(tmpObstacleSensorat);
+	lifterCelluarA.ptReachSensorStatus := ADR(tmpReachSensor);
 END_IF
 //TEST_BUFFERING();
 //TEST_CYLINDER();
@@ -236,9 +243,12 @@ ptUnitGeneric^.alarmCode := 99;  //
       <LineId Id="301" Count="0" />
       <LineId Id="300" Count="0" />
       <LineId Id="297" Count="0" />
+      <LineId Id="524" Count="0" />
       <LineId Id="302" Count="0" />
       <LineId Id="305" Count="0" />
       <LineId Id="299" Count="0" />
+      <LineId Id="503" Count="1" />
+      <LineId Id="523" Count="0" />
       <LineId Id="165" Count="0" />
       <LineId Id="136" Count="0" />
       <LineId Id="54" Count="0" />

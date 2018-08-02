@@ -3,7 +3,9 @@
   <POU Name="RunLifterCelluar" Id="{8e8fc5f3-47f1-4079-a3ab-596940aadfbf}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunLifterCelluar EXTENDS RunUnitGeneric
 VAR_INPUT
-	
+	//sensor
+	ptObstacleSensorStatus : POINTER TO BOOL; //fibers
+	ptReachSensorStatus : POINTER TO BOOL; //approximities
 END_VAR
 VAR_OUTPUT
 END_VAR
@@ -25,9 +27,7 @@ VAR
 	//carrier mover(horizon
 	ptCommandHorizonHit : POINTER TO ParameterSet;
 	ptCommandHorizonWorking : POINTER TO ParameterSet;
-	//sensor
-	ptObstacleSensorStatus : POINTER TO BOOL; //fibers
-	ptReachSensorStatus : POINTER TO BOOL; //approximities
+	
 	
 	working : BOOL; //dispatch work to working station
 END_VAR

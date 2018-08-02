@@ -3,8 +3,6 @@
   <POU Name="RunCylinder" Id="{a99bf5d1-aaa3-4095-9742-005d9ab3fed8}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunCylinder
 VAR			
-	A_SENSOR_USED_COUNT : INT := 0;
-	B_SENSOR_USED_COUNT : INT :=0 ;	
 
 	COMMAND_CACHED : eCylinderCommands; //1 , HMI->PLC
 	LAST_COMMAND : eCylinderCommands;   //2 , 
@@ -17,11 +15,7 @@ VAR
 
 	nCounter : INT := 0;
 	bMatched : BOOL := false;
-	
-	TMR_WATCH_DOG : TON ; //Watch dog timer
-	TMR_DELAY_TO_A : TON;
-	TMR_DELAY_TO_B : TON;
-	
+		
 	BIT_WARNING : BIT; //0
 	BIT_A_MATCH : BIT; //1
 	BIT_B_MATCH : BIT; //2
@@ -29,6 +23,14 @@ VAR
 	
 	BIT_DONE : BIT; //5
 	
+END_VAR
+VAR RETAIN
+	A_SENSOR_USED_COUNT : INT := 0;
+	B_SENSOR_USED_COUNT : INT :=0 ;		
+
+	TMR_WATCH_DOG : TON ; //Watch dog timer
+	TMR_DELAY_TO_A : TON;
+	TMR_DELAY_TO_B : TON;
 END_VAR
 ]]></Declaration>
     <Implementation>
