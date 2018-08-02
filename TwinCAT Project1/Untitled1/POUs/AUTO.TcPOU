@@ -17,62 +17,53 @@ VAR
 									argReachSensor:= ADR(simuReachSensor));
 	ConveyorMaster : RunUnitIndexerMasterCelluarA(argParent:= ADR(masterCelluarA), 
 												argSlotBase:= ADR(GVL.MATERIAL_SLOTS[1]), 
-												argSlotLast:= ADR(GVL.MATERIAL_SLOTS[2]),
-												argAxis:=ADR(GVL.axisControls[2]),
+												argSlotLast:= ADR(GVL.MATERIAL_SLOTS[3]),
+												argAxis:=ADR(GVL.axisControls[1]),
 												argUpstream:=ADR(masterProxy),		
-												argCommandFast:=ADR(GVL.commandBlocks[32]),
-												argCommandSlow:=ADR(GVL.commandBlocks[33]),
-												argCommandTriggerRaise:=ADR(GVL.commandBlocks[40]),
-												argCommandCheckRaise:=ADR(GVL.commandBlocks[41]));
+												argCommandFast:=ADR(GVL.commandBlocks[1]),
+												argCommandSlow:=ADR(GVL.commandBlocks[2]),
+												argCommandTriggerRaise:=ADR(GVL.commandBlocks[3]),
+												argCommandCheckRaise:=ADR(GVL.commandBlocks[4]));
 	//
 	nCounter : INT;
-	bAllInitialized:BOOL;
-	State : int;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[IF NOT GVL.bObjectsInitialized THEN
+      <ST><![CDATA[IF NOT GVL.bObjectsLinked THEN
 	//all station initialize (build relationship) , machine spcific configuration
+	FOR nCounter := 1 TO 3 BY 1 DO
+		LifterCelluarA[nCounter].FB_init(
+		bInitRetains:= FALSE, 
+		bInCopyCode:= FALSE, 
+		argParent:= ADR(Controller), 
+		argSlotBase:= ADR(gvl.materialSlots[0+nCounter]), 
+		argSlotLast:= ADR(gvl.materialSlots[0+nCounter]), 
+		argAxis:= ADR(gvl.axisControls[1+nCounter]), 
+		argCylinder:= ADR(gvl.cylinderControls[0+nCounter]), 
+		argHit:= ADR(gvl.commandBlocks[7+(nCounter-1)*4]+1), 
+		argRelease:=ADR(gvl.commandBlocks[7+(nCounter-1)*4]+2) , 
+		argWorking:=ADR(gvl.commandBlocks[7+(nCounter-1)*4]+3) , 
+		argObstacleSensor:=ADR(gvl.signalControls[nCounter+0].debouncedOn) , 
+		argReachSensor:= ADR(gvl.signalControls[nCounter+3].debouncedOn));
+	END_FOR
+	gvl.bObjectsLinked := true; //self-locked
 END_IF
 
-CASE State OF
-	0:
-	bAllInitialized := TRUE;
-	FOR nCounter:=1 TO 32 BY 1 DO
-		IF gvl.stations[nCounter] <> 0 THEN
-			gvl.stations[nCounter]^.Initialize();
-		END_IF
-		// if every station comes to 16#FF
-		bAllInitialized := bAllInitialized AND (gvl.stations[nCounter]^.State = 16#FF);
-	END_FOR
-	1:
-	//working
-	FOR nCounter:=1 TO 32 BY 1 DO
-		IF gvl.stations[nCounter] <> 0 THEN
-			gvl.stations[nCounter]^();
-		END_IF
-		// if every station comes to 16#FF
-		bAllInitialized := bAllInitialized AND (gvl.stations[nCounter]^.State = 16#FF);
-	END_FOR
-	//TODO , if initialize request raised , change to State-0
-END_CASE
+Controller();//execute
 
 ]]></ST>
     </Implementation>
     <LineIds Name="AUTO">
       <LineId Id="5" Count="0" />
       <LineId Id="14" Count="0" />
+      <LineId Id="130" Count="0" />
+      <LineId Id="134" Count="0" />
+      <LineId Id="146" Count="0" />
+      <LineId Id="136" Count="9" />
+      <LineId Id="132" Count="1" />
+      <LineId Id="131" Count="0" />
       <LineId Id="12" Count="0" />
       <LineId Id="19" Count="0" />
-      <LineId Id="28" Count="0" />
-      <LineId Id="81" Count="0" />
-      <LineId Id="84" Count="6" />
-      <LineId Id="83" Count="0" />
-      <LineId Id="91" Count="0" />
-      <LineId Id="100" Count="0" />
-      <LineId Id="94" Count="5" />
-      <LineId Id="93" Count="0" />
-      <LineId Id="101" Count="0" />
       <LineId Id="82" Count="0" />
       <LineId Id="72" Count="0" />
       <LineId Id="78" Count="0" />

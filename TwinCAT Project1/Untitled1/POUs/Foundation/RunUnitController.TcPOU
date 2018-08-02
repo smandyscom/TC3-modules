@@ -7,15 +7,12 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-	axisControls: ARRAY[1..8] OF RunAxis;
-	stations : ARRAY[1..32] OF POINTER TO RunUnitGeneric; //interconnected exteranlly
-	mode : eOperationModes;
+	mode : eOperationModes := eOperationModes.SEMI_AUTO; //default in semi-auto
 	
 	nCounter : INT;
-	bAllInitialized : bool;
+	bAllInitialized : BOOL := FALSE;
 END_VAR
 VAR RETAIN
-	cylinderControls : ARRAY[1..32] OF RunCylinder;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -25,15 +22,20 @@ END_VAR
 THIS^.ScanError();//alarm/pause scan
 THIS^.ScanPauseRequest();
 
+//scan running all devices
+FOR nCounter :=1 TO 8 BY 1 DO
+	gvl.axisControls[nCounter]();
+	gvl.cylinderControls[nCounter]();
+	gvl.signalControls[nCounter]();
+END_FOR
+
 //
 CASE mode OF	
 	eOperationModes.MANUAL:
-		//scan-in...
-		//manual
-		//scan-out...
-		THIS^.ManualMode();
-		RETURN;
+		THIS^.ManualMode(); //scan-in,scan-out,manual...
+		RETURN; //break here
 	eOperationModes.AUTO,eOperationModes.SEMI_AUTO:
+		//go further
 END_CASE
 
 
@@ -43,23 +45,25 @@ CASE State OF
 	//initialize all stations
 	bAllInitialized := TRUE;
 	FOR nCounter:=1 TO 32 BY 1 DO
-		IF stations[nCounter] <> 0 THEN
-			gvl.stations[nCounter]^.Initialize();
+		IF gvl.stations[nCounter] <> 0 THEN
+			// if every station comes initialized
+			bAllInitialized := bAllInitialized AND gvl.stations[nCounter]^.Initialize();
 		END_IF
-		// if every station comes to 16#FF
-		bAllInitialized := bAllInitialized AND (gvl.stations[nCounter]^.State = 16#FF);
 	END_FOR
-	10:
+	IF bAllInitialized THEN
+		NextState:=100;
+	END_IF
+	100:
 	//working
 	FOR nCounter:=1 TO 32 BY 1 DO
 		IF gvl.stations[nCounter] <> 0 THEN
 			gvl.stations[nCounter]^();
 		END_IF
-		// if every station comes to 16#FF
-		bAllInitialized := bAllInitialized AND (gvl.stations[nCounter]^.State = 16#FF);
 	END_FOR
 	//TODO , if initialize request raised , change to State-0
-	
+	IF FALSE THEN
+		NextState := 0;
+	END_IF
 END_CASE]]></ST>
     </Implementation>
     <Method Name="Initialize" Id="{cb68dc91-f1ca-48a3-a360-7027131d9307}">
@@ -103,19 +107,28 @@ END_VAR
       <LineId Id="119" Count="0" />
       <LineId Id="21" Count="1" />
       <LineId Id="42" Count="0" />
+      <LineId Id="146" Count="0" />
+      <LineId Id="136" Count="2" />
+      <LineId Id="140" Count="1" />
+      <LineId Id="139" Count="0" />
       <LineId Id="28" Count="0" />
       <LineId Id="24" Count="0" />
       <LineId Id="93" Count="0" />
       <LineId Id="32" Count="0" />
-      <LineId Id="34" Count="0" />
-      <LineId Id="36" Count="0" />
-      <LineId Id="35" Count="0" />
       <LineId Id="41" Count="0" />
       <LineId Id="33" Count="0" />
       <LineId Id="118" Count="0" />
+      <LineId Id="142" Count="0" />
       <LineId Id="31" Count="0" />
       <LineId Id="37" Count="1" />
-      <LineId Id="95" Count="22" />
+      <LineId Id="95" Count="6" />
+      <LineId Id="162" Count="0" />
+      <LineId Id="102" Count="1" />
+      <LineId Id="106" Count="0" />
+      <LineId Id="147" Count="2" />
+      <LineId Id="107" Count="5" />
+      <LineId Id="115" Count="2" />
+      <LineId Id="150" Count="1" />
       <LineId Id="17" Count="0" />
     </LineIds>
     <LineIds Name="RunUnitController.Initialize">

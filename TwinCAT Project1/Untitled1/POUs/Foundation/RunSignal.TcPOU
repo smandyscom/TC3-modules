@@ -1,22 +1,35 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4020.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
   <POU Name="RunSignal" Id="{2f1f5cd2-5e24-47f9-8ea9-a8607aa3166e}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunSignal
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
-END_VAR
-VAR_IN_OUT
-	Comm : SignalBlockBase;
+	raw : BOOL;
+	debouncedOn : BOOL;
+	debouncedOff : BOOL;
 END_VAR
 VAR
+	input AT%I* : BOOL;
+END_VAR
+VAR RETAIN
+	debouncedOnTimer : TON;
+	debouncedOffTimer : TOn;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[]]></ST>
+      <ST><![CDATA[
+raw := input;
+
+debouncedOnTimer(IN:= input, PT:= , Q=> debouncedOn, ET=> );
+debouncedOffTimer(IN:= NOT input, PT:= , Q=> debouncedoff, ET=> );]]></ST>
     </Implementation>
     <LineIds Name="RunSignal">
+      <LineId Id="28" Count="0" />
       <LineId Id="9" Count="0" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="29" Count="0" />
+      <LineId Id="31" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

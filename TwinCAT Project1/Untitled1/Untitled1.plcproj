@@ -66,6 +66,12 @@
     <Compile Include="DUTs\Definitions\eCylinderCommands.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\Definitions\eOperationModes.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Definitions\eSpecialStates.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\Definitions\eUpstreamComm.TcDUT">
       <SubType>Code</SubType>
     </Compile>
