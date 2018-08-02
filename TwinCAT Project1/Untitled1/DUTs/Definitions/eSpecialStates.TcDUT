@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <DUT Name="eSpecialStates" Id="{158b9422-e8ea-4462-a756-c8472a85a7ae}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE eSpecialStates : 
+(
+	INITIAL_BEGIN := 16#100,
+	INITIAL_END := 16#1FF, //256 states possible
+	INITIAL_REGION := 16#F00,
+	
+	SLAVE_WORK_DONE := 16#FF
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
