@@ -12,9 +12,7 @@ VAR_OUTPUT
 	syncEngaged : BOOL; //inform downstream i am ready , face to downstream
 	syncMaterialId : DWORD;
 END_VAR
-VAR	
-	
-	
+VAR		
 	Upstream : POINTER TO RunUnitIndexerMaster;//upstream linkage
 	Axis : POINTER TO RunAxis; //axis reference
 	
@@ -27,10 +25,55 @@ VAR
 	condition : BOOL;
 	
 	isLastSlotOccupied : BOOL; //indicate if last slot occupied
+	
+	
+	//proxy mode
+	isProxyMode : BOOL := FALSE;
+	fbAdsRead : ADSREAD;
+	fbAdsWrite : ADSWRITE;
+	
 END_VAR
-]]></Declaration>
+VAR RETAIN
+	//proxy mode parameters
+	netId : T_AmsNetID;
+	port : T_AmsPort := 851;
+	indexGroup : UDINT := TO_UDINT(eAdsIndexGroups.PLCADS_RWM);
+	offsetUpstreamSyncEngaged : UDINT := 127;
+	offsetUpstreamSyncAckowledged  : UDINT := 128;
+	
+END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[SUPER^(); // call base class's execution
+      <ST><![CDATA[IF isProxyMode THEN
+	//do ADS data exchanging only
+	fbAdsRead(
+		NETID:= netId, 
+		PORT:= port, 
+		IDXGRP:= indexGroup, 
+		IDXOFFS:= offsetUpstreamSyncEngaged, 
+		LEN:= SIZEOF(syncEngaged), 
+		DESTADDR:= ADR(syncEngaged), 
+		READ:= not fbAdsRead.BUSY, 
+		TMOUT:= , 
+		BUSY=> , 
+		ERR=> , 
+		ERRID=> );
+		
+	fbAdsWrite(
+		NETID:= netId, 
+		PORT:= port, 
+		IDXGRP:= indexGroup, 
+		IDXOFFS:= offsetUpstreamSyncAckowledged, 
+		LEN:= SIZEOF(syncAcknowledged), 
+		SRCADDR:= ADR(syncAcknowledged), 
+		WRITE:= NOT fbAdsWrite.BUSY, 
+		TMOUT:= , 
+		BUSY=> , 
+		ERR=> , 
+		ERRID=> );
+	return; //break here
+END_IF
+
+SUPER^(); // call base class's execution
 
 CASE SUPER^.State OF
 	//0:
@@ -114,6 +157,7 @@ VAR_INPUT
 	
 	argAxis : POINTER TO RunAxis;
 	argUpstream : POINTER TO RunUnitIndexerMaster;
+	
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -125,50 +169,19 @@ SlotLast := argSlotLast;
 Axis := argAxis;
 Upstream := argUpstream;
 
+IF Upstream=0 THEN
+	isProxyMode:=TRUE; //no upstream , i am proxy
+END_IF
 ]]></ST>
       </Implementation>
     </Method>
-    <Method Name="ProxyMode" Id="{33b629b5-5210-4d2f-9d83-0eef6582dc16}">
-      <Declaration><![CDATA[METHOD ProxyMode : BOOL
-VAR_INPUT
-	netId : T_AmsNetID;
-	port : T_AmsPort := 851;
-END_VAR
-VAR
-	fbAdsRead : ADSREAD;
-	fbAdsWrite : ADSWRITE;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[//do ADS data exchanging only
-fbAdsRead(
-	NETID:= netId, 
-	PORT:= port, 
-	IDXGRP:= TO_UDINT(eUpstreamComm.indexGroup), 
-	IDXOFFS:= TO_UDINT(eUpstreamComm.offsetUpstreamSyncEngaged), 
-	LEN:= SIZEOF(syncEngaged), 
-	DESTADDR:= ADR(syncEngaged), 
-	READ:= not fbAdsRead.BUSY, 
-	TMOUT:= , 
-	BUSY=> , 
-	ERR=> , 
-	ERRID=> );
-	
-fbAdsWrite(
-	NETID:= netId, 
-	PORT:= port, 
-	IDXGRP:= TO_UDINT(eUpstreamComm.indexGroup), 
-	IDXOFFS:= TO_UDINT(eUpstreamComm.offsetUpstreamSyncAckowledged), 
-	LEN:= SIZEOF(syncAcknowledged), 
-	SRCADDR:= ADR(syncAcknowledged), 
-	WRITE:= NOT fbAdsWrite.BUSY, 
-	TMOUT:= , 
-	BUSY=> , 
-	ERR=> , 
-	ERRID=> );]]></ST>
-      </Implementation>
-    </Method>
     <LineIds Name="RunUnitIndexerMaster">
+      <LineId Id="456" Count="0" />
+      <LineId Id="460" Count="24" />
+      <LineId Id="458" Count="0" />
+      <LineId Id="485" Count="0" />
+      <LineId Id="459" Count="0" />
+      <LineId Id="457" Count="0" />
       <LineId Id="295" Count="4" />
       <LineId Id="412" Count="0" />
       <LineId Id="301" Count="6" />
@@ -202,13 +215,10 @@ fbAdsWrite(
       <LineId Id="43" Count="0" />
       <LineId Id="42" Count="0" />
       <LineId Id="41" Count="0" />
+      <LineId Id="59" Count="0" />
       <LineId Id="38" Count="0" />
+      <LineId Id="60" Count="1" />
       <LineId Id="9" Count="0" />
-    </LineIds>
-    <LineIds Name="RunUnitIndexerMaster.ProxyMode">
-      <LineId Id="8" Count="13" />
-      <LineId Id="26" Count="10" />
-      <LineId Id="5" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

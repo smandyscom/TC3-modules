@@ -34,8 +34,8 @@ tmpObstacleSensorat AT%I*  : BOOL;
 tmpReachSensor AT%I* : BOOL;
 
 lifterCelluarA : RunLifterCelluar(argParent:= ADR(lifterCelluarA), 
-argSlotBase:= ADR(GVL.MATERIAL_SLOTS[1]), 
-argSlotLast:= ADR(GVL.MATERIAL_SLOTS[2]),
+argSlotBase:= ADR(GVL.materialSlots[1]), 
+argSlotLast:= ADR(GVL.materialSlots[2]),
 argAxis:= ADR(GVL.axisControls[4]),
 argCylinder:=ADR(GVL.cylinderControls[1]),
 argHit:=ADR(GVL.commandBlocks[16]),
@@ -56,8 +56,8 @@ argCommandTriggerRaise:=0,
 argCommandCheckRaise:=0);
 
 masterCelluarA : RunUnitIndexerMasterCelluarA(argParent:= ADR(masterCelluarA), 
-argSlotBase:= ADR(GVL.MATERIAL_SLOTS[1]), 
-argSlotLast:= ADR(GVL.MATERIAL_SLOTS[2]),
+argSlotBase:= ADR(GVL.materialSlots[1]), 
+argSlotLast:= ADR(GVL.materialSlots[2]),
 argAxis:=ADR(GVL.axisControls[1]),
 argUpstream:=ADR(masterProxy),
 argCommandFast:=ADR(GVL.commandBlocks[32]),
@@ -65,7 +65,7 @@ argCommandSlow:=ADR(GVL.commandBlocks[33]),
 argCommandTriggerRaise:=ADR(GVL.commandBlocks[40]),
 argCommandCheckRaise:=ADR(GVL.commandBlocks[41]));
 
-simuStation : RunUnitGeneric(argParent:= ADR(simuStation), argSlotBase:= ADR(GVL.MATERIAL_SLOTS[1]), argSlotLast:= ADR(GVL.MATERIAL_SLOTS[1]));
+simuStation : RunUnitGeneric(argParent:= ADR(simuStation), argSlotBase:= ADR(GVL.materialSlots[1]), argSlotLast:= ADR(GVL.materialSlots[1]));
 
 END_VAR
 ]]></Declaration>

@@ -2,10 +2,17 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
   <DUT Name="eSpecialStates" Id="{158b9422-e8ea-4462-a756-c8472a85a7ae}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
-{attribute 'strict'}
+//{attribute 'strict'}
 TYPE eSpecialStates : 
 (
 	INITIAL_BEGIN := 16#100,
+	INITIAL_STATE_1 := INITIAL_BEGIN+1,
+	INITIAL_STATE_2 := INITIAL_BEGIN+2,
+	INITIAL_STATE_3 := INITIAL_BEGIN+3,
+	INITIAL_STATE_4 := INITIAL_BEGIN+4,
+	INITIAL_STATE_5 := INITIAL_BEGIN+5,
+	INITIAL_STATE_6 := INITIAL_BEGIN+6,
+	INITIAL_STATE_7 := INITIAL_BEGIN+7,
 	INITIAL_END := 16#1FF, //256 states possible
 	INITIAL_REGION := 16#F00,
 	

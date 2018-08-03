@@ -169,15 +169,14 @@ VAR_INPUT
 	
 	argAxis : POINTER TO RunAxis;
 	argUpstream : POINTER TO RunUnitIndexerMaster;
-		
-	argCommandFast : POINTER TO ParameterSet;
-	argCommandSlow : POINTER TO ParameterSet;
-	
-	argCommandTriggerRaise: POINTER TO ParameterSet; //trigger point
-	argCommandCheckRaise : POINTER TO ParameterSet; //if not all lifter done until then , slowdown conveyor motion
 	
 END_VAR
-]]></Declaration>
+VAR CONSTANT
+	indexFast : INT := 1;
+	indexSlow : INT := 2;
+	indexRaise : INT := 3;
+	indexCheck : INT :=4;
+END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[//initialize 
 Parent := argParent;
@@ -186,11 +185,18 @@ SlotLast := argSlotLast;
 
 Axis := argAxis;
 Upstream := argUpstream;
+
 //
-ptCommandFast := argCommandFast;
-ptCommandSlow := argCommandSlow;
-ptCommandTriggerRaise := argCommandTriggerRaise; //trigger point
-ptCommandCheckRaise :=argCommandCheckRaise; //if not all lifter done until then , slowdown conveyor motion]]></ST>
+IF Axis<>0 THEN
+	ptCommandFast := ADR(Axis^.ptpCommands[indexFast]);
+	ptCommandSlow := ADR(Axis^.ptpCommands[indexSlow]);
+	ptCommandTriggerRaise := ADR(Axis^.ptpCommands[indexRaise]); //trigger point
+	ptCommandCheckRaise :=ADR(Axis^.ptpCommands[indexCheck]); //if not all lifter done until then , slowdown conveyor motion
+END_IF
+
+IF Upstream=0 THEN
+	isProxyMode:=TRUE; //no upstream , i am proxy
+END_IF]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="RunUnitIndexerMasterCelluarA">
@@ -233,9 +239,14 @@ ptCommandCheckRaise :=argCommandCheckRaise; //if not all lifter done until then 
     <LineIds Name="RunUnitIndexerMasterCelluarA.FB_init">
       <LineId Id="15" Count="5" />
       <LineId Id="14" Count="0" />
+      <LineId Id="72" Count="0" />
       <LineId Id="31" Count="0" />
-      <LineId Id="34" Count="1" />
-      <LineId Id="38" Count="0" />
+      <LineId Id="63" Count="0" />
+      <LineId Id="66" Count="0" />
+      <LineId Id="69" Count="0" />
+      <LineId Id="68" Count="0" />
+      <LineId Id="64" Count="1" />
+      <LineId Id="73" Count="2" />
       <LineId Id="32" Count="0" />
     </LineIds>
   </POU>

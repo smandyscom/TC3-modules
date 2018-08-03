@@ -30,7 +30,7 @@ VAR
 	workingTimer : LTON;
 END_VAR
 VAR RETAIN
-	//station specific settings area
+	//station specific settings area (user settings
 END_VAR
 ]]></Declaration>
     <Implementation>

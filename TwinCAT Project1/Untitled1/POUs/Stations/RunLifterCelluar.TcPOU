@@ -98,16 +98,18 @@ VAR_INPUT
 	argSlotBase : POINTER TO MaterialBlock;
 	argSlotLast : POINTER TO MaterialBlock;
 	
-	argAxis : POINTER TO RunAxis;
+	argAxisVertical : POINTER TO RunAxis;
+	argAxisHorizon : POINTER TO RunAxis;
 	argCylinder : POINTER TO RunCylinder;
 	
-	argHit : POINTER TO ParameterSet;
-	argRelease : POINTER TO ParameterSet;
-	argWorking : POINTER TO ParameterSet;
+	argObstacleSensor : POINTER TO RunSignal;
+	argReachSensor : POINTER TO RunSignal;
 	
-	argObstacleSensor : POINTER TO BOOL;
-	argReachSensor : POINTER TO BOOL;
-	
+END_VAR
+VAR CONSTANT
+	indexRelease : INT := 3;
+	indexHit : INT := 1;
+	indexWorking : INT := 2;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -121,19 +123,21 @@ SlotLast := argSlotLast;
 
 //actuator
 	//axis
-AxisVertical := argAxis;
+AxisVertical := argAxisVertical;
+AxisHorizon := argAxisHorizon;
 //cylinder
 Cylinder := argCylinder;
 	
 //lifter
-ptCommandLifterHit := argHit; // raise to hit
-ptCommandLifterRelease := argRelease; //release
-ptCommandLifterWorking := argWorking; //lift carrier to working position
+ptCommandLifterHit := ADR(AxisVertical^.ptpCommands[indexHit]); // raise to hit
+ptCommandLifterRelease :=  ADR(AxisVertical^.ptpCommands[indexRelease]);; //release
+ptCommandLifterWorking :=  ADR(AxisVertical^.ptpCommands[indexWorking]);; //lift carrier to working position
+//horizon
+ptCommandHorizonWorking := ADR(AxisHorizon^.ptpCommands[indexRelease]);
+ptCommandHorizonHit :=ADR(AxisHorizon^.ptpCommands[indexHit]);
 //sensor
-ptObstacleSensorStatus := argObstacleSensor; //fibers
-ptReachSensorStatus :=argReachSensor; //approximities
-//slot status
-//ptPreivousSlotValid :=argSlotValid;]]></ST>
+ptObstacleSensorStatus := ADR(argObstacleSensor^.debouncedOn); //fibers
+ptReachSensorStatus :=ADR(argReachSensor^.debouncedOn); //approximities]]></ST>
       </Implementation>
     </Method>
     <Method Name="Initialize" Id="{21db5a00-f7a1-4530-94de-d799f1b897b9}">
@@ -144,15 +148,14 @@ END_VAR
       <Implementation>
         <ST><![CDATA[
 CASE State OF
-	0:
-	//TODO , MC power off , on
-	bSerialTransition:=Cylinder^.Execute(eCylinderCommands.COMMAND_A);
-	1:
-	bSerialTransition :=  AxisVertical^.ExecuteParameter(ptCommandLifterRelease);
-	2:
-	bSerialTransition := AxisHorizon^.ExecuteParameter(ptCommandHorizonHit);
-	3:
-	//How to decide occupied status? Preset all occupied status , then raising alarm to clear status?
+	eSpecialStates.INITIAL_BEGIN:
+		bSerialTransition:=Cylinder^.Execute(eCylinderCommands.COMMAND_A);//MC on would be taken by method call
+	eSpecialStates.INITIAL_STATE_1:
+		bSerialTransition :=  AxisVertical^.ExecuteParameter(ptCommandLifterRelease);
+	eSpecialStates.INITIAL_STATE_2:
+		IF AxisHorizon^.ExecuteParameter(ptCommandHorizonHit) THEN
+			NextState := eSpecialStates.INITIAL_END;
+		END_IF
 END_CASE
 
 Initialize := SUPER^.Initialize(); //call base method]]></ST>
@@ -220,22 +223,20 @@ END_VAR
       <LineId Id="42" Count="0" />
     </LineIds>
     <LineIds Name="RunLifterCelluar.FB_init">
-      <LineId Id="49" Count="2" />
-      <LineId Id="47" Count="1" />
-      <LineId Id="7" Count="0" />
-      <LineId Id="17" Count="15" />
-      <LineId Id="16" Count="0" />
+      <LineId Id="92" Count="10" />
+      <LineId Id="115" Count="0" />
+      <LineId Id="103" Count="6" />
+      <LineId Id="122" Count="2" />
+      <LineId Id="110" Count="2" />
     </LineIds>
     <LineIds Name="RunLifterCelluar.Initialize">
       <LineId Id="6" Count="0" />
       <LineId Id="5" Count="0" />
       <LineId Id="7" Count="0" />
-      <LineId Id="26" Count="0" />
       <LineId Id="9" Count="1" />
       <LineId Id="14" Count="0" />
-      <LineId Id="23" Count="1" />
-      <LineId Id="22" Count="0" />
-      <LineId Id="25" Count="0" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="30" Count="2" />
       <LineId Id="8" Count="0" />
       <LineId Id="18" Count="0" />
       <LineId Id="17" Count="0" />

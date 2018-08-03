@@ -4,26 +4,25 @@
     <Declaration><![CDATA[PROGRAM AUTO
 VAR
 	//Stations
-	Controller : RunUnitController(argParent:= Controller, argSlotBase:= 0, argSlotLast:= 0);
-	LifterCelluarA : ARRAY[1..3] OF RunLifterCelluar(argParent:= ADR(lifterCelluarA), 
-									argSlotBase:= ADR(GVL.MATERIAL_SLOTS[1]), 
-									argSlotLast:= ADR(GVL.MATERIAL_SLOTS[2]),
-									argAxis:= ADR(GVL.axisControls[1]),
-									argCylinder:=ADR(GVL.cylinderControls[1]),
-									argHit:=ADR(GVL.commandBlocks[16]),
-									argRelease:=ADR(GVL.commandBlocks[17]),
-									argWorking:=ADR(GVL.commandBlocks[18]),		
-									argObstacleSensor:= ADR(simuObstacleSensor),
-									argReachSensor:= ADR(simuReachSensor));
-	ConveyorMaster : RunUnitIndexerMasterCelluarA(argParent:= ADR(masterCelluarA), 
-												argSlotBase:= ADR(GVL.MATERIAL_SLOTS[1]), 
-												argSlotLast:= ADR(GVL.MATERIAL_SLOTS[3]),
+	Controller : RunUnitController(argParent:= ADR(Controller), argSlotBase:= 0, argSlotLast:= 0);
+	LifterCelluarA : ARRAY[1..3] OF RunLifterCelluar(argParent:= ADR(Controller), 
+									argSlotBase:= ADR(GVL.materialSlots[1]), 
+									argSlotLast:= ADR(GVL.materialSlots[2]),
+									argAxisVertical:= ADR(GVL.axisControls[1]),
+									argAxisHorizon := ADR(Gvl.axisControls[1]),
+									argCylinder:=ADR(GVL.cylinderControls[1]),		
+									argObstacleSensor:= ADR(gvl.signalControls[1]),
+									argReachSensor:= ADR(gvl.signalControls[1]));
+	ConveyorProxy : RunUnitIndexerMaster(argParent:= ADR(Controller), 
+												argSlotBase:= 0, 
+												argSlotLast:= 0,
+												argAxis:=0,
+												argUpstream:=0);
+	ConveyorMaster : RunUnitIndexerMasterCelluarA(argParent:= ADR(Controller), 
+												argSlotBase:= ADR(GVL.materialSlots[1]), 
+												argSlotLast:= ADR(GVL.materialSlots[3]),
 												argAxis:=ADR(GVL.axisControls[1]),
-												argUpstream:=ADR(masterProxy),		
-												argCommandFast:=ADR(GVL.commandBlocks[1]),
-												argCommandSlow:=ADR(GVL.commandBlocks[2]),
-												argCommandTriggerRaise:=ADR(GVL.commandBlocks[3]),
-												argCommandCheckRaise:=ADR(GVL.commandBlocks[4]));
+												argUpstream:=ADR(ConveyorProxy));
 	//
 	nCounter : INT;
 END_VAR
@@ -38,13 +37,11 @@ END_VAR
 		argParent:= ADR(Controller), 
 		argSlotBase:= ADR(gvl.materialSlots[0+nCounter]), 
 		argSlotLast:= ADR(gvl.materialSlots[0+nCounter]), 
-		argAxis:= ADR(gvl.axisControls[1+nCounter]), 
-		argCylinder:= ADR(gvl.cylinderControls[0+nCounter]), 
-		argHit:= ADR(gvl.commandBlocks[7+(nCounter-1)*4]+1), 
-		argRelease:=ADR(gvl.commandBlocks[7+(nCounter-1)*4]+2) , 
-		argWorking:=ADR(gvl.commandBlocks[7+(nCounter-1)*4]+3) , 
-		argObstacleSensor:=ADR(gvl.signalControls[nCounter+0].debouncedOn) , 
-		argReachSensor:= ADR(gvl.signalControls[nCounter+3].debouncedOn));
+		argAxisVertical:= ADR(gvl.axisControls[1+nCounter]),
+		argAxisHorizon := ADR(gvl.axisControls[4+nCounter]),
+		argCylinder:= ADR(gvl.cylinderControls[0+nCounter]),  
+		argObstacleSensor:=ADR(gvl.signalControls[nCounter]) , 
+		argReachSensor:= ADR(gvl.signalControls[nCounter+3]));
 	END_FOR
 	gvl.bObjectsLinked := true; //self-locked
 END_IF
@@ -59,7 +56,10 @@ Controller();//execute
       <LineId Id="130" Count="0" />
       <LineId Id="134" Count="0" />
       <LineId Id="146" Count="0" />
-      <LineId Id="136" Count="9" />
+      <LineId Id="136" Count="4" />
+      <LineId Id="179" Count="0" />
+      <LineId Id="141" Count="0" />
+      <LineId Id="145" Count="0" />
       <LineId Id="132" Count="1" />
       <LineId Id="131" Count="0" />
       <LineId Id="12" Count="0" />

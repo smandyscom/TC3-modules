@@ -123,6 +123,7 @@
     </Compile>
     <Compile Include="POUs\TEST_MAIN.TcPOU">
       <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
     <Compile Include="POUs\Stations\RunLifterCelluar.TcPOU">
       <SubType>Code</SubType>
@@ -136,6 +137,7 @@
     </Compile>
     <Compile Include="POUs\TEST_BUFFERING.TcPOU">
       <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
     <Compile Include="POUs\TEST_COMMAND_BLOCK.TcPOU">
       <SubType>Code</SubType>
@@ -143,6 +145,7 @@
     </Compile>
     <Compile Include="POUs\TEST_CYLINDER.TcPOU">
       <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
     <Compile Include="POUs\TEST_UNIT_MASTER.TcPOU">
       <SubType>Code</SubType>
