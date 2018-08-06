@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <DUT Name="eTypeCodes" Id="{7f52dbf3-6040-481f-848c-d745309072df}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+//{attribute 'strict'}
+TYPE eTypeCodes : 
+(
+	//sort of type codes
+	AXIS := 0,
+	CYLINDER := 1,
+	SIGNAL := 2,
+	COMMANDBLOCK :=4,
+	UNIT := 5
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

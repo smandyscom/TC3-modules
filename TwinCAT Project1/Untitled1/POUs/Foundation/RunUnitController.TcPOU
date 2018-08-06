@@ -7,51 +7,102 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-	mode : eOperationModes := eOperationModes.SEMI_AUTO; //default in semi-auto
+	currentMode : eOperationModes := eOperationModes.SEMI_AUTO; //default in semi-auto
 	
 	nCounter : INT;
 	bAllInitialized : BOOL := FALSE;
+	
+	//user control
+	requestInitialize : BOOL;
+	requestMode : eOperationModes := eOperationModes.SEMI_AUTO;
+	//requestErrorReset : BOOL;
+	//requestErrorIgnore : BOOL;
+	
+	//error
+	requestErrorClear : eErrorClearWays := eErrorClearWays.NO_ACTION;
+	errorDevice :ICommon := 0; //null reference
+	errorType : eTypeCodes;
+	errorIndex : INT;
+	errorCode : INT;
 END_VAR
 VAR RETAIN
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[SUPER^();
-
-//routines
-THIS^.ScanError();//alarm/pause scan
-THIS^.ScanPauseRequest();
-
-//scan running all devices
+      <ST><![CDATA[//scan running all devices
 FOR nCounter :=1 TO 8 BY 1 DO
-	gvl.axisControls[nCounter]();
+	gvl.axisControls[nCounter]();	
 	gvl.cylinderControls[nCounter]();
 	gvl.signalControls[nCounter]();
+	
+	//error detection
+	IF errorDevice =0 AND_THEN gvl.axisControls[nCounter].ErrorDetect() <> 0 THEN
+		//error scaned
+		errorDevice := gvl.axisControls[nCounter];
+	END_IF
+	IF errorDevice=0 AND_THEN gvl.cylinderControls[nCounter].ErrorDetect() <> 0 THEN
+		//error scaned
+		errorDevice := gvl.cylinderControls[nCounter];
+	END_IF
+	//station
+	IF errorDevice=0 AND_THEN gvl.stations[nCounter] <> 0 AND_THEN gvl.stations[nCounter]^.ErrorDetect() <> 0 THEN
+		errorDevice := gvl.stations[nCounter]^;
+	END_IF
+	IF errorDevice <>0 THEN
+		errorIndex := nCounter-1;
+		errorType := errorDevice.TypeCode();
+		errorCode := errorDevice.ErrorDetect();
+	END_IF
+	
 END_FOR
-
+//routines
+THIS^.ErrorHandler();//
+//mode switcher pre-check
+IF requestMode<>currentMode THEN
+	CASE requestMode OF 
+		eOperationModes.MANUAL,eOperationModes.SEMI_AUTO:
+			//direct changes
+			IF currentMode = eOperationModes.AUTO THEN
+				THIS^.bPause := TRUE;//first time to pause
+			END_IF
+			currentMode := requestMode;
+		eOperationModes.AUTO:
+			//check : no error , manual channel work done
+			IF errorDevice=0 THEN
+				THIS^.bPause := FALSE;//release
+				currentMode := eOperationModes.AUTO;
+			ELSE
+				//refuce to change , maintain
+				requestMode := currentMode;
+			END_IF 
+	END_CASE
+END_IF
+//step,pause control...etc
+SUPER^();
 //
-CASE mode OF	
+CASE currentMode OF	
 	eOperationModes.MANUAL:
 		THIS^.ManualMode(); //scan-in,scan-out,manual...
 		RETURN; //break here
 	eOperationModes.AUTO,eOperationModes.SEMI_AUTO:
 		//go further
 END_CASE
-
-
 //AUTO,SEMI-AUTO
 CASE State OF
 	0:
+	IF  requestInitialize THEN
 	//initialize all stations
-	bAllInitialized := TRUE;
-	FOR nCounter:=1 TO 32 BY 1 DO
-		IF gvl.stations[nCounter] <> 0 THEN
-			// if every station comes initialized
-			bAllInitialized := bAllInitialized AND gvl.stations[nCounter]^.Initialize();
+		bAllInitialized := TRUE;
+		FOR nCounter:=1 TO 32 BY 1 DO
+			IF gvl.stations[nCounter] <> 0 THEN
+				// if every station comes initialized
+				bAllInitialized := bAllInitialized AND gvl.stations[nCounter]^.Initialize();
+			END_IF
+		END_FOR
+		IF bAllInitialized THEN
+			NextState:=100;
+			requestInitialize := FALSE; //clear after done
 		END_IF
-	END_FOR
-	IF bAllInitialized THEN
-		NextState:=100;
 	END_IF
 	100:
 	//working
@@ -60,12 +111,36 @@ CASE State OF
 			gvl.stations[nCounter]^();
 		END_IF
 	END_FOR
-	//TODO , if initialize request raised , change to State-0
-	IF FALSE THEN
+	//if initialize request raised , change to State-0
+	IF bAllInitialized THEN
 		NextState := 0;
 	END_IF
 END_CASE]]></ST>
     </Implementation>
+    <Method Name="ErrorHandler" Id="{a0eb5aec-6465-4175-9953-8d5b0f3a2dc2}">
+      <Declaration><![CDATA[METHOD ErrorHandler : BOOL
+VAR_INPUT
+END_VAR
+VAR
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF errorDevice <>0 THEN
+	//once error scanned
+	IF requestMode = eOperationModes.AUTO THEN
+		//once error deteted and in AUTO mode , forcely switch to SEMI_AUTO
+		requestMode := eOperationModes.SEMI_AUTO;
+	END_IF
+	//reset error handling
+	IF requestErrorClear <> eErrorClearWays.NO_ACTION THEN
+		errorDevice.ErrorClear(requestErrorClear);
+		requestErrorClear := eErrorClearWays.NO_ACTION;
+		errorDevice := 0 ;// cut link
+	END_IF
+END_IF
+
+]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="Initialize" Id="{cb68dc91-f1ca-48a3-a360-7027131d9307}">
       <Declaration><![CDATA[METHOD Initialize : BOOL
 VAR_INPUT
@@ -84,63 +159,56 @@ END_VAR
         <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
-    <Method Name="ScanError" Id="{a0eb5aec-6465-4175-9953-8d5b0f3a2dc2}">
-      <Declaration><![CDATA[METHOD ScanError : BOOL
-VAR_INPUT
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="ScanPauseRequest" Id="{6f7e528e-ac65-4600-a978-7e93463d8474}">
-      <Declaration><![CDATA[METHOD ScanPauseRequest : BOOL
-VAR_INPUT
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[]]></ST>
-      </Implementation>
-    </Method>
     <LineIds Name="RunUnitController">
-      <LineId Id="9" Count="0" />
-      <LineId Id="119" Count="0" />
-      <LineId Id="21" Count="1" />
-      <LineId Id="42" Count="0" />
-      <LineId Id="146" Count="0" />
-      <LineId Id="136" Count="2" />
-      <LineId Id="140" Count="1" />
-      <LineId Id="139" Count="0" />
-      <LineId Id="28" Count="0" />
-      <LineId Id="24" Count="0" />
-      <LineId Id="93" Count="0" />
-      <LineId Id="32" Count="0" />
-      <LineId Id="41" Count="0" />
-      <LineId Id="33" Count="0" />
-      <LineId Id="118" Count="0" />
-      <LineId Id="142" Count="0" />
-      <LineId Id="31" Count="0" />
-      <LineId Id="37" Count="1" />
-      <LineId Id="95" Count="6" />
-      <LineId Id="162" Count="0" />
-      <LineId Id="102" Count="1" />
-      <LineId Id="106" Count="0" />
-      <LineId Id="147" Count="2" />
-      <LineId Id="107" Count="5" />
-      <LineId Id="115" Count="2" />
-      <LineId Id="150" Count="1" />
+      <LineId Id="304" Count="4" />
+      <LineId Id="406" Count="1" />
+      <LineId Id="400" Count="1" />
+      <LineId Id="405" Count="0" />
+      <LineId Id="392" Count="0" />
+      <LineId Id="394" Count="1" />
+      <LineId Id="399" Count="0" />
+      <LineId Id="393" Count="0" />
+      <LineId Id="382" Count="1" />
+      <LineId Id="385" Count="1" />
+      <LineId Id="384" Count="0" />
+      <LineId Id="410" Count="1" />
+      <LineId Id="408" Count="1" />
+      <LineId Id="389" Count="0" />
+      <LineId Id="257" Count="2" />
+      <LineId Id="325" Count="0" />
+      <LineId Id="347" Count="0" />
+      <LineId Id="350" Count="15" />
+      <LineId Id="348" Count="1" />
+      <LineId Id="339" Count="0" />
+      <LineId Id="309" Count="0" />
+      <LineId Id="269" Count="7" />
+      <LineId Id="279" Count="2" />
+      <LineId Id="310" Count="0" />
+      <LineId Id="282" Count="9" />
+      <LineId Id="315" Count="0" />
+      <LineId Id="318" Count="0" />
+      <LineId Id="320" Count="0" />
+      <LineId Id="293" Count="10" />
       <LineId Id="17" Count="0" />
+    </LineIds>
+    <LineIds Name="RunUnitController.ErrorHandler">
+      <LineId Id="94" Count="0" />
+      <LineId Id="122" Count="0" />
+      <LineId Id="124" Count="0" />
+      <LineId Id="127" Count="0" />
+      <LineId Id="125" Count="1" />
+      <LineId Id="100" Count="0" />
+      <LineId Id="103" Count="0" />
+      <LineId Id="123" Count="0" />
+      <LineId Id="128" Count="0" />
+      <LineId Id="104" Count="1" />
+      <LineId Id="101" Count="1" />
+      <LineId Id="21" Count="0" />
     </LineIds>
     <LineIds Name="RunUnitController.Initialize">
       <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="RunUnitController.ManualMode">
-      <LineId Id="5" Count="0" />
-    </LineIds>
-    <LineIds Name="RunUnitController.ScanError">
-      <LineId Id="5" Count="0" />
-    </LineIds>
-    <LineIds Name="RunUnitController.ScanPauseRequest">
       <LineId Id="5" Count="0" />
     </LineIds>
   </POU>

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
   <POU Name="RunAxis" Id="{1e355049-017f-4f7f-88a6-a7040666a5c5}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK RunAxis
+    <Declaration><![CDATA[FUNCTION_BLOCK RunAxis IMPLEMENTS ICommon
 VAR_OUTPUT
 	PositionFeedback : LREAL;
 END_VAR
@@ -25,7 +25,9 @@ END_VAR
 VAR_OUTPUT RETAIN
 	ptpCommands : ARRAY[1..16] OF ParameterSet; //collect command blocks relative to this axis here
 END_VAR
-]]></Declaration>
+VAR CONSTANT
+	typeCode : eTypeCodes := eTypeCodes.AXIS;
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[
 fbSetPosition(
@@ -168,6 +170,55 @@ END_IF
 	
 ]]></ST>
     </Implementation>
+    <Folder Name="ICommon" Id="{7ba97dc2-1cf9-458a-88dc-8f5c2d73ba9c}" />
+    <Method Name="ConfigureRead" Id="{b2d706a8-b020-4343-983c-4c7a56c09ac2}" FolderPath="ICommon\">
+      <Declaration><![CDATA[METHOD ConfigureRead : Block64Words
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ConfigureWrite" Id="{cde8b8df-cc3c-4ac1-a00a-6c29224f2a1d}" FolderPath="ICommon\">
+      <Declaration><![CDATA[METHOD ConfigureWrite : BOOL
+VAR_INPUT
+	input : Block64Words;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//command block write-in]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Control" Id="{fb2d590a-2a78-44ed-97fd-631e13336dc9}" FolderPath="ICommon\">
+      <Declaration><![CDATA[METHOD Control : BOOL
+VAR_INPUT
+	input : Block64Words;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//manual control servo on/servo alarm reset]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ErrorClear" Id="{3448d412-4c2e-4bc3-a590-f166f4dbcea7}" FolderPath="ICommon\">
+      <Declaration><![CDATA[METHOD ErrorClear : BOOL
+VAR_INPUT
+	input : eErrorClearWays;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ErrorDetect" Id="{da618aca-91fe-4791-8fbe-90aff9c7dc94}" FolderPath="ICommon\">
+      <Declaration><![CDATA[METHOD ErrorDetect : INT
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="ExecuteParameter" Id="{71f56729-8e13-4b1e-a80c-858adc37a723}">
       <Declaration><![CDATA[METHOD ExecuteParameter : BOOL
 VAR_INPUT
@@ -304,6 +355,24 @@ END_VAR
         <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
+    <Method Name="Monitor" Id="{f14ef5b7-4fb3-4276-899b-459b8636a870}" FolderPath="ICommon\">
+      <Declaration><![CDATA[METHOD Monitor : Block64Words
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TypeCode" Id="{d7c803da-ddd0-409e-b8b9-d71f78281c2b}" FolderPath="ICommon\">
+      <Declaration><![CDATA[METHOD TypeCode : eTypeCodes
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
     <LineIds Name="RunAxis">
       <LineId Id="443" Count="0" />
       <LineId Id="446" Count="8" />
@@ -329,6 +398,21 @@ END_VAR
       <LineId Id="253" Count="0" />
       <LineId Id="143" Count="1" />
       <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="RunAxis.ConfigureRead">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="RunAxis.ConfigureWrite">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="RunAxis.Control">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="RunAxis.ErrorClear">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="RunAxis.ErrorDetect">
+      <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="RunAxis.ExecuteParameter">
       <LineId Id="11" Count="0" />
@@ -383,6 +467,12 @@ END_VAR
     </LineIds>
     <LineIds Name="RunAxis.FB_init">
       <LineId Id="7" Count="0" />
+    </LineIds>
+    <LineIds Name="RunAxis.Monitor">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="RunAxis.TypeCode">
+      <LineId Id="5" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

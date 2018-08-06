@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <Itf Name="ICommon" Id="{3195de24-7332-4626-a0e0-5f82f7dad679}">
+    <Declaration><![CDATA[INTERFACE ICommon
+]]></Declaration>
+    <Method Name="ConfigureRead" Id="{6d589c03-f339-48ab-b876-cab398236125}">
+      <Declaration><![CDATA[METHOD ConfigureRead : Block64Words
+VAR_INPUT
+END_VAR
+//turns internal data(Retain arae , into 64Words block , pass to HMI]]></Declaration>
+    </Method>
+    <Method Name="ConfigureWrite" Id="{632a7afa-57b4-410f-90c5-014e311845e0}">
+      <Declaration><![CDATA[METHOD ConfigureWrite : BOOL
+VAR_INPUT
+	input : Block64Words;
+END_VAR
+//turns 64Words blocki , into  nternal data(Retain arae, from HMI]]></Declaration>
+    </Method>
+    <Method Name="Control" Id="{bf54ab1c-a189-4b4e-a555-103d378be280}">
+      <Declaration><![CDATA[METHOD Control : BOOL
+VAR_INPUT
+	input : Block64Words;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="ErrorClear" Id="{08c8aed5-bdc9-41ea-ada2-f017e55dd3f3}">
+      <Declaration><![CDATA[METHOD ErrorClear : BOOL
+VAR_INPUT
+	//reset,ignore
+	input : eErrorClearWays;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="ErrorDetect" Id="{ca40218d-104f-4911-94a5-fbf59c9d1e4d}">
+      <Declaration><![CDATA[METHOD ErrorDetect : INT
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="Monitor" Id="{b1eb2aa0-d7da-4a19-8768-e8a193343f37}">
+      <Declaration><![CDATA[METHOD Monitor : Block64Words
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="TypeCode" Id="{64ea1201-6b50-4ccb-bd12-8f3175ca76f8}">
+      <Declaration><![CDATA[METHOD TypeCode : eTypeCodes
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>

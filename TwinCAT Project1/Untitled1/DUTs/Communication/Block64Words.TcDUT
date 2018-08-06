@@ -5,7 +5,7 @@
 UNION
 	reserved : ARRAY[1..64] OF WORD; //memeory occupation
 	axis : AxisBase;
-	cylinder : cylinderBlockBase;
+	//cylinder : cylinderBlockBase;
 	signal : signalBlockbase;
 	command : commandBlockGeneric;
 	unit : UnitBase;

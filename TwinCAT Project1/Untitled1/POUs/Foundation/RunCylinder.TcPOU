@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
   <POU Name="RunCylinder" Id="{a99bf5d1-aaa3-4095-9742-005d9ab3fed8}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK RunCylinder
+    <Declaration><![CDATA[FUNCTION_BLOCK RunCylinder IMPLEMENTS ICommon
 VAR			
 
 	COMMAND_CACHED : eCylinderCommands; //1 , HMI->PLC
@@ -109,6 +109,55 @@ LAST_COMMAND := COMMAND_CACHED;
 //comm.STATUS_WORD.2 := BIT_B_MATCH;
 //comm.STATUS_WORD.5 := BIT_DONE;]]></ST>
     </Implementation>
+    <Folder Name="ICommon" Id="{48bea1d3-0a28-439a-92dd-8f8417445059}" />
+    <Method Name="ConfigureRead" Id="{bc98ac9f-d51a-43ad-b528-a1a54fe67ea0}" FolderPath="ICommon\">
+      <Declaration><![CDATA[METHOD ConfigureRead : Block64Words
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ConfigureWrite" Id="{f3b24b0b-d22d-4018-b1c9-709a957955d9}" FolderPath="ICommon\">
+      <Declaration><![CDATA[METHOD ConfigureWrite : BOOL
+VAR_INPUT
+	input : Block64Words;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Control" Id="{57e57159-f3d2-45e6-85f3-9a286c6e359d}" FolderPath="ICommon\">
+      <Declaration><![CDATA[METHOD Control : BOOL
+VAR_INPUT
+	input : Block64Words;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ErrorClear" Id="{945c9ccd-86db-44c6-8d20-e9e7b141f3bf}" FolderPath="ICommon\">
+      <Declaration><![CDATA[METHOD ErrorClear : BOOL
+VAR_INPUT
+	input : eErrorClearWays;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ErrorDetect" Id="{6a0ed216-b71b-4070-ba95-2d84d65ddbd3}" FolderPath="ICommon\">
+      <Declaration><![CDATA[METHOD ErrorDetect : INT
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="Execute" Id="{13693201-8c27-444e-bbfc-9d5e6a727077}">
       <Declaration><![CDATA[METHOD Execute : BOOL
 VAR_INPUT
@@ -148,13 +197,51 @@ END_VAR
 //given timer initial value
 //TMR_WATCH_DOG.PT := T#200MS;
 //TMR_DELAY_TO_A.PT := T#200MS;
-//TMR_DELAY_TO_B.PT := T#200MS;]]></ST>
+//TMR_DELAY_TO_B.PT := T#200MS;
+IF bInitRetains THEN
+	TMR_WATCH_DOG.PT := T#200MS;
+	TMR_DELAY_TO_A.PT := T#200MS;
+	TMR_DELAY_TO_B.PT := T#200MS;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Monitor" Id="{120aac0f-3608-4cae-b6d2-bb459b1d4cf7}" FolderPath="ICommon\">
+      <Declaration><![CDATA[METHOD Monitor : Block64Words
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TypeCode" Id="{2fbd4fdf-fcb0-4d45-95f6-2e5788341375}" FolderPath="ICommon\">
+      <Declaration><![CDATA[METHOD TypeCode : eTypeCodes
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="RunCylinder">
       <LineId Id="144" Count="66" />
       <LineId Id="233" Count="5" />
       <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="RunCylinder.ConfigureRead">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="RunCylinder.ConfigureWrite">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="RunCylinder.Control">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="RunCylinder.ErrorClear">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="RunCylinder.ErrorDetect">
+      <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="RunCylinder.Execute">
       <LineId Id="9" Count="9" />
@@ -165,6 +252,15 @@ END_VAR
       <LineId Id="14" Count="0" />
       <LineId Id="7" Count="0" />
       <LineId Id="15" Count="2" />
+      <LineId Id="30" Count="1" />
+      <LineId Id="33" Count="1" />
+      <LineId Id="32" Count="0" />
+    </LineIds>
+    <LineIds Name="RunCylinder.Monitor">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="RunCylinder.TypeCode">
+      <LineId Id="5" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

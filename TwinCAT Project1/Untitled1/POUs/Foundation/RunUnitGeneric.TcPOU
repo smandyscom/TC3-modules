@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
   <POU Name="RunUnitGeneric" Id="{a108e392-1419-4492-a6fc-c3186312016b}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK RunUnitGeneric
+    <Declaration><![CDATA[FUNCTION_BLOCK RunUnitGeneric IMPLEMENTS ICommon
 VAR_INPUT
 	bEnStep : BOOL;
 	bTrigStep : BOOL;
@@ -76,6 +76,55 @@ bTrigStep := FALSE;
 //Timer
 workingTimer(IN:=,PT:=,Q=>,ET=>);]]></ST>
     </Implementation>
+    <Folder Name="ICommon" Id="{a3eb2459-fb17-4657-a789-38e4b978c786}" />
+    <Method Name="ConfigureRead" Id="{5b0d9a0a-5d92-42f2-80d6-58161cf4acad}" FolderPath="ICommon\">
+      <Declaration><![CDATA[METHOD ConfigureRead : Block64Words
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ConfigureWrite" Id="{b15520cc-2020-48bd-8025-beb0523946ca}" FolderPath="ICommon\">
+      <Declaration><![CDATA[METHOD ConfigureWrite : BOOL
+VAR_INPUT
+	input : Block64Words;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Control" Id="{fe69a240-a6bf-45a3-bd63-78ff17e8577a}" FolderPath="ICommon\">
+      <Declaration><![CDATA[METHOD Control : BOOL
+VAR_INPUT
+	input : Block64Words;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ErrorClear" Id="{c0e62209-d0d5-44f2-8c68-278b3588f780}" FolderPath="ICommon\">
+      <Declaration><![CDATA[METHOD ErrorClear : BOOL
+VAR_INPUT
+	input : eErrorClearWays;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ErrorDetect" Id="{f4463e33-7efc-4b67-a80e-02e00ed76350}" FolderPath="ICommon\">
+      <Declaration><![CDATA[METHOD ErrorDetect : INT
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="FB_init" Id="{1054404a-900b-4aa2-9841-9d1387599ab2}">
       <Declaration><![CDATA[METHOD FB_init : BOOL
 VAR_INPUT
@@ -104,7 +153,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[//once initializing method call , redirect current state to initalizing region
-IF (State AND eSpecialStates.INITIAL_REGION) =0 THEN
+IF (TO_UINT(State) AND TO_UINT(eSpecialStates.INITIAL_REGION)) =0 THEN
 	NextState := eSpecialStates.INITIAL_BEGIN;
 END_IF
 
@@ -116,6 +165,24 @@ END_IF
 Initialize := (State = eSpecialStates.INITIAL_END);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="Monitor" Id="{8df8139c-9882-4bf6-9048-c2ce81b63c35}" FolderPath="ICommon\">
+      <Declaration><![CDATA[METHOD Monitor : Block64Words
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TypeCode" Id="{5f35ce6c-c451-4e46-809f-fa5a3eec0aed}" FolderPath="ICommon\">
+      <Declaration><![CDATA[METHOD TypeCode : eTypeCodes
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
     <LineIds Name="RunUnitGeneric">
       <LineId Id="232" Count="0" />
       <LineId Id="234" Count="22" />
@@ -124,6 +191,21 @@ Initialize := (State = eSpecialStates.INITIAL_END);]]></ST>
       <LineId Id="271" Count="3" />
       <LineId Id="278" Count="1" />
       <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="RunUnitGeneric.ConfigureRead">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="RunUnitGeneric.ConfigureWrite">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="RunUnitGeneric.Control">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="RunUnitGeneric.ErrorClear">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="RunUnitGeneric.ErrorDetect">
+      <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="RunUnitGeneric.FB_init">
       <LineId Id="43" Count="0" />
@@ -142,6 +224,12 @@ Initialize := (State = eSpecialStates.INITIAL_END);]]></ST>
       <LineId Id="10" Count="0" />
       <LineId Id="14" Count="0" />
       <LineId Id="7" Count="0" />
+    </LineIds>
+    <LineIds Name="RunUnitGeneric.Monitor">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="RunUnitGeneric.TypeCode">
+      <LineId Id="5" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
