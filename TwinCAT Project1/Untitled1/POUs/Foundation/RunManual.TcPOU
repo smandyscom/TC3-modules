@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <POU Name="RunManual" Id="{69f8e896-e3c8-4e08-b157-7fa165a49498}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunManual
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	wordOut  AT%M* : WORD; //0
+	reserved1 AT%M* : ARRAY[1..31] OF WORD;
+	wordIn	 AT%M* : WORD; //32
+	reserved2 AT%M* : ARRAY[1..8] OF WORD;
+	monitorType AT%M* : WORD;//40
+	monitorIndex AT%M* : WORD;//41
+	commitMode AT%M* : DWORD;//42
+	commitSelection AT%M* : DWORD;//44
+	commitIndex AT%M* : WORD;//46
+	reserved3 AT%M* : ARRAY[1..18] OF WORD;
+	dataBlock AT%M* : Block64Words;//64
+	monitorBlock AT%M* : Block64Words;//128
+	
+	monitorDevice : ICommon;
+	controlDevice : ICommon;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//monitor
+CASE monitorType OF
+	eTypeCodes.AXIS:
+		monitorDevice := gvl.axisControls[monitorIndex];
+	eTypeCodes.CYLINDER:
+		monitorDevice := gvl.cylinderControls[monitorIndex];
+	eTypeCodes.UNIT:
+		monitorDevice := gvl.stations[monitorIndex]^;
+END_CASE
+monitorBlock := monitorDevice.Monitor();
+
+//]]></ST>
+    </Implementation>
+    <LineIds Name="RunManual">
+      <LineId Id="27" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="34" Count="0" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="35" Count="0" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="36" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
