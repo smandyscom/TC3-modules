@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <POU Name="InterfaceControlV1" Id="{bd206c09-8ce6-427d-b5d8-5f734ed43bc9}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK InterfaceControlV1
+VAR_INPUT
+	currentMode : eOperationModes;
+END_VAR
+VAR_OUTPUT
+	requestMode : eOperationModes;
+	requestInit : BOOL;
+	errorClear : eErrorClearWays;
+	
+	mErrorIndex : DWORD;
+	mErrorType : DWORD;
+	mErrorCode : LWORD;
+	
+	mMonitorDatas:ARRAY[1..8] OF DWORD;
+END_VAR
+VAR
+	reserved1 AT%M* : ARRAY[1..32] OF WORD;
+	control AT%M* : DWORD;
+	errorIndex AT%M* : DWORD;
+	errorType AT%M* : DWORD;
+	errorCode AT%M* : LWORD;
+	reserved2 AT%M* : ARRAY[1..8] OF WORD;
+	monitorDatas AT%M* : ARRAY[1..8] OF DWORD;
+END_VAR
+VAR CONSTANT
+	bErrorReset : INT := 0;
+	bPause : INT :=1;
+	bInitialize : INT :=2;
+	bManualMode : INT :=3;
+	bErrorIgnore : INT :=4;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//Start/Stop/Manual
+CASE currentMode OF
+	eOperationModes.AUTO:
+		IF control.bPause THEN
+			requestMode := eOperationModes.SEMI_AUTO;
+		END_IF
+	eOperationModes.SEMI_AUTO:
+		IF control.bManualMode THEN
+			//higher priority
+			requestMode := eOperationModes.MANUAL;
+		ELSIF control.bPause THEN
+			requestMode := eOperationModes.AUTO;
+		END_IF
+	eOperationModes.MANUAL:
+		IF control.bManualMode THEN
+			requestMode := eOperationModes.SEMI_AUTO;
+		END_IF
+END_CASE
+//Initialization
+requestInit := control.bInitialize;
+//Error clear request
+IF control.bErrorReset THEN
+	errorClear := eErrorClearWays.RESET;
+ELSIF control.bErrorIgnore THEN
+	errorClear := eErrorClearWays.IGNORE;	
+END_IF
+//
+errorIndex := mErrorIndex;
+errorType := mErrorType;
+errorCode := mErrorCode;
+//one-shot control clear
+control := 0;]]></ST>
+    </Implementation>
+    <LineIds Name="InterfaceControlV1">
+      <LineId Id="38" Count="0" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="42" Count="0" />
+      <LineId Id="44" Count="2" />
+      <LineId Id="40" Count="0" />
+      <LineId Id="59" Count="0" />
+      <LineId Id="61" Count="0" />
+      <LineId Id="60" Count="0" />
+      <LineId Id="48" Count="1" />
+      <LineId Id="47" Count="0" />
+      <LineId Id="43" Count="0" />
+      <LineId Id="51" Count="1" />
+      <LineId Id="50" Count="0" />
+      <LineId Id="41" Count="0" />
+      <LineId Id="67" Count="0" />
+      <LineId Id="78" Count="0" />
+      <LineId Id="55" Count="1" />
+      <LineId Id="66" Count="0" />
+      <LineId Id="63" Count="0" />
+      <LineId Id="65" Count="0" />
+      <LineId Id="64" Count="0" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="74" Count="2" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="26" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

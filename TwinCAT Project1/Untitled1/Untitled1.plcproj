@@ -63,6 +63,12 @@
     <Compile Include="DUTs\Definitions\eCommandTypes.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\Definitions\eCommitModes.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Definitions\eCommitSelection.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\Definitions\eCylinderCommands.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -109,7 +115,13 @@
     <Compile Include="POUs\Foundation\RunAxis.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Foundation\InterfaceControlV1.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Foundation\RunCylinder.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Foundation\InterfaceManualV1.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Foundation\RunSignal.TcPOU">

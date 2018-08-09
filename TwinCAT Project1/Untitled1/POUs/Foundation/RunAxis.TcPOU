@@ -194,10 +194,18 @@ END_VAR
       <Declaration><![CDATA[METHOD Control : BOOL
 VAR_INPUT
 	input : Block64Words;
+	mode : int;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[//manual control servo on/servo alarm reset]]></ST>
+        <ST><![CDATA[//manual control servo on/servo alarm reset
+
+//different route
+CASE mode OF
+	eCommitModes.MODE_EXE_AXIS:
+	eCommitModes.MODE_EXE_COMMAND_BLOCK:
+	
+END_CASE]]></ST>
       </Implementation>
     </Method>
     <Method Name="ErrorClear" Id="{3448d412-4c2e-4bc3-a590-f166f4dbcea7}" FolderPath="ICommon\">
@@ -407,6 +415,11 @@ END_VAR
     </LineIds>
     <LineIds Name="RunAxis.Control">
       <LineId Id="5" Count="0" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="11" Count="1" />
+      <LineId Id="14" Count="1" />
+      <LineId Id="13" Count="0" />
     </LineIds>
     <LineIds Name="RunAxis.ErrorClear">
       <LineId Id="5" Count="0" />

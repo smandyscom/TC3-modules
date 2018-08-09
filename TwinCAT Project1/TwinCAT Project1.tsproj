@@ -1576,7 +1576,7 @@ External Setpoint Generation:
 			</SubItem>
 		</DataType>
 		<DataType>
-			<Name IecBaseType="true">ARRAY [1..16] OF ParameterSet</Name>
+			<Name GUID="{0BC92B97-6229-4642-9775-06C0FEBF92C9}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..16] OF ParameterSet</Name>
 			<Comment>
 				<![CDATA[collect command blocks relative to this axis here]]>
 			</Comment>
@@ -4767,7 +4767,7 @@ simuSyncAcknowledged AT%MB128 : BOOL;
 							<Comment>
 								<![CDATA[collect command blocks relative to this axis here]]>
 							</Comment>
-							<Type GUID="{F9251E89-8F29-6F1D-422F-50EB629997C5}">ARRAY [1..16] OF ParameterSet</Type>
+							<Type GUID="{0BC92B97-6229-4642-9775-06C0FEBF92C9}">ARRAY [1..16] OF ParameterSet</Type>
 							<InOut>7</InOut>
 							<SubVar>
 								<Name>GVL.axisControls[1].ptpCommands[1]^parameter^position^Velocity</Name>
@@ -5159,7 +5159,7 @@ simuSyncAcknowledged AT%MB128 : BOOL;
 							<Comment>
 								<![CDATA[collect command blocks relative to this axis here]]>
 							</Comment>
-							<Type GUID="{F9251E89-8F29-6F1D-422F-50EB629997C5}">ARRAY [1..16] OF ParameterSet</Type>
+							<Type GUID="{0BC92B97-6229-4642-9775-06C0FEBF92C9}">ARRAY [1..16] OF ParameterSet</Type>
 							<InOut>7</InOut>
 							<SubVar>
 								<Name>GVL.axisControls[2].ptpCommands[1]^parameter^position^Velocity</Name>
@@ -5551,7 +5551,7 @@ simuSyncAcknowledged AT%MB128 : BOOL;
 							<Comment>
 								<![CDATA[collect command blocks relative to this axis here]]>
 							</Comment>
-							<Type GUID="{F9251E89-8F29-6F1D-422F-50EB629997C5}">ARRAY [1..16] OF ParameterSet</Type>
+							<Type GUID="{0BC92B97-6229-4642-9775-06C0FEBF92C9}">ARRAY [1..16] OF ParameterSet</Type>
 							<InOut>7</InOut>
 							<SubVar>
 								<Name>GVL.axisControls[3].ptpCommands[1]^parameter^position^Velocity</Name>
@@ -5943,7 +5943,7 @@ simuSyncAcknowledged AT%MB128 : BOOL;
 							<Comment>
 								<![CDATA[collect command blocks relative to this axis here]]>
 							</Comment>
-							<Type GUID="{F9251E89-8F29-6F1D-422F-50EB629997C5}">ARRAY [1..16] OF ParameterSet</Type>
+							<Type GUID="{0BC92B97-6229-4642-9775-06C0FEBF92C9}">ARRAY [1..16] OF ParameterSet</Type>
 							<InOut>7</InOut>
 							<SubVar>
 								<Name>GVL.axisControls[4].ptpCommands[1]^parameter^position^Velocity</Name>
@@ -6335,7 +6335,7 @@ simuSyncAcknowledged AT%MB128 : BOOL;
 							<Comment>
 								<![CDATA[collect command blocks relative to this axis here]]>
 							</Comment>
-							<Type GUID="{F9251E89-8F29-6F1D-422F-50EB629997C5}">ARRAY [1..16] OF ParameterSet</Type>
+							<Type GUID="{0BC92B97-6229-4642-9775-06C0FEBF92C9}">ARRAY [1..16] OF ParameterSet</Type>
 							<InOut>7</InOut>
 							<SubVar>
 								<Name>GVL.axisControls[5].ptpCommands[1]^parameter^position^Velocity</Name>
@@ -6727,7 +6727,7 @@ simuSyncAcknowledged AT%MB128 : BOOL;
 							<Comment>
 								<![CDATA[collect command blocks relative to this axis here]]>
 							</Comment>
-							<Type GUID="{F9251E89-8F29-6F1D-422F-50EB629997C5}">ARRAY [1..16] OF ParameterSet</Type>
+							<Type GUID="{0BC92B97-6229-4642-9775-06C0FEBF92C9}">ARRAY [1..16] OF ParameterSet</Type>
 							<InOut>7</InOut>
 							<SubVar>
 								<Name>GVL.axisControls[6].ptpCommands[1]^parameter^position^Velocity</Name>
@@ -7119,7 +7119,7 @@ simuSyncAcknowledged AT%MB128 : BOOL;
 							<Comment>
 								<![CDATA[collect command blocks relative to this axis here]]>
 							</Comment>
-							<Type GUID="{F9251E89-8F29-6F1D-422F-50EB629997C5}">ARRAY [1..16] OF ParameterSet</Type>
+							<Type GUID="{0BC92B97-6229-4642-9775-06C0FEBF92C9}">ARRAY [1..16] OF ParameterSet</Type>
 							<InOut>7</InOut>
 							<SubVar>
 								<Name>GVL.axisControls[7].ptpCommands[1]^parameter^position^Velocity</Name>
@@ -7511,7 +7511,7 @@ simuSyncAcknowledged AT%MB128 : BOOL;
 							<Comment>
 								<![CDATA[collect command blocks relative to this axis here]]>
 							</Comment>
-							<Type GUID="{F9251E89-8F29-6F1D-422F-50EB629997C5}">ARRAY [1..16] OF ParameterSet</Type>
+							<Type GUID="{0BC92B97-6229-4642-9775-06C0FEBF92C9}">ARRAY [1..16] OF ParameterSet</Type>
 							<InOut>7</InOut>
 							<SubVar>
 								<Name>GVL.axisControls[8].ptpCommands[1]^parameter^position^Velocity</Name>

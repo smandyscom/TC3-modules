@@ -15,15 +15,17 @@ VAR
 	//user control
 	requestInitialize : BOOL;
 	requestMode : eOperationModes := eOperationModes.SEMI_AUTO;
-	//requestErrorReset : BOOL;
-	//requestErrorIgnore : BOOL;
-	
 	//error
 	requestErrorClear : eErrorClearWays := eErrorClearWays.NO_ACTION;
 	errorDevice :ICommon := 0; //null reference
 	errorType : eTypeCodes;
 	errorIndex : INT;
 	errorCode : INT;
+	
+	//HMI Control interface
+	interfaceControl : InterfaceControlV1;
+	interfaceManual : InterfaceManualV1;
+	
 END_VAR
 VAR RETAIN
 END_VAR
@@ -57,6 +59,16 @@ FOR nCounter :=1 TO 8 BY 1 DO
 END_FOR
 //routines
 THIS^.ErrorHandler();//
+//handling input request
+interfaceControl(
+	currentMode:= THIS^.currentMode, 
+	requestMode=> THIS^.requestMode, 
+	requestInit=> requestInitialize, 
+	errorClear=> THIS^.requestErrorClear, 
+	mErrorIndex=> TO_DWORD(errorIndex), 
+	mErrorType=> errorType, 
+	mErrorCode=> TO_LWORD(errorCode), 
+	mMonitorDatas=> );
 //mode switcher pre-check
 IF requestMode<>currentMode THEN
 	CASE requestMode OF 
@@ -175,6 +187,9 @@ END_VAR
       <LineId Id="408" Count="1" />
       <LineId Id="389" Count="0" />
       <LineId Id="257" Count="2" />
+      <LineId Id="456" Count="0" />
+      <LineId Id="448" Count="7" />
+      <LineId Id="447" Count="0" />
       <LineId Id="325" Count="0" />
       <LineId Id="347" Count="0" />
       <LineId Id="350" Count="15" />

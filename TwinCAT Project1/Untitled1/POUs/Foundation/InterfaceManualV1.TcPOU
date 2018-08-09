@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <POU Name="InterfaceManualV1" Id="{69f8e896-e3c8-4e08-b157-7fa165a49498}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK InterfaceManualV1
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	wordOut  AT%M* : WORD; //0
+	reserved1 AT%M* : ARRAY[1..31] OF WORD;
+	wordIn	 AT%M* : WORD; //32
+	reserved2 AT%M* : ARRAY[1..8] OF WORD;
+	monitorType AT%M* : WORD;//40
+	monitorIndex AT%M* : WORD;//41
+	commitMode AT%M* : DWORD;//42
+	commitSelection AT%M* : DWORD;//44
+	commitIndex AT%M* : WORD;//46
+	reserved3 AT%M* : ARRAY[1..18] OF WORD;
+	commitBlock AT%M* : Block64Words;//64
+	monitorBlock AT%M* : Block64Words;//128
+	
+	monitorDevice : ICommon;
+	controlDevice : ICommon;
+	state : INT := 0;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//monitor
+CASE monitorType OF
+	eTypeCodes.AXIS:
+		monitorDevice := gvl.axisControls[monitorIndex];
+	eTypeCodes.CYLINDER:
+		monitorDevice := gvl.cylinderControls[monitorIndex];
+	eTypeCodes.UNIT:
+		monitorDevice := gvl.stations[monitorIndex]^;
+END_CASE
+monitorBlock := monitorDevice.Monitor();
+//control
+CASE commitSelection OF
+	eTypeCodes.AXIS:
+		controlDevice := gvl.axisControls[monitorIndex];
+	eTypeCodes.CYLINDER:
+		controlDevice := gvl.cylinderControls[monitorIndex];
+	eTypeCodes.UNIT:
+		controlDevice := gvl.stations[monitorIndex]^;
+	eTypeCodes.COMMANDBLOCK:
+		
+END_CASE
+CASE state OF
+	0:
+		IF wordIn.0 AND wordIn.1 THEN
+			//ENGAGED_HMI and RUN
+			state := 1;
+		END_IF
+	1:
+		CASE commitMode OF
+			//Manual execution
+			eCommitModes.MODE_EXE_AXIS,eCommitModes.MODE_EXE_COMMAND_BLOCK,eCommitModes.MODE_EXE_CYLINDER,eCommitModes.MODE_EXE_UNIT:
+				wordOut.1 := controlDevice.Control(commitBlock,commitMode); //return whether done
+			eCommitModes.MODE_UPLOAD_DATA_BLOCK:
+				commitBlock := controlDevice.ConfigureRead();
+				wordOut.1 := TRUE;
+			eCommitModes.MODE_DOWNLOAD_DATA_BLOCK:
+				controlDevice.ConfigureWrite(commitBlock);
+				wordOut.1 := TRUE;//done
+		END_CASE
+		
+		IF wordOut.1 OR NOT wordIn.0 THEN
+			//DONE or ENGAGED_HMI off
+			state :=2;
+		END_IF
+	2:
+		IF NOT wordIn.1 THEN
+			wordOut.1 := FALSE;
+			state := 0;
+		END_IF
+END_CASE]]></ST>
+    </Implementation>
+    <LineIds Name="InterfaceManualV1">
+      <LineId Id="112" Count="28" />
+      <LineId Id="146" Count="0" />
+      <LineId Id="141" Count="2" />
+      <LineId Id="149" Count="0" />
+      <LineId Id="162" Count="0" />
+      <LineId Id="144" Count="0" />
+      <LineId Id="150" Count="0" />
+      <LineId Id="160" Count="0" />
+      <LineId Id="145" Count="0" />
+      <LineId Id="153" Count="2" />
+      <LineId Id="157" Count="0" />
+      <LineId Id="156" Count="0" />
+      <LineId Id="151" Count="1" />
+      <LineId Id="158" Count="0" />
+      <LineId Id="166" Count="0" />
+      <LineId Id="159" Count="0" />
+      <LineId Id="63" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
