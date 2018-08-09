@@ -27,7 +27,7 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[//monitor
-CASE monitorType OF
+CASE TO_DWORD(monitorType) OF
 	eTypeCodes.AXIS:
 		monitorDevice := gvl.axisControls[monitorIndex];
 	eTypeCodes.CYLINDER:
@@ -57,7 +57,7 @@ CASE state OF
 		CASE commitMode OF
 			//Manual execution
 			eCommitModes.MODE_EXE_AXIS,eCommitModes.MODE_EXE_COMMAND_BLOCK,eCommitModes.MODE_EXE_CYLINDER,eCommitModes.MODE_EXE_UNIT:
-				wordOut.1 := controlDevice.Control(commitBlock,commitMode); //return whether done
+				wordOut.1 := controlDevice.Control(commitBlock,TO_INT(commitMode)); //return whether done
 			eCommitModes.MODE_UPLOAD_DATA_BLOCK:
 				commitBlock := controlDevice.ConfigureRead();
 				wordOut.1 := TRUE;

@@ -65,10 +65,13 @@ interfaceControl(
 	requestMode=> THIS^.requestMode, 
 	requestInit=> requestInitialize, 
 	errorClear=> THIS^.requestErrorClear, 
-	mErrorIndex=> TO_DWORD(errorIndex), 
 	mErrorType=> errorType, 
-	mErrorCode=> TO_LWORD(errorCode), 
 	mMonitorDatas=> );
+
+errorType := interfaceControl.mErrorType;
+errorIndex := TO_INT(interfaceControl.mErrorIndex);
+errorCode := TO_INT(interfaceControl.mErrorCode);
+	
 //mode switcher pre-check
 IF requestMode<>currentMode THEN
 	CASE requestMode OF 
@@ -188,8 +191,13 @@ END_VAR
       <LineId Id="389" Count="0" />
       <LineId Id="257" Count="2" />
       <LineId Id="456" Count="0" />
-      <LineId Id="448" Count="7" />
+      <LineId Id="448" Count="4" />
+      <LineId Id="454" Count="0" />
       <LineId Id="447" Count="0" />
+      <LineId Id="489" Count="0" />
+      <LineId Id="488" Count="0" />
+      <LineId Id="487" Count="0" />
+      <LineId Id="485" Count="1" />
       <LineId Id="325" Count="0" />
       <LineId Id="347" Count="0" />
       <LineId Id="350" Count="15" />

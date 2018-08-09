@@ -133,6 +133,7 @@ END_VAR
       <Declaration><![CDATA[METHOD Control : BOOL
 VAR_INPUT
 	input : Block64Words;
+	mode : int;
 END_VAR
 ]]></Declaration>
       <Implementation>

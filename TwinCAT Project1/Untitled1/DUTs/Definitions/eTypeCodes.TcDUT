@@ -11,7 +11,7 @@ TYPE eTypeCodes :
 	SIGNAL := 2,
 	COMMANDBLOCK :=4,
 	UNIT := 5
-);
+) DWORD ;
 END_TYPE
 ]]></Declaration>
   </DUT>

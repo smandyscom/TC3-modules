@@ -4135,6 +4135,10 @@ External Setpoint Generation:
 							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
 						</Var>
 						<Var>
+							<Name>GVL.cylinderControls[7].SENSOR_B</Name>
+							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+						</Var>
+						<Var>
 							<Name>GVL.cylinderControls[8].SENSOR_A</Name>
 							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
 						</Var>
@@ -4148,10 +4152,6 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>GVL.cylinderControls[9].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.cylinderControls[7].SENSOR_B</Name>
 							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
 						</Var>
 						<Var>
@@ -4484,15 +4484,15 @@ simuSyncAcknowledged AT%MB128 : BOOL;
 							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
 						</Var>
 						<Var>
+							<Name>GVL.cylinderControls[5].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
 							<Name>GVL.cylinderControls[6].ACT_A</Name>
 							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
 						</Var>
 						<Var>
 							<Name>GVL.cylinderControls[6].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.cylinderControls[5].ACT_B</Name>
 							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
 						</Var>
 						<Var>
@@ -4664,15 +4664,15 @@ simuSyncAcknowledged AT%MB128 : BOOL;
 							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[28].ACT_A</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
-						</Var>
-						<Var>
 							<Name>GVL.cylinderControls[28].ACT_B</Name>
 							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
 						</Var>
 						<Var>
 							<Name>GVL.cylinderControls[29].ACT_A</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[28].ACT_A</Name>
 							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
 						</Var>
 						<Var>
@@ -10704,11 +10704,6 @@ simuSyncAcknowledged AT%MB128 : BOOL;
 							<InOut>7</InOut>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[29].B_SENSOR_USED_COUNT</Name>
-							<Type>INT</Type>
-							<InOut>7</InOut>
-						</Var>
-						<Var>
 							<Name>GVL.cylinderControls[29].TMR_WATCH_DOG</Name>
 							<Comment>
 								<![CDATA[Watch dog timer]]>
@@ -10797,6 +10792,11 @@ simuSyncAcknowledged AT%MB128 : BOOL;
 									<![CDATA[ elapsed time ]]>
 								</Comment>
 							</SubVar>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[29].B_SENSOR_USED_COUNT</Name>
+							<Type>INT</Type>
+							<InOut>7</InOut>
 						</Var>
 						<Var>
 							<Name>GVL.cylinderControls[30].A_SENSOR_USED_COUNT</Name>
