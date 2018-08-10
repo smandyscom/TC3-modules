@@ -1339,7 +1339,16 @@ External Setpoint Generation:
 			</ArrayInfo>
 		</DataType>
 		<DataType>
-			<Name GUID="{72675FEB-1256-4BEA-88E0-8E503D397738}" Namespace="Tc2_System" AutoDeleteType="true">T_AmsNetID</Name>
+			<Name GUID="{12136D81-4849-9FCF-6C84-9A0446B0B0C9}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..32] OF BOOL</Name>
+			<BitSize>256</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000030}">BOOL</BaseType>
+			<ArrayInfo>
+				<LBound>1</LBound>
+				<Elements>32</Elements>
+			</ArrayInfo>
+		</DataType>
+		<DataType>
+			<Name GUID="{8EB54264-6ACC-4020-BF8A-1DCC5718A056}" Namespace="Tc2_System" AutoDeleteType="true">T_AmsNetID</Name>
 			<Comment>
 				<![CDATA[ TwinCAT AMS netID address string. ]]>
 			</Comment>
@@ -1347,7 +1356,7 @@ External Setpoint Generation:
 			<BaseType GUID="{18071995-0000-0000-0000-000100000017}">STRING(23)</BaseType>
 		</DataType>
 		<DataType>
-			<Name GUID="{611632B5-1865-497E-8DF7-BD6220259426}" Namespace="Tc2_System" AutoDeleteType="true">T_AmsPort</Name>
+			<Name GUID="{CC011217-70A2-406F-9DBD-4575C210E893}" Namespace="Tc2_System" AutoDeleteType="true">T_AmsPort</Name>
 			<Comment>
 				<![CDATA[ TwinCAT AMS port address. ]]>
 			</Comment>
@@ -1384,8 +1393,25 @@ External Setpoint Generation:
 			</EnumInfo>
 		</DataType>
 		<DataType>
-			<Name GUID="{AAD929D3-A5FE-463E-8B47-2AE64587B938}" AutoDeleteType="true">ParametersPosition</Name>
-			<BitSize>256</BitSize>
+			<Name GUID="{F5BDEB84-5CBF-4AF7-897F-5D361E1F0E00}" AutoDeleteType="true">ePositionType</Name>
+			<BitSize>16</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000006}">INT</BaseType>
+			<EnumInfo>
+				<Text>
+					<![CDATA[POSITION_ABS]]>
+				</Text>
+				<Enum>0</Enum>
+			</EnumInfo>
+			<EnumInfo>
+				<Text>
+					<![CDATA[POSITION_REL]]>
+				</Text>
+				<Enum>1</Enum>
+			</EnumInfo>
+		</DataType>
+		<DataType>
+			<Name GUID="{9945FB8C-D17D-4863-A6E4-D04C86C80D6C}" AutoDeleteType="true">ParametersPosition</Name>
+			<BitSize>320</BitSize>
 			<SubItem>
 				<Name>Velocity</Name>
 				<Type GUID="{18071995-0000-0000-0000-00000000000E}">LREAL</Type>
@@ -1395,7 +1421,7 @@ External Setpoint Generation:
 				<BitSize>64</BitSize>
 				<BitOffs>0</BitOffs>
 				<Default>
-					<Value>50</Value>
+					<Value>10</Value>
 				</Default>
 			</SubItem>
 			<SubItem>
@@ -1407,7 +1433,7 @@ External Setpoint Generation:
 				<BitSize>64</BitSize>
 				<BitOffs>64</BitOffs>
 				<Default>
-					<Value>500</Value>
+					<Value>100</Value>
 				</Default>
 			</SubItem>
 			<SubItem>
@@ -1416,7 +1442,7 @@ External Setpoint Generation:
 				<BitSize>64</BitSize>
 				<BitOffs>128</BitOffs>
 				<Default>
-					<Value>500</Value>
+					<Value>100</Value>
 				</Default>
 			</SubItem>
 			<SubItem>
@@ -1431,6 +1457,18 @@ External Setpoint Generation:
 					<Value>10</Value>
 				</Default>
 			</SubItem>
+			<SubItem>
+				<Name>PositionType</Name>
+				<Type GUID="{F5BDEB84-5CBF-4AF7-897F-5D361E1F0E00}">ePositionType</Type>
+				<BitSize>16</BitSize>
+				<BitOffs>256</BitOffs>
+				<Default>
+					<Value>0</Value>
+				</Default>
+			</SubItem>
+			<Hides>
+				<Hide GUID="{AAD929D3-A5FE-463E-8B47-2AE64587B938}"/>
+			</Hides>
 		</DataType>
 		<DataType>
 			<Name GUID="{C095864A-1156-42C5-96C5-2FAD8588685E}" Namespace="Tc2_MC2" AutoDeleteType="true">MC_HomingMode</Name>
@@ -1544,12 +1582,12 @@ External Setpoint Generation:
 			</SubItem>
 		</DataType>
 		<DataType>
-			<Name GUID="{AA2E5709-1144-4103-8E92-6D6D9568398F}" AutoDeleteType="true">ParameterGeneric</Name>
-			<BitSize>256</BitSize>
+			<Name GUID="{19CB59A6-0666-4D4D-A85F-2082296EBD5F}" AutoDeleteType="true">ParameterGeneric</Name>
+			<BitSize>320</BitSize>
 			<SubItem>
 				<Name>position</Name>
-				<Type GUID="{AAD929D3-A5FE-463E-8B47-2AE64587B938}">ParametersPosition</Type>
-				<BitSize>256</BitSize>
+				<Type GUID="{9945FB8C-D17D-4863-A6E4-D04C86C80D6C}">ParametersPosition</Type>
+				<BitSize>320</BitSize>
 				<BitOffs>0</BitOffs>
 			</SubItem>
 			<SubItem>
@@ -1558,33 +1596,42 @@ External Setpoint Generation:
 				<BitSize>128</BitSize>
 				<BitOffs>0</BitOffs>
 			</SubItem>
+			<Hides>
+				<Hide GUID="{AA2E5709-1144-4103-8E92-6D6D9568398F}"/>
+			</Hides>
 		</DataType>
 		<DataType>
-			<Name GUID="{FCDFD67E-9096-4614-86C5-A08864BA2B22}" AutoDeleteType="true">ParameterSet</Name>
-			<BitSize>320</BitSize>
+			<Name GUID="{BA6E9D55-3720-4DC3-9FF6-824598190E85}" AutoDeleteType="true">ParameterSet</Name>
+			<BitSize>384</BitSize>
 			<SubItem>
 				<Name>command</Name>
 				<Type GUID="{69D4F101-5ACB-4E12-84A8-3D29739E6C5E}">eCommandTypes</Type>
 				<BitSize>16</BitSize>
 				<BitOffs>0</BitOffs>
+				<Default>
+					<Value>1</Value>
+				</Default>
 			</SubItem>
 			<SubItem>
 				<Name>parameter</Name>
-				<Type GUID="{AA2E5709-1144-4103-8E92-6D6D9568398F}">ParameterGeneric</Type>
-				<BitSize>256</BitSize>
+				<Type GUID="{19CB59A6-0666-4D4D-A85F-2082296EBD5F}">ParameterGeneric</Type>
+				<BitSize>320</BitSize>
 				<BitOffs>64</BitOffs>
 			</SubItem>
+			<Hides>
+				<Hide GUID="{FCDFD67E-9096-4614-86C5-A08864BA2B22}"/>
+			</Hides>
 		</DataType>
 		<DataType>
-			<Name GUID="{0BC92B97-6229-4642-9775-06C0FEBF92C9}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..16] OF ParameterSet</Name>
+			<Name IecBaseType="true">ARRAY [1..12] OF ParameterSet</Name>
 			<Comment>
 				<![CDATA[collect command blocks relative to this axis here]]>
 			</Comment>
-			<BitSize>5120</BitSize>
-			<BaseType GUID="{FCDFD67E-9096-4614-86C5-A08864BA2B22}">ParameterSet</BaseType>
+			<BitSize>4608</BitSize>
+			<BaseType GUID="{BA6E9D55-3720-4DC3-9FF6-824598190E85}">ParameterSet</BaseType>
 			<ArrayInfo>
 				<LBound>1</LBound>
-				<Elements>16</Elements>
+				<Elements>12</Elements>
 			</ArrayInfo>
 		</DataType>
 		<DataType>
@@ -2210,8 +2257,8 @@ External Setpoint Generation:
 					<AxisPara>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
 					</AxisPara>
-					<Encoder Name="Enc" EncType="19">
-						<EncPara ScaleFactorNumerator="1" ScaleFactorDenominator="8388608" MaxCount="#xffffffff"/>
+					<Encoder Name="Enc" EncType="1">
+						<EncPara ScaleFactorNumerator="1" ScaleFactorDenominator="8388608"/>
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
 							<Var>
@@ -2277,8 +2324,8 @@ External Setpoint Generation:
 							</Var>
 						</Vars>
 					</Encoder>
-					<Drive Name="Drive" DrvType="16">
-						<DrvPara MaxCount="#xffffffff" DriveControlDWord="#x00000100">
+					<Drive Name="Drive" DrvType="5">
+						<DrvPara>
 							<Analog ScaleFactorActTorque="0.1"/>
 							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
@@ -2331,6 +2378,26 @@ Drive Status 4 (manually linked):
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut2</Name>
+								</SubVar>
+								<SubVar>
+									<Name>nCtrl2</Name>
+									<Comment>
+										<![CDATA[Digital Outputs Setpoint Generator:
+0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
+0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
+0x80 (1000 0000) = Stop
+]]>
+									</Comment>
+								</SubVar>
+								<SubVar>
+									<Name>nCtrl3</Name>
+									<Comment>
+										<![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
+0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
+0x80 (1000 0000) = Stop
+]]>
+									</Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
@@ -2421,8 +2488,8 @@ External Setpoint Generation:
 						<Velo SlowManual="10" FastManual="35" Maximum="50"/>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
 					</AxisPara>
-					<Encoder Name="Enc" EncType="19">
-						<EncPara ScaleFactorNumerator="1" ScaleFactorDenominator="8388608" MaxCount="#xffffffff"/>
+					<Encoder Name="Enc" EncType="1">
+						<EncPara ScaleFactorNumerator="1" ScaleFactorDenominator="8388608"/>
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
 							<Var>
@@ -2488,8 +2555,8 @@ External Setpoint Generation:
 							</Var>
 						</Vars>
 					</Encoder>
-					<Drive Name="Drive" DrvType="16">
-						<DrvPara MaxCount="#xffffffff" DriveControlDWord="#x00000100">
+					<Drive Name="Drive" DrvType="5">
+						<DrvPara>
 							<Analog VeloReferenz="50" ScaleFactorActTorque="0.1"/>
 							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
@@ -2542,6 +2609,26 @@ Drive Status 4 (manually linked):
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut2</Name>
+								</SubVar>
+								<SubVar>
+									<Name>nCtrl2</Name>
+									<Comment>
+										<![CDATA[Digital Outputs Setpoint Generator:
+0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
+0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
+0x80 (1000 0000) = Stop
+]]>
+									</Comment>
+								</SubVar>
+								<SubVar>
+									<Name>nCtrl3</Name>
+									<Comment>
+										<![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
+0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
+0x80 (1000 0000) = Stop
+]]>
+									</Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
@@ -2631,8 +2718,8 @@ External Setpoint Generation:
 					<AxisPara>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
 					</AxisPara>
-					<Encoder Name="Enc" EncType="19">
-						<EncPara ScaleFactorNumerator="1" ScaleFactorDenominator="8388608" MaxCount="#xffffffff"/>
+					<Encoder Name="Enc" EncType="1">
+						<EncPara ScaleFactorNumerator="1" ScaleFactorDenominator="8388608"/>
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
 							<Var>
@@ -2698,8 +2785,8 @@ External Setpoint Generation:
 							</Var>
 						</Vars>
 					</Encoder>
-					<Drive Name="Drive" DrvType="16">
-						<DrvPara MaxCount="#xffffffff" DriveControlDWord="#x00000100">
+					<Drive Name="Drive" DrvType="5">
+						<DrvPara>
 							<Analog ScaleFactorActTorque="0.1"/>
 							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
@@ -2752,6 +2839,26 @@ Drive Status 4 (manually linked):
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut2</Name>
+								</SubVar>
+								<SubVar>
+									<Name>nCtrl2</Name>
+									<Comment>
+										<![CDATA[Digital Outputs Setpoint Generator:
+0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
+0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
+0x80 (1000 0000) = Stop
+]]>
+									</Comment>
+								</SubVar>
+								<SubVar>
+									<Name>nCtrl3</Name>
+									<Comment>
+										<![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
+0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
+0x80 (1000 0000) = Stop
+]]>
+									</Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
@@ -2842,8 +2949,8 @@ External Setpoint Generation:
 						<Velo RefSearch="86.25" RefSync="86.25" SlowManual="431.25" FastManual="2587.5" Fast="8625" Maximum="8625"/>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
 					</AxisPara>
-					<Encoder Name="Enc" EncType="19">
-						<EncPara ScaleFactorNumerator="150" ScaleFactorDenominator="1048576" Inverse="true" MaxCount="#xffffffff"/>
+					<Encoder Name="Enc" EncType="1">
+						<EncPara ScaleFactorNumerator="150" ScaleFactorDenominator="1048576" Inverse="true"/>
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
 							<Var>
@@ -2909,9 +3016,9 @@ External Setpoint Generation:
 							</Var>
 						</Vars>
 					</Encoder>
-					<Drive Name="Drive" DrvType="16">
-						<DrvPara Inverse="true" MaxCount="#xffffffff" DriveControlDWord="#x00000100">
-							<Analog VeloReferenz="9487.5" VeloScale="32" ScaleFactorActTorque="0.1"/>
+					<Drive Name="Drive" DrvType="5">
+						<DrvPara Inverse="true">
+							<Analog VeloReferenz="9487.5" ScaleFactorActTorque="0.1"/>
 							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
 						<Vars VarGrpType="1">
@@ -2963,6 +3070,26 @@ Drive Status 4 (manually linked):
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut2</Name>
+								</SubVar>
+								<SubVar>
+									<Name>nCtrl2</Name>
+									<Comment>
+										<![CDATA[Digital Outputs Setpoint Generator:
+0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
+0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
+0x80 (1000 0000) = Stop
+]]>
+									</Comment>
+								</SubVar>
+								<SubVar>
+									<Name>nCtrl3</Name>
+									<Comment>
+										<![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
+0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
+0x80 (1000 0000) = Stop
+]]>
+									</Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
@@ -3055,8 +3182,8 @@ External Setpoint Generation:
 						<Velo RefSearch="2.875" RefSync="2.875" SlowManual="14.375" FastManual="86.25" Fast="287.5" Maximum="287.5"/>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
 					</AxisPara>
-					<Encoder Name="Enc" EncType="19">
-						<EncPara ScaleFactorNumerator="5" ScaleFactorDenominator="1048576" Inverse="true" MaxCount="#xffffffff"/>
+					<Encoder Name="Enc" EncType="1">
+						<EncPara ScaleFactorNumerator="5" ScaleFactorDenominator="1048576" Inverse="true"/>
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
 							<Var>
@@ -3122,9 +3249,9 @@ External Setpoint Generation:
 							</Var>
 						</Vars>
 					</Encoder>
-					<Drive Name="Drive" DrvType="16">
-						<DrvPara Inverse="true" MaxCount="#xffffffff" DriveControlDWord="#x00000100">
-							<Analog VeloReferenz="316.25" VeloScale="32" ScaleFactorActTorque="0.1"/>
+					<Drive Name="Drive" DrvType="5">
+						<DrvPara Inverse="true">
+							<Analog VeloReferenz="316.25" ScaleFactorActTorque="0.1"/>
 							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
 						<Vars VarGrpType="1">
@@ -3176,6 +3303,26 @@ Drive Status 4 (manually linked):
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut2</Name>
+								</SubVar>
+								<SubVar>
+									<Name>nCtrl2</Name>
+									<Comment>
+										<![CDATA[Digital Outputs Setpoint Generator:
+0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
+0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
+0x80 (1000 0000) = Stop
+]]>
+									</Comment>
+								</SubVar>
+								<SubVar>
+									<Name>nCtrl3</Name>
+									<Comment>
+										<![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
+0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
+0x80 (1000 0000) = Stop
+]]>
+									</Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
@@ -3266,8 +3413,8 @@ External Setpoint Generation:
 						<Velo RefSearch="2.875" RefSync="2.875" SlowManual="14.375" FastManual="86.25" Fast="287.5" Maximum="287.5"/>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
 					</AxisPara>
-					<Encoder Name="Enc" EncType="19">
-						<EncPara ScaleFactorNumerator="5" ScaleFactorDenominator="1048576" Inverse="true" MaxCount="#xffffffff"/>
+					<Encoder Name="Enc" EncType="1">
+						<EncPara ScaleFactorNumerator="5" ScaleFactorDenominator="1048576" Inverse="true"/>
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
 							<Var>
@@ -3333,9 +3480,9 @@ External Setpoint Generation:
 							</Var>
 						</Vars>
 					</Encoder>
-					<Drive Name="Drive" DrvType="16">
-						<DrvPara Inverse="true" MaxCount="#xffffffff" DriveControlDWord="#x00000100">
-							<Analog VeloReferenz="316.25" VeloScale="32" ScaleFactorActTorque="0.1"/>
+					<Drive Name="Drive" DrvType="5">
+						<DrvPara Inverse="true">
+							<Analog VeloReferenz="316.25" ScaleFactorActTorque="0.1"/>
 							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
 						<Vars VarGrpType="1">
@@ -3387,6 +3534,26 @@ Drive Status 4 (manually linked):
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut2</Name>
+								</SubVar>
+								<SubVar>
+									<Name>nCtrl2</Name>
+									<Comment>
+										<![CDATA[Digital Outputs Setpoint Generator:
+0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
+0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
+0x80 (1000 0000) = Stop
+]]>
+									</Comment>
+								</SubVar>
+								<SubVar>
+									<Name>nCtrl3</Name>
+									<Comment>
+										<![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
+0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
+0x80 (1000 0000) = Stop
+]]>
+									</Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
@@ -3477,8 +3644,8 @@ External Setpoint Generation:
 						<Velo RefSearch="2.875" RefSync="2.875" SlowManual="14.375" FastManual="86.25" Fast="287.5" Maximum="287.5"/>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
 					</AxisPara>
-					<Encoder Name="Enc" EncType="19">
-						<EncPara ScaleFactorNumerator="5" ScaleFactorDenominator="1048576" Inverse="true" MaxCount="#xffffffff"/>
+					<Encoder Name="Enc" EncType="1">
+						<EncPara ScaleFactorNumerator="5" ScaleFactorDenominator="1048576" Inverse="true"/>
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
 							<Var>
@@ -3544,9 +3711,9 @@ External Setpoint Generation:
 							</Var>
 						</Vars>
 					</Encoder>
-					<Drive Name="Drive" DrvType="16">
-						<DrvPara Inverse="true" MaxCount="#xffffffff" DriveControlDWord="#x00000100">
-							<Analog VeloReferenz="316.25" VeloScale="32" ScaleFactorActTorque="0.1"/>
+					<Drive Name="Drive" DrvType="5">
+						<DrvPara Inverse="true">
+							<Analog VeloReferenz="316.25" ScaleFactorActTorque="0.1"/>
 							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
 						<Vars VarGrpType="1">
@@ -3598,6 +3765,26 @@ Drive Status 4 (manually linked):
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut2</Name>
+								</SubVar>
+								<SubVar>
+									<Name>nCtrl2</Name>
+									<Comment>
+										<![CDATA[Digital Outputs Setpoint Generator:
+0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
+0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
+0x80 (1000 0000) = Stop
+]]>
+									</Comment>
+								</SubVar>
+								<SubVar>
+									<Name>nCtrl3</Name>
+									<Comment>
+										<![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
+0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
+0x80 (1000 0000) = Stop
+]]>
+									</Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
@@ -4668,11 +4855,11 @@ simuSyncAcknowledged AT%MB128 : BOOL;
 							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[29].ACT_A</Name>
+							<Name>GVL.cylinderControls[28].ACT_A</Name>
 							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[28].ACT_A</Name>
+							<Name>GVL.cylinderControls[29].ACT_A</Name>
 							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
 						</Var>
 						<Var>
@@ -4707,16 +4894,56 @@ simuSyncAcknowledged AT%MB128 : BOOL;
 					<Vars VarGrpType="8">
 						<Name>PlcTask Retains</Name>
 						<Var>
+							<Name>AUTO.Controller.slaveLinkageStatus</Name>
+							<Comment>
+								<![CDATA[ configuration]]>
+							</Comment>
+							<Type GUID="{12136D81-4849-9FCF-6C84-9A0446B0B0C9}">ARRAY [1..32] OF BOOL</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>AUTO.LifterCellularA[1].slaveLinkageStatus</Name>
+							<Comment>
+								<![CDATA[ configuration]]>
+							</Comment>
+							<Type GUID="{12136D81-4849-9FCF-6C84-9A0446B0B0C9}">ARRAY [1..32] OF BOOL</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>AUTO.LifterCellularA[2].slaveLinkageStatus</Name>
+							<Comment>
+								<![CDATA[ configuration]]>
+							</Comment>
+							<Type GUID="{12136D81-4849-9FCF-6C84-9A0446B0B0C9}">ARRAY [1..32] OF BOOL</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>AUTO.LifterCellularA[3].slaveLinkageStatus</Name>
+							<Comment>
+								<![CDATA[ configuration]]>
+							</Comment>
+							<Type GUID="{12136D81-4849-9FCF-6C84-9A0446B0B0C9}">ARRAY [1..32] OF BOOL</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>AUTO.ConveyorProxy.slaveLinkageStatus</Name>
+							<Comment>
+								<![CDATA[ configuration]]>
+							</Comment>
+							<Type GUID="{12136D81-4849-9FCF-6C84-9A0446B0B0C9}">ARRAY [1..32] OF BOOL</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
 							<Name>AUTO.ConveyorProxy.netId</Name>
 							<Comment>
 								<![CDATA[proxy mode parameters]]>
 							</Comment>
-							<Type GUID="{72675FEB-1256-4BEA-88E0-8E503D397738}" Namespace="Tc2_System">T_AmsNetID</Type>
+							<Type GUID="{8EB54264-6ACC-4020-BF8A-1DCC5718A056}" Namespace="Tc2_System">T_AmsNetID</Type>
 							<InOut>7</InOut>
 						</Var>
 						<Var>
 							<Name>AUTO.ConveyorProxy.port</Name>
-							<Type GUID="{611632B5-1865-497E-8DF7-BD6220259426}" Namespace="Tc2_System">T_AmsPort</Type>
+							<Type GUID="{CC011217-70A2-406F-9DBD-4575C210E893}" Namespace="Tc2_System">T_AmsPort</Type>
 							<InOut>7</InOut>
 						</Var>
 						<Var>
@@ -4735,16 +4962,24 @@ simuSyncAcknowledged AT%MB128 : BOOL;
 							<InOut>7</InOut>
 						</Var>
 						<Var>
+							<Name>AUTO.ConveyorMaster.slaveLinkageStatus</Name>
+							<Comment>
+								<![CDATA[ configuration]]>
+							</Comment>
+							<Type GUID="{12136D81-4849-9FCF-6C84-9A0446B0B0C9}">ARRAY [1..32] OF BOOL</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
 							<Name>AUTO.ConveyorMaster.netId</Name>
 							<Comment>
 								<![CDATA[proxy mode parameters]]>
 							</Comment>
-							<Type GUID="{72675FEB-1256-4BEA-88E0-8E503D397738}" Namespace="Tc2_System">T_AmsNetID</Type>
+							<Type GUID="{8EB54264-6ACC-4020-BF8A-1DCC5718A056}" Namespace="Tc2_System">T_AmsNetID</Type>
 							<InOut>7</InOut>
 						</Var>
 						<Var>
 							<Name>AUTO.ConveyorMaster.port</Name>
-							<Type GUID="{611632B5-1865-497E-8DF7-BD6220259426}" Namespace="Tc2_System">T_AmsPort</Type>
+							<Type GUID="{CC011217-70A2-406F-9DBD-4575C210E893}" Namespace="Tc2_System">T_AmsPort</Type>
 							<InOut>7</InOut>
 						</Var>
 						<Var>
@@ -4767,7 +5002,7 @@ simuSyncAcknowledged AT%MB128 : BOOL;
 							<Comment>
 								<![CDATA[collect command blocks relative to this axis here]]>
 							</Comment>
-							<Type GUID="{0BC92B97-6229-4642-9775-06C0FEBF92C9}">ARRAY [1..16] OF ParameterSet</Type>
+							<Type GUID="{2821C3DB-CF54-0AB4-D51F-472E6BDDBBA7}">ARRAY [1..12] OF ParameterSet</Type>
 							<InOut>7</InOut>
 							<SubVar>
 								<Name>GVL.axisControls[1].ptpCommands[1]^parameter^position^Velocity</Name>
@@ -5057,109 +5292,13 @@ simuSyncAcknowledged AT%MB128 : BOOL;
 									<![CDATA[ in mm]]>
 								</Comment>
 							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[1].ptpCommands[13]^parameter^position^Velocity</Name>
-								<Comment>
-									<![CDATA[in mm/s]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[1].ptpCommands[13]^parameter^position^Acceleration</Name>
-								<Comment>
-									<![CDATA[ in mm/s2]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[1].ptpCommands[13]^parameter^position^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[1].ptpCommands[13]^parameter^home^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[1].ptpCommands[14]^parameter^position^Velocity</Name>
-								<Comment>
-									<![CDATA[in mm/s]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[1].ptpCommands[14]^parameter^position^Acceleration</Name>
-								<Comment>
-									<![CDATA[ in mm/s2]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[1].ptpCommands[14]^parameter^position^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[1].ptpCommands[14]^parameter^home^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[1].ptpCommands[15]^parameter^position^Velocity</Name>
-								<Comment>
-									<![CDATA[in mm/s]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[1].ptpCommands[15]^parameter^position^Acceleration</Name>
-								<Comment>
-									<![CDATA[ in mm/s2]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[1].ptpCommands[15]^parameter^position^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[1].ptpCommands[15]^parameter^home^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[1].ptpCommands[16]^parameter^position^Velocity</Name>
-								<Comment>
-									<![CDATA[in mm/s]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[1].ptpCommands[16]^parameter^position^Acceleration</Name>
-								<Comment>
-									<![CDATA[ in mm/s2]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[1].ptpCommands[16]^parameter^position^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[1].ptpCommands[16]^parameter^home^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
 						</Var>
 						<Var>
 							<Name>GVL.axisControls[2].ptpCommands</Name>
 							<Comment>
 								<![CDATA[collect command blocks relative to this axis here]]>
 							</Comment>
-							<Type GUID="{0BC92B97-6229-4642-9775-06C0FEBF92C9}">ARRAY [1..16] OF ParameterSet</Type>
+							<Type GUID="{2821C3DB-CF54-0AB4-D51F-472E6BDDBBA7}">ARRAY [1..12] OF ParameterSet</Type>
 							<InOut>7</InOut>
 							<SubVar>
 								<Name>GVL.axisControls[2].ptpCommands[1]^parameter^position^Velocity</Name>
@@ -5449,109 +5588,13 @@ simuSyncAcknowledged AT%MB128 : BOOL;
 									<![CDATA[ in mm]]>
 								</Comment>
 							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[2].ptpCommands[13]^parameter^position^Velocity</Name>
-								<Comment>
-									<![CDATA[in mm/s]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[2].ptpCommands[13]^parameter^position^Acceleration</Name>
-								<Comment>
-									<![CDATA[ in mm/s2]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[2].ptpCommands[13]^parameter^position^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[2].ptpCommands[13]^parameter^home^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[2].ptpCommands[14]^parameter^position^Velocity</Name>
-								<Comment>
-									<![CDATA[in mm/s]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[2].ptpCommands[14]^parameter^position^Acceleration</Name>
-								<Comment>
-									<![CDATA[ in mm/s2]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[2].ptpCommands[14]^parameter^position^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[2].ptpCommands[14]^parameter^home^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[2].ptpCommands[15]^parameter^position^Velocity</Name>
-								<Comment>
-									<![CDATA[in mm/s]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[2].ptpCommands[15]^parameter^position^Acceleration</Name>
-								<Comment>
-									<![CDATA[ in mm/s2]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[2].ptpCommands[15]^parameter^position^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[2].ptpCommands[15]^parameter^home^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[2].ptpCommands[16]^parameter^position^Velocity</Name>
-								<Comment>
-									<![CDATA[in mm/s]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[2].ptpCommands[16]^parameter^position^Acceleration</Name>
-								<Comment>
-									<![CDATA[ in mm/s2]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[2].ptpCommands[16]^parameter^position^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[2].ptpCommands[16]^parameter^home^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
 						</Var>
 						<Var>
 							<Name>GVL.axisControls[3].ptpCommands</Name>
 							<Comment>
 								<![CDATA[collect command blocks relative to this axis here]]>
 							</Comment>
-							<Type GUID="{0BC92B97-6229-4642-9775-06C0FEBF92C9}">ARRAY [1..16] OF ParameterSet</Type>
+							<Type GUID="{2821C3DB-CF54-0AB4-D51F-472E6BDDBBA7}">ARRAY [1..12] OF ParameterSet</Type>
 							<InOut>7</InOut>
 							<SubVar>
 								<Name>GVL.axisControls[3].ptpCommands[1]^parameter^position^Velocity</Name>
@@ -5841,109 +5884,13 @@ simuSyncAcknowledged AT%MB128 : BOOL;
 									<![CDATA[ in mm]]>
 								</Comment>
 							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[3].ptpCommands[13]^parameter^position^Velocity</Name>
-								<Comment>
-									<![CDATA[in mm/s]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[3].ptpCommands[13]^parameter^position^Acceleration</Name>
-								<Comment>
-									<![CDATA[ in mm/s2]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[3].ptpCommands[13]^parameter^position^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[3].ptpCommands[13]^parameter^home^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[3].ptpCommands[14]^parameter^position^Velocity</Name>
-								<Comment>
-									<![CDATA[in mm/s]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[3].ptpCommands[14]^parameter^position^Acceleration</Name>
-								<Comment>
-									<![CDATA[ in mm/s2]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[3].ptpCommands[14]^parameter^position^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[3].ptpCommands[14]^parameter^home^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[3].ptpCommands[15]^parameter^position^Velocity</Name>
-								<Comment>
-									<![CDATA[in mm/s]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[3].ptpCommands[15]^parameter^position^Acceleration</Name>
-								<Comment>
-									<![CDATA[ in mm/s2]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[3].ptpCommands[15]^parameter^position^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[3].ptpCommands[15]^parameter^home^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[3].ptpCommands[16]^parameter^position^Velocity</Name>
-								<Comment>
-									<![CDATA[in mm/s]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[3].ptpCommands[16]^parameter^position^Acceleration</Name>
-								<Comment>
-									<![CDATA[ in mm/s2]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[3].ptpCommands[16]^parameter^position^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[3].ptpCommands[16]^parameter^home^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
 						</Var>
 						<Var>
 							<Name>GVL.axisControls[4].ptpCommands</Name>
 							<Comment>
 								<![CDATA[collect command blocks relative to this axis here]]>
 							</Comment>
-							<Type GUID="{0BC92B97-6229-4642-9775-06C0FEBF92C9}">ARRAY [1..16] OF ParameterSet</Type>
+							<Type GUID="{2821C3DB-CF54-0AB4-D51F-472E6BDDBBA7}">ARRAY [1..12] OF ParameterSet</Type>
 							<InOut>7</InOut>
 							<SubVar>
 								<Name>GVL.axisControls[4].ptpCommands[1]^parameter^position^Velocity</Name>
@@ -6233,109 +6180,13 @@ simuSyncAcknowledged AT%MB128 : BOOL;
 									<![CDATA[ in mm]]>
 								</Comment>
 							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[4].ptpCommands[13]^parameter^position^Velocity</Name>
-								<Comment>
-									<![CDATA[in mm/s]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[4].ptpCommands[13]^parameter^position^Acceleration</Name>
-								<Comment>
-									<![CDATA[ in mm/s2]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[4].ptpCommands[13]^parameter^position^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[4].ptpCommands[13]^parameter^home^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[4].ptpCommands[14]^parameter^position^Velocity</Name>
-								<Comment>
-									<![CDATA[in mm/s]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[4].ptpCommands[14]^parameter^position^Acceleration</Name>
-								<Comment>
-									<![CDATA[ in mm/s2]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[4].ptpCommands[14]^parameter^position^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[4].ptpCommands[14]^parameter^home^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[4].ptpCommands[15]^parameter^position^Velocity</Name>
-								<Comment>
-									<![CDATA[in mm/s]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[4].ptpCommands[15]^parameter^position^Acceleration</Name>
-								<Comment>
-									<![CDATA[ in mm/s2]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[4].ptpCommands[15]^parameter^position^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[4].ptpCommands[15]^parameter^home^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[4].ptpCommands[16]^parameter^position^Velocity</Name>
-								<Comment>
-									<![CDATA[in mm/s]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[4].ptpCommands[16]^parameter^position^Acceleration</Name>
-								<Comment>
-									<![CDATA[ in mm/s2]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[4].ptpCommands[16]^parameter^position^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[4].ptpCommands[16]^parameter^home^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
 						</Var>
 						<Var>
 							<Name>GVL.axisControls[5].ptpCommands</Name>
 							<Comment>
 								<![CDATA[collect command blocks relative to this axis here]]>
 							</Comment>
-							<Type GUID="{0BC92B97-6229-4642-9775-06C0FEBF92C9}">ARRAY [1..16] OF ParameterSet</Type>
+							<Type GUID="{2821C3DB-CF54-0AB4-D51F-472E6BDDBBA7}">ARRAY [1..12] OF ParameterSet</Type>
 							<InOut>7</InOut>
 							<SubVar>
 								<Name>GVL.axisControls[5].ptpCommands[1]^parameter^position^Velocity</Name>
@@ -6625,109 +6476,13 @@ simuSyncAcknowledged AT%MB128 : BOOL;
 									<![CDATA[ in mm]]>
 								</Comment>
 							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[5].ptpCommands[13]^parameter^position^Velocity</Name>
-								<Comment>
-									<![CDATA[in mm/s]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[5].ptpCommands[13]^parameter^position^Acceleration</Name>
-								<Comment>
-									<![CDATA[ in mm/s2]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[5].ptpCommands[13]^parameter^position^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[5].ptpCommands[13]^parameter^home^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[5].ptpCommands[14]^parameter^position^Velocity</Name>
-								<Comment>
-									<![CDATA[in mm/s]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[5].ptpCommands[14]^parameter^position^Acceleration</Name>
-								<Comment>
-									<![CDATA[ in mm/s2]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[5].ptpCommands[14]^parameter^position^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[5].ptpCommands[14]^parameter^home^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[5].ptpCommands[15]^parameter^position^Velocity</Name>
-								<Comment>
-									<![CDATA[in mm/s]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[5].ptpCommands[15]^parameter^position^Acceleration</Name>
-								<Comment>
-									<![CDATA[ in mm/s2]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[5].ptpCommands[15]^parameter^position^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[5].ptpCommands[15]^parameter^home^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[5].ptpCommands[16]^parameter^position^Velocity</Name>
-								<Comment>
-									<![CDATA[in mm/s]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[5].ptpCommands[16]^parameter^position^Acceleration</Name>
-								<Comment>
-									<![CDATA[ in mm/s2]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[5].ptpCommands[16]^parameter^position^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[5].ptpCommands[16]^parameter^home^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
 						</Var>
 						<Var>
 							<Name>GVL.axisControls[6].ptpCommands</Name>
 							<Comment>
 								<![CDATA[collect command blocks relative to this axis here]]>
 							</Comment>
-							<Type GUID="{0BC92B97-6229-4642-9775-06C0FEBF92C9}">ARRAY [1..16] OF ParameterSet</Type>
+							<Type GUID="{2821C3DB-CF54-0AB4-D51F-472E6BDDBBA7}">ARRAY [1..12] OF ParameterSet</Type>
 							<InOut>7</InOut>
 							<SubVar>
 								<Name>GVL.axisControls[6].ptpCommands[1]^parameter^position^Velocity</Name>
@@ -7017,109 +6772,13 @@ simuSyncAcknowledged AT%MB128 : BOOL;
 									<![CDATA[ in mm]]>
 								</Comment>
 							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[6].ptpCommands[13]^parameter^position^Velocity</Name>
-								<Comment>
-									<![CDATA[in mm/s]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[6].ptpCommands[13]^parameter^position^Acceleration</Name>
-								<Comment>
-									<![CDATA[ in mm/s2]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[6].ptpCommands[13]^parameter^position^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[6].ptpCommands[13]^parameter^home^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[6].ptpCommands[14]^parameter^position^Velocity</Name>
-								<Comment>
-									<![CDATA[in mm/s]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[6].ptpCommands[14]^parameter^position^Acceleration</Name>
-								<Comment>
-									<![CDATA[ in mm/s2]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[6].ptpCommands[14]^parameter^position^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[6].ptpCommands[14]^parameter^home^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[6].ptpCommands[15]^parameter^position^Velocity</Name>
-								<Comment>
-									<![CDATA[in mm/s]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[6].ptpCommands[15]^parameter^position^Acceleration</Name>
-								<Comment>
-									<![CDATA[ in mm/s2]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[6].ptpCommands[15]^parameter^position^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[6].ptpCommands[15]^parameter^home^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[6].ptpCommands[16]^parameter^position^Velocity</Name>
-								<Comment>
-									<![CDATA[in mm/s]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[6].ptpCommands[16]^parameter^position^Acceleration</Name>
-								<Comment>
-									<![CDATA[ in mm/s2]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[6].ptpCommands[16]^parameter^position^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[6].ptpCommands[16]^parameter^home^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
 						</Var>
 						<Var>
 							<Name>GVL.axisControls[7].ptpCommands</Name>
 							<Comment>
 								<![CDATA[collect command blocks relative to this axis here]]>
 							</Comment>
-							<Type GUID="{0BC92B97-6229-4642-9775-06C0FEBF92C9}">ARRAY [1..16] OF ParameterSet</Type>
+							<Type GUID="{2821C3DB-CF54-0AB4-D51F-472E6BDDBBA7}">ARRAY [1..12] OF ParameterSet</Type>
 							<InOut>7</InOut>
 							<SubVar>
 								<Name>GVL.axisControls[7].ptpCommands[1]^parameter^position^Velocity</Name>
@@ -7409,109 +7068,13 @@ simuSyncAcknowledged AT%MB128 : BOOL;
 									<![CDATA[ in mm]]>
 								</Comment>
 							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[7].ptpCommands[13]^parameter^position^Velocity</Name>
-								<Comment>
-									<![CDATA[in mm/s]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[7].ptpCommands[13]^parameter^position^Acceleration</Name>
-								<Comment>
-									<![CDATA[ in mm/s2]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[7].ptpCommands[13]^parameter^position^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[7].ptpCommands[13]^parameter^home^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[7].ptpCommands[14]^parameter^position^Velocity</Name>
-								<Comment>
-									<![CDATA[in mm/s]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[7].ptpCommands[14]^parameter^position^Acceleration</Name>
-								<Comment>
-									<![CDATA[ in mm/s2]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[7].ptpCommands[14]^parameter^position^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[7].ptpCommands[14]^parameter^home^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[7].ptpCommands[15]^parameter^position^Velocity</Name>
-								<Comment>
-									<![CDATA[in mm/s]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[7].ptpCommands[15]^parameter^position^Acceleration</Name>
-								<Comment>
-									<![CDATA[ in mm/s2]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[7].ptpCommands[15]^parameter^position^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[7].ptpCommands[15]^parameter^home^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[7].ptpCommands[16]^parameter^position^Velocity</Name>
-								<Comment>
-									<![CDATA[in mm/s]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[7].ptpCommands[16]^parameter^position^Acceleration</Name>
-								<Comment>
-									<![CDATA[ in mm/s2]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[7].ptpCommands[16]^parameter^position^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[7].ptpCommands[16]^parameter^home^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
 						</Var>
 						<Var>
 							<Name>GVL.axisControls[8].ptpCommands</Name>
 							<Comment>
 								<![CDATA[collect command blocks relative to this axis here]]>
 							</Comment>
-							<Type GUID="{0BC92B97-6229-4642-9775-06C0FEBF92C9}">ARRAY [1..16] OF ParameterSet</Type>
+							<Type GUID="{2821C3DB-CF54-0AB4-D51F-472E6BDDBBA7}">ARRAY [1..12] OF ParameterSet</Type>
 							<InOut>7</InOut>
 							<SubVar>
 								<Name>GVL.axisControls[8].ptpCommands[1]^parameter^position^Velocity</Name>
@@ -7797,102 +7360,6 @@ simuSyncAcknowledged AT%MB128 : BOOL;
 							</SubVar>
 							<SubVar>
 								<Name>GVL.axisControls[8].ptpCommands[12]^parameter^home^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[8].ptpCommands[13]^parameter^position^Velocity</Name>
-								<Comment>
-									<![CDATA[in mm/s]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[8].ptpCommands[13]^parameter^position^Acceleration</Name>
-								<Comment>
-									<![CDATA[ in mm/s2]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[8].ptpCommands[13]^parameter^position^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[8].ptpCommands[13]^parameter^home^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[8].ptpCommands[14]^parameter^position^Velocity</Name>
-								<Comment>
-									<![CDATA[in mm/s]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[8].ptpCommands[14]^parameter^position^Acceleration</Name>
-								<Comment>
-									<![CDATA[ in mm/s2]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[8].ptpCommands[14]^parameter^position^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[8].ptpCommands[14]^parameter^home^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[8].ptpCommands[15]^parameter^position^Velocity</Name>
-								<Comment>
-									<![CDATA[in mm/s]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[8].ptpCommands[15]^parameter^position^Acceleration</Name>
-								<Comment>
-									<![CDATA[ in mm/s2]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[8].ptpCommands[15]^parameter^position^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[8].ptpCommands[15]^parameter^home^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[8].ptpCommands[16]^parameter^position^Velocity</Name>
-								<Comment>
-									<![CDATA[in mm/s]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[8].ptpCommands[16]^parameter^position^Acceleration</Name>
-								<Comment>
-									<![CDATA[ in mm/s2]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[8].ptpCommands[16]^parameter^position^Position</Name>
-								<Comment>
-									<![CDATA[ in mm]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>GVL.axisControls[8].ptpCommands[16]^parameter^home^Position</Name>
 								<Comment>
 									<![CDATA[ in mm]]>
 								</Comment>
@@ -10704,6 +10171,11 @@ simuSyncAcknowledged AT%MB128 : BOOL;
 							<InOut>7</InOut>
 						</Var>
 						<Var>
+							<Name>GVL.cylinderControls[29].B_SENSOR_USED_COUNT</Name>
+							<Type>INT</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
 							<Name>GVL.cylinderControls[29].TMR_WATCH_DOG</Name>
 							<Comment>
 								<![CDATA[Watch dog timer]]>
@@ -10792,11 +10264,6 @@ simuSyncAcknowledged AT%MB128 : BOOL;
 									<![CDATA[ elapsed time ]]>
 								</Comment>
 							</SubVar>
-						</Var>
-						<Var>
-							<Name>GVL.cylinderControls[29].B_SENSOR_USED_COUNT</Name>
-							<Type>INT</Type>
-							<InOut>7</InOut>
 						</Var>
 						<Var>
 							<Name>GVL.cylinderControls[30].A_SENSOR_USED_COUNT</Name>
@@ -10899,20 +10366,7 @@ simuSyncAcknowledged AT%MB128 : BOOL;
 							</SubVar>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[31].A_SENSOR_USED_COUNT</Name>
-							<Type>INT</Type>
-							<InOut>7</InOut>
-						</Var>
-						<Var>
-							<Name>GVL.cylinderControls[31].B_SENSOR_USED_COUNT</Name>
-							<Type>INT</Type>
-							<InOut>7</InOut>
-						</Var>
-						<Var>
-							<Name>GVL.cylinderControls[31].TMR_WATCH_DOG</Name>
-							<Comment>
-								<![CDATA[Watch dog timer]]>
-							</Comment>
+							<Name>GVL.cylinderControls[31].TMR_DELAY_TO_A</Name>
 							<Type GUID="{878C70BB-1F9D-4E1B-AF14-8A6FD7CB73A3}" Namespace="Tc2_Standard">TON</Type>
 							<InOut>7</InOut>
 							<SubVar>
@@ -10941,7 +10395,20 @@ simuSyncAcknowledged AT%MB128 : BOOL;
 							</SubVar>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[31].TMR_DELAY_TO_A</Name>
+							<Name>GVL.cylinderControls[31].A_SENSOR_USED_COUNT</Name>
+							<Type>INT</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[31].B_SENSOR_USED_COUNT</Name>
+							<Type>INT</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[31].TMR_WATCH_DOG</Name>
+							<Comment>
+								<![CDATA[Watch dog timer]]>
+							</Comment>
 							<Type GUID="{878C70BB-1F9D-4E1B-AF14-8A6FD7CB73A3}" Namespace="Tc2_Standard">TON</Type>
 							<InOut>7</InOut>
 							<SubVar>
@@ -12035,14 +11502,6 @@ simuSyncAcknowledged AT%MB128 : BOOL;
 							<InOut>7</InOut>
 						</Var>
 					</Vars>
-					<UnrestoredVarLinks ImportTime="2018-08-03T11:40:38">
-						<OwnerA Name="InputDst" Prefix="TIPC^Untitled1^Untitled1 Instance" Type="1">
-							<OwnerB Name="TIID^Device 1 (EtherCAT)^Box 16 (NU-EC1)">
-								<Link VarA="TEST_MAIN.tmpObstacleSensorat" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Output TxPDO-Map^SfA03" Size="1" RestoreInfo="ANotFound"/>
-								<Link VarA="TEST_MAIN.tmpReachSensor" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Output TxPDO-Map^SpA03" Size="1" RestoreInfo="ANotFound"/>
-							</OwnerB>
-						</OwnerA>
-					</UnrestoredVarLinks>
 					<TaskPouOids>
 						<TaskPouOid Prio="20" OTCID="#x08502001"/>
 					</TaskPouOids>
@@ -12079,9 +11538,6 @@ simuSyncAcknowledged AT%MB128 : BOOL;
 				</AddressInfo>
 				<Image Id="2" AddrType="9" ImageType="3">
 					<Name>Image</Name>
-				</Image>
-				<Image Id="4" AddrType="10" ImageType="3">
-					<Name>Image-2</Name>
 				</Image>
 				<Box BoxType="9099" Id="1">
 					<Name>Term 1 (EK1200)</Name>
@@ -17418,146 +16874,17 @@ simuSyncAcknowledged AT%MB128 : BOOL;
 	</Project>
 	<Mappings>
 		<MappingInfo Identifier="{05000010-2001-0850-1000-040300205008}" Id="#x02030010" Watchdog="14000000040000000400000004000000"/>
-		<OwnerA Name="TINC^NC-Task 1 SAF^Axes^Conveyor">
-			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 8 (EL7201-9014)">
-				<Link VarA="Drive^Inputs^In^nDataIn1" VarB="DRV Following error actual value^Following error actual value"/>
-				<Link VarA="Drive^Inputs^In^nDcOutputTime" VarB="InfoData^DcOutputShift"/>
-				<Link VarA="Drive^Inputs^In^nState1" VarB="DRV Statusword^Statusword"/>
-				<Link VarA="Drive^Inputs^In^nState2" VarB="DRV Statusword^Statusword" Size="8" OffsB="8"/>
-				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
-				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^WcState"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl1" VarB="DRV Controlword^Controlword"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl2" VarB="DRV Controlword^Controlword" Size="8" OffsB="8"/>
-				<Link VarA="Drive^Outputs^Out^nDataOut1" VarB="DRV Target position^Target position"/>
-				<Link VarA="Enc^Inputs^In^nDataIn1" VarB="FB Position^Position"/>
-				<Link VarA="Enc^Inputs^In^nDcInputTime" VarB="InfoData^DcInputShift"/>
-				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
-				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^WcState"/>
-			</OwnerB>
-		</OwnerA>
-		<OwnerA Name="TINC^NC-Task 1 SAF^Axes^Horizon1">
-			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 9 (EL7201-9014)">
-				<Link VarA="Drive^Inputs^In^nDataIn1" VarB="DRV Following error actual value^Following error actual value"/>
-				<Link VarA="Drive^Inputs^In^nDcOutputTime" VarB="InfoData^DcOutputShift"/>
-				<Link VarA="Drive^Inputs^In^nState1" VarB="DRV Statusword^Statusword"/>
-				<Link VarA="Drive^Inputs^In^nState2" VarB="DRV Statusword^Statusword" Size="8" OffsB="8"/>
-				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
-				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^WcState"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl1" VarB="DRV Controlword^Controlword"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl2" VarB="DRV Controlword^Controlword" Size="8" OffsB="8"/>
-				<Link VarA="Drive^Outputs^Out^nDataOut1" VarB="DRV Target position^Target position"/>
-				<Link VarA="Enc^Inputs^In^nDataIn1" VarB="FB Position^Position"/>
-				<Link VarA="Enc^Inputs^In^nDcInputTime" VarB="InfoData^DcInputShift"/>
-				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
-				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^WcState"/>
-			</OwnerB>
-		</OwnerA>
-		<OwnerA Name="TINC^NC-Task 1 SAF^Axes^Horizon2">
-			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 10 (EL7201-9014)">
-				<Link VarA="Drive^Inputs^In^nDataIn1" VarB="DRV Following error actual value^Following error actual value"/>
-				<Link VarA="Drive^Inputs^In^nDcOutputTime" VarB="InfoData^DcOutputShift"/>
-				<Link VarA="Drive^Inputs^In^nState1" VarB="DRV Statusword^Statusword"/>
-				<Link VarA="Drive^Inputs^In^nState2" VarB="DRV Statusword^Statusword" Size="8" OffsB="8"/>
-				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
-				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^WcState"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl1" VarB="DRV Controlword^Controlword"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl2" VarB="DRV Controlword^Controlword" Size="8" OffsB="8"/>
-				<Link VarA="Drive^Outputs^Out^nDataOut1" VarB="DRV Target position^Target position"/>
-				<Link VarA="Enc^Inputs^In^nDataIn1" VarB="FB Position^Position"/>
-				<Link VarA="Enc^Inputs^In^nDcInputTime" VarB="InfoData^DcInputShift"/>
-				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
-				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^WcState"/>
-			</OwnerB>
-		</OwnerA>
-		<OwnerA Name="TINC^NC-Task 1 SAF^Axes^Horizon3">
-			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 11 (EL7201-9014)">
-				<Link VarA="Drive^Inputs^In^nDataIn1" VarB="DRV Following error actual value^Following error actual value"/>
-				<Link VarA="Drive^Inputs^In^nDcOutputTime" VarB="InfoData^DcOutputShift"/>
-				<Link VarA="Drive^Inputs^In^nState1" VarB="DRV Statusword^Statusword"/>
-				<Link VarA="Drive^Inputs^In^nState2" VarB="DRV Statusword^Statusword" Size="8" OffsB="8"/>
-				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
-				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^WcState"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl1" VarB="DRV Controlword^Controlword"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl2" VarB="DRV Controlword^Controlword" Size="8" OffsB="8"/>
-				<Link VarA="Drive^Outputs^Out^nDataOut1" VarB="DRV Target position^Target position"/>
-				<Link VarA="Enc^Inputs^In^nDataIn1" VarB="FB Position^Position"/>
-				<Link VarA="Enc^Inputs^In^nDcInputTime" VarB="InfoData^DcInputShift"/>
-				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
-				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^WcState"/>
-			</OwnerB>
-		</OwnerA>
-		<OwnerA Name="TINC^NC-Task 1 SAF^Axes^Lifter1">
-			<OwnerB Name="TIID^Device 1 (EtherCAT)^Drive 15 (MADLN05BE)">
-				<Link VarA="Drive^Inputs^In^nDataIn1" VarB="Transmit PDO mapping 1^Following error actual value"/>
-				<Link VarA="Drive^Inputs^In^nState1" VarB="Transmit PDO mapping 1^Statusword"/>
-				<Link VarA="Drive^Inputs^In^nState2" VarB="Transmit PDO mapping 1^Statusword" Size="8" OffsB="8"/>
-				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
-				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^WcState"/>
-				<Link VarA="Drive^Inputs^In^nState5" VarB="Transmit PDO mapping 1^Modes of operation display"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl1" VarB="Receive PDO mapping 1^Controlword"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl2" VarB="Receive PDO mapping 1^Controlword" Size="8" OffsB="8"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl5" VarB="Receive PDO mapping 1^Modes of operation"/>
-				<Link VarA="Drive^Outputs^Out^nDataOut1" VarB="Receive PDO mapping 1^Target position"/>
-				<Link VarA="Enc^Inputs^In^nDataIn1" VarB="Transmit PDO mapping 1^Position actual value"/>
-				<Link VarA="Enc^Inputs^In^nDataIn3" VarB="Transmit PDO mapping 1^Touch probe pos1 pos value"/>
-				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
-				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^WcState"/>
-				<Link VarA="Enc^Inputs^In^nState5" VarB="Transmit PDO mapping 1^Touch probe status"/>
-				<Link VarA="Enc^Inputs^In^nState6" VarB="Transmit PDO mapping 1^Touch probe status" Size="8" OffsB="8"/>
-				<Link VarA="Enc^Outputs^Out^nCtrl5" VarB="Receive PDO mapping 1^Touch probe function"/>
-				<Link VarA="Enc^Outputs^Out^nCtrl6" VarB="Receive PDO mapping 1^Touch probe function" Size="8" OffsB="8"/>
-			</OwnerB>
-		</OwnerA>
-		<OwnerA Name="TINC^NC-Task 1 SAF^Axes^Lifter2">
-			<OwnerB Name="TIID^Device 1 (EtherCAT)^Drive 14 (MADLN05BE)">
-				<Link VarA="Drive^Inputs^In^nDataIn1" VarB="Transmit PDO mapping 1^Following error actual value"/>
-				<Link VarA="Drive^Inputs^In^nState1" VarB="Transmit PDO mapping 1^Statusword"/>
-				<Link VarA="Drive^Inputs^In^nState2" VarB="Transmit PDO mapping 1^Statusword" Size="8" OffsB="8"/>
-				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
-				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^WcState"/>
-				<Link VarA="Drive^Inputs^In^nState5" VarB="Transmit PDO mapping 1^Modes of operation display"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl1" VarB="Receive PDO mapping 1^Controlword"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl2" VarB="Receive PDO mapping 1^Controlword" Size="8" OffsB="8"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl5" VarB="Receive PDO mapping 1^Modes of operation"/>
-				<Link VarA="Drive^Outputs^Out^nDataOut1" VarB="Receive PDO mapping 1^Target position"/>
-				<Link VarA="Enc^Inputs^In^nDataIn1" VarB="Transmit PDO mapping 1^Position actual value"/>
-				<Link VarA="Enc^Inputs^In^nDataIn3" VarB="Transmit PDO mapping 1^Touch probe pos1 pos value"/>
-				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
-				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^WcState"/>
-				<Link VarA="Enc^Inputs^In^nState5" VarB="Transmit PDO mapping 1^Touch probe status"/>
-				<Link VarA="Enc^Inputs^In^nState6" VarB="Transmit PDO mapping 1^Touch probe status" Size="8" OffsB="8"/>
-				<Link VarA="Enc^Outputs^Out^nCtrl5" VarB="Receive PDO mapping 1^Touch probe function"/>
-				<Link VarA="Enc^Outputs^Out^nCtrl6" VarB="Receive PDO mapping 1^Touch probe function" Size="8" OffsB="8"/>
-			</OwnerB>
-		</OwnerA>
-		<OwnerA Name="TINC^NC-Task 1 SAF^Axes^Lifter3">
-			<OwnerB Name="TIID^Device 1 (EtherCAT)^Drive 13 (MADLN05BE)">
-				<Link VarA="Drive^Inputs^In^nDataIn1" VarB="Transmit PDO mapping 1^Following error actual value"/>
-				<Link VarA="Drive^Inputs^In^nState1" VarB="Transmit PDO mapping 1^Statusword"/>
-				<Link VarA="Drive^Inputs^In^nState2" VarB="Transmit PDO mapping 1^Statusword" Size="8" OffsB="8"/>
-				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
-				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^WcState"/>
-				<Link VarA="Drive^Inputs^In^nState5" VarB="Transmit PDO mapping 1^Modes of operation display"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl1" VarB="Receive PDO mapping 1^Controlword"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl2" VarB="Receive PDO mapping 1^Controlword" Size="8" OffsB="8"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl5" VarB="Receive PDO mapping 1^Modes of operation"/>
-				<Link VarA="Drive^Outputs^Out^nDataOut1" VarB="Receive PDO mapping 1^Target position"/>
-				<Link VarA="Enc^Inputs^In^nDataIn1" VarB="Transmit PDO mapping 1^Position actual value"/>
-				<Link VarA="Enc^Inputs^In^nDataIn3" VarB="Transmit PDO mapping 1^Touch probe pos1 pos value"/>
-				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
-				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^WcState"/>
-				<Link VarA="Enc^Inputs^In^nState5" VarB="Transmit PDO mapping 1^Touch probe status"/>
-				<Link VarA="Enc^Inputs^In^nState6" VarB="Transmit PDO mapping 1^Touch probe status" Size="8" OffsB="8"/>
-				<Link VarA="Enc^Outputs^Out^nCtrl5" VarB="Receive PDO mapping 1^Touch probe function"/>
-				<Link VarA="Enc^Outputs^Out^nCtrl6" VarB="Receive PDO mapping 1^Touch probe function" Size="8" OffsB="8"/>
-			</OwnerB>
-		</OwnerA>
 		<OwnerA Name="TIPC^Untitled1^Untitled1 Instance">
 			<OwnerB Name="TIID^Device 1 (EtherCAT)^Box 16 (NU-EC1)">
 				<Link VarA="PlcTask Inputs^GVL.cylinderControls[1].SENSOR_B[1]" VarB="Output TxPDO-Map^CyA03b"/>
-			</OwnerB>
-			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 3 (EL2889)">
-				<Link VarA="PlcTask Outputs^GVL.cylinderControls[1].ACT_B[1]" VarB="Channel 3^Cy03"/>
+				<Link VarA="PlcTask Inputs^GVL.cylinderControls[2].SENSOR_B[1]" VarB="Output TxPDO-Map^CyA02b"/>
+				<Link VarA="PlcTask Inputs^GVL.cylinderControls[3].SENSOR_B[1]" VarB="Output TxPDO-Map^CyA01b"/>
+				<Link VarA="PlcTask Inputs^GVL.signalControls[1].input" VarB="Output TxPDO-Map^SfA01"/>
+				<Link VarA="PlcTask Inputs^GVL.signalControls[2].input" VarB="Output TxPDO-Map^SfA02"/>
+				<Link VarA="PlcTask Inputs^GVL.signalControls[3].input" VarB="Output TxPDO-Map^SfA03"/>
+				<Link VarA="PlcTask Inputs^GVL.signalControls[4].input" VarB="Output TxPDO-Map^SpA01"/>
+				<Link VarA="PlcTask Inputs^GVL.signalControls[5].input" VarB="Output TxPDO-Map^SpA02"/>
+				<Link VarA="PlcTask Inputs^GVL.signalControls[6].input" VarB="Output TxPDO-Map^SpA03"/>
 			</OwnerB>
 			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Conveyor">
 				<Link VarA="PlcTask Inputs^GVL.axisControls[1].Axis.NcToPlc" VarB="Outputs^ToPlc"/>

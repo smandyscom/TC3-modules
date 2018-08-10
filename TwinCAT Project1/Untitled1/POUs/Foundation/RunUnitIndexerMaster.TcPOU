@@ -5,8 +5,7 @@
 VAR_INPUT
 	syncAcknowledged : BOOL; //downstream replied starting ackowledge , face to downstream
 	
-	slaveLinkageStatus : ARRAY[1..32] of bool; // configuration
-	slaveWorkingSignal : ARRAY[1..32] OF BOOL; // collect slave working signal , possible to access externally?
+	
 END_VAR
 VAR_OUTPUT
 	syncEngaged : BOOL; //inform downstream i am ready , face to downstream

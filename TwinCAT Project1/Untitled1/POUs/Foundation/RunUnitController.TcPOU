@@ -63,11 +63,13 @@ THIS^.ErrorHandler();//
 interfaceControl(
 	currentMode:= THIS^.currentMode, 
 	requestMode=> THIS^.requestMode, 
-	requestInit=> requestInitialize, 
 	errorClear=> THIS^.requestErrorClear, 
 	mErrorType=> errorType, 
 	mMonitorDatas=> );
-
+IF interfaceControl.requestInit THEN
+	requestInitialize := TRUE; // memorize
+END_IF
+	
 errorType := interfaceControl.mErrorType;
 errorIndex := TO_INT(interfaceControl.mErrorIndex);
 errorCode := TO_INT(interfaceControl.mErrorCode);
@@ -92,44 +94,36 @@ IF requestMode<>currentMode THEN
 			END_IF 
 	END_CASE
 END_IF
-//step,pause control...etc
-SUPER^();
 //
 CASE currentMode OF	
 	eOperationModes.MANUAL:
 		THIS^.ManualMode(); //scan-in,scan-out,manual...
-		RETURN; //break here
 	eOperationModes.AUTO,eOperationModes.SEMI_AUTO:
-		//go further
-END_CASE
-//AUTO,SEMI-AUTO
-CASE State OF
-	0:
-	IF  requestInitialize THEN
-	//initialize all stations
-		bAllInitialized := TRUE;
-		FOR nCounter:=1 TO 32 BY 1 DO
+		//running sequences
+		FOR nCounter :=1 TO 8 BY 1 DO
 			IF gvl.stations[nCounter] <> 0 THEN
-				// if every station comes initialized
-				bAllInitialized := bAllInitialized AND gvl.stations[nCounter]^.Initialize();
+				gvl.stations[nCounter]^();
 			END_IF
 		END_FOR
-		IF bAllInitialized THEN
-			NextState:=100;
-			requestInitialize := FALSE; //clear after done
-		END_IF
-	END_IF
-	100:
-	//working
-	FOR nCounter:=1 TO 32 BY 1 DO
-		IF gvl.stations[nCounter] <> 0 THEN
-			gvl.stations[nCounter]^();
-		END_IF
-	END_FOR
-	//if initialize request raised , change to State-0
-	IF bAllInitialized THEN
-		NextState := 0;
-	END_IF
+		
+		IF  requestInitialize THEN
+			//initialize all stations
+			bAllInitialized := TRUE;
+			FOR nCounter:=1 TO 32 BY 1 DO
+				IF gvl.stations[nCounter] <> 0 THEN
+					// if every station comes initialized
+					bAllInitialized := bAllInitialized AND gvl.stations[nCounter]^.Initialize();
+				END_IF
+			END_FOR
+			IF bAllInitialized THEN
+				FOR nCounter:=1 TO 32 BY 1 DO
+					IF gvl.stations[nCounter] <> 0 THEN
+						gvl.stations[nCounter]^.NextState := 0; //start working
+					END_IF
+				END_FOR	
+				requestInitialize := FALSE; //clear after done
+			END_IF
+		END_IF		
 END_CASE]]></ST>
     </Implementation>
     <Method Name="ErrorHandler" Id="{a0eb5aec-6465-4175-9953-8d5b0f3a2dc2}">
@@ -176,7 +170,8 @@ END_VAR
     </Method>
     <LineIds Name="RunUnitController">
       <LineId Id="304" Count="4" />
-      <LineId Id="406" Count="1" />
+      <LineId Id="494" Count="0" />
+      <LineId Id="407" Count="0" />
       <LineId Id="400" Count="1" />
       <LineId Id="405" Count="0" />
       <LineId Id="392" Count="0" />
@@ -191,9 +186,11 @@ END_VAR
       <LineId Id="389" Count="0" />
       <LineId Id="257" Count="2" />
       <LineId Id="456" Count="0" />
-      <LineId Id="448" Count="4" />
+      <LineId Id="448" Count="2" />
+      <LineId Id="452" Count="0" />
       <LineId Id="454" Count="0" />
       <LineId Id="447" Count="0" />
+      <LineId Id="490" Count="2" />
       <LineId Id="489" Count="0" />
       <LineId Id="488" Count="0" />
       <LineId Id="487" Count="0" />
@@ -202,17 +199,18 @@ END_VAR
       <LineId Id="347" Count="0" />
       <LineId Id="350" Count="15" />
       <LineId Id="348" Count="1" />
-      <LineId Id="339" Count="0" />
-      <LineId Id="309" Count="0" />
-      <LineId Id="269" Count="7" />
-      <LineId Id="279" Count="2" />
-      <LineId Id="310" Count="0" />
-      <LineId Id="282" Count="9" />
-      <LineId Id="315" Count="0" />
-      <LineId Id="318" Count="0" />
-      <LineId Id="320" Count="0" />
-      <LineId Id="293" Count="10" />
-      <LineId Id="17" Count="0" />
+      <LineId Id="269" Count="3" />
+      <LineId Id="274" Count="1" />
+      <LineId Id="506" Count="0" />
+      <LineId Id="509" Count="0" />
+      <LineId Id="511" Count="1" />
+      <LineId Id="508" Count="0" />
+      <LineId Id="545" Count="0" />
+      <LineId Id="548" Count="0" />
+      <LineId Id="565" Count="0" />
+      <LineId Id="550" Count="14" />
+      <LineId Id="546" Count="0" />
+      <LineId Id="276" Count="0" />
     </LineIds>
     <LineIds Name="RunUnitController.ErrorHandler">
       <LineId Id="94" Count="0" />

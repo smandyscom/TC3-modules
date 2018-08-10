@@ -3,7 +3,7 @@
   <DUT Name="ParameterSet" Id="{7787d46e-2a5f-4431-8438-c57dc843a3f1}">
     <Declaration><![CDATA[TYPE ParameterSet :
 STRUCT
-	command : eCommandTypes;
+	command : eCommandTypes := eCommandTypes.POSITION;
 	parameter : ParameterGeneric;
 END_STRUCT
 END_TYPE

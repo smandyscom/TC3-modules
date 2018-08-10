@@ -4,6 +4,7 @@
     <Declaration><![CDATA[FUNCTION_BLOCK RunAxis IMPLEMENTS ICommon
 VAR_OUTPUT
 	PositionFeedback : LREAL;
+	//PositionCommand : LREAL;
 END_VAR
 VAR	
 	Axis : AXIS_REF;
@@ -16,14 +17,15 @@ VAR
 	fbSetPosition: MC_SetPosition;
 	
 	//Status reading
-	fbReadParameter: MC_ReadParameter;
+	fbReadActualVelocity: MC_ReadParameter;
 	fbReadActualPosition : MC_ReadActualPosition;
+	fbReadCommandPosition : MC_ReadParameter;
 	fbReadStatus : MC_ReadStatus;
 	
 	//bMonitoring : bool;
 END_VAR
-VAR_OUTPUT RETAIN
-	ptpCommands : ARRAY[1..16] OF ParameterSet; //collect command blocks relative to this axis here
+VAR RETAIN
+	ptpCommands : ARRAY[1..12] OF ParameterSet; //collect command blocks relative to this axis here
 END_VAR
 VAR CONSTANT
 	typeCode : eTypeCodes := eTypeCodes.AXIS;
@@ -65,7 +67,7 @@ fbReset(
 	ErrorID=> );
 
 //Status reading and update
-fbReadParameter(
+fbReadActualVelocity(
 	Axis:= Axis, 
 	Enable:= TRUE, 
 	ParameterNumber:= ActualVelocity, 
@@ -76,16 +78,7 @@ fbReadParameter(
 	ErrorID=> , 
 	Value=> );
 //comm.SPD_FEEDBACK := LREAL_TO_DWORD(fbReadParameter.Value*1000);
-fbReadParameter(
-	Axis:= Axis, 
-	Enable:= TRUE, 
-	ParameterNumber:= CommandedPosition, 
-	ReadMode:= , 
-	Valid=> , 
-	Busy=> , 
-	Error=> , 
-	ErrorID=> , 
-	Value=> );
+
 //comm.POS_COMMAND := LREAL_TO_DWORD(fbReadParameter.Value*1000);
 fbReadActualPosition(
 	Axis:= axis, 
@@ -271,12 +264,19 @@ eCommandTypes.POSITION:
 	ptMcError:=ADR(fbMoveAbs[bufferIndex].Error);
 	ptMcCommandAbort := ADR(fbMoveAbs[bufferIndex].CommandAborted);
 	//set once
-	IF NOT fbMoveAbs[bufferIndex].Busy THEN
+	IF NOT fbMoveAbs[bufferIndex].Busy AND NOT ptMcExecute^ THEN
 		//parameter writing
 		fbMoveAbs[bufferIndex].Velocity := ptBlock^.parameter.position.Velocity;
 		fbMoveAbs[bufferIndex].Acceleration:= ptBlock^.parameter.position.Acceleration;
 		fbMoveAbs[bufferIndex].Deceleration:= ptBlock^.parameter.position.Deceleration;
-		fbMoveAbs[bufferIndex].Position := ptBlock^.parameter.position.Position;
+		
+		CASE ptBlock^.parameter.position.PositionType OF
+			ePositionType.POSITION_ABS:
+				fbMoveAbs[bufferIndex].Position := ptBlock^.parameter.position.Position;
+			ePositionType.POSITION_REL:
+				fbMoveAbs[bufferIndex].Position := PositionCommand + ptBlock^.parameter.position.Position; 
+		END_CASE
+		
 	END_IF
 	
 	IF bufferIndex>=2 THEN
@@ -358,7 +358,9 @@ VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
 END_VAR
-]]></Declaration>
+VAR
+	nCounter : int ;
+END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[]]></ST>
       </Implementation>
@@ -372,6 +374,34 @@ END_VAR
         <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
+    <Property Name="PositionCommand" Id="{d90f9427-641f-46be-8de0-14848d24631d}">
+      <Declaration><![CDATA[PROPERTY PositionCommand : LREAL]]></Declaration>
+      <Get Name="Get" Id="{19f01c9c-5d4f-4654-8572-382eb730f8d5}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[fbReadCommandPosition(
+	Axis:= Axis, 
+	Enable:= TRUE, 
+	ParameterNumber:= CommandedPosition, 
+	ReadMode:= READMODE_ONCE, 
+	Valid=> , 
+	Busy=> , 
+	Error=> , 
+	ErrorID=> , 
+	Value=> PositionCommand);]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{dd39da7a-143a-4c85-876d-cc4718cf70aa}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
     <Method Name="TypeCode" Id="{d7c803da-ddd0-409e-b8b9-d71f78281c2b}" FolderPath="ICommon\">
       <Declaration><![CDATA[METHOD TypeCode : eTypeCodes
 VAR_INPUT
@@ -382,29 +412,8 @@ END_VAR
       </Implementation>
     </Method>
     <LineIds Name="RunAxis">
-      <LineId Id="443" Count="0" />
-      <LineId Id="446" Count="8" />
-      <LineId Id="444" Count="0" />
-      <LineId Id="492" Count="21" />
-      <LineId Id="362" Count="0" />
-      <LineId Id="514" Count="0" />
-      <LineId Id="516" Count="57" />
-      <LineId Id="310" Count="0" />
-      <LineId Id="515" Count="0" />
-      <LineId Id="486" Count="0" />
-      <LineId Id="575" Count="0" />
-      <LineId Id="574" Count="0" />
-      <LineId Id="487" Count="0" />
-      <LineId Id="491" Count="0" />
-      <LineId Id="361" Count="0" />
-      <LineId Id="346" Count="14" />
-      <LineId Id="314" Count="0" />
-      <LineId Id="279" Count="0" />
-      <LineId Id="295" Count="14" />
-      <LineId Id="121" Count="0" />
-      <LineId Id="489" Count="1" />
-      <LineId Id="253" Count="0" />
-      <LineId Id="143" Count="1" />
+      <LineId Id="796" Count="46" />
+      <LineId Id="852" Count="82" />
       <LineId Id="9" Count="0" />
     </LineIds>
     <LineIds Name="RunAxis.ConfigureRead">
@@ -440,6 +449,10 @@ END_VAR
       <LineId Id="466" Count="0" />
       <LineId Id="375" Count="1" />
       <LineId Id="378" Count="3" />
+      <LineId Id="507" Count="2" />
+      <LineId Id="513" Count="0" />
+      <LineId Id="511" Count="1" />
+      <LineId Id="510" Count="0" />
       <LineId Id="377" Count="0" />
       <LineId Id="367" Count="0" />
       <LineId Id="461" Count="3" />
@@ -479,10 +492,17 @@ END_VAR
       <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="RunAxis.FB_init">
-      <LineId Id="7" Count="0" />
+      <LineId Id="14" Count="0" />
     </LineIds>
     <LineIds Name="RunAxis.Monitor">
       <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="RunAxis.PositionCommand.Get">
+      <LineId Id="5" Count="8" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="RunAxis.PositionCommand.Set">
+      <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="RunAxis.TypeCode">
       <LineId Id="5" Count="0" />

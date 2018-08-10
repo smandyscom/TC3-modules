@@ -51,7 +51,7 @@ END_VAR
 	gvl.bObjectsLinked := TRUE; //self-locked
 END_IF
 
-//Controller();//execute
+Controller();//execute
 
 ]]></ST>
     </Implementation>

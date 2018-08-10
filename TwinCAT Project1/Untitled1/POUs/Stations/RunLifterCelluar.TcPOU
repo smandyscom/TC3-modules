@@ -30,12 +30,22 @@ VAR
 	
 	
 	working : BOOL; //dispatch work to working station
+	//TODO , signal working[1]
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[SUPER^();
 
 CASE State OF
+	//-------------------------Initialize
+	eSpecialStates.INITIAL_BEGIN:
+		bSerialTransition:=Cylinder^.Execute(eCylinderCommands.COMMAND_A);//MC on would be taken by method call
+	eSpecialStates.INITIAL_STATE_1:
+		bSerialTransition :=  AxisVertical^.ExecuteParameter(ptCommandLifterRelease);
+	eSpecialStates.INITIAL_STATE_2:
+		IF AxisHorizon^.ExecuteParameter(ptCommandHorizonHit) THEN
+			NextState := eSpecialStates.INITIAL_END;
+		END_IF
 	//-------------------------Hit
 	0:
 	//initiale state : 
@@ -140,27 +150,6 @@ ptObstacleSensorStatus := ADR(argObstacleSensor^.debouncedOn); //fibers
 ptReachSensorStatus :=ADR(argReachSensor^.debouncedOn); //approximities]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Initialize" Id="{21db5a00-f7a1-4530-94de-d799f1b897b9}">
-      <Declaration><![CDATA[METHOD Initialize : BOOL
-VAR_INPUT
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[
-CASE State OF
-	eSpecialStates.INITIAL_BEGIN:
-		bSerialTransition:=Cylinder^.Execute(eCylinderCommands.COMMAND_A);//MC on would be taken by method call
-	eSpecialStates.INITIAL_STATE_1:
-		bSerialTransition :=  AxisVertical^.ExecuteParameter(ptCommandLifterRelease);
-	eSpecialStates.INITIAL_STATE_2:
-		IF AxisHorizon^.ExecuteParameter(ptCommandHorizonHit) THEN
-			NextState := eSpecialStates.INITIAL_END;
-		END_IF
-END_CASE
-
-Initialize := SUPER^.Initialize(); //call base method]]></ST>
-      </Implementation>
-    </Method>
     <Property Name="IsHit" Id="{e0692fcd-15a1-46c6-afa7-94c322fff347}">
       <Declaration><![CDATA[PROPERTY IsHit : BOOL]]></Declaration>
       <Get Name="Get" Id="{fdd265c2-710a-432f-ad01-ec9705bca363}">
@@ -219,7 +208,11 @@ END_VAR
       </Set>
     </Property>
     <LineIds Name="RunLifterCelluar">
-      <LineId Id="236" Count="52" />
+      <LineId Id="236" Count="2" />
+      <LineId Id="327" Count="0" />
+      <LineId Id="320" Count="6" />
+      <LineId Id="319" Count="0" />
+      <LineId Id="239" Count="49" />
       <LineId Id="42" Count="0" />
     </LineIds>
     <LineIds Name="RunLifterCelluar.FB_init">
@@ -228,18 +221,6 @@ END_VAR
       <LineId Id="103" Count="6" />
       <LineId Id="122" Count="2" />
       <LineId Id="110" Count="2" />
-    </LineIds>
-    <LineIds Name="RunLifterCelluar.Initialize">
-      <LineId Id="6" Count="0" />
-      <LineId Id="5" Count="0" />
-      <LineId Id="7" Count="0" />
-      <LineId Id="9" Count="1" />
-      <LineId Id="14" Count="0" />
-      <LineId Id="23" Count="0" />
-      <LineId Id="30" Count="2" />
-      <LineId Id="8" Count="0" />
-      <LineId Id="18" Count="0" />
-      <LineId Id="17" Count="0" />
     </LineIds>
     <LineIds Name="RunLifterCelluar.IsHit.Get">
       <LineId Id="2" Count="0" />

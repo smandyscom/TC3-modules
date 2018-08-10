@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <DUT Name="ePositionType" Id="{55de27bb-a4c8-4ace-84de-fb78476b5140}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE ePositionType :
+(
+	POSITION_ABS := 0,
+	POSITION_REL := 1
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

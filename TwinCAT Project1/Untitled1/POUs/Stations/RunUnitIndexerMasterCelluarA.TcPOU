@@ -199,6 +199,17 @@ IF Upstream=0 THEN
 END_IF]]></ST>
       </Implementation>
     </Method>
+    <Method Name="Initialize" Id="{c03378a0-0488-4150-9f50-182a82a479bf}">
+      <Declaration><![CDATA[METHOD Initialize : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//direct change state
+NextState := eSpecialStates.INITIAL_END;
+Initialize := SUPER^.Initialize();]]></ST>
+      </Implementation>
+    </Method>
     <LineIds Name="RunUnitIndexerMasterCelluarA">
       <LineId Id="1233" Count="2" />
       <LineId Id="1392" Count="0" />
@@ -248,6 +259,10 @@ END_IF]]></ST>
       <LineId Id="64" Count="1" />
       <LineId Id="73" Count="2" />
       <LineId Id="32" Count="0" />
+    </LineIds>
+    <LineIds Name="RunUnitIndexerMasterCelluarA.Initialize">
+      <LineId Id="6" Count="1" />
+      <LineId Id="5" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

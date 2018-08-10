@@ -9,6 +9,8 @@ VAR_INPUT
 	bIsBypassed : BOOL;
 	bWorkingOverride : BOOL;
 	bMaterialOverride : BOOL;
+	
+	slaveWorkingSignal : ARRAY[1..32] OF BOOL; // collect slave working signal , possible to access externally?
 END_VAR
 VAR_OUTPUT
 	State : INT := 0;
@@ -31,6 +33,7 @@ VAR
 END_VAR
 VAR RETAIN
 	//station specific settings area (user settings
+	slaveLinkageStatus : ARRAY[1..32] OF BOOL; // configuration
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -142,6 +145,10 @@ END_VAR
 Parent := argParent;
 SlotBase := argSlotBase;
 SlotLast := argSlotLast;
+//
+IF bInitRetains THEN
+	NextState := eSpecialStates.INITIAL_BEGIN;
+END_IF
 
 
 ]]></ST>
@@ -155,12 +162,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[//once initializing method call , redirect current state to initalizing region
 IF (TO_UINT(State) AND TO_UINT(eSpecialStates.INITIAL_REGION)) =0 THEN
-	NextState := eSpecialStates.INITIAL_BEGIN;
-END_IF
-
-//clear state,next state if initialized
-IF State=eSpecialStates.INITIAL_END THEN
-	NextState:=0;
+	NextState := eSpecialStates.INITIAL_BEGIN; //not in intializing region , change
 END_IF
 
 Initialize := (State = eSpecialStates.INITIAL_END);]]></ST>
@@ -212,17 +214,13 @@ END_VAR
       <LineId Id="43" Count="0" />
       <LineId Id="10" Count="1" />
       <LineId Id="41" Count="0" />
+      <LineId Id="53" Count="3" />
       <LineId Id="13" Count="1" />
       <LineId Id="7" Count="0" />
     </LineIds>
     <LineIds Name="RunUnitGeneric.Initialize">
       <LineId Id="18" Count="0" />
       <LineId Id="20" Count="2" />
-      <LineId Id="19" Count="0" />
-      <LineId Id="5" Count="0" />
-      <LineId Id="8" Count="0" />
-      <LineId Id="12" Count="0" />
-      <LineId Id="10" Count="0" />
       <LineId Id="14" Count="0" />
       <LineId Id="7" Count="0" />
     </LineIds>

@@ -75,6 +75,9 @@
     <Compile Include="DUTs\Definitions\eErrorClearWays.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\Definitions\ePositionType.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\Definitions\eTypeCodes.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -138,6 +141,10 @@
     </Compile>
     <Compile Include="POUs\ICommon.TcIO">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\POU.TcPOU">
+      <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
     <Compile Include="POUs\TEST_MAIN.TcPOU">
       <SubType>Code</SubType>
