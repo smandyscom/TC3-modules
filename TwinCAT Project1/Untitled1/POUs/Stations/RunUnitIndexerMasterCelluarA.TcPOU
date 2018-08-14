@@ -61,11 +61,10 @@ IF bSerialTransition AND State = 1 THEN
 	NextState := 16#10; //state override : release lifters
 END_IF
 
-IF State >=3 AND State <=7 AND_THEN Upstream<>0 AND Upstream^.syncEngaged AND NOT Upstream^.syncAcknowledged THEN
-	//pull upstream when ready
-	Upstream^.syncAcknowledged := TRUE;
+IF State >=3 AND State <=7 AND_THEN Upstream<>0 AND Upstream^.syncEngaged AND NOT Upstream^.syncAcknowledged THEN	
+	Upstream^.syncAcknowledged := TRUE;//pull upstream when ready
 	//Data transmit
-	SlotBase^.wordOut.0 := TRUE; //is valid
+	SlotBase^.wordOut.0 := TRUE; //TODO , follow that status
 	SlotBase^.id := Upstream^.syncMaterialId;
 	//set-up final goal
 	commandFinalGoal.command := eCommandTypes.POSITION;
@@ -116,6 +115,7 @@ CASE State OF
 		IF allHit THEN
 			triggerHit:=false;
 			slowExecute:=TRUE;//able to slowdown to hit
+			syncEngaged := false ;// sending over
 			bSerialTransition:= TRUE; //serial transition
 		ELSE
 			//NextState := 16#E0;	//any lifter fails
@@ -216,7 +216,8 @@ Initialize := SUPER^.Initialize();]]></ST>
       <LineId Id="1391" Count="0" />
       <LineId Id="1236" Count="16" />
       <LineId Id="1375" Count="0" />
-      <LineId Id="1253" Count="5" />
+      <LineId Id="1253" Count="3" />
+      <LineId Id="1258" Count="0" />
       <LineId Id="1387" Count="0" />
       <LineId Id="1389" Count="0" />
       <LineId Id="1388" Count="0" />
@@ -232,7 +233,9 @@ Initialize := SUPER^.Initialize();]]></ST>
       <LineId Id="1376" Count="1" />
       <LineId Id="1280" Count="15" />
       <LineId Id="1378" Count="0" />
-      <LineId Id="1296" Count="3" />
+      <LineId Id="1296" Count="0" />
+      <LineId Id="1425" Count="0" />
+      <LineId Id="1297" Count="2" />
       <LineId Id="1369" Count="0" />
       <LineId Id="1300" Count="4" />
       <LineId Id="1379" Count="0" />

@@ -139,12 +139,18 @@
     <Compile Include="POUs\Foundation\RunUnitIndexerMaster.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Foundation\RunUnitTransporterBase.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\ICommon.TcIO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\POU.TcPOU">
       <SubType>Code</SubType>
       <ExcludeFromBuild>true</ExcludeFromBuild>
+    </Compile>
+    <Compile Include="POUs\Stations\RunUnitCellularC.TcPOU">
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\TEST_MAIN.TcPOU">
       <SubType>Code</SubType>

@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <POU Name="RunUnitTransporterBase" Id="{05eb4ac2-43a3-44ce-8012-78838d9522d6}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunUnitTransporterBase EXTENDS RunUnitGeneric
+VAR_INPUT
+	syncAcknowledged : BOOL; //downstream replied starting ackowledge , face to downstream
+	//upstream write for downstream
+END_VAR
+VAR_OUTPUT
+	syncEngaged : BOOL; //inform downstream i am ready , face to downstream
+END_VAR
+VAR
+	Upstream : POINTER TO RunUnitTransporterBase;//upstream linkage
+	//proxy mode
+	isProxyMode : BOOL := FALSE;
+	
+	fbAdsSyncRead : ADSREAD;
+	fbAdsSyncWrite : ADSWRITE;
+	fbAdsMatSyncRead : ADSREAD;
+	
+	isMatSync : BOOL := FALSE;
+	
+END_VAR
+VAR RETAIN
+	matSyncValue : LINT := 0;
+	//proxy mode parameters
+	netId : T_AmsNetID;
+	port : T_AmsPort := 851; //Tc3
+	indexGroup : UDINT := TO_UDINT(eAdsIndexGroups.PLCADS_RWM);
+	
+	offsetUpstreamSyncEngaged : UDINT := 127;
+	offsetUpstreamSyncAckowledged  : UDINT := 128;
+	offsetUpstreamSyncMatSync : UDINT := 130; //64bits
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//non proxy 	
+SUPER^();
+// Handshaking sequence (face to upstream
+IF Upstream <> 0 AND_THEN NOT Upstream^.syncEngaged THEN
+	Upstream^.syncAcknowledged := FALSE; //reset upstream
+END_IF
+
+IF NOT isProxyMode THEN
+	RETURN;
+END_IF
+
+//do ADS data exchanging
+fbAdsSyncRead(
+		NETID:= netId, 
+		PORT:= port, 
+		IDXGRP:= indexGroup, 
+		IDXOFFS:= offsetUpstreamSyncEngaged, 
+		LEN:= SIZEOF(syncEngaged), 
+		DESTADDR:= ADR(syncEngaged), 
+		READ:= not fbAdsSyncRead.BUSY, 
+		TMOUT:= , 
+		BUSY=> , 
+		ERR=> , 
+		ERRID=> );
+		
+fbAdsSyncWrite(
+		NETID:= netId, 
+		PORT:= port, 
+		IDXGRP:= indexGroup, 
+		IDXOFFS:= offsetUpstreamSyncAckowledged, 
+		LEN:= SIZEOF(syncAcknowledged), 
+		SRCADDR:= ADR(syncAcknowledged), 
+		WRITE:= NOT fbAdsSyncWrite.BUSY, 
+		TMOUT:= , 
+		BUSY=> , 
+		ERR=> , 
+		ERRID=> );
+	
+fbAdsMatSyncRead(
+		NETID:= netId, 
+		PORT:= port, 
+		IDXGRP:= indexGroup, 
+		IDXOFFS:= offsetUpstreamSyncMatSync, 
+		LEN:= SIZEOF(matSyncValue), 
+		DESTADDR:= ADR(matSyncValue), 
+		READ:= NOT fbAdsMatSyncRead.BUSY AND isMatSync, 
+		TMOUT:= , 
+		BUSY=> , 
+		ERR=> , 
+		ERRID=> );	
+		
+
+CASE State OF
+	0:
+		IF syncEngaged AND NOT syncAcknowledged THEN
+			isMatSync:= TRUE; //start mat sync
+			bSerialTransition := TRUE;
+		END_IF
+	1: 
+		IF NOT fbAdsMatSyncRead.READ THEN
+			//done
+			isMatSync := FALSE;
+			NextState := 0;
+		END_IF
+END_CASE
+	]]></ST>
+    </Implementation>
+    <LineIds Name="RunUnitTransporterBase">
+      <LineId Id="372" Count="1" />
+      <LineId Id="458" Count="2" />
+      <LineId Id="374" Count="0" />
+      <LineId Id="461" Count="0" />
+      <LineId Id="375" Count="43" />
+      <LineId Id="437" Count="8" />
+      <LineId Id="448" Count="0" />
+      <LineId Id="450" Count="1" />
+      <LineId Id="449" Count="0" />
+      <LineId Id="446" Count="0" />
+      <LineId Id="329" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

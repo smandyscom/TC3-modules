@@ -3,9 +3,9 @@
   <GVL Name="GVL" Id="{e607aa11-c301-416f-9cbc-bc4f43af5299}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
 VAR_GLOBAL 
-	//test usage
-	//simuSyncEngaged AT%MB127 : BOOL;
-	//simuSyncAcknowledged AT%MB128 : BOOL;
+	//for downstream
+	//downstreamSyncEngaged AT%MB127 : BOOL;
+	//downstreamSyncAcknowledged AT%MB128 : BOOL;
 
 	//
 	fakeInput AT%I* : bool;

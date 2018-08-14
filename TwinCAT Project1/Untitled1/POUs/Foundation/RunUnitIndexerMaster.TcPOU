@@ -35,7 +35,7 @@ END_VAR
 VAR RETAIN
 	//proxy mode parameters
 	netId : T_AmsNetID;
-	port : T_AmsPort := 851;
+	port : T_AmsPort := 851; //Tc3
 	indexGroup : UDINT := TO_UDINT(eAdsIndexGroups.PLCADS_RWM);
 	offsetUpstreamSyncEngaged : UDINT := 127;
 	offsetUpstreamSyncAckowledged  : UDINT := 128;
