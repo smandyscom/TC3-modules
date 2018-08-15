@@ -115,6 +115,9 @@
     <Compile Include="POUs\AUTO.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\MAIN_C1A2.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Foundation\RunAxis.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -170,15 +173,7 @@
       <SubType>Code</SubType>
       <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
-    <Compile Include="POUs\TEST_COMMAND_BLOCK.TcPOU">
-      <SubType>Code</SubType>
-      <ExcludeFromBuild>true</ExcludeFromBuild>
-    </Compile>
     <Compile Include="POUs\TEST_CYLINDER.TcPOU">
-      <SubType>Code</SubType>
-      <ExcludeFromBuild>true</ExcludeFromBuild>
-    </Compile>
-    <Compile Include="POUs\TEST_UNIT_MASTER.TcPOU">
       <SubType>Code</SubType>
       <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>

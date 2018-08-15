@@ -8,7 +8,7 @@ VAR_GLOBAL
 	//downstreamSyncAcknowledged AT%MB128 : BOOL;
 
 	//
-	fakeInput AT%I* : bool;
+	//fakeInput AT%I* : bool;
 	
 	materialSlots : ARRAY[1..3] OF Block128Words;	
 	axisControls: ARRAY[1..8] OF RunAxis;
