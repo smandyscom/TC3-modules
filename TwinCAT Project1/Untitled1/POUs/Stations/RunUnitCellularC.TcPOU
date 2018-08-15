@@ -20,6 +20,7 @@ END_VAR
 VAR CONSTANT
 	indexSend : INT := 1;
 	indexReceive : INT := 2;
+	indexWork : INT := 3; //especially for Cellular D
 END_VAR
 VAR RETAIN
 	//TODO memorize carrier existed?
@@ -128,6 +129,47 @@ CASE State OF
 END_CASE
 ]]></ST>
     </Implementation>
+    <Method Name="FB_init" Id="{a9a51c1b-f758-4ded-9a6c-01bf50e17b39}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	
+	argParent : POINTER TO RunUnitGeneric;
+	argSlotBase : POINTER TO MaterialBlock;
+	argSlotLast : POINTER TO MaterialBlock;
+	
+	argUpstream : POINTER TO RunUnitIndexerMaster;
+	
+	argLinear : POINTER TO RunAxis;
+	argRotator : POINTER TO RunAxis;
+	argReachSensor : POINTER TO RunSignal;
+	argInterfereSensor : POINTER TO RunSignal;
+	argHolderCylinder : POINTER TO RunCylinder;
+	argPusherCylinder : POINTER TO RunCylinder;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//initialize 
+Parent := argParent;
+SlotBase := argSlotBase;
+SlotLast := argSlotLast;
+
+Upstream := argUpstream;
+
+IF Upstream=0 THEN
+	isProxyMode:=TRUE; //no upstream , i am proxy
+END_IF
+
+//device link
+liner := argLinear;
+rotator := argRotator;
+reachSensor := argReachSensor;
+interfereSensor := argInterfereSensor;
+holderCylinder := argHolderCylinder;
+pusherCylinder := argPusherCylinder;]]></ST>
+      </Implementation>
+    </Method>
     <LineIds Name="RunUnitCellularC">
       <LineId Id="26" Count="0" />
       <LineId Id="9" Count="0" />
@@ -182,6 +224,13 @@ END_CASE
       <LineId Id="141" Count="4" />
       <LineId Id="30" Count="0" />
       <LineId Id="27" Count="0" />
+    </LineIds>
+    <LineIds Name="RunUnitCellularC.FB_init">
+      <LineId Id="21" Count="8" />
+      <LineId Id="7" Count="0" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="32" Count="5" />
     </LineIds>
   </POU>
 </TcPlcObject>

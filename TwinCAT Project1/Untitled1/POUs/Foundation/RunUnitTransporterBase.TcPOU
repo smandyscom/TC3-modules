@@ -101,6 +101,32 @@ CASE State OF
 END_CASE
 	]]></ST>
     </Implementation>
+    <Method Name="FB_init" Id="{a8c98733-d54c-4b9b-8f3c-27eb23521d1d}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	
+	argParent : POINTER TO RunUnitGeneric;
+	argSlotBase : POINTER TO MaterialBlock;
+	argSlotLast : POINTER TO MaterialBlock;
+	
+	argUpstream : POINTER TO RunUnitIndexerMaster;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//initialize 
+Parent := argParent;
+SlotBase := argSlotBase;
+SlotLast := argSlotLast;
+
+Upstream := argUpstream;
+
+IF Upstream=0 THEN
+	isProxyMode:=TRUE; //no upstream , i am proxy
+END_IF]]></ST>
+      </Implementation>
+    </Method>
     <LineIds Name="RunUnitTransporterBase">
       <LineId Id="372" Count="1" />
       <LineId Id="458" Count="2" />
@@ -113,6 +139,11 @@ END_CASE
       <LineId Id="449" Count="0" />
       <LineId Id="446" Count="0" />
       <LineId Id="329" Count="0" />
+    </LineIds>
+    <LineIds Name="RunUnitTransporterBase.FB_init">
+      <LineId Id="15" Count="4" />
+      <LineId Id="21" Count="3" />
+      <LineId Id="11" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
