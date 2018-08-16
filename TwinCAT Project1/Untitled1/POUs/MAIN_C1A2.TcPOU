@@ -26,6 +26,9 @@ VAR
 	//TODO , cellular C/top view/bottom view
 	//
 	nCounter : INT; //comment
+	
+	//need to explicit call write persistance data , to store into non-violate memory
+	writePersistance : WritePersistentData;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -52,11 +55,51 @@ END_VAR
 	gvl.bObjectsLinked := TRUE; //self-locked
 END_IF
 
-Controller();//execute]]></ST>
+Controller();//execute
+
+ConveyorMaster.allHit := TRUE;
+ConveyorMaster.allReach := TRUE;
+ConveyorMaster.allRelease := true;
+FOR nCounter := 1 TO 3 BY 1 DO
+	LifterCellularA[nCounter].IsHit := ConveyorMaster.triggerHit;
+	LifterCellularA[nCounter].IsReleased := ConveyorMaster.triggerRelease;
+	//link
+	ConveyorMaster.allHit := ConveyorMaster.allHit AND LifterCellularA[nCounter].IsHit;
+	ConveyorMaster.allReach := ConveyorMaster.allReach AND LifterCellularA[nCounter].IsReach;
+	ConveyorMaster.allRelease := ConveyorMaster.allRelease AND LifterCellularA[nCounter].IsReleased;
+END_FOR
+//lifterCelluarA.IsHit := masterCelluarA.triggerHit;
+//lifterCelluarA.IsReleased := masterCelluarA.triggerRelease;
+//masterCelluarA.allHit := lifterCelluarA.IsHit;
+//masterCelluarA.allReach := lifterCelluarA.IsReach;
+//masterCelluarA.allRelease := lifterCelluarA.IsReleased;
+
+writePersistance(
+		NETID:= , 
+		PORT:= 851, 
+		START:= , 
+		TMOUT:= , 
+		BUSY=> , 
+		ERR=> , 
+		ERRID=> );]]></ST>
     </Implementation>
     <LineIds Name="MAIN_C1A2">
       <LineId Id="28" Count="22" />
       <LineId Id="5" Count="0" />
+      <LineId Id="125" Count="0" />
+      <LineId Id="114" Count="0" />
+      <LineId Id="126" Count="1" />
+      <LineId Id="108" Count="0" />
+      <LineId Id="115" Count="0" />
+      <LineId Id="117" Count="0" />
+      <LineId Id="119" Count="2" />
+      <LineId Id="124" Count="0" />
+      <LineId Id="116" Count="0" />
+      <LineId Id="110" Count="3" />
+      <LineId Id="109" Count="0" />
+      <LineId Id="84" Count="0" />
+      <LineId Id="101" Count="6" />
+      <LineId Id="100" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

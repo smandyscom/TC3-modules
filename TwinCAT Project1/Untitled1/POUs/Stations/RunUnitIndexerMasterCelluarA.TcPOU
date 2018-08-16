@@ -98,8 +98,8 @@ CASE State OF
 		triggerRelease:=FALSE;
 		
 		//before enter deceleration
-		commandCheckRaise.parameter.position := (ptCommandFast^.parameter.position.Velocity * ptCommandFast^.parameter.position.Velocity);
-		commandCheckRaise.parameter.position := commandCheckRaise.parameter.position / (ptCommandFast^.parameter.position.Deceleration * 1.8);
+		commandCheckRaise.parameter.position.Position := (ptCommandFast^.parameter.position.Velocity * ptCommandFast^.parameter.position.Velocity);
+		commandCheckRaise.parameter.position.Position := commandCheckRaise.parameter.position.Position / (ptCommandFast^.parameter.position.Deceleration * 1.8);
 		
 		NextState:=2; //merge back default sequence
 	END_IF
@@ -196,7 +196,7 @@ IF Axis<>0 THEN
 	ptCommandSlow := ADR(Axis^.ptpCommands[indexSlow]);
 	//ptCommandTriggerRaise := ADR(Axis^.ptpCommands[indexRaise]); //trigger point
 	//ptCommandCheckRaise :=ADR(Axis^.ptpCommands[indexCheck]); //if not all lifter done until then , slowdown conveyor motion
-	commandTriggerRaise.parameter.position := 250; //carrier length
+	commandTriggerRaise.parameter.position.Position := 250; //carrier length
 END_IF
 
 IF Upstream=0 THEN

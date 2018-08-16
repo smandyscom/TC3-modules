@@ -60,32 +60,26 @@ CASE State OF
 	END_IF
 	2:
 	//once reach sensor detected , n
-	bSerialTransition := ptReachSensorStatus^;
+	bSerialTransition := ptReachSensorStatus^;	
 	3:
-	//hold
-	bSerialTransition := Cylinder^.Execute(eCylinderCommands.COMMAND_B);
-	4:
 	//to working position
-	IF AxisVertical^.ExecuteParameter(ptCommandLifterWorking)THEN
+	bSerialTransition := AxisVertical^.ExecuteParameter(ptCommandLifterWorking);
+	4:
+	//hold
+	IF Cylinder^.Execute(eCylinderCommands.COMMAND_B)THEN
 		//dispatching work to station
 		working := TRUE;
 		NextState := 16#10;
 	END_IF
-	
 	//---------------------------releasing
 	16#20:
 	bSerialTransition := mRelease;
 	IF bSerialTransition THEN
 		mRelease := FALSE;
-	END_IF
+	END_IF	
 	16#21:
-	bSerialTransition := AxisVertical^.ExecuteParameter(ptCommandLifterHit);//if release flag on
-	16#22:
-	//release holder
-	bSerialTransition := Cylinder^.Execute(eCylinderCommands.COMMAND_A);
-	16#23:
 	bSerialTransition :=  AxisVertical^.ExecuteParameter(ptCommandLifterRelease);
-	16#24:
+	16#22:
 	IF NOT ptReachSensorStatus^ THEN
 		//make sure all state reseted
 		NextState := 0;
@@ -93,9 +87,14 @@ CASE State OF
 	
 	//----------------------------- working
 	16#10:
-	IF NOT working THEN
-		NextState := 16#20;
-	END_IF
+		bSerialTransition := NOT working;
+	16#11:
+		//release holder
+		bSerialTransition := Cylinder^.Execute(eCylinderCommands.COMMAND_A);
+	16#12:
+		IF AxisVertical^.ExecuteParameter(ptCommandLifterHit) THEN
+			NextState := 16#20;
+		END_IF
 END_CASE]]></ST>
     </Implementation>
     <Method Name="FB_init" Id="{a4e43bb3-b045-4468-b1e1-3d38f2c0d86a}">
@@ -212,7 +211,16 @@ END_VAR
       <LineId Id="327" Count="0" />
       <LineId Id="320" Count="6" />
       <LineId Id="319" Count="0" />
-      <LineId Id="239" Count="49" />
+      <LineId Id="239" Count="14" />
+      <LineId Id="257" Count="1" />
+      <LineId Id="363" Count="0" />
+      <LineId Id="359" Count="1" />
+      <LineId Id="364" Count="3" />
+      <LineId Id="264" Count="6" />
+      <LineId Id="276" Count="9" />
+      <LineId Id="376" Count="0" />
+      <LineId Id="368" Count="1" />
+      <LineId Id="371" Count="4" />
       <LineId Id="42" Count="0" />
     </LineIds>
     <LineIds Name="RunLifterCelluar.FB_init">

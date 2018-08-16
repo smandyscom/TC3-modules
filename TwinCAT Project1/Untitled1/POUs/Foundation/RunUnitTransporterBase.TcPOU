@@ -21,7 +21,7 @@ VAR
 	isMatSync : BOOL := FALSE;
 	
 END_VAR
-VAR RETAIN
+VAR PERSISTENT
 	matSyncValue : LINT := 0;
 	//proxy mode parameters
 	netId : T_AmsNetID;

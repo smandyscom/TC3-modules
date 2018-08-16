@@ -27,7 +27,7 @@ VAR
 	interfaceManual : InterfaceManualV1;
 	
 END_VAR
-VAR RETAIN
+VAR PERSISTENT
 END_VAR
 ]]></Declaration>
     <Implementation>

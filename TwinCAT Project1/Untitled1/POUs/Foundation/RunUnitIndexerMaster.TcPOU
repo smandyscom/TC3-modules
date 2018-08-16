@@ -32,7 +32,7 @@ VAR
 	fbAdsWrite : ADSWRITE;
 	
 END_VAR
-VAR RETAIN
+VAR PERSISTENT
 	//proxy mode parameters
 	netId : T_AmsNetID;
 	port : T_AmsPort := 851; //Tc3

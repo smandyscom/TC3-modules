@@ -31,7 +31,7 @@ VAR
 	isTransit : BOOL ;
 	workingTimer : LTON;
 END_VAR
-VAR RETAIN
+VAR PERSISTENT
 	//station specific settings area (user settings
 	slaveLinkageStatus : ARRAY[1..32] OF BOOL; // configuration
 END_VAR

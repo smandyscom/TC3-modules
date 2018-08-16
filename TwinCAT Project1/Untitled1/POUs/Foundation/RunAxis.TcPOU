@@ -24,7 +24,7 @@ VAR
 	
 	//bMonitoring : bool;
 END_VAR
-VAR RETAIN
+VAR PERSISTENT
 	ptpCommands : ARRAY[1..12] OF ParameterSet; //collect command blocks relative to this axis here
 END_VAR
 VAR CONSTANT
