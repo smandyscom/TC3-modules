@@ -134,7 +134,7 @@ VAR_INPUT
 	argSlotBase : POINTER TO MaterialBlock;
 	argSlotLast : POINTER TO MaterialBlock;
 	
-	argUpstream : POINTER TO RunUnitIndexerMaster;
+	argUpstream : POINTER TO RunUnitTransporterBase;
 	
 	argLiner : POINTER TO RunAxis;
 	argRotator : POINTER TO RunAxis;

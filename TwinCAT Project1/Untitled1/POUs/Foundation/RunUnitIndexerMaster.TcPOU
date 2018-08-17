@@ -1,78 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
   <POU Name="RunUnitIndexerMaster" Id="{2551b589-75e5-432e-8b87-41fecbcdc1e1}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK RunUnitIndexerMaster EXTENDS RunUnitGeneric
-VAR_INPUT
-	syncAcknowledged : BOOL; //downstream replied starting ackowledge , face to downstream
-	
-	
-END_VAR
-VAR_OUTPUT
-	syncEngaged : BOOL; //inform downstream i am ready , face to downstream
-	syncMaterialId : DWORD;
-END_VAR
+    <Declaration><![CDATA[FUNCTION_BLOCK RunUnitIndexerMaster EXTENDS RunUnitTransporterBase
 VAR		
-	Upstream : POINTER TO RunUnitIndexerMaster;//upstream linkage
 	Axis : POINTER TO RunAxis; //axis reference
 	
 	//Working registers
 	matIsValidStatus : DWORD;
-	matSyncDone : DWORD;
-	
 	
 	nCounter : INT;
 	condition : BOOL;
 	
 	isLastSlotOccupied : BOOL; //indicate if last slot occupied
 	
-	
-	//proxy mode
-	isProxyMode : BOOL := FALSE;
-	fbAdsRead : ADSREAD;
-	fbAdsWrite : ADSWRITE;
-	
 END_VAR
 VAR PERSISTENT
-	//proxy mode parameters
-	netId : T_AmsNetID;
-	port : T_AmsPort := 851; //Tc3
-	indexGroup : UDINT := TO_UDINT(eAdsIndexGroups.PLCADS_RWM);
-	offsetUpstreamSyncEngaged : UDINT := 127;
-	offsetUpstreamSyncAckowledged  : UDINT := 128;
-	
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[IF isProxyMode THEN
-	//do ADS data exchanging only
-	fbAdsRead(
-		NETID:= netId, 
-		PORT:= port, 
-		IDXGRP:= indexGroup, 
-		IDXOFFS:= offsetUpstreamSyncEngaged, 
-		LEN:= SIZEOF(syncEngaged), 
-		DESTADDR:= ADR(syncEngaged), 
-		READ:= not fbAdsRead.BUSY, 
-		TMOUT:= , 
-		BUSY=> , 
-		ERR=> , 
-		ERRID=> );
-		
-	fbAdsWrite(
-		NETID:= netId, 
-		PORT:= port, 
-		IDXGRP:= indexGroup, 
-		IDXOFFS:= offsetUpstreamSyncAckowledged, 
-		LEN:= SIZEOF(syncAcknowledged), 
-		SRCADDR:= ADR(syncAcknowledged), 
-		WRITE:= NOT fbAdsWrite.BUSY, 
-		TMOUT:= , 
-		BUSY=> , 
-		ERR=> , 
-		ERRID=> );
-	return; //break here
-END_IF
-
-SUPER^(); // call base class's execution
+      <ST><![CDATA[SUPER^(); // call base class's execution
 
 CASE SUPER^.State OF
 	//0:
@@ -101,7 +46,7 @@ CASE SUPER^.State OF
 			//Do data shifting (move is valid/id)
 			FOR nCounter:=SlotCount TO 2 BY 1 DO	
 				IF nCounter = SlotCount THEN
-					syncMaterialId:= SlotBase[nCounter].id; // for the last slot
+					syncMatValue:= SlotBase[nCounter].id; // for the last slot
 				END_IF
 				SlotBase[nCounter].id := SlotBase[nCounter-1].id;
 				SlotBase[nCounter].wordOut.0 := SlotBase[nCounter-1].wordOut.0;
@@ -154,9 +99,9 @@ VAR_INPUT
 	argSlotBase : POINTER TO MaterialBlock;
 	argSlotLast : POINTER TO MaterialBlock;
 	
+	argUpstream : POINTER TO RunUnitTransporterBase;
 	argAxis : POINTER TO RunAxis;
-	argUpstream : POINTER TO RunUnitIndexerMaster;
-	
+
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -175,12 +120,6 @@ END_IF
       </Implementation>
     </Method>
     <LineIds Name="RunUnitIndexerMaster">
-      <LineId Id="456" Count="0" />
-      <LineId Id="460" Count="24" />
-      <LineId Id="458" Count="0" />
-      <LineId Id="485" Count="0" />
-      <LineId Id="459" Count="0" />
-      <LineId Id="457" Count="0" />
       <LineId Id="295" Count="4" />
       <LineId Id="412" Count="0" />
       <LineId Id="301" Count="6" />

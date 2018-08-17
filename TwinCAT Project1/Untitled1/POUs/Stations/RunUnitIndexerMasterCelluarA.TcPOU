@@ -65,7 +65,7 @@ IF State >=3 AND State <=7 AND_THEN Upstream<>0 AND Upstream^.syncEngaged AND NO
 	Upstream^.syncAcknowledged := TRUE;//pull upstream when ready
 	//Data transmit
 	SlotBase^.wordOut.0 := TRUE; //TODO , follow that status
-	SlotBase^.id := Upstream^.syncMaterialId;
+	//SlotBase^.id := Upstream^.syncMatValue;
 	//set-up final goal
 	commandFinalGoal.command := eCommandTypes.POSITION;
 	commandFinalGoal.parameter.position.Velocity := ptCommandFast^.parameter.position.Velocity;
@@ -171,9 +171,9 @@ VAR_INPUT
 	argSlotBase : POINTER TO MaterialBlock;
 	argSlotLast : POINTER TO MaterialBlock;
 	
+	argUpstream : POINTER TO RunUnitTransporterBase;
 	argAxis : POINTER TO RunAxis;
-	argUpstream : POINTER TO RunUnitIndexerMaster;
-	
+
 END_VAR
 VAR CONSTANT
 	indexFast : INT := 1;

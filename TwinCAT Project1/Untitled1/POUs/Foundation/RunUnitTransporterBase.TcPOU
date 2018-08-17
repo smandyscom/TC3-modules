@@ -4,12 +4,12 @@
     <Declaration><![CDATA[FUNCTION_BLOCK RunUnitTransporterBase EXTENDS RunUnitGeneric
 VAR_INPUT
 	syncAcknowledged : BOOL; //downstream replied starting ackowledge , face to downstream
-	//upstream write for downstream
 END_VAR
 VAR_OUTPUT
 	syncEngaged : BOOL; //inform downstream i am ready , face to downstream
+	syncMatValue : LINT := 0;
 END_VAR
-VAR
+VAR	
 	Upstream : POINTER TO RunUnitTransporterBase;//upstream linkage
 	//proxy mode
 	isProxyMode : BOOL := FALSE;
@@ -22,7 +22,6 @@ VAR
 	
 END_VAR
 VAR PERSISTENT
-	matSyncValue : LINT := 0;
 	//proxy mode parameters
 	netId : T_AmsNetID;
 	port : T_AmsPort := 851; //Tc3
@@ -77,8 +76,8 @@ fbAdsMatSyncRead(
 		PORT:= port, 
 		IDXGRP:= indexGroup, 
 		IDXOFFS:= offsetUpstreamSyncMatSync, 
-		LEN:= SIZEOF(matSyncValue), 
-		DESTADDR:= ADR(matSyncValue), 
+		LEN:= SIZEOF(syncMatValue), 
+		DESTADDR:= ADR(syncMatValue), 
 		READ:= NOT fbAdsMatSyncRead.BUSY AND isMatSync, 
 		TMOUT:= , 
 		BUSY=> , 
@@ -111,7 +110,7 @@ VAR_INPUT
 	argSlotBase : POINTER TO MaterialBlock;
 	argSlotLast : POINTER TO MaterialBlock;
 	
-	argUpstream : POINTER TO RunUnitIndexerMaster;
+	argUpstream : POINTER TO RunUnitTransporterBase;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -128,16 +127,7 @@ END_IF]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="RunUnitTransporterBase">
-      <LineId Id="372" Count="1" />
-      <LineId Id="458" Count="2" />
-      <LineId Id="374" Count="0" />
-      <LineId Id="461" Count="0" />
-      <LineId Id="375" Count="43" />
-      <LineId Id="437" Count="8" />
-      <LineId Id="448" Count="0" />
-      <LineId Id="450" Count="1" />
-      <LineId Id="449" Count="0" />
-      <LineId Id="446" Count="0" />
+      <LineId Id="538" Count="64" />
       <LineId Id="329" Count="0" />
     </LineIds>
     <LineIds Name="RunUnitTransporterBase.FB_init">
