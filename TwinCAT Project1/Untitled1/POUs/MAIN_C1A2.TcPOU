@@ -60,7 +60,7 @@ END_VAR]]></Declaration>
       <ST><![CDATA[IF NOT GVL.bObjectsLinked THEN
 	//link
 	gvl.stations[1] := ADR(ConveyorMaster);
-	//gvl.stations[5] := ADR(CellularC);
+	gvl.stations[5] := ADR(CellularC);
 	//all station initialize (build relationship) , machine spcific configuration
 	FOR nCounter := 1 TO 3 BY 1 DO
 		LifterCellularA[nCounter].FB_init(

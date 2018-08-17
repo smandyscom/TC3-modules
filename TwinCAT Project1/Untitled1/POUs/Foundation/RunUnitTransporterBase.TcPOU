@@ -3,13 +3,15 @@
   <POU Name="RunUnitTransporterBase" Id="{05eb4ac2-43a3-44ce-8012-78838d9522d6}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunUnitTransporterBase EXTENDS RunUnitGeneric
 VAR_INPUT
-	syncAcknowledged : BOOL; //downstream replied starting ackowledge , face to downstream
 END_VAR
 VAR_OUTPUT
-	syncEngaged : BOOL; //inform downstream i am ready , face to downstream
-	syncMatValue : LINT := 0;
 END_VAR
 VAR	
+	//self
+	syncAcknowledged AT%M* : BOOL; //downstream replied starting ackowledge , face to downstream
+	syncEngaged AT%M* : BOOL; //inform downstream i am ready , face to downstream
+	syncMatValue at%M* : LINT := 0;
+	//
 	Upstream : POINTER TO RunUnitTransporterBase;//upstream linkage
 	//proxy mode
 	isProxyMode : BOOL := FALSE;

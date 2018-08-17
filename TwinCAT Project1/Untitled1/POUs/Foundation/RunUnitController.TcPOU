@@ -32,7 +32,7 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[//scan running all devices
-FOR nCounter :=1 TO 8 BY 1 DO
+FOR nCounter :=1 TO 9 BY 1 DO
 	gvl.axisControls[nCounter]();	
 	gvl.cylinderControls[nCounter]();
 	gvl.signalControls[nCounter]();

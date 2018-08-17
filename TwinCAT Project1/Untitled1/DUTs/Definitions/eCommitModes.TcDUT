@@ -15,7 +15,7 @@ TYPE eCommitModes :
 
     MODE_DOWNLOAD_DATA_BLOCK := 15, //PLC<-HMI
     MODE_UPLOAD_DATA_BLOCK := 16   //PLC->HMI
-);
+) INT ;
 END_TYPE
 ]]></Declaration>
   </DUT>
