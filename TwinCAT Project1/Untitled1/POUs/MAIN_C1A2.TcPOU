@@ -23,18 +23,44 @@ VAR
 												argSlotLast:= ADR(GVL.materialSlots[3]),
 												argAxis:=ADR(GVL.axisControls[1]),
 												argUpstream:=ADR(ConveyorProxy));
-	//TODO , cellular C/top view/bottom view
+												
+	CellularC : RunUnitCellularC(argParent:= ADR(Controller), 
+								argSlotBase:=  ADR(GVL.materialSlots[4]),
+								argSlotLast:= ADR(GVL.materialSlots[4]),
+								argUpstream := ADR(ConveyorProxy),
+								argLiner := ADR(GVL.axisControls[axisLiner]),
+								argRotator := ADR(GVL.axisControls[axisRotaor]),
+								argReachSensor := ADR(GVL.signalControls[signalCellularCReach]),
+								argInterfereSensor :=ADR(GVL.signalControls[signalCellularCInterfere]),
+								argHolderCylinder := ADR(GVL.cylinderControls[cylinderCellularCHolder]),
+								argPusherCylinder := ADR(GVL.cylinderControls[cylinderCellularCPusher]));
+	//TODO , top view/bottom view
 	//
 	nCounter : INT; //comment
 	
 	//need to explicit call write persistance data , to store into non-violate memory
 	writePersistance : WritePersistentData;
 END_VAR
-]]></Declaration>
+VAR CONSTANT
+	//Axis
+	axisConveyor : INT := 1;
+	axisLifter1: INT := 2;
+	axisHorizon1 : INT:=5;
+	axisLiner : INT :=8;
+	axisRotaor : INT :=9;
+	//Cylinder
+	cylinderCellularAHolder1 : INT := 1;
+	cylinderCellularCHolder : INT :=4;
+	cylinderCellularCPusher : INT :=5;
+	//Signal
+	signalCellularCReach : INT :=7;
+	signalCellularCInterfere : INT :=8;
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF NOT GVL.bObjectsLinked THEN
 	//link
 	gvl.stations[1] := ADR(ConveyorMaster);
+	//gvl.stations[5] := ADR(CellularC);
 	//all station initialize (build relationship) , machine spcific configuration
 	FOR nCounter := 1 TO 3 BY 1 DO
 		LifterCellularA[nCounter].FB_init(
@@ -59,7 +85,7 @@ Controller();//execute
 
 ConveyorMaster.allHit := TRUE;
 ConveyorMaster.allReach := TRUE;
-ConveyorMaster.allRelease := true;
+ConveyorMaster.allRelease := TRUE;
 FOR nCounter := 1 TO 3 BY 1 DO
 	LifterCellularA[nCounter].IsHit := ConveyorMaster.triggerHit;
 	LifterCellularA[nCounter].IsReleased := ConveyorMaster.triggerRelease;
@@ -84,7 +110,9 @@ writePersistance(
 		ERRID=> );]]></ST>
     </Implementation>
     <LineIds Name="MAIN_C1A2">
-      <LineId Id="28" Count="22" />
+      <LineId Id="28" Count="2" />
+      <LineId Id="153" Count="0" />
+      <LineId Id="31" Count="19" />
       <LineId Id="5" Count="0" />
       <LineId Id="125" Count="0" />
       <LineId Id="114" Count="0" />
