@@ -16,8 +16,14 @@ TYPE eSpecialStates :
 	INITIAL_END := 16#1FF, //256 states possible
 	INITIAL_REGION := 16#F00,
 	
-	SLAVE_WORK_DONE := 16#FF
-);
+	SLAVE_WORK_TRIGGER := 16#0,
+	SLAVE_ENTER_PROCEDURE := 16#100,
+	SLAVE_WORK_DONE := 16#FF,
+	
+	SLAVE_AXIS_INSPECTION_ENTER := 16#300, //enter iteration region
+	SLAVE_AXIS_INSPECTION_ITERATION := 16#301,
+	SLAVE_AXIS_INSPECTION_EXIT := 16#400 //exit iteration region
+) INT ;
 END_TYPE
 ]]></Declaration>
   </DUT>

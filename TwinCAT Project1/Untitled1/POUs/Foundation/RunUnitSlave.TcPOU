@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <POU Name="RunUnitSlave" Id="{f294cd3d-3335-490a-8099-05ea45ee1c2b}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunUnitSlave EXTENDS RunUnitGeneric
+VAR
+	workingSignal : POINTER TO BOOL;  // start working when on
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[SUPER^();
+
+CASE State OF 
+	eSpecialStates.SLAVE_WORK_TRIGGER:
+		//working start
+		IF workingSignal^ THEN
+			bWorkingOverride := TRUE; // backup working override signal
+		END_IF
+		IF bWorkingOverride AND NOT bIsBypassed THEN
+			NextState := eSpecialStates.SLAVE_ENTER_PROCEDURE; // enter working procedure
+		ELSIF bWorkingOverride AND bIsBypassed THEN
+			NextState := eSpecialStates.SLAVE_WORK_DONE;
+		ELSE
+			//do nothing
+		END_IF
+	eSpecialStates.SLAVE_WORK_DONE:
+		//working done
+		workingSignal^ := FALSE;
+		bWorkingOverride := FALSE;
+		bMaterialOverride := FALSE;
+		NextState := eSpecialStates.SLAVE_WORK_TRIGGER; // rewind
+END_CASE]]></ST>
+    </Implementation>
+    <Method Name="FB_init" Id="{5fe09d05-6f33-419c-ac80-1bcb29fd85fb}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	
+	argParent : POINTER TO RunUnitGeneric;
+	argSlotBase : POINTER TO MaterialBlock;
+	argSlotLast : POINTER TO MaterialBlock;
+	
+	argWorkingSignal : POINTER TO BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//initialize 
+Parent := argParent;
+SlotBase := argSlotBase;
+SlotLast := argSlotLast;
+//
+IF bInitRetains THEN
+	NextState := eSpecialStates.INITIAL_BEGIN;
+END_IF
+
+workingSignal := argWorkingSignal; //link]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Initialize" Id="{d85590e7-7777-4ed2-a542-a41058c1988e}">
+      <Declaration><![CDATA[METHOD Initialize : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+IF State = eSpecialStates.INITIAL_END THEN
+	//clear all internal status
+	bEnStep := FALSE;
+	bTrigStep := FALSE;
+	bIsBypassed := FALSE;
+	bWorkingOverride := FALSE;
+	bMaterialOverride := FALSE;
+	workingSignal^ := FALSE;	
+END_IF
+SUPER^();]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="RunUnitSlave">
+      <LineId Id="9" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="26" Count="2" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="32" Count="0" />
+      <LineId Id="29" Count="1" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="16" Count="5" />
+      <LineId Id="13" Count="0" />
+    </LineIds>
+    <LineIds Name="RunUnitSlave.FB_init">
+      <LineId Id="16" Count="6" />
+      <LineId Id="14" Count="1" />
+      <LineId Id="11" Count="0" />
+    </LineIds>
+    <LineIds Name="RunUnitSlave.Initialize">
+      <LineId Id="5" Count="0" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="19" Count="4" />
+      <LineId Id="17" Count="1" />
+      <LineId Id="13" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
