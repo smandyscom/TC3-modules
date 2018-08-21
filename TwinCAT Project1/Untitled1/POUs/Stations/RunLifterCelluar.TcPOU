@@ -29,8 +29,8 @@ VAR
 	ptCommandHorizonWorking : POINTER TO ParameterSet;
 	
 	
-	working : BOOL; //dispatch work to working station
-	//TODO , signal working[1]
+	isAllWorkDone : BOOL; //dispatch work to working station
+	nCounter : int ;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -68,7 +68,10 @@ CASE State OF
 	//hold
 	IF Cylinder^.Execute(eCylinderCommands.COMMAND_B)THEN
 		//dispatching work to station
-		working := TRUE;
+		//Dispatch working signal to all station
+		FOR nCounter := 1 TO 4 BY 1 DO
+		  slaveWorkingSignal[nCounter]	:= slaveLinkageStatus[nCounter];
+		END_FOR
 		NextState := 16#10;
 	END_IF
 	//---------------------------releasing
@@ -76,10 +79,12 @@ CASE State OF
 	bSerialTransition := mRelease;
 	IF bSerialTransition THEN
 		mRelease := FALSE;
-	END_IF	
-	16#21:
-	bSerialTransition :=  AxisVertical^.ExecuteParameter(ptCommandLifterRelease);
+	END_IF
+	16#21:	
+	bSerialTransition := Cylinder^.Execute(eCylinderCommands.COMMAND_A);	//release holder
 	16#22:
+	bSerialTransition :=  AxisVertical^.ExecuteParameter(ptCommandLifterRelease);
+	16#23:
 	IF NOT ptReachSensorStatus^ THEN
 		//make sure all state reseted
 		NextState := 0;
@@ -87,12 +92,12 @@ CASE State OF
 	
 	//----------------------------- working
 	16#10:
-		bSerialTransition := NOT working;
-	16#11:
-		//release holder
-		bSerialTransition := Cylinder^.Execute(eCylinderCommands.COMMAND_A);
-	16#12:
-		IF AxisVertical^.ExecuteParameter(ptCommandLifterHit) THEN
+		//check if all working signal off
+		isAllWorkDone := TRUE;
+		FOR nCounter :=1 TO 4 BY 1 DO
+			isAllWorkDone := isAllWorkDone AND  not slaveWorkingSignal[nCounter];
+		END_FOR
+		IF isAllWorkDone THEN
 			NextState := 16#20;
 		END_IF
 END_CASE]]></ST>
@@ -207,20 +212,11 @@ END_VAR
       </Set>
     </Property>
     <LineIds Name="RunLifterCelluar">
-      <LineId Id="236" Count="2" />
-      <LineId Id="327" Count="0" />
-      <LineId Id="320" Count="6" />
-      <LineId Id="319" Count="0" />
-      <LineId Id="239" Count="14" />
-      <LineId Id="257" Count="1" />
-      <LineId Id="363" Count="0" />
-      <LineId Id="359" Count="1" />
-      <LineId Id="364" Count="3" />
-      <LineId Id="264" Count="6" />
-      <LineId Id="276" Count="9" />
-      <LineId Id="376" Count="0" />
-      <LineId Id="368" Count="1" />
-      <LineId Id="371" Count="4" />
+      <LineId Id="549" Count="57" />
+      <LineId Id="617" Count="0" />
+      <LineId Id="621" Count="0" />
+      <LineId Id="618" Count="2" />
+      <LineId Id="607" Count="2" />
       <LineId Id="42" Count="0" />
     </LineIds>
     <LineIds Name="RunLifterCelluar.FB_init">
