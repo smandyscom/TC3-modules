@@ -20,8 +20,20 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Method Name="Initialize" Id="{b1cb528c-756c-4543-b261-8a9a85e25c02}">
+      <Declaration><![CDATA[METHOD Initialize : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[SUPER^();]]></ST>
+      </Implementation>
+    </Method>
     <LineIds Name="RunETest">
       <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="RunETest.Initialize">
+      <LineId Id="5" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
