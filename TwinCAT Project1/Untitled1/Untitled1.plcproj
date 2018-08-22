@@ -158,6 +158,12 @@
     <Compile Include="POUs\Stations\RunAxisInspection.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Stations\RunBottomView.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Stations\RunETest.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Stations\RunUnitCellularC.TcPOU">
       <SubType>Code</SubType>
     </Compile>

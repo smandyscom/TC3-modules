@@ -4,8 +4,9 @@
     <Declaration><![CDATA[{attribute 'qualified_only'}
 VAR_GLOBAL 
 	//for downstream
-	//downstreamSyncEngaged AT%MB127 : BOOL;
-	//downstreamSyncAcknowledged AT%MB128 : BOOL;
+	downstreamSyncEngaged AT%MB127 : BOOL;
+	downstreamSyncAcknowledged AT%MB128 : BOOL;
+	//downstreamSyncAcknowledged  : BOOL;
 
 	//
 	//fakeInput AT%I* : bool;

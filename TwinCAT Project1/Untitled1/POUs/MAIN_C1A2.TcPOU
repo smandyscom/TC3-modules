@@ -34,6 +34,15 @@ VAR
 								argInterfereSensor :=ADR(GVL.signalControls[signalCellularCInterfere]),
 								argHolderCylinder := ADR(GVL.cylinderControls[cylinderCellularCHolder]),
 								argPusherCylinder := ADR(GVL.cylinderControls[cylinderCellularCPusher]));
+	//ET
+	ETester : RunAxisInspection(argParent:= ADR(Controller), 
+								argSlotBase:= ADR(GVL.materialSlots[1]), 
+								argSlotLast:= ADR(GVL.materialSlots[1]),
+								argWorkingSignal := ADR(LifterCellularA[1].slaveWorkingSignal[1],
+								argAxis1= ,
+								argAxis2:=0)
+	//Front
+	
 	//TODO , top view/bottom view
 	//
 	nCounter : INT; //comment
@@ -46,8 +55,8 @@ VAR CONSTANT
 	axisConveyor : INT := 1;
 	axisLifter1: INT := 2;
 	axisHorizon1 : INT:=5;
-	axisLiner : INT :=8;
-	axisRotaor : INT :=9;
+	axisETVertical : INT :=8;
+	axisFrontView : INT :=9;
 	//Cylinder
 	cylinderCellularAHolder1 : INT := 1;
 	cylinderCellularCHolder : INT :=4;
@@ -81,7 +90,21 @@ END_VAR]]></Declaration>
 	gvl.bObjectsLinked := TRUE; //self-locked
 END_IF
 
+ConveyorProxy(
+	bEnStep:= , 
+	bTrigStep:= , 
+	bPause:= , 
+	bIsBypassed:= , 
+	bWorkingOverride:= , 
+	bMaterialOverride:= , 
+	slaveWorkingSignal:= , 
+	State=> , 
+	NextState=> , 
+	AlarmCode=> );
 Controller();//execute
+//Transmit
+ConveyorMaster.syncAcknowledged := gvl.downstreamSyncAcknowledged;
+gvl.downstreamSyncEngaged := ConveyorMaster.syncEngaged;
 
 ConveyorMaster.allHit := TRUE;
 ConveyorMaster.allReach := TRUE;
@@ -94,11 +117,6 @@ FOR nCounter := 1 TO 3 BY 1 DO
 	ConveyorMaster.allReach := ConveyorMaster.allReach AND LifterCellularA[nCounter].IsReach;
 	ConveyorMaster.allRelease := ConveyorMaster.allRelease AND LifterCellularA[nCounter].IsReleased;
 END_FOR
-//lifterCelluarA.IsHit := masterCelluarA.triggerHit;
-//lifterCelluarA.IsReleased := masterCelluarA.triggerRelease;
-//masterCelluarA.allHit := lifterCelluarA.IsHit;
-//masterCelluarA.allReach := lifterCelluarA.IsReach;
-//masterCelluarA.allRelease := lifterCelluarA.IsReleased;
 
 writePersistance(
 		NETID:= , 
@@ -112,8 +130,12 @@ writePersistance(
     <LineIds Name="MAIN_C1A2">
       <LineId Id="28" Count="2" />
       <LineId Id="153" Count="0" />
-      <LineId Id="31" Count="19" />
+      <LineId Id="31" Count="18" />
+      <LineId Id="208" Count="10" />
+      <LineId Id="50" Count="0" />
       <LineId Id="5" Count="0" />
+      <LineId Id="273" Count="1" />
+      <LineId Id="294" Count="0" />
       <LineId Id="125" Count="0" />
       <LineId Id="114" Count="0" />
       <LineId Id="126" Count="1" />
@@ -123,8 +145,6 @@ writePersistance(
       <LineId Id="119" Count="2" />
       <LineId Id="124" Count="0" />
       <LineId Id="116" Count="0" />
-      <LineId Id="110" Count="3" />
-      <LineId Id="109" Count="0" />
       <LineId Id="84" Count="0" />
       <LineId Id="101" Count="6" />
       <LineId Id="100" Count="0" />

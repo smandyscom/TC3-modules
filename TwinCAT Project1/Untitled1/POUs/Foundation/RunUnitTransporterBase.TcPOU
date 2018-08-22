@@ -2,20 +2,22 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
   <POU Name="RunUnitTransporterBase" Id="{05eb4ac2-43a3-44ce-8012-78838d9522d6}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunUnitTransporterBase EXTENDS RunUnitGeneric
-VAR_INPUT
+VAR_INPUT	
+	//self
+	syncAcknowledged  : BOOL; //downstream replied starting ackowledge , face to downstream
+	syncMatValue  : LINT := 0;
 END_VAR
 VAR_OUTPUT
-END_VAR
-VAR	
 	//self
-	syncAcknowledged AT%M* : BOOL; //downstream replied starting ackowledge , face to downstream
-	syncEngaged AT%M* : BOOL; //inform downstream i am ready , face to downstream
-	syncMatValue at%M* : LINT := 0;
+	syncEngaged  : BOOL; //inform downstream i am ready , face to downstream
+END_VAR
+VAR		
 	//
 	Upstream : POINTER TO RunUnitTransporterBase;//upstream linkage
 	//proxy mode
 	isProxyMode : BOOL := FALSE;
 	
+	pollingTimer : TON;
 	fbAdsSyncRead : ADSREAD;
 	fbAdsSyncWrite : ADSWRITE;
 	fbAdsMatSyncRead : ADSREAD;
@@ -46,6 +48,8 @@ IF NOT isProxyMode THEN
 	RETURN;
 END_IF
 
+pollingTimer(IN:= NOT pollingTimer.Q, PT:= T#50MS, Q=> , ET=> );
+
 //do ADS data exchanging
 fbAdsSyncRead(
 		NETID:= netId, 
@@ -54,12 +58,12 @@ fbAdsSyncRead(
 		IDXOFFS:= offsetUpstreamSyncEngaged, 
 		LEN:= SIZEOF(syncEngaged), 
 		DESTADDR:= ADR(syncEngaged), 
-		READ:= not fbAdsSyncRead.BUSY, 
+		READ:= pollingTimer.Q, 
 		TMOUT:= , 
 		BUSY=> , 
 		ERR=> , 
 		ERRID=> );
-		
+	
 fbAdsSyncWrite(
 		NETID:= netId, 
 		PORT:= port, 
@@ -67,7 +71,7 @@ fbAdsSyncWrite(
 		IDXOFFS:= offsetUpstreamSyncAckowledged, 
 		LEN:= SIZEOF(syncAcknowledged), 
 		SRCADDR:= ADR(syncAcknowledged), 
-		WRITE:= NOT fbAdsSyncWrite.BUSY, 
+		WRITE:= pollingTimer.Q, 
 		TMOUT:= , 
 		BUSY=> , 
 		ERR=> , 
@@ -129,7 +133,11 @@ END_IF]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="RunUnitTransporterBase">
-      <LineId Id="538" Count="64" />
+      <LineId Id="538" Count="9" />
+      <LineId Id="673" Count="1" />
+      <LineId Id="548" Count="13" />
+      <LineId Id="637" Count="0" />
+      <LineId Id="563" Count="39" />
       <LineId Id="329" Count="0" />
     </LineIds>
     <LineIds Name="RunUnitTransporterBase.FB_init">

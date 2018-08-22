@@ -72,7 +72,7 @@ IF State >=3 AND State <=7 AND_THEN Upstream<>0 AND Upstream^.syncEngaged AND NO
 	commandFinalGoal.parameter.position.Velocity := ptCommandFast^.parameter.position.Velocity;
 	commandFinalGoal.parameter.position.Acceleration := ptCommandFast^.parameter.position.Acceleration;
 	commandFinalGoal.parameter.position.Deceleration := ptCommandFast^.parameter.position.Deceleration;
-	commandFinalGoal.parameter.position.Position := Axis^.PositionFeedback + ptCommandSlow^.parameter.position.Position; //goal extended
+	commandFinalGoal.parameter.position.Position := Axis^.PositionFeedback + ptCommandSlow^.parameter.position.Position + 65; //goal extended
 	
 END_IF
 

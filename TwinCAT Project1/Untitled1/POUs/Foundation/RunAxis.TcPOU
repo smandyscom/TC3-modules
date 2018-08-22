@@ -31,7 +31,19 @@ VAR CONSTANT
 	typeCode : eTypeCodes := eTypeCodes.AXIS;
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
+      <ST><![CDATA[//fbReadCommandPosition.Enable := FALSE; //reset for next reading
+fbReadCommandPosition(
+	Axis:= Axis, 
+	Enable:= TRUE, 
+	ParameterNumber:= CommandedPosition, 
+	ReadMode:= READMODE_CYCLIC, 
+	Valid=> , 
+	Busy=> , 
+	Error=> , 
+	ErrorID=> , 
+	Value=> );
+
+
 fbSetPosition(
 	Axis:= Axis, 
 	Execute:= , 
@@ -381,16 +393,18 @@ END_VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[fbReadCommandPosition(
-	Axis:= Axis, 
-	Enable:= TRUE, 
-	ParameterNumber:= CommandedPosition, 
-	ReadMode:= READMODE_ONCE, 
-	Valid=> , 
-	Busy=> , 
-	Error=> , 
-	ErrorID=> , 
-	Value=> PositionCommand);]]></ST>
+          <ST><![CDATA[fbReadCommandPosition.Enable := TRUE;
+//fbReadCommandPosition(
+//	Axis:= Axis, 
+//	Enable:= , 
+//	ParameterNumber:= CommandedPosition, 
+//	ReadMode:= READMODE_ONCE, 
+//	Valid=> , 
+//	Busy=> , 
+//	Error=> , 
+//	ErrorID=> , 
+//	Value=> PositionCommand);
+PositionCommand := fbReadCommandPosition.Value;]]></ST>
         </Implementation>
       </Get>
       <Set Name="Set" Id="{dd39da7a-143a-4c85-876d-cc4718cf70aa}">
@@ -412,6 +426,9 @@ END_VAR
       </Implementation>
     </Method>
     <LineIds Name="RunAxis">
+      <LineId Id="963" Count="0" />
+      <LineId Id="975" Count="8" />
+      <LineId Id="973" Count="1" />
       <LineId Id="796" Count="46" />
       <LineId Id="852" Count="82" />
       <LineId Id="9" Count="0" />
@@ -498,8 +515,10 @@ END_VAR
       <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="RunAxis.PositionCommand.Get">
+      <LineId Id="16" Count="0" />
       <LineId Id="5" Count="8" />
       <LineId Id="2" Count="0" />
+      <LineId Id="17" Count="0" />
     </LineIds>
     <LineIds Name="RunAxis.PositionCommand.Set">
       <LineId Id="2" Count="0" />
