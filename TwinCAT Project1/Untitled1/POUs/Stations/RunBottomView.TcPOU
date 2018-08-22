@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <POU Name="RunBottomView" Id="{6aac86b2-3f9d-4198-8e80-39356a7bda6d}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunBottomView EXTENDS RunAxisInspection
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	connectorHolder : RunCylinder;
+	cableHolder : RunCylinder;
+	openClamp : RunCylinder;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <LineIds Name="RunBottomView">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
