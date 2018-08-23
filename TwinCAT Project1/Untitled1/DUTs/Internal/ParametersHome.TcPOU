@@ -4,6 +4,9 @@
     <Declaration><![CDATA[TYPE ParametersHome :
 STRUCT
 	Position : LREAL := 10; // in mm
+	Dummy1 : LREAL := 0;
+	Dummy2 : LREAL := 0;
+	Dummy3 : LREAL := 0;
 	Mode : MC_HomingMode := MC_DefaultHoming;
 END_STRUCT
 END_TYPE
