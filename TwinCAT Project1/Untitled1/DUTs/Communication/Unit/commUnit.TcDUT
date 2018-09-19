@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
-  <DUT Name="UnitBase" Id="{df6981cd-3f6e-4429-8877-edaaff2c86c9}">
-    <Declaration><![CDATA[TYPE UnitBase :
+  <DUT Name="commUnit" Id="{df6981cd-3f6e-4429-8877-edaaff2c86c9}">
+    <Declaration><![CDATA[TYPE commUnit :
 	//32Bytes , 16Word occupation
 STRUCT
 	parent : WORD := 1; //0
@@ -27,7 +27,7 @@ STRUCT
 	reserved2 : DWORD;//8-9
 	workingTimerCache : DWORD; //10-11 , used to reflect timer couting
 	//
-	reservedRest : ARRAY[1..4] OF WORD;
+	reservedRest : ARRAY[1..52] OF WORD;
 END_STRUCT
 END_TYPE
 

@@ -18,7 +18,7 @@ VAR
 	//error
 	requestErrorClear : eErrorClearWays := eErrorClearWays.NO_ACTION;
 	errorDevice :ICommon := 0; //null reference
-	errorType : eTypeCodes;
+	errorType : eCategrories;
 	errorIndex : INT;
 	errorCode : INT;
 	

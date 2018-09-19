@@ -28,7 +28,7 @@ VAR PERSISTENT
 	ptpCommands : ARRAY[1..12] OF ParameterSet; //collect command blocks relative to this axis here
 END_VAR
 VAR CONSTANT
-	typeCode : eTypeCodes := eTypeCodes.AXIS;
+	typeCode : eCategrories := eCategrories.SELECTION_AXIS;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[//fbReadCommandPosition.Enable := FALSE; //reset for next reading
@@ -177,7 +177,7 @@ END_IF
     </Implementation>
     <Folder Name="ICommon" Id="{7ba97dc2-1cf9-458a-88dc-8f5c2d73ba9c}" />
     <Method Name="ConfigureRead" Id="{b2d706a8-b020-4343-983c-4c7a56c09ac2}" FolderPath="ICommon\">
-      <Declaration><![CDATA[METHOD ConfigureRead : Block64Words
+      <Declaration><![CDATA[METHOD ConfigureRead : CellDataBlock
 VAR_INPUT
 END_VAR
 ]]></Declaration>
@@ -188,7 +188,7 @@ END_VAR
     <Method Name="ConfigureWrite" Id="{cde8b8df-cc3c-4ac1-a00a-6c29224f2a1d}" FolderPath="ICommon\">
       <Declaration><![CDATA[METHOD ConfigureWrite : BOOL
 VAR_INPUT
-	input : Block64Words;
+	input : CellDataBlock;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -198,8 +198,8 @@ END_VAR
     <Method Name="Control" Id="{fb2d590a-2a78-44ed-97fd-631e13336dc9}" FolderPath="ICommon\">
       <Declaration><![CDATA[METHOD Control : BOOL
 VAR_INPUT
-	input : Block64Words;
-	mode : int;
+	input : CellDataBlock;
+	mode : eModes;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -207,8 +207,8 @@ END_VAR
 
 //different route
 CASE mode OF
-	eCommitModes.MODE_EXE_AXIS:
-	eCommitModes.MODE_EXE_COMMAND_BLOCK:
+	eModes.MODE_EXE_AXIS:
+	eModes.MODE_EXE_COMMAND_BLOCK:
 	
 END_CASE]]></ST>
       </Implementation>
@@ -378,7 +378,7 @@ END_VAR]]></Declaration>
       </Implementation>
     </Method>
     <Method Name="Monitor" Id="{f14ef5b7-4fb3-4276-899b-459b8636a870}" FolderPath="ICommon\">
-      <Declaration><![CDATA[METHOD Monitor : Block64Words
+      <Declaration><![CDATA[METHOD Monitor : CellDataBlock
 VAR_INPUT
 END_VAR
 ]]></Declaration>
@@ -417,7 +417,7 @@ END_VAR
       </Set>
     </Property>
     <Method Name="TypeCode" Id="{d7c803da-ddd0-409e-b8b9-d71f78281c2b}" FolderPath="ICommon\">
-      <Declaration><![CDATA[METHOD TypeCode : eTypeCodes
+      <Declaration><![CDATA[METHOD TypeCode : eCategrories
 VAR_INPUT
 END_VAR
 ]]></Declaration>

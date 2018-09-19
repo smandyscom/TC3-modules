@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <DUT Name="commAxis" Id="{c71fae35-4ccc-4e8a-a2d5-e324c41e50b7}">
+    <Declaration><![CDATA[TYPE commAxis :
+STRUCT
+	operationMonitor :WORD; //0 ,status of servoOn,alarmClear (PLC->HMI
+	reserved1 : WORD;//1
+	posCommand : DINT; //2-3 , 
+	runStatus : DWORD; //4,5 ,  runningWithServoOn , servoReady
+	warning : DWORD;//6-7 ,
+	alarm: DWORD;//8-9	   ,  64Bits error code
+	commandStatus : DWORD; //10,11 , not implemented
+	posStatus:WORD;//12,13 , not implemented
+	//
+	posFeedback : DINT;//14-15
+	speedFeedback : DWORD;//16-17
+	torqueFeedback : DWORD;//18-19
+	reserved : ARRAY[1..4] OF WORD;//20-23
+	operationOperation : WORD;//24 , operation of servoOn,alarmClear (HMI->PLC
+	
+	//Depreciated variables suitable for MechtrolinkIII
+	//Address
+	//AxisTYpe
+	//LimitPlus
+	//LimitMinus
+	//SpeedMax
+	//PosTolearance
+	
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

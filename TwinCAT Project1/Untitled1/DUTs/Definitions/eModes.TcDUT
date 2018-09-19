@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <DUT Name="eModes" Id="{15487bc2-d402-4339-ae09-883c02904c95}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+//{attribute 'strict'}
+TYPE eModes :
+(
+	MODE_EXE_AXIS := eCategrories.SELECTION_AXIS,
+    MODE_EXE_CYLINDER := eCategrories.SELECTION_CYLINDER,
+    MODE_EXE_SIGNAL := eCategrories.SELECTION_SIGNAL, //dummy
+
+    MODE_EXE_COMMAND_BLOCK := eCategrories.SELECTION_COMMAND_BLOCK,
+
+    MODE_EXE_UNIT := eCategrories.SELECTION_UNIT,
+
+    MODE_DOWNLOAD_DATA_BLOCK := 15, //PLC<-HMI
+    MODE_UPLOAD_DATA_BLOCK := 16   //PLC->HMI
+) DWORD ;
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

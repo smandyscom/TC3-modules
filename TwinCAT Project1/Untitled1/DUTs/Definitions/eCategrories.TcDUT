@@ -1,16 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
-  <DUT Name="eCommitSelection" Id="{cce23375-09dd-4e7a-82d9-89e6899f8e8f}">
+  <DUT Name="eCategrories" Id="{cce23375-09dd-4e7a-82d9-89e6899f8e8f}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
 {attribute 'strict'}
-TYPE eCommitSelection :
+TYPE eCategrories :
 (
 	SELECTION_AXIS := 0,
     SELECTION_CYLINDER := 1,
     SELECTION_SIGNAL :=2,
     SELECTION_COMMAND_BLOCK := 4,
     SELECTION_UNIT := 5
-) INT;
+) DWORD;
 END_TYPE
 ]]></Declaration>
   </DUT>

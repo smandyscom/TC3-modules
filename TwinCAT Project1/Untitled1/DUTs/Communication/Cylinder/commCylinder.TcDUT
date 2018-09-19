@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <DUT Name="commCylinder" Id="{f5534b05-bf6f-4b58-b246-ce2f0f7a94c0}">
+    <Declaration><![CDATA[TYPE commCylinder :
+STRUCT
+	statusWord : WORD; //0
+	command : eCylinderCommands; //1
+	lastCommand : eCylinderCommands; //2
+	timerCountValue : WORD; //3
+	reserved : ARRAY[1..12] OF WORD;
+	//context
+	timerSetValue : DWORD; //16,17
+	//Depre
+	
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

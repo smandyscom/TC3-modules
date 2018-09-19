@@ -15,46 +15,43 @@
     <LibraryReferences>{a3ee82cf-dd82-4766-9d9c-b0f1c9a4fad4}</LibraryReferences>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="DUTs\Communication\AxisBase.TcDUT">
+    <Compile Include="DUTs\Communication\Axis\commAxis.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\Communication\Block128Words.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\Communication\Block64Words.TcDUT">
+    <Compile Include="DUTs\Communication\CellDataBlock.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\Communication\CommandBlock\CommandBlockBase.TcDUT">
+    <Compile Include="DUTs\Communication\Command\commCommandBase.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\Communication\CommandBlock\CommandBlockGeneric.TcDUT">
+    <Compile Include="DUTs\Communication\Command\commCommandGeneric.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\Communication\CommandBlock\CommandBlockPos.TcDUT">
+    <Compile Include="DUTs\Communication\Command\commCommandPos.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Communication\commManual.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\Communication\ContextUnitBase.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\Communication\SignalBlockBase.TcDUT">
+    <Compile Include="DUTs\Communication\Cylinder\commCylinder.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\Communication\UnitBlock\UnitAoiHandshaking.TcDUT">
+    <Compile Include="DUTs\Communication\Signal\commSignal.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\Communication\UnitBlock\UnitBase.TcDUT">
+    <Compile Include="DUTs\Communication\Unit\commUnit.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\Communication\UnitBlock\UnitBlockGeneric.TcDUT">
+    <Compile Include="DUTs\Communication\Unit\commUnitGeneric.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\Communication\UnitBlock\UnitController.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\Communication\UnitBlock\UnitIndexerMaster.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\Communication\UnitBlock\UnitIndexerSlave.TcDUT">
+    <Compile Include="DUTs\Communication\Unit\commUnitController.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\Definitions\eAdsIndexGroups.TcDUT">
@@ -63,10 +60,10 @@
     <Compile Include="DUTs\Definitions\eCommandTypes.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\Definitions\eCommitModes.TcDUT">
+    <Compile Include="DUTs\Definitions\eModes.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\Definitions\eCommitSelection.TcDUT">
+    <Compile Include="DUTs\Definitions\eCategrories.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\Definitions\eCylinderCommands.TcDUT">
@@ -76,9 +73,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\Definitions\ePositionType.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\Definitions\eTypeCodes.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\Definitions\eOperationModes.TcDUT">
@@ -197,8 +191,11 @@
   <ItemGroup>
     <Folder Include="DUTs" />
     <Folder Include="DUTs\Communication" />
-    <Folder Include="DUTs\Communication\CommandBlock" />
-    <Folder Include="DUTs\Communication\UnitBlock" />
+    <Folder Include="DUTs\Communication\Command" />
+    <Folder Include="DUTs\Communication\Axis" />
+    <Folder Include="DUTs\Communication\Cylinder" />
+    <Folder Include="DUTs\Communication\Signal" />
+    <Folder Include="DUTs\Communication\Unit" />
     <Folder Include="DUTs\Definitions" />
     <Folder Include="DUTs\Internal" />
     <Folder Include="DUTs\Material" />

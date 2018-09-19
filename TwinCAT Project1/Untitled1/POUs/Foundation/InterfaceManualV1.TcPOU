@@ -7,18 +7,8 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-	wordOut  AT%M* : WORD; //0
-	reserved1 AT%M* : ARRAY[1..31] OF WORD;
-	wordIn	 AT%M* : WORD; //32
-	reserved2 AT%M* : ARRAY[1..8] OF WORD;
-	monitorType AT%M* : WORD;//40
-	monitorIndex AT%M* : WORD;//41
-	commitMode AT%M* : DWORD;//42
-	commitSelection AT%M* : DWORD;//44
-	commitIndex AT%M* : WORD;//46
-	reserved3 AT%M* : ARRAY[1..18] OF WORD;
-	commitBlock AT%M* : Block64Words;//64
-	monitorBlock AT%M* : Block64Words;//128
+
+	comm AT%MB1024: commManual;
 	
 	monitorDevice : ICommon;
 	controlDevice : ICommon;
@@ -27,52 +17,52 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[//monitor
-CASE TO_DWORD(monitorType) OF
-	eTypeCodes.AXIS:
-		monitorDevice := gvl.axisControls[monitorIndex];
-	eTypeCodes.CYLINDER:
-		monitorDevice := gvl.cylinderControls[monitorIndex];
-	eTypeCodes.UNIT:
-		monitorDevice := gvl.stations[monitorIndex]^;
+CASE TO_DWORD(comm.monitorType) OF
+	eCategrories.SELECTION_AXIS:
+		monitorDevice := gvl.axisControls[comm.monitorIndex];
+	eCategrories.SELECTION_CYLINDER:
+		monitorDevice := gvl.cylinderControls[comm.monitorIndex];
+	eCategrories.SELECTION_UNIT:
+		monitorDevice := gvl.stations[comm.monitorIndex]^;
 END_CASE
-monitorBlock := monitorDevice.Monitor();
+comm.monitorBlock := monitorDevice.Monitor();
 //control
-CASE commitSelection OF
-	eTypeCodes.AXIS:
-		controlDevice := gvl.axisControls[monitorIndex];
-	eTypeCodes.CYLINDER:
-		controlDevice := gvl.cylinderControls[monitorIndex];
-	eTypeCodes.UNIT:
-		controlDevice := gvl.stations[monitorIndex]^;
-	eTypeCodes.COMMANDBLOCK:
+CASE comm.commitSelection OF
+	eCategrories.SELECTION_AXIS:
+		controlDevice := gvl.axisControls[comm.monitorIndex];
+	eCategrories.SELECTION_CYLINDER:
+		controlDevice := gvl.cylinderControls[comm.monitorIndex];
+	eCategrories.SELECTION_UNIT:
+		controlDevice := gvl.stations[comm.monitorIndex]^;
+	eCategrories.SELECTION_SIGNAL:
 		
 END_CASE
 CASE state OF
 	0:
-		IF wordIn.0 AND wordIn.1 THEN
+		IF comm.wordIn.0 AND comm.wordIn.1 THEN
 			//ENGAGED_HMI and RUN
 			state := 1;
 		END_IF
 	1:
-		CASE commitMode OF
+		CASE comm.commitMode OF
 			//Manual execution
-			eCommitModes.MODE_EXE_AXIS,eCommitModes.MODE_EXE_COMMAND_BLOCK,eCommitModes.MODE_EXE_CYLINDER,eCommitModes.MODE_EXE_UNIT:
-				wordOut.1 := controlDevice.Control(commitBlock,TO_INT(commitMode)); //return whether done
-			eCommitModes.MODE_UPLOAD_DATA_BLOCK:
-				commitBlock := controlDevice.ConfigureRead();
-				wordOut.1 := TRUE;
-			eCommitModes.MODE_DOWNLOAD_DATA_BLOCK:
-				controlDevice.ConfigureWrite(commitBlock);
-				wordOut.1 := TRUE;//done
+			eModes.MODE_EXE_AXIS,eModes.MODE_EXE_COMMAND_BLOCK,eModes.MODE_EXE_CYLINDER,eModes.MODE_EXE_UNIT:
+				comm.wordOut.1 := controlDevice.Control(comm.commitBlock,TO_INT(comm.commitMode)); //return whether done
+			eModes.MODE_UPLOAD_DATA_BLOCK:
+				comm.commitBlock := controlDevice.ConfigureRead();
+				comm.wordOut.1 := TRUE;
+			eModes.MODE_DOWNLOAD_DATA_BLOCK:
+				controlDevice.ConfigureWrite(comm.commitBlock);
+				comm.wordOut.1 := TRUE;//done
 		END_CASE
 		
-		IF wordOut.1 OR NOT wordIn.0 THEN
+		IF comm.wordOut.1 OR NOT comm.wordIn.0 THEN
 			//DONE or ENGAGED_HMI off
 			state :=2;
 		END_IF
 	2:
-		IF NOT wordIn.1 THEN
-			wordOut.1 := FALSE;
+		IF NOT comm.wordIn.1 THEN
+			comm.wordOut.1 := FALSE;
 			state := 0;
 		END_IF
 END_CASE]]></ST>

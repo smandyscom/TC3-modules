@@ -10,7 +10,7 @@ TYPE eCommandTypes :
 	ZRET:=3,
 	
 	SET_POSITION:=16#FF
-);
+) WORD;
 END_TYPE
 ]]></Declaration>
   </DUT>

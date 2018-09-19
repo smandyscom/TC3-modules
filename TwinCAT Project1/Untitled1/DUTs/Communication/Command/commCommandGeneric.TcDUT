@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <DUT Name="commCommandGeneric" Id="{62c6cccb-2d2a-4621-abb3-49c6aff3e548}">
+    <Declaration><![CDATA[TYPE commCommandGeneric :
+UNION
+	base : commCommandBase;
+	position : commCommandPos;
+END_UNION
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

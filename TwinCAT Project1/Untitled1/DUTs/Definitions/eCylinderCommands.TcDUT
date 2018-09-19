@@ -8,7 +8,7 @@ TYPE eCylinderCommands :
 	NO_COMMAND := 0,
 	COMMAND_A := 1,
 	COMMAND_B := 2
-);
+) WORD;
 END_TYPE
 ]]></Declaration>
   </DUT>

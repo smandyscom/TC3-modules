@@ -8,6 +8,9 @@ VAR_GLOBAL
 	downstreamSyncAcknowledged AT%MB128 : BOOL;
 	//downstreamSyncAcknowledged  : BOOL;
 
+	//testValue1 AT%MW0 : WORD;
+	//testValue2 AT%MW1 : WORD;
+	blockData AT%Mb512 : commUnit;
 	//
 	//fakeInput AT%I* : bool;
 	

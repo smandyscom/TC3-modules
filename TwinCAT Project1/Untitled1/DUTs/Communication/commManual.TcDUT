@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <DUT Name="commManual" Id="{862d75da-433e-45f8-b444-e87c42bdc9e7}">
+    <Declaration><![CDATA[TYPE commManual :
+STRUCT
+	wordOut  : WORD; //0
+	reserved1 : ARRAY[1..31] OF WORD;
+	wordIn	 : WORD; //32
+	reserved2 : ARRAY[1..8] OF WORD;
+	monitorType : eCategrories;//40
+	monitorIndex : WORD;//41
+	commitMode : eModes;//42
+	commitSelection : eCategrories;//44
+	commitIndex  : WORD;//46
+	reserved3  : ARRAY[1..18] OF WORD;
+	commitBlock  : CellDataBlock;//64
+	monitorBlock  : CellDataBlock;//128
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

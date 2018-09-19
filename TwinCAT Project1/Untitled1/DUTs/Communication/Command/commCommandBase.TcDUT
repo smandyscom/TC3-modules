@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <DUT Name="commCommandBase" Id="{44762155-a4ee-4688-ad57-0991b5877603}">
+    <Declaration><![CDATA[TYPE commCommandBase :
+STRUCT	
+	axisId: WORD;				//0
+	commandType:eCommandTypes;	//1
+	speed:DWORD ; // in 0.001mm , fixed point , 2
+	accTime:DWORD; // in ms , 4
+	decTime:DWORD; // in ms , 6
+	torqueLimit:DWORD; // in 0.01 percentage , 8
+	reserved : ARRAY[1..6] OF WORD; //9...15
+END_STRUCT
+END_TYPE
+
+
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

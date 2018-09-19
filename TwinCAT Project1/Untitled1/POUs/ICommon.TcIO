@@ -4,7 +4,7 @@
     <Declaration><![CDATA[INTERFACE ICommon
 ]]></Declaration>
     <Method Name="ConfigureRead" Id="{6d589c03-f339-48ab-b876-cab398236125}">
-      <Declaration><![CDATA[METHOD ConfigureRead : Block64Words
+      <Declaration><![CDATA[METHOD ConfigureRead : CellDataBlock
 VAR_INPUT
 END_VAR
 //turns internal data(Retain arae , into 64Words block , pass to HMI]]></Declaration>
@@ -12,15 +12,15 @@ END_VAR
     <Method Name="ConfigureWrite" Id="{632a7afa-57b4-410f-90c5-014e311845e0}">
       <Declaration><![CDATA[METHOD ConfigureWrite : BOOL
 VAR_INPUT
-	input : Block64Words;
+	input : CellDataBlock;
 END_VAR
 //turns 64Words blocki , into  nternal data(Retain arae, from HMI]]></Declaration>
     </Method>
     <Method Name="Control" Id="{bf54ab1c-a189-4b4e-a555-103d378be280}">
       <Declaration><![CDATA[METHOD Control : BOOL
 VAR_INPUT
-	input : Block64Words;
-	mode : int; //commit mode , 
+	input : CellDataBlock;
+	mode : eModes; //commit mode , 
 END_VAR
 ]]></Declaration>
     </Method>
@@ -39,13 +39,13 @@ END_VAR
 ]]></Declaration>
     </Method>
     <Method Name="Monitor" Id="{b1eb2aa0-d7da-4a19-8768-e8a193343f37}">
-      <Declaration><![CDATA[METHOD Monitor : Block64Words
+      <Declaration><![CDATA[METHOD Monitor : CellDataBlock
 VAR_INPUT
 END_VAR
 ]]></Declaration>
     </Method>
     <Method Name="TypeCode" Id="{64ea1201-6b50-4ccb-bd12-8f3175ca76f8}">
-      <Declaration><![CDATA[METHOD TypeCode : eTypeCodes
+      <Declaration><![CDATA[METHOD TypeCode : eCategrories
 VAR_INPUT
 END_VAR
 ]]></Declaration>

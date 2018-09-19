@@ -111,7 +111,7 @@ LAST_COMMAND := COMMAND_CACHED;
     </Implementation>
     <Folder Name="ICommon" Id="{48bea1d3-0a28-439a-92dd-8f8417445059}" />
     <Method Name="ConfigureRead" Id="{bc98ac9f-d51a-43ad-b528-a1a54fe67ea0}" FolderPath="ICommon\">
-      <Declaration><![CDATA[METHOD ConfigureRead : Block64Words
+      <Declaration><![CDATA[METHOD ConfigureRead : CellDataBlock
 VAR_INPUT
 END_VAR
 ]]></Declaration>
@@ -122,7 +122,7 @@ END_VAR
     <Method Name="ConfigureWrite" Id="{f3b24b0b-d22d-4018-b1c9-709a957955d9}" FolderPath="ICommon\">
       <Declaration><![CDATA[METHOD ConfigureWrite : BOOL
 VAR_INPUT
-	input : Block64Words;
+	input : CellDataBlock;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -132,8 +132,8 @@ END_VAR
     <Method Name="Control" Id="{57e57159-f3d2-45e6-85f3-9a286c6e359d}" FolderPath="ICommon\">
       <Declaration><![CDATA[METHOD Control : BOOL
 VAR_INPUT
-	input : Block64Words;
-	mode : int;
+	input : CellDataBlock;
+	mode : eModes;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -207,7 +207,7 @@ END_IF]]></ST>
       </Implementation>
     </Method>
     <Method Name="Monitor" Id="{120aac0f-3608-4cae-b6d2-bb459b1d4cf7}" FolderPath="ICommon\">
-      <Declaration><![CDATA[METHOD Monitor : Block64Words
+      <Declaration><![CDATA[METHOD Monitor : CellDataBlock
 VAR_INPUT
 END_VAR
 ]]></Declaration>
@@ -216,7 +216,7 @@ END_VAR
       </Implementation>
     </Method>
     <Method Name="TypeCode" Id="{2fbd4fdf-fcb0-4d45-95f6-2e5788341375}" FolderPath="ICommon\">
-      <Declaration><![CDATA[METHOD TypeCode : eTypeCodes
+      <Declaration><![CDATA[METHOD TypeCode : eCategrories
 VAR_INPUT
 END_VAR
 ]]></Declaration>

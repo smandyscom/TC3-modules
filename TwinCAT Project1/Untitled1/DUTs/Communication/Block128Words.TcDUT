@@ -4,7 +4,7 @@
     <Declaration><![CDATA[TYPE Block128Words :
 UNION
 	reserved : ARRAY[1..128] OF WORD;
-	unit : unitBlockGeneric;
+	unit : commUnitGeneric;
 	material : materialBlock;
 END_UNION
 END_TYPE

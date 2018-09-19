@@ -11,7 +11,7 @@ VAR_OUTPUT
 	errorClear : eErrorClearWays;
 	
 	mErrorIndex : DWORD;
-	mErrorType : DWORD;
+	mErrorType : eCategrories;
 	mErrorCode : LWORD;
 	
 	mMonitorDatas:ARRAY[1..8] OF DWORD;
