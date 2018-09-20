@@ -381,9 +381,11 @@ END_VAR]]></Declaration>
       <Declaration><![CDATA[METHOD Monitor : CellDataBlock
 VAR_INPUT
 END_VAR
-]]></Declaration>
+VAR
+	comm : CellDataBlock;
+END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[Monitor := comm;]]></ST>
       </Implementation>
     </Method>
     <Property Name="PositionCommand" Id="{d90f9427-641f-46be-8de0-14848d24631d}">

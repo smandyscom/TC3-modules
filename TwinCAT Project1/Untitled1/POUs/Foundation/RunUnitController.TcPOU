@@ -97,7 +97,7 @@ END_IF
 //
 CASE currentMode OF	
 	eOperationModes.MANUAL:
-		THIS^.ManualMode(); //scan-in,scan-out,manual...
+		interfaceManual(); //scan-in,scan-out,manual...
 	eOperationModes.AUTO,eOperationModes.SEMI_AUTO:
 		//running sequences
 		FOR nCounter :=1 TO 8 BY 1 DO
@@ -152,15 +152,6 @@ END_IF
     </Method>
     <Method Name="Initialize" Id="{cb68dc91-f1ca-48a3-a360-7027131d9307}">
       <Declaration><![CDATA[METHOD Initialize : BOOL
-VAR_INPUT
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="ManualMode" Id="{ce6e971a-3f9a-4616-be00-b8a22036226a}">
-      <Declaration><![CDATA[METHOD ManualMode : BOOL
 VAR_INPUT
 END_VAR
 ]]></Declaration>
@@ -227,9 +218,6 @@ END_VAR
       <LineId Id="21" Count="0" />
     </LineIds>
     <LineIds Name="RunUnitController.Initialize">
-      <LineId Id="5" Count="0" />
-    </LineIds>
-    <LineIds Name="RunUnitController.ManualMode">
       <LineId Id="5" Count="0" />
     </LineIds>
   </POU>
