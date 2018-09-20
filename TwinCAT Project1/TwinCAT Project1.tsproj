@@ -2511,8 +2511,8 @@ External Setpoint Generation:
 						<Velo RefSearch="86.25" RefSync="86.25" SlowManual="431.25" FastManual="2587.5" Fast="8625" Maximum="8625"/>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
 					</AxisPara>
-					<Encoder Name="Enc" EncType="19">
-						<EncPara ScaleFactorNumerator="150" ScaleFactorDenominator="1048576" Inverse="true" MaxCount="#xffffffff"/>
+					<Encoder Name="Enc" EncType="1">
+						<EncPara ScaleFactorNumerator="150" ScaleFactorDenominator="1048576" Inverse="true"/>
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
 							<Var>
@@ -2578,8 +2578,8 @@ External Setpoint Generation:
 							</Var>
 						</Vars>
 					</Encoder>
-					<Drive Name="Drive" DrvType="16">
-						<DrvPara Inverse="true" MaxCount="#xffffffff" DriveControlDWord="#x00000100">
+					<Drive Name="Drive" DrvType="5">
+						<DrvPara Inverse="true">
 							<Analog VeloReferenz="9487.5" ScaleFactorActTorque="0.1"/>
 							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
@@ -2632,6 +2632,26 @@ Drive Status 4 (manually linked):
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut2</Name>
+								</SubVar>
+								<SubVar>
+									<Name>nCtrl2</Name>
+									<Comment>
+										<![CDATA[Digital Outputs Setpoint Generator:
+0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
+0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
+0x80 (1000 0000) = Stop
+]]>
+									</Comment>
+								</SubVar>
+								<SubVar>
+									<Name>nCtrl3</Name>
+									<Comment>
+										<![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
+0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
+0x80 (1000 0000) = Stop
+]]>
+									</Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
@@ -3801,6 +3821,70 @@ External Setpoint Generation:
 							</SubVar>
 						</Var>
 						<Var>
+							<Name>GVL.signalControls[1].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[2].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[3].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[4].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[5].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[6].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[7].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[8].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[9].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[10].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[11].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[12].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[13].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[14].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[15].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[16].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
 							<Name>GVL.cylinderControls[1].SENSOR_A</Name>
 							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
 						</Var>
@@ -4055,70 +4139,6 @@ External Setpoint Generation:
 						<Var>
 							<Name>GVL.cylinderControls[32].SENSOR_B</Name>
 							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[1].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[2].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[3].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[4].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[5].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[6].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[7].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[8].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[9].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[10].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[11].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[12].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[13].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[14].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[15].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[16].input</Name>
-							<Type>BOOL</Type>
 						</Var>
 					</Vars>
 					<Vars VarGrpType="2">
@@ -9791,23 +9811,6 @@ External Setpoint Generation:
 	</Project>
 	<Mappings>
 		<MappingInfo Identifier="{05000010-2002-0850-1000-040300205008}" Id="#x02030010" Watchdog="14000000040000000400000004000000"/>
-		<OwnerA Name="TINC^NC-Task 1 SAF^Axes^Conveyor">
-			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 8 (EL7201-9014)">
-				<Link VarA="Drive^Inputs^In^nDataIn1" VarB="DRV Following error actual value^Following error actual value"/>
-				<Link VarA="Drive^Inputs^In^nDcOutputTime" VarB="InfoData^DcOutputShift"/>
-				<Link VarA="Drive^Inputs^In^nState1" VarB="DRV Statusword^Statusword"/>
-				<Link VarA="Drive^Inputs^In^nState2" VarB="DRV Statusword^Statusword" Size="8" OffsB="8"/>
-				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
-				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^WcState"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl1" VarB="DRV Controlword^Controlword"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl2" VarB="DRV Controlword^Controlword" Size="8" OffsB="8"/>
-				<Link VarA="Drive^Outputs^Out^nDataOut1" VarB="DRV Target position^Target position"/>
-				<Link VarA="Enc^Inputs^In^nDataIn1" VarB="FB Position^Position"/>
-				<Link VarA="Enc^Inputs^In^nDcInputTime" VarB="InfoData^DcInputShift"/>
-				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
-				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^WcState"/>
-			</OwnerB>
-		</OwnerA>
 		<OwnerA Name="TINC^NC-Task 1 SAF^Axes^Horizon1">
 			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 9 (EL7201-9014)">
 				<Link VarA="Drive^Inputs^In^nDataIn1" VarB="DRV Following error actual value^Following error actual value"/>
