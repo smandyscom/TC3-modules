@@ -17,7 +17,7 @@ VAR
 	requestMode : eOperationModes := eOperationModes.SEMI_AUTO;
 	//error
 	requestErrorClear : eErrorClearWays := eErrorClearWays.NO_ACTION;
-	errorDevice :ICommon := 0; //null reference
+	errorDevice : POINTER TO CommonBase := 0; //null reference
 	errorType : eCategrories;
 	errorIndex : INT;
 	errorCode : INT;
@@ -40,20 +40,20 @@ FOR nCounter :=1 TO 9 BY 1 DO
 	//error detection
 	IF errorDevice =0 AND_THEN gvl.axisControls[nCounter].ErrorDetect() <> 0 THEN
 		//error scaned
-		errorDevice := gvl.axisControls[nCounter];
+		errorDevice := ADR(gvl.axisControls[nCounter]);
 	END_IF
 	IF errorDevice=0 AND_THEN gvl.cylinderControls[nCounter].ErrorDetect() <> 0 THEN
 		//error scaned
-		errorDevice := gvl.cylinderControls[nCounter];
+		errorDevice := ADR(gvl.cylinderControls[nCounter]);
 	END_IF
 	//station
 	IF errorDevice=0 AND_THEN gvl.stations[nCounter] <> 0 AND_THEN gvl.stations[nCounter]^.ErrorDetect() <> 0 THEN
-		errorDevice := gvl.stations[nCounter]^;
+		errorDevice := gvl.stations[nCounter];
 	END_IF
 	IF errorDevice <>0 THEN
 		errorIndex := nCounter-1;
-		errorType := errorDevice.TypeCode();
-		errorCode := errorDevice.ErrorDetect();
+		errorType := errorDevice^.TypeCode();
+		errorCode := errorDevice^.ErrorDetect();
 	END_IF
 	
 END_FOR
@@ -141,7 +141,7 @@ END_VAR]]></Declaration>
 	END_IF
 	//reset error handling
 	IF requestErrorClear <> eErrorClearWays.NO_ACTION THEN
-		errorDevice.ErrorClear(requestErrorClear);
+		errorDevice^.ErrorClear(requestErrorClear);
 		requestErrorClear := eErrorClearWays.NO_ACTION;
 		errorDevice := 0 ;// cut link
 	END_IF

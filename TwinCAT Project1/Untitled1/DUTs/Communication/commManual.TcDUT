@@ -8,10 +8,10 @@ STRUCT
 	wordIn	 : WORD; //32
 	reserved2 : ARRAY[1..8] OF WORD;
 	monitorType : eCategrories;//40
-	monitorIndex : WORD;//41
+	monitorIndex : WORD;//41 , 0-based index
 	commitMode : eModes;//42
 	commitSelection : eCategrories;//44
-	commitIndex  : WORD;//46
+	commitIndex  : WORD;//46 , 0-based index
 	reserved3  : ARRAY[1..18] OF WORD;
 	commitBlock  : CellDataBlock;//64
 	monitorBlock  : CellDataBlock;//128

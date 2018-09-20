@@ -49,6 +49,9 @@ VAR
 	
 	//need to explicit call write persistance data , to store into non-violate memory
 	writePersistance : WritePersistentData;
+	
+	test : POINTER TO CommonBase;
+	value : eCategrories;
 END_VAR
 VAR CONSTANT
 	//Axis
@@ -125,7 +128,11 @@ writePersistance(
 		TMOUT:= , 
 		BUSY=> , 
 		ERR=> , 
-		ERRID=> );]]></ST>
+		ERRID=> );
+		
+
+test := ADR(gvl.axisControls[1]);
+value := test^.TypeCode();]]></ST>
     </Implementation>
     <LineIds Name="MAIN_C1A2">
       <LineId Id="28" Count="2" />
@@ -148,6 +155,10 @@ writePersistance(
       <LineId Id="84" Count="0" />
       <LineId Id="101" Count="6" />
       <LineId Id="100" Count="0" />
+      <LineId Id="360" Count="0" />
+      <LineId Id="363" Count="0" />
+      <LineId Id="361" Count="0" />
+      <LineId Id="364" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

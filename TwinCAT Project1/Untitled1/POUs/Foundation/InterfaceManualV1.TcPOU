@@ -10,8 +10,8 @@ VAR
 
 	comm AT%MB1024: commManual;
 	
-	monitorDevice : REFERENCE TO ICommon;
-	controlDevice : REFERENCE TO ICommon;
+	monitorDevice : POINTER TO CommonBase;
+	controlDevice : POINTER TO CommonBase;
 	state : INT := 0;
 END_VAR
 ]]></Declaration>
@@ -19,21 +19,24 @@ END_VAR
       <ST><![CDATA[//monitor
 CASE TO_DWORD(comm.monitorType) OF
 	eCategrories.SELECTION_AXIS:
-		monitorDevice REF= gvl.axisControls[comm.monitorIndex];
+		monitorDevice := ADR(gvl.axisControls[comm.monitorIndex+1]); // index start from 1
 	eCategrories.SELECTION_CYLINDER:
-		monitorDevice REF= gvl.cylinderControls[comm.monitorIndex];
+		monitorDevice := ADR(gvl.cylinderControls[comm.monitorIndex+1]);
 	eCategrories.SELECTION_UNIT:
-		monitorDevice REF= gvl.stations[comm.monitorIndex]^;
+		monitorDevice := gvl.stations[comm.monitorIndex+1];
 END_CASE
-comm.monitorBlock := monitorDevice.Monitor();
+monitorDevice := gvl.stations[1];
+monitorDevice := ADR(gvl.cylinderControls[1]);
+monitorDevice := ADR(gvl.axisControls[1]);
+comm.monitorBlock := monitorDevice^.Monitor();
 //control
 CASE comm.commitSelection OF
 	eCategrories.SELECTION_AXIS:
-		controlDevice :=  gvl.axisControls[comm.monitorIndex];
+		controlDevice :=  ADR(gvl.axisControls[comm.monitorIndex+1]);
 	eCategrories.SELECTION_CYLINDER:
-		controlDevice := gvl.cylinderControls[comm.monitorIndex];
+		controlDevice := ADR(gvl.cylinderControls[comm.monitorIndex+1]);
 	eCategrories.SELECTION_UNIT:
-		controlDevice := gvl.stations[comm.monitorIndex]^;
+		controlDevice := gvl.stations[comm.monitorIndex+1];
 	eCategrories.SELECTION_SIGNAL:
 		
 END_CASE
@@ -47,12 +50,12 @@ CASE state OF
 		CASE comm.commitMode OF
 			//Manual execution
 			eModes.MODE_EXE_AXIS,eModes.MODE_EXE_COMMAND_BLOCK,eModes.MODE_EXE_CYLINDER,eModes.MODE_EXE_UNIT:
-				comm.wordOut.1 := controlDevice.Control(comm.commitBlock,comm.commitMode); //return whether done
+				comm.wordOut.1 := controlDevice^.Control(comm.commitBlock,comm.commitMode); //return whether done
 			eModes.MODE_UPLOAD_DATA_BLOCK:
-				comm.commitBlock := controlDevice.ConfigureRead();
+				comm.commitBlock := controlDevice^.ConfigureRead();
 				comm.wordOut.1 := TRUE;
 			eModes.MODE_DOWNLOAD_DATA_BLOCK:
-				controlDevice.ConfigureWrite(comm.commitBlock);
+				controlDevice^.ConfigureWrite(comm.commitBlock);
 				comm.wordOut.1 := TRUE;//done
 		END_CASE
 		
@@ -68,7 +71,9 @@ CASE state OF
 END_CASE]]></ST>
     </Implementation>
     <LineIds Name="InterfaceManualV1">
-      <LineId Id="112" Count="28" />
+      <LineId Id="112" Count="8" />
+      <LineId Id="208" Count="2" />
+      <LineId Id="121" Count="19" />
       <LineId Id="146" Count="0" />
       <LineId Id="141" Count="2" />
       <LineId Id="149" Count="0" />

@@ -109,6 +109,9 @@
     <Compile Include="POUs\AUTO.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Foundation\CommonBase.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Foundation\RunUnitSlave.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -144,6 +147,7 @@
     </Compile>
     <Compile Include="POUs\ICommon.TcIO">
       <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
     <Compile Include="POUs\POU.TcPOU">
       <SubType>Code</SubType>

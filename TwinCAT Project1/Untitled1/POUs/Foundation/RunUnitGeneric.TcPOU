@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
   <POU Name="RunUnitGeneric" Id="{a108e392-1419-4492-a6fc-c3186312016b}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK RunUnitGeneric IMPLEMENTS ICommon
+    <Declaration><![CDATA[FUNCTION_BLOCK RunUnitGeneric Extends CommonBase
 VAR_INPUT
 	bEnStep : BOOL;
 	bTrigStep : BOOL;
@@ -80,8 +80,8 @@ bTrigStep := FALSE;
 //Timer
 workingTimer(IN:=,PT:=,Q=>,ET=>);]]></ST>
     </Implementation>
-    <Folder Name="ICommon" Id="{a3eb2459-fb17-4657-a789-38e4b978c786}" />
-    <Method Name="ConfigureRead" Id="{5b0d9a0a-5d92-42f2-80d6-58161cf4acad}" FolderPath="ICommon\">
+    <Folder Name="CommonBase" Id="{a3eb2459-fb17-4657-a789-38e4b978c786}" />
+    <Method Name="ConfigureRead" Id="{5b0d9a0a-5d92-42f2-80d6-58161cf4acad}" FolderPath="CommonBase\">
       <Declaration><![CDATA[METHOD ConfigureRead : CellDataBlock
 VAR_INPUT
 END_VAR
@@ -90,7 +90,7 @@ END_VAR
         <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
-    <Method Name="ConfigureWrite" Id="{b15520cc-2020-48bd-8025-beb0523946ca}" FolderPath="ICommon\">
+    <Method Name="ConfigureWrite" Id="{b15520cc-2020-48bd-8025-beb0523946ca}" FolderPath="CommonBase\">
       <Declaration><![CDATA[METHOD ConfigureWrite : BOOL
 VAR_INPUT
 	input : CellDataBlock;
@@ -100,7 +100,7 @@ END_VAR
         <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Control" Id="{fe69a240-a6bf-45a3-bd63-78ff17e8577a}" FolderPath="ICommon\">
+    <Method Name="Control" Id="{fe69a240-a6bf-45a3-bd63-78ff17e8577a}" FolderPath="CommonBase\">
       <Declaration><![CDATA[METHOD Control : BOOL
 VAR_INPUT
 	input : CellDataBlock;
@@ -111,7 +111,7 @@ END_VAR
         <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
-    <Method Name="ErrorClear" Id="{c0e62209-d0d5-44f2-8c68-278b3588f780}" FolderPath="ICommon\">
+    <Method Name="ErrorClear" Id="{c0e62209-d0d5-44f2-8c68-278b3588f780}" FolderPath="CommonBase\">
       <Declaration><![CDATA[METHOD ErrorClear : BOOL
 VAR_INPUT
 	input : eErrorClearWays;
@@ -121,7 +121,7 @@ END_VAR
         <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
-    <Method Name="ErrorDetect" Id="{f4463e33-7efc-4b67-a80e-02e00ed76350}" FolderPath="ICommon\">
+    <Method Name="ErrorDetect" Id="{f4463e33-7efc-4b67-a80e-02e00ed76350}" FolderPath="CommonBase\">
       <Declaration><![CDATA[METHOD ErrorDetect : INT
 VAR_INPUT
 END_VAR
@@ -169,7 +169,7 @@ END_IF
 Initialize := (State = eSpecialStates.INITIAL_END);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Monitor" Id="{8df8139c-9882-4bf6-9048-c2ce81b63c35}" FolderPath="ICommon\">
+    <Method Name="Monitor" Id="{8df8139c-9882-4bf6-9048-c2ce81b63c35}" FolderPath="CommonBase\">
       <Declaration><![CDATA[METHOD Monitor : CellDataBlock
 VAR_INPUT
 END_VAR
@@ -178,7 +178,7 @@ END_VAR
         <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
-    <Method Name="TypeCode" Id="{5f35ce6c-c451-4e46-809f-fa5a3eec0aed}" FolderPath="ICommon\">
+    <Method Name="TypeCode" Id="{5f35ce6c-c451-4e46-809f-fa5a3eec0aed}" FolderPath="CommonBase\">
       <Declaration><![CDATA[METHOD TypeCode : eCategrories
 VAR_INPUT
 END_VAR

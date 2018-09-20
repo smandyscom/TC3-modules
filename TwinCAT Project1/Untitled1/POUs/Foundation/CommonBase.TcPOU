@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <POU Name="CommonBase" Id="{0ec98e57-59b2-46ad-8038-cac0ed0e74a9}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK CommonBase
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	default : int := 16#ff; //for base class , minimun requires one field to locate address
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="ConfigureRead" Id="{8e0df28b-cbcb-4f0b-9e41-e6a240ff5ddf}">
+      <Declaration><![CDATA[METHOD ConfigureRead : CellDataBlock
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ConfigureWrite" Id="{ae3bac82-ca4b-49e7-bb0c-2ffd48d7a2d3}">
+      <Declaration><![CDATA[METHOD ConfigureWrite : BOOL
+VAR_INPUT
+	input : CellDataBlock;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Control" Id="{6b2845e0-d489-487e-a42c-42934f1729db}">
+      <Declaration><![CDATA[METHOD Control : BOOL
+VAR_INPUT
+	input : CellDataBlock;
+	mode : eModes;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ErrorClear" Id="{b26b719e-f527-4ef0-bd52-663bd6511afd}">
+      <Declaration><![CDATA[METHOD ErrorClear : BOOL
+VAR_INPUT
+	input : eErrorClearWays;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ErrorDetect" Id="{f95a086f-f03e-4047-a51e-55e0cdb1901d}">
+      <Declaration><![CDATA[METHOD ErrorDetect : int
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Monitor" Id="{6e2674a7-55cf-4f68-b8fc-bd23a5a9c826}">
+      <Declaration><![CDATA[METHOD Monitor : CellDataBlock
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TypeCode" Id="{e730d55b-d0ba-4b79-ae5c-fc301e130191}">
+      <Declaration><![CDATA[METHOD TypeCode : eCategrories
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="CommonBase">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="CommonBase.ConfigureRead">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="CommonBase.ConfigureWrite">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="CommonBase.Control">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="CommonBase.ErrorClear">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="CommonBase.ErrorDetect">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="CommonBase.Monitor">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="CommonBase.TypeCode">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
