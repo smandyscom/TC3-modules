@@ -10,7 +10,7 @@ TYPE eCategrories :
     SELECTION_SIGNAL :=2,
     SELECTION_COMMAND_BLOCK := 4,
     SELECTION_UNIT := 5
-) DWORD;
+) WORD;
 END_TYPE
 ]]></Declaration>
   </DUT>
