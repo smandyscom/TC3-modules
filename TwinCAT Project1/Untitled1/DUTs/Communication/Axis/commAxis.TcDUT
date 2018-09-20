@@ -13,8 +13,8 @@ STRUCT
 	posStatus:WORD;//12,13 , not implemented
 	//
 	posFeedback : DINT;//14-15
-	speedFeedback : DWORD;//16-17
-	torqueFeedback : DWORD;//18-19
+	speedFeedback : DINT;//16-17
+	torqueFeedback : DINT;//18-19
 	reserved : ARRAY[1..4] OF WORD;//20-23
 	operationOperation : WORD;//24 , operation of servoOn,alarmClear (HMI->PLC
 	

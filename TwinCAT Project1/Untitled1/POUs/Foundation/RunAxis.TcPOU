@@ -90,7 +90,7 @@ fbReadActualVelocity(
 	Axis:= Axis, 
 	Enable:= TRUE, 
 	ParameterNumber:= ActualVelocity, 
-	ReadMode:= , 
+	ReadMode:= READMODE_CYCLIC, 
 	Valid=> , 
 	Busy=> , 
 	Error=> , 
@@ -399,12 +399,20 @@ END_VAR]]></Declaration>
     <Method Name="Monitor" Id="{f14ef5b7-4fb3-4276-899b-459b8636a870}" FolderPath="CommonBase\">
       <Declaration><![CDATA[METHOD Monitor : CellDataBlock
 VAR_INPUT
-END_VAR
-VAR
-	comm : CellDataBlock;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Monitor := comm;]]></ST>
+        <ST><![CDATA[Monitor.axis.operationMonitor.0 := fbPower.Enable;
+Monitor.axis.operationMonitor.15 := fbReset.Execute;
+
+Monitor.axis.runStatus.1 := fbReadStatus.StandStill;
+Monitor.axis.runStatus.3 := fbReadStatus.Error;
+
+Monitor.axis.alarm := fbReadStatus.ErrorID;
+
+Monitor.axis.posCommand := TO_DINT(fbReadCommandPosition.Value * 1000);
+Monitor.axis.posFeedback := TO_DINT(fbReadActualPosition.Position * 1000);
+Monitor.axis.speedFeedback := TO_DINT(fbReadActualVelocity.Value * 1000);
+]]></ST>
       </Implementation>
     </Method>
     <Property Name="PositionCommand" Id="{d90f9427-641f-46be-8de0-14848d24631d}">
@@ -565,6 +573,15 @@ END_VAR
     </LineIds>
     <LineIds Name="RunAxis.Monitor">
       <LineId Id="5" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="18" Count="2" />
+      <LineId Id="17" Count="0" />
     </LineIds>
     <LineIds Name="RunAxis.PositionCommand.Get">
       <LineId Id="16" Count="0" />
