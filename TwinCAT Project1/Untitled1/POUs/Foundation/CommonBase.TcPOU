@@ -71,6 +71,15 @@ END_VAR
         <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
+    <Method Name="Stop" Id="{23e1061a-1dcf-48fd-bd32-abbb323b4a0b}">
+      <Declaration><![CDATA[METHOD Stop : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="TypeCode" Id="{e730d55b-d0ba-4b79-ae5c-fc301e130191}">
       <Declaration><![CDATA[METHOD TypeCode : eCategrories
 VAR_INPUT
@@ -99,6 +108,9 @@ END_VAR
       <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="CommonBase.Monitor">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="CommonBase.Stop">
       <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="CommonBase.TypeCode">

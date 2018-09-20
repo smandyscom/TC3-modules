@@ -57,6 +57,11 @@ CASE state OF
 				comm.wordOut.1 := TRUE;//done
 		END_CASE
 		
+		//interrupt operation
+		IF NOT comm.wordIn.0 THEN
+			controlDevice^.Stop();
+		END_IF
+		
 		IF comm.wordOut.1 OR NOT comm.wordIn.0 THEN
 			//DONE or ENGAGED_HMI off
 			state :=2;
@@ -81,6 +86,9 @@ END_CASE]]></ST>
       <LineId Id="150" Count="0" />
       <LineId Id="160" Count="0" />
       <LineId Id="145" Count="0" />
+      <LineId Id="214" Count="0" />
+      <LineId Id="218" Count="0" />
+      <LineId Id="215" Count="2" />
       <LineId Id="193" Count="0" />
       <LineId Id="154" Count="1" />
       <LineId Id="157" Count="0" />

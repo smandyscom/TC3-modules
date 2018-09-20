@@ -115,6 +115,12 @@
     <Compile Include="POUs\Foundation\RunUnitSlave.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Helper\CellDataBlock2Parameter.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Helper\Parameter2CellDataBlock.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\MAIN_C1A2.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -205,6 +211,7 @@
     <Folder Include="DUTs\Material" />
     <Folder Include="GVLs" />
     <Folder Include="POUs\Foundation" />
+    <Folder Include="POUs\Helper" />
     <Folder Include="POUs\Stations" />
     <Folder Include="VISUs" />
     <Folder Include="POUs" />

@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <POU Name="CellDataBlock2Parameter" Id="{00389500-3e9b-4192-b4d9-ba69313aed8c}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION CellDataBlock2Parameter : ParameterSet
+VAR_INPUT
+	input : CellDataBlock;
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//set command type
+CellDataBlock2Parameter.command := input.command.base.commandType;
+
+CASE CellDataBlock2Parameter.command OF
+	eCommandTypes.POSITION:
+		//details setup
+		IF input.command.position.controlWord.0 THEN
+			//abs
+			CellDataBlock2Parameter.parameter.position.PositionType := ePositionType.POSITION_ABS;
+		ELSE
+			//rel
+			CellDataBlock2Parameter.parameter.position.PositionType := ePositionType.POSITION_REL;	
+		END_IF
+		CellDataBlock2Parameter.parameter.position.Velocity := TO_REAL(input.command.base.speed) * 0.001; //0.001mm/s -> mm/s
+		CellDataBlock2Parameter.parameter.position.Acceleration := CellDataBlock2Parameter.parameter.position.Velocity/(TO_REAL(input.command.base.accTime) * 0.001); // ms -> mm/s2
+		CellDataBlock2Parameter.parameter.position.Deceleration := CellDataBlock2Parameter.parameter.position.Velocity/(TO_REAL(input.command.base.decTime) * 0.001);
+		CellDataBlock2Parameter.parameter.position.Position := TO_REAL(input.command.position.coordinate) * 0.001;
+	
+	eCommandTypes.ZRET:
+		//TODO
+END_CASE]]></ST>
+    </Implementation>
+    <LineIds Name="CellDataBlock2Parameter">
+      <LineId Id="30" Count="0" />
+      <LineId Id="15" Count="1" />
+      <LineId Id="10" Count="1" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="18" Count="1" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="21" Count="1" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="29" Count="0" />
+      <LineId Id="32" Count="0" />
+      <LineId Id="27" Count="0" />
+      <LineId Id="13" Count="1" />
+      <LineId Id="17" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

@@ -3,8 +3,8 @@
   <DUT Name="commCommandPos" Id="{8f368442-c415-42b2-b751-673ee70c0436}">
     <Declaration><![CDATA[TYPE commCommandPos EXTENDS commCommandBase :
 STRUCT
-	CONTROL_WORD:DWORD; //16,17
-	COORDINATE:DINT; //18,19
+	controlWord:DWORD; //16,17 , bit0, true=abs
+	coordinate:DINT; //18,19 , in 0.001mm
 END_STRUCT
 END_TYPE
 ]]></Declaration>

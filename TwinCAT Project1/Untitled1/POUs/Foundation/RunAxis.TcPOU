@@ -207,6 +207,9 @@ END_VAR
 VAR_INPUT
 	input : CellDataBlock;
 	mode : eModes;
+END_VAR
+VAR
+	temp : ParameterSet;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[//manual control servo on/servo alarm reset
@@ -224,7 +227,8 @@ CASE mode OF
 		END_IF
 		Control := TRUE;
 	eModes.MODE_EXE_COMMAND_BLOCK:
-		Control := TRUE;
+		temp := CellDataBlock2Parameter(input:= input);
+		Control := ExecuteParameter(ptBlock:= ADR(temp));
 END_CASE]]></ST>
       </Implementation>
     </Method>
@@ -433,6 +437,21 @@ END_VAR
         </Implementation>
       </Set>
     </Property>
+    <Method Name="Stop" Id="{92c52b93-2b5b-43c1-8417-c41b77593d4d}" FolderPath="CommonBase\">
+      <Declaration><![CDATA[METHOD Stop : BOOL
+VAR_INPUT
+END_VAR
+VAR
+	nCounter : INT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//stop all function blocks
+FOR nCounter:=1 TO 3 BY 1 DO
+	fbMoveAbs[nCounter].Execute := FALSE;
+END_FOR
+fbMoveHome.Execute := FALSE;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="TypeCode" Id="{d7c803da-ddd0-409e-b8b9-d71f78281c2b}" FolderPath="CommonBase\">
       <Declaration><![CDATA[METHOD TypeCode : eCategrories
 VAR_INPUT
@@ -476,6 +495,7 @@ END_VAR
       <LineId Id="29" Count="0" />
       <LineId Id="34" Count="0" />
       <LineId Id="14" Count="0" />
+      <LineId Id="41" Count="0" />
       <LineId Id="35" Count="0" />
       <LineId Id="13" Count="0" />
     </LineIds>
@@ -554,6 +574,13 @@ END_VAR
     </LineIds>
     <LineIds Name="RunAxis.PositionCommand.Set">
       <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="RunAxis.Stop">
+      <LineId Id="12" Count="0" />
+      <LineId Id="6" Count="0" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="7" Count="0" />
+      <LineId Id="10" Count="0" />
     </LineIds>
     <LineIds Name="RunAxis.TypeCode">
       <LineId Id="5" Count="0" />
