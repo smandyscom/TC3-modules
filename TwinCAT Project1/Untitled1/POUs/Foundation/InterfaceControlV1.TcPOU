@@ -24,6 +24,9 @@ VAR
 	errorCode AT%M* : LWORD;
 	reserved2 AT%M* : ARRAY[1..8] OF WORD;
 	monitorDatas AT%M* : ARRAY[1..8] OF DWORD;
+	
+	//TODO , towerlight/pushbutton controls
+	
 END_VAR
 VAR CONSTANT
 	bErrorReset : INT := 0;

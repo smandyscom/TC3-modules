@@ -4,14 +4,13 @@
     <Declaration><![CDATA[FUNCTION_BLOCK RunGradeOutput EXTENDS RunUnitSlave
 VAR
 	axisMoving : POINTER TO RunAxis;
-	axisVertical : POINTER TO RunCylinder;
 	holder : POINTER TO RunCylinder;
-	
+	axisVertical : POINTER TO RunCylinder;
+	clamper : POINTER TO RunCylinder;	
 	//
 	ptCommandReady : POINTER TO ParameterSet;
 	ptCommandOK : POINTER TO ParameterSet;
 	ptCommandNG : POINTER TO ParameterSet;
-	//TODO , shuld be pickAndPlace protocal
 END_VAR
 
 ]]></Declaration>
@@ -22,7 +21,9 @@ SUPER^();
 CASE state OF 
 	//-------------------------Initialize
 	eSpecialStates.INITIAL_BEGIN:
-		bSerialTransition:=holder^.Execute(eCylinderCommands.COMMAND_A);
+		transitionByte.0 := (NOT transitionByte.0) AND_THEN holder^.Execute(eCylinderCommands.COMMAND_A);
+		transitionByte.1 := (NOT transitionByte.1) AND_THEN clamper^.Execute(eCylinderCommands.COMMAND_A);
+		bSerialTransition := (transitionByte = 16#3);
 	eSpecialStates.INITIAL_STATE_1:
 		bSerialTransition :=  axisVertical^.Execute(eCylinderCommands.COMMAND_A);
 	eSpecialStates.INITIAL_STATE_2:
@@ -35,8 +36,12 @@ CASE state OF
 	16#101:
 		bSerialTransition:=holder^.Execute(eCylinderCommands.COMMAND_B); //hold
 	16#102:
-		bSerialTransition:=axisVertical^.Execute(eCylinderCommands.COMMAND_A); //up
+		bSerialTransition:=clamper^.Execute(eCylinderCommands.COMMAND_B); //clamper relase
 	16#103:
+		bSerialTransition:=axisVertical^.Execute(eCylinderCommands.COMMAND_A); //up
+	16#104:
+		bSerialTransition:=clamper^.Execute(eCylinderCommands.COMMAND_A); //clamper return
+	16#105:
 		IF axisMoving^.ExecuteParameter(ptCommandOK) THEN
 			//TODO , according to grade to move
 			NextState := 16#110;
@@ -64,7 +69,12 @@ VAR_INPUT
 	
 	argWorkingSignal : POINTER TO BOOL;
 	
-	argAxisMoving : RunAxis;
+	argAxisMoving : POINTER TO RunAxis;
+	
+	argHolder : POINTER TO RunCylinder;
+	argAxisVertical : POINTER TO RunCylinder;
+	argClamper : POINTER TO RunCylinder;
+	
 END_VAR
 VAR CONSTANT
 	indexReady : INT := 1;
@@ -89,16 +99,27 @@ axisMoving := argAxisMoving;
 ptCommandReady := ADR(axisMoving^.ptpCommands[indexReady]);
 ptCommandOK := ADR(axisMoving^.ptpCommands[indexOK]);
 ptCommandNG := ADR(axisMoving^.ptpCommands[indexNG]);
-]]></ST>
+
+holder := argHolder;
+axisVertical := argAxisVertical;
+clamper := argClamper;]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="RunGradeOutput">
       <LineId Id="9" Count="0" />
       <LineId Id="14" Count="1" />
       <LineId Id="13" Count="0" />
-      <LineId Id="18" Count="7" />
+      <LineId Id="18" Count="2" />
+      <LineId Id="69" Count="0" />
+      <LineId Id="71" Count="0" />
+      <LineId Id="21" Count="4" />
       <LineId Id="16" Count="0" />
-      <LineId Id="32" Count="8" />
+      <LineId Id="32" Count="4" />
+      <LineId Id="63" Count="1" />
+      <LineId Id="37" Count="1" />
+      <LineId Id="65" Count="0" />
+      <LineId Id="67" Count="0" />
+      <LineId Id="39" Count="1" />
       <LineId Id="47" Count="0" />
       <LineId Id="49" Count="0" />
       <LineId Id="48" Count="0" />
@@ -115,7 +136,9 @@ ptCommandNG := ADR(axisMoving^.ptpCommands[indexNG]);
       <LineId Id="27" Count="1" />
       <LineId Id="35" Count="0" />
       <LineId Id="37" Count="0" />
+      <LineId Id="44" Count="0" />
       <LineId Id="36" Count="0" />
+      <LineId Id="45" Count="1" />
     </LineIds>
   </POU>
 </TcPlcObject>

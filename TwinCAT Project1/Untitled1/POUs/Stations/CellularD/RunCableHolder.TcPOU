@@ -55,6 +55,45 @@ CASE state OF
 		END_IF
 END_CASE]]></ST>
     </Implementation>
+    <Method Name="FB_init" Id="{5c2d8834-883b-4bdd-9d6d-567f106a2a04}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	
+	argParent : POINTER TO RunUnitGeneric;
+	argSlotBase : POINTER TO MaterialBlock;
+	argSlotLast : POINTER TO MaterialBlock;
+	
+	argWorkingSignal : POINTER TO BOOL;
+	
+	//devices
+	argHolderFixedEnd : POINTER TO RunCylinder;
+	argHolderMovingEnd : POINTER TO RunCylinder;
+	argShifterShort : POINTER TO RunCylinder;
+	argShifterLong : POINTER TO RunCylinder;
+	
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//initialize 
+Parent := argParent;
+SlotBase := argSlotBase;
+SlotLast := argSlotLast;
+//
+IF bInitRetains THEN
+	NextState := eSpecialStates.INITIAL_BEGIN;
+END_IF
+
+workingSignal := argWorkingSignal; //link
+
+//device link
+holderFixedEnd := argHolderFixedEnd;
+holderMovingEnd := argHolderMovingEnd;
+shifterShort := argShifterShort;
+shifterLong := argShifterLong;]]></ST>
+      </Implementation>
+    </Method>
     <LineIds Name="RunCableHolder">
       <LineId Id="9" Count="0" />
       <LineId Id="22" Count="0" />
@@ -83,6 +122,14 @@ END_CASE]]></ST>
       <LineId Id="78" Count="0" />
       <LineId Id="82" Count="1" />
       <LineId Id="24" Count="0" />
+    </LineIds>
+    <LineIds Name="RunCableHolder.FB_init">
+      <LineId Id="14" Count="8" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="33" Count="2" />
+      <LineId Id="32" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

@@ -14,7 +14,7 @@ VAR
 	bVacuumGenerator AT%Q* : BOOL;
 	bVacuumBreaker AT%Q* :BOOL;
 	bVacuumSensor : POINTER TO RunSignal;
-	bVacuumTimeout : ton;
+	
 	//
 	axis : POINTER TO RunAxis;
 	//
@@ -29,9 +29,12 @@ VAR
 	ptCommandLabelPlace : POINTER TO ParameterSet;
 	//
 	pressCounter : INT := 0;
-	pressGoal : INT := 3;
+	
 END_VAR
-]]></Declaration>
+VAR PERSISTENT
+	bVacuumTimeout : TON;
+	pressGoal : INT := 3;
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[SUPER^();
 
@@ -69,7 +72,7 @@ CASE State OF
 		IF bSerialTransition THEN
 			bTaken := TRUE;
 			//
-			bVacuumTimeout.IN :=false; //reset
+			bVacuumTimeout.IN :=FALSE; //reset
 		ELSIF bVacuumTimeout.Q THEN
 			//TODO , timeout alarm
 		END_IF
@@ -136,6 +139,63 @@ IF bTaken AND NOT bPrinted THEN
 	bTaken := FALSE;
 END_IF]]></ST>
     </Implementation>
+    <Method Name="FB_init" Id="{8e22ea07-e6ac-4cce-a3dd-c0421a83bdd3}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	
+	argParent : POINTER TO RunUnitGeneric;
+	argSlotBase : POINTER TO MaterialBlock;
+	argSlotLast : POINTER TO MaterialBlock;
+	
+	argWorkingSignal : POINTER TO BOOL;
+	
+	//devices
+	argVacuumSensor : POINTER TO RunSignal;
+	
+	argAxis : POINTER TO RunAxis;
+	//
+	argGripperVertical : POINTER TO RunCylinder;
+	argGripperRotate : POINTER TO RunCylinder;
+	argGripperPressorVertical : POINTER TO RunCylinder;
+	argGripperPressorPress : POINTER TO RunCylinder;
+	argShifter : POINTER TO RunCylinder;
+END_VAR
+VAR CONSTANT
+	indexReady : INT := 1;
+	indexTake :INT :=2;
+	indexPlace : INT :=3;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//initialize 
+Parent := argParent;
+SlotBase := argSlotBase;
+SlotLast := argSlotLast;
+//
+IF bInitRetains THEN
+	NextState := eSpecialStates.INITIAL_BEGIN;
+END_IF
+
+workingSignal := argWorkingSignal; //link
+
+//device link
+//
+axis := argAxis;
+//
+gripperVertical := argGripperVertical;
+gripperRotate := argGripperRotate;
+gripperPressorVertical := argGripperPressorVertical;
+gripperPressorPress := argGripperPressorPress;
+shifter := argShifter;
+
+ptCommandReady := axis^.ptpCommands[indexReady];
+ptCommandLabelTake := axis^.ptpCommands[indexTake];
+ptCommandLabelPlace := axis^.ptpCommands[indexPlace];
+
+]]></ST>
+      </Implementation>
+    </Method>
     <LineIds Name="RunLabelHandler">
       <LineId Id="9" Count="0" />
       <LineId Id="23" Count="0" />
@@ -204,6 +264,19 @@ END_IF]]></ST>
       <LineId Id="146" Count="0" />
       <LineId Id="145" Count="0" />
       <LineId Id="147" Count="1" />
+    </LineIds>
+    <LineIds Name="RunLabelHandler.FB_init">
+      <LineId Id="25" Count="8" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="35" Count="0" />
+      <LineId Id="34" Count="0" />
+      <LineId Id="37" Count="6" />
+      <LineId Id="36" Count="0" />
+      <LineId Id="50" Count="0" />
+      <LineId Id="45" Count="0" />
+      <LineId Id="52" Count="1" />
+      <LineId Id="51" Count="0" />
+      <LineId Id="44" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
