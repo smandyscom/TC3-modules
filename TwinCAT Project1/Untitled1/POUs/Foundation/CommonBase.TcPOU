@@ -16,6 +16,7 @@ END_VAR
     <Method Name="ConfigureRead" Id="{8e0df28b-cbcb-4f0b-9e41-e6a240ff5ddf}">
       <Declaration><![CDATA[METHOD ConfigureRead : CellDataBlock
 VAR_INPUT
+	mode : eModes;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -26,6 +27,7 @@ END_VAR
       <Declaration><![CDATA[METHOD ConfigureWrite : BOOL
 VAR_INPUT
 	input : CellDataBlock;
+	mode : eModes;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -54,7 +56,7 @@ END_VAR
       </Implementation>
     </Method>
     <Method Name="ErrorDetect" Id="{f95a086f-f03e-4047-a51e-55e0cdb1901d}">
-      <Declaration><![CDATA[METHOD ErrorDetect : int
+      <Declaration><![CDATA[METHOD ErrorDetect : UDINT
 VAR_INPUT
 END_VAR
 ]]></Declaration>

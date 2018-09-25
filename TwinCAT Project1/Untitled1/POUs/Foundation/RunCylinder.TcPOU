@@ -113,6 +113,7 @@ LAST_COMMAND := COMMAND_CACHED;
     <Method Name="ConfigureRead" Id="{bc98ac9f-d51a-43ad-b528-a1a54fe67ea0}" FolderPath="CommonBase\">
       <Declaration><![CDATA[METHOD ConfigureRead : CellDataBlock
 VAR_INPUT
+	mode : eModes;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -123,6 +124,7 @@ END_VAR
       <Declaration><![CDATA[METHOD ConfigureWrite : BOOL
 VAR_INPUT
 	input : CellDataBlock;
+	mode : eModes;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -151,7 +153,7 @@ END_VAR
       </Implementation>
     </Method>
     <Method Name="ErrorDetect" Id="{6a0ed216-b71b-4070-ba95-2d84d65ddbd3}" FolderPath="CommonBase\">
-      <Declaration><![CDATA[METHOD ErrorDetect : INT
+      <Declaration><![CDATA[METHOD ErrorDetect : UDINT
 VAR_INPUT
 END_VAR
 ]]></Declaration>

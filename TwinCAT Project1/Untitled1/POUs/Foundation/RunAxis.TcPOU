@@ -186,6 +186,7 @@ END_IF
     <Method Name="ConfigureRead" Id="{b2d706a8-b020-4343-983c-4c7a56c09ac2}" FolderPath="CommonBase\">
       <Declaration><![CDATA[METHOD ConfigureRead : CellDataBlock
 VAR_INPUT
+	mode : eModes;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -196,10 +197,21 @@ END_VAR
       <Declaration><![CDATA[METHOD ConfigureWrite : BOOL
 VAR_INPUT
 	input : CellDataBlock;
+	mode : eModes;
+END_VAR
+VAR
+	temp : ParameterSet; 
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[//command block write-in]]></ST>
+        <ST><![CDATA[//command block write-in
+CASE mode OF
+	eModes.MODE_EXE_AXIS:
+		
+	eModes.MODE_EXE_COMMAND_BLOCK:
+		temp := CellDataBlock2Parameter(input:= input);
+		ptpCommands[input.command.base.subIndex+1] := temp; //write-in
+END_CASE]]></ST>
       </Implementation>
     </Method>
     <Method Name="Control" Id="{fb2d590a-2a78-44ed-97fd-631e13336dc9}" FolderPath="CommonBase\">
@@ -239,16 +251,19 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[CASE input OF
+	eErrorClearWays.RESET:
+		fbReset.Execute := true;
+END_CASE]]></ST>
       </Implementation>
     </Method>
     <Method Name="ErrorDetect" Id="{da618aca-91fe-4791-8fbe-90aff9c7dc94}" FolderPath="CommonBase\">
-      <Declaration><![CDATA[METHOD ErrorDetect : INT
+      <Declaration><![CDATA[METHOD ErrorDetect : UDINT
 VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[ErrorDetect := fbReadStatus.ErrorID;]]></ST>
       </Implementation>
     </Method>
     <Method Name="ExecuteParameter" Id="{71f56729-8e13-4b1e-a80c-858adc37a723}">
@@ -488,6 +503,12 @@ END_VAR
     </LineIds>
     <LineIds Name="RunAxis.ConfigureWrite">
       <LineId Id="5" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="19" Count="1" />
+      <LineId Id="13" Count="0" />
     </LineIds>
     <LineIds Name="RunAxis.Control">
       <LineId Id="5" Count="0" />
@@ -509,6 +530,9 @@ END_VAR
     </LineIds>
     <LineIds Name="RunAxis.ErrorClear">
       <LineId Id="5" Count="0" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="11" Count="0" />
     </LineIds>
     <LineIds Name="RunAxis.ErrorDetect">
       <LineId Id="5" Count="0" />

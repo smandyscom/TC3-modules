@@ -84,6 +84,7 @@ workingTimer(IN:=,PT:=,Q=>,ET=>);]]></ST>
     <Method Name="ConfigureRead" Id="{5b0d9a0a-5d92-42f2-80d6-58161cf4acad}" FolderPath="CommonBase\">
       <Declaration><![CDATA[METHOD ConfigureRead : CellDataBlock
 VAR_INPUT
+	mode : eModes;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -94,6 +95,7 @@ END_VAR
       <Declaration><![CDATA[METHOD ConfigureWrite : BOOL
 VAR_INPUT
 	input : CellDataBlock;
+	mode : eModes;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -122,7 +124,7 @@ END_VAR
       </Implementation>
     </Method>
     <Method Name="ErrorDetect" Id="{f4463e33-7efc-4b67-a80e-02e00ed76350}" FolderPath="CommonBase\">
-      <Declaration><![CDATA[METHOD ErrorDetect : INT
+      <Declaration><![CDATA[METHOD ErrorDetect : UDINT
 VAR_INPUT
 END_VAR
 ]]></Declaration>
