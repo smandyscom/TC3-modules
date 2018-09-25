@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <POU Name="RunCableHolder" Id="{f529174f-1b1c-4098-af22-9f3935583d60}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunCableHolder EXTENDS RunUnitSlave
+VAR
+	//devices
+	holderFixedEnd : POINTER TO RunCylinder;
+	holderMovingEnd : POINTER TO RunCylinder;
+	shifterShort : POINTER TO RunCylinder;
+	shifterLong : POINTER TO RunCylinder;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[SUPER^();
+
+CASE state OF
+	//---------------Initialize
+	eSpecialStates.INITIAL_BEGIN:
+		transitionByte.0 := (NOT transitionByte.0) AND_THEN holderFixedEnd^.Execute(eCylinderCommands.COMMAND_A);
+		transitionByte.1 := (NOT transitionByte.1) AND_THEN holderMovingEnd^.Execute(eCylinderCommands.COMMAND_A);
+		transitionByte.2 := (NOT transitionByte.2) AND_THEN shifterShort^.Execute(eCylinderCommands.COMMAND_A);
+		transitionByte.3 := (NOT transitionByte.3) AND_THEN shifterLong^.Execute(eCylinderCommands.COMMAND_A);
+		IF transitionByte = 16#F THEN
+			NextState := eSpecialStates.INITIAL_END;
+		END_IF
+	//---------------Working
+	eSpecialStates.SLAVE_ENTER_PROCEDURE:
+		bSerialTransition := shifterLong^.Execute(eCylinderCommands.COMMAND_B);
+	16#101:
+		//hold
+		transitionByte.0 := (NOT transitionByte.0) AND_THEN holderFixedEnd^.Execute(eCylinderCommands.COMMAND_B);
+		transitionByte.1 := (NOT transitionByte.1) AND_THEN holderMovingEnd^.Execute(eCylinderCommands.COMMAND_B);
+		bSerialTransition := (transitionByte = 16#3);
+	16#102:
+		//strech
+		bSerialTransition := shifterShort^.Execute(eCylinderCommands.COMMAND_B);
+		IF bSerialTransition THEN
+			slaveWorkingSignal[1] := TRUE; //inform to labeler handler to work
+		END_IF
+	//-------------Releasing
+	16#110:
+		//wait until
+		bSerialTransition := NOT slaveWorkingSignal[1];
+	16#111:
+		//release
+		transitionByte.0 := (NOT transitionByte.0) AND_THEN holderFixedEnd^.Execute(eCylinderCommands.COMMAND_A);
+		transitionByte.1 := (NOT transitionByte.1) AND_THEN holderMovingEnd^.Execute(eCylinderCommands.COMMAND_A);
+		bSerialTransition := (transitionByte = 16#3);
+	16#112:
+		//release
+		transitionByte.0 := (NOT transitionByte.0) AND_THEN shifterShort^.Execute(eCylinderCommands.COMMAND_A);
+		transitionByte.1 := (NOT transitionByte.1) AND_THEN shifterLong^.Execute(eCylinderCommands.COMMAND_A);
+		IF transitionByte = 16#3 THEN
+			NextState := eSpecialStates.SLAVE_WORK_DONE;
+		END_IF
+END_CASE]]></ST>
+    </Implementation>
+    <LineIds Name="RunCableHolder">
+      <LineId Id="9" Count="0" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="33" Count="1" />
+      <LineId Id="37" Count="3" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="41" Count="2" />
+      <LineId Id="55" Count="0" />
+      <LineId Id="49" Count="1" />
+      <LineId Id="54" Count="0" />
+      <LineId Id="47" Count="0" />
+      <LineId Id="56" Count="1" />
+      <LineId Id="64" Count="2" />
+      <LineId Id="71" Count="0" />
+      <LineId Id="58" Count="1" />
+      <LineId Id="70" Count="0" />
+      <LineId Id="72" Count="0" />
+      <LineId Id="74" Count="2" />
+      <LineId Id="73" Count="0" />
+      <LineId Id="77" Count="0" />
+      <LineId Id="79" Count="2" />
+      <LineId Id="78" Count="0" />
+      <LineId Id="82" Count="1" />
+      <LineId Id="24" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

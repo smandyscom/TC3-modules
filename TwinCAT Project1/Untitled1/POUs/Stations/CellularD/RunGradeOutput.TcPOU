@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <POU Name="RunGradeOutput" Id="{3be266a6-2ed3-4d2f-a14a-5486dca5768b}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunGradeOutput EXTENDS RunUnitSlave
+VAR
+	axisMoving : POINTER TO RunAxis;
+	axisVertical : POINTER TO RunCylinder;
+	holder : POINTER TO RunCylinder;
+	
+	//
+	ptCommandReady : POINTER TO ParameterSet;
+	ptCommandOK : POINTER TO ParameterSet;
+	ptCommandNG : POINTER TO ParameterSet;
+	//TODO , shuld be pickAndPlace protocal
+END_VAR
+
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//Ng/OK output mechanism
+SUPER^();
+
+CASE state OF 
+	//-------------------------Initialize
+	eSpecialStates.INITIAL_BEGIN:
+		bSerialTransition:=holder^.Execute(eCylinderCommands.COMMAND_A);
+	eSpecialStates.INITIAL_STATE_1:
+		bSerialTransition :=  axisVertical^.Execute(eCylinderCommands.COMMAND_A);
+	eSpecialStates.INITIAL_STATE_2:
+		IF axisMoving^.ExecuteParameter(ptCommandReady) THEN
+			NextState := eSpecialStates.INITIAL_END;
+		END_IF
+	//------------------------Working
+	eSpecialStates.SLAVE_ENTER_PROCEDURE:
+		bSerialTransition:=axisVertical^.Execute(eCylinderCommands.COMMAND_B); //down
+	16#101:
+		bSerialTransition:=holder^.Execute(eCylinderCommands.COMMAND_B); //hold
+	16#102:
+		bSerialTransition:=axisVertical^.Execute(eCylinderCommands.COMMAND_A); //up
+	16#103:
+		IF axisMoving^.ExecuteParameter(ptCommandOK) THEN
+			//TODO , according to grade to move
+			NextState := 16#110;
+		END_IF
+	//-------------------Drop
+	16#110: 
+		bSerialTransition:=axisVertical^.Execute(eCylinderCommands.COMMAND_B); //down
+	16#111:
+		bSerialTransition:=holder^.Execute(eCylinderCommands.COMMAND_A); //release
+	16#112:
+		IF axisMoving^.ExecuteParameter(ptCommandReady) THEN
+			NextState := eSpecialStates.SLAVE_WORK_DONE;
+		END_IF
+END_CASE]]></ST>
+    </Implementation>
+    <Method Name="FB_init" Id="{16d063af-8ad4-4db2-a192-b68a7dec8537}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	
+	argParent : POINTER TO RunUnitGeneric;
+	argSlotBase : POINTER TO MaterialBlock;
+	argSlotLast : POINTER TO MaterialBlock;
+	
+	argWorkingSignal : POINTER TO BOOL;
+	
+	argAxisMoving : RunAxis;
+END_VAR
+VAR CONSTANT
+	indexReady : INT := 1;
+	indexOK : INT := 2;
+	indexNG : INT := 3;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//initialize 
+Parent := argParent;
+SlotBase := argSlotBase;
+SlotLast := argSlotLast;
+//
+IF bInitRetains THEN
+	NextState := eSpecialStates.INITIAL_BEGIN;
+END_IF
+
+workingSignal := argWorkingSignal; //link
+
+//Axis
+axisMoving := argAxisMoving;
+ptCommandReady := ADR(axisMoving^.ptpCommands[indexReady]);
+ptCommandOK := ADR(axisMoving^.ptpCommands[indexOK]);
+ptCommandNG := ADR(axisMoving^.ptpCommands[indexNG]);
+]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="RunGradeOutput">
+      <LineId Id="9" Count="0" />
+      <LineId Id="14" Count="1" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="18" Count="7" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="32" Count="8" />
+      <LineId Id="47" Count="0" />
+      <LineId Id="49" Count="0" />
+      <LineId Id="48" Count="0" />
+      <LineId Id="50" Count="0" />
+      <LineId Id="41" Count="2" />
+      <LineId Id="51" Count="4" />
+      <LineId Id="17" Count="0" />
+    </LineIds>
+    <LineIds Name="RunGradeOutput.FB_init">
+      <LineId Id="16" Count="8" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="27" Count="1" />
+      <LineId Id="35" Count="0" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="36" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

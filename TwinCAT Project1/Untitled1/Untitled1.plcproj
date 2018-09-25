@@ -162,6 +162,15 @@
       <SubType>Code</SubType>
       <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
+    <Compile Include="POUs\Stations\CellularD\RunCableHolder.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Stations\CellularD\RunGradeOutput.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Stations\CellularD\RunLabelHandler.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Stations\RunAxisInspection.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -219,6 +228,7 @@
     <Folder Include="POUs\Foundation" />
     <Folder Include="POUs\Helper" />
     <Folder Include="POUs\Stations" />
+    <Folder Include="POUs\Stations\CellularD" />
     <Folder Include="VISUs" />
     <Folder Include="POUs" />
   </ItemGroup>
