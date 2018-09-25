@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <POU Name="RunUnitCellularAIO" Id="{b0aa6adc-8e97-4df4-866b-f03dd216654d}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunUnitCellularAIO EXTENDS RunUnitIndexerMaster
+VAR_INPUT
+	allHit : BOOL;
+	allReach : BOOL;
+	allRelease : BOOL;
+END_VAR
+VAR_OUTPUT
+	triggerHit : BOOL;
+	triggerRelease : BOOL;
+END_VAR
+VAR
+	//output bit to I/O motor
+	run AT%Q* : BOOL;
+	runTimer : TON;
+	//
+	alarmTimer : ton;
+	//Checkpoints
+	commandTriggerRaise: TIME; //trigger point
+	commandReceivingTime : TIME; //if not all lifter done until then , slowdown conveyor motion
+
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//implement state 3
+isLastSlotOccupied := TRUE; //always occupied , force to transmit to downstream
+
+SUPER^(); //run indexer master
+
+IF bSerialTransition AND State = 1 THEN
+	triggerRelease:=TRUE;
+	NextState := 16#10; //state override : release lifters
+END_IF
+
+CASE State OF
+	//-------------------------release lifters
+	16#10:
+	IF allRelease THEN
+		//reset
+		triggerRelease:=FALSE;
+		
+		//timer setup and run
+		runTimer.IN := TRUE;
+		runTimer.PT := commandTriggerRaise;
+		run := TRUE;
+				
+		NextState:=2; //merge back default sequence
+	END_IF
+	//------------------start running
+	2:
+	IF runTimer.Q THEN	
+		triggerHit := TRUE;//until trigger raise reached , trigger all lifter to move
+		bSerialTransition:= TRUE; //serial transition
+		
+		runTimer.IN := FALSE;
+	ELSE
+		//on-going , not trigger lifter
+	END_IF
+	3:
+	IF allHit THEN
+		triggerHit:=FALSE;
+		syncEngaged := FALSE ;// sending over
+		bSerialTransition:= TRUE; //serial transition
+	ELSIF alarmTimer.Q THEN
+		//sending error , raising alarm
+	END_IF
+	4:
+	IF allReach THEN	
+		bSerialTransition := TRUE; //since working signal raised by individual lifter?
+	ELSIF alarmTimer.Q THEN	
+		//receiving error		
+	END_IF
+	5:
+	IF Upstream<>0 AND_THEN Upstream^.syncEngaged THEN
+		//After all reached , then pull upstream
+		Upstream^.syncAcknowledged := TRUE;//pull upstream when ready
+		//Data transmit
+		SlotBase^.wordOut.0 := TRUE; //TODO , follow that status
+		bSerialTransition:= TRUE; //serial transition
+		//
+		runTimer.PT := commandReceivingTime;
+		runTimer.IN := TRUE;
+	ELSE 
+		//waiting upstream
+	END_IF
+	6:
+	// on extension , only one oppertunity
+	IF runTimer.Q THEN
+		runTimer.IN := FALSE;
+		run := FALSE; //conveyor stopped
+		
+		NextState := 16#20;//done
+	ELSE
+		//wait motion done	
+	END_IF
+	//------------------------end of running
+END_CASE
+//run timer
+runTimer(IN:= , PT:= , Q=> , ET=> );
+alarmTimer(IN:= , PT:= , Q=> , ET=> );]]></ST>
+    </Implementation>
+    <Method Name="FB_init" Id="{94431706-316d-43bf-8737-4bc97fe6d821}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	
+	argParent : POINTER TO RunUnitGeneric;
+	argSlotBase : POINTER TO MaterialBlock;
+	argSlotLast : POINTER TO MaterialBlock;
+	
+	argUpstream : POINTER TO RunUnitTransporterBase;
+	argAxis : POINTER TO RunAxis;
+
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//initialize 
+Parent := argParent;
+SlotBase := argSlotBase;
+SlotLast := argSlotLast;
+
+Axis := 0; //no servo axis
+Upstream := argUpstream;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Initialize" Id="{a1a56396-50b5-4a67-b24b-77ca39f7b67a}">
+      <Declaration><![CDATA[METHOD Initialize : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//direct change state
+NextState := eSpecialStates.INITIAL_END;
+Initialize := SUPER^.Initialize();]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="RunUnitCellularAIO">
+      <LineId Id="228" Count="68" />
+      <LineId Id="304" Count="0" />
+      <LineId Id="297" Count="3" />
+      <LineId Id="158" Count="0" />
+      <LineId Id="303" Count="0" />
+    </LineIds>
+    <LineIds Name="RunUnitCellularAIO.FB_init">
+      <LineId Id="16" Count="5" />
+      <LineId Id="15" Count="0" />
+    </LineIds>
+    <LineIds Name="RunUnitCellularAIO.Initialize">
+      <LineId Id="6" Count="1" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

@@ -13,10 +13,18 @@ VAR
 	monitorDevice : POINTER TO CommonBase;
 	controlDevice : POINTER TO CommonBase;
 	state : INT := 0;
+	
+	//need to explicit call write persistance data , to store into non-violate memory
+	writePersistance : WritePersistentData;
+	
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[//monitor
+      <ST><![CDATA[IF writePersistance.START THEN
+	writePersistance.START := false;
+END_IF
+
+//monitor
 CASE TO_DWORD(comm.monitorType) OF
 	eCategrories.SELECTION_AXIS:
 		monitorDevice := ADR(gvl.axisControls[comm.monitorIndex+1]); // index start from 1
@@ -54,6 +62,7 @@ CASE state OF
 				comm.wordOut.1 := TRUE;
 			eModes.MODE_DOWNLOAD_DATA_BLOCK:
 				controlDevice^.ConfigureWrite(comm.commitBlock,comm.commitMode);
+				writePersistance.START := TRUE;
 				comm.wordOut.1 := TRUE;//done
 		END_CASE
 		
@@ -71,9 +80,22 @@ CASE state OF
 			comm.wordOut.1 := FALSE;
 			state := 0;
 		END_IF
-END_CASE]]></ST>
+END_CASE
+
+//Write-in non-violate memory
+writePersistance(
+		NETID:= , 
+		PORT:= 851, 
+		START:= , 
+		TMOUT:= , 
+		BUSY=> , 
+		ERR=> , 
+		ERRID=> );
+]]></ST>
     </Implementation>
     <LineIds Name="InterfaceManualV1">
+      <LineId Id="249" Count="2" />
+      <LineId Id="248" Count="0" />
       <LineId Id="112" Count="18" />
       <LineId Id="213" Count="0" />
       <LineId Id="211" Count="0" />
@@ -84,6 +106,7 @@ END_CASE]]></ST>
       <LineId Id="162" Count="0" />
       <LineId Id="144" Count="0" />
       <LineId Id="150" Count="0" />
+      <LineId Id="246" Count="0" />
       <LineId Id="160" Count="0" />
       <LineId Id="145" Count="0" />
       <LineId Id="214" Count="0" />
@@ -98,6 +121,11 @@ END_CASE]]></ST>
       <LineId Id="166" Count="0" />
       <LineId Id="159" Count="0" />
       <LineId Id="63" Count="0" />
+      <LineId Id="247" Count="0" />
+      <LineId Id="237" Count="0" />
+      <LineId Id="239" Count="6" />
+      <LineId Id="238" Count="0" />
+      <LineId Id="236" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
