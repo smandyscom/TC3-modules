@@ -29,29 +29,38 @@ VAR
 	
 END_VAR
 VAR PERSISTENT
+	axisUpperBound : INT;
+	cylinderUpperBound : INT;
+	signalUpperBound : INT;
+	unitUpperBound : INT;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[//scan running all devices
-FOR nCounter :=1 TO 9 BY 1 DO
-	gvl.axisControls[nCounter]();	
-	gvl.cylinderControls[nCounter]();
-	gvl.signalControls[nCounter]();
-	
+FOR nCounter :=1 TO axisUpperBound BY 1 DO
+	gvl.axisControls[nCounter]();
 	//error detection
-	IF errorDevice=0 AND errorDelayDetect.Q THEN
-		IF gvl.axisControls[nCounter].ErrorDetect() <> 0 THEN
-			//error scaned
+	IF errorDevice=0 AND errorDelayDetect.Q AND gvl.axisControls[nCounter].ErrorDetect() <> 0 THEN
+		//error scaned
 		errorDevice := ADR(gvl.axisControls[nCounter]);
-		END_IF
-		IF gvl.cylinderControls[nCounter].ErrorDetect() <> 0 THEN
-			//error scaned
+	END_IF
+END_FOR
+FOR nCounter :=1 TO cylinderUpperBound BY 1 DO
+	gvl.cylinderControls[nCounter]();
+	//error detection
+	IF errorDevice=0 AND errorDelayDetect.Q AND gvl.cylinderControls[nCounter].ErrorDetect() <> 0 THEN
+		//error scaned
 		errorDevice := ADR(gvl.cylinderControls[nCounter]);
-		END_IF
-		IF gvl.stations[nCounter] <> 0 AND_THEN gvl.stations[nCounter]^.ErrorDetect() <> 0 THEN
-			//station
-			errorDevice := gvl.stations[nCounter];
-		END_IF
+	END_IF
+END_FOR
+FOR nCounter :=1 TO signalUpperBound BY 1 DO
+	gvl.signalControls[nCounter]();
+END_FOR
+FOR nCounter :=1 TO unitUpperBound BY 1 DO
+	//error detection
+	IF errorDevice=0 AND errorDelayDetect.Q AND gvl.stations[nCounter] <> 0 AND_THEN gvl.stations[nCounter]^.ErrorDetect() <> 0THEN
+		//station
+		errorDevice := gvl.stations[nCounter];
 	END_IF
 END_FOR
 //routines
@@ -62,22 +71,18 @@ IF errorDevice <>0 THEN
 	errorCode := errorDevice^.ErrorDetect();
 		
 	THIS^.ErrorHandler();// handling user-input reset/ignore
-END_IF	
+END_IF
+//reflect to interface
+
 //handling input request
 interfaceControl(
 	currentMode:= THIS^.currentMode, 
 	requestMode=> THIS^.requestMode, 
 	errorClear=> THIS^.requestErrorClear, 
-	mErrorType=> errorType, 
 	mMonitorDatas=> );
 IF interfaceControl.requestInit THEN
 	requestInitialize := TRUE; // memorize
-END_IF
-	
-errorType := interfaceControl.mErrorType;
-errorIndex := TO_INT(interfaceControl.mErrorIndex);
-errorCode := TO_INT(interfaceControl.mErrorCode);
-	
+END_IF	
 //mode switcher pre-check
 IF requestMode<>currentMode THEN
 	CASE requestMode OF 
@@ -104,7 +109,7 @@ CASE currentMode OF
 		interfaceManual(); //scan-in,scan-out,manual...
 	eOperationModes.AUTO,eOperationModes.SEMI_AUTO:
 		//running sequences
-		FOR nCounter :=1 TO 8 BY 1 DO
+		FOR nCounter :=1 TO unitUpperBound BY 1 DO
 			IF gvl.stations[nCounter] <> 0 THEN
 				gvl.stations[nCounter]^();
 			END_IF
@@ -113,14 +118,14 @@ CASE currentMode OF
 		IF  requestInitialize THEN
 			//initialize all stations
 			bAllInitialized := TRUE;
-			FOR nCounter:=1 TO 32 BY 1 DO
+			FOR nCounter:=1 TO unitUpperBound BY 1 DO
 				IF gvl.stations[nCounter] <> 0 THEN
 					// if every station comes initialized
 					bAllInitialized := bAllInitialized AND gvl.stations[nCounter]^.Initialize();
 				END_IF
 			END_FOR
 			IF bAllInitialized THEN
-				FOR nCounter:=1 TO 32 BY 1 DO
+				FOR nCounter:=1 TO unitUpperBound BY 1 DO
 					IF gvl.stations[nCounter] <> 0 THEN
 						gvl.stations[nCounter]^.NextState := 0; //start working
 					END_IF
@@ -162,34 +167,34 @@ END_VAR
       </Implementation>
     </Method>
     <LineIds Name="RunUnitController">
-      <LineId Id="304" Count="4" />
-      <LineId Id="494" Count="0" />
-      <LineId Id="407" Count="0" />
-      <LineId Id="604" Count="0" />
-      <LineId Id="609" Count="1" />
-      <LineId Id="619" Count="0" />
-      <LineId Id="611" Count="2" />
-      <LineId Id="618" Count="0" />
-      <LineId Id="614" Count="1" />
-      <LineId Id="620" Count="0" />
-      <LineId Id="616" Count="1" />
-      <LineId Id="606" Count="0" />
-      <LineId Id="257" Count="1" />
+      <LineId Id="304" Count="0" />
+      <LineId Id="686" Count="1" />
+      <LineId Id="713" Count="1" />
+      <LineId Id="718" Count="1" />
+      <LineId Id="716" Count="0" />
+      <LineId Id="688" Count="0" />
+      <LineId Id="690" Count="1" />
+      <LineId Id="699" Count="2" />
+      <LineId Id="724" Count="0" />
+      <LineId Id="702" Count="0" />
+      <LineId Id="692" Count="5" />
+      <LineId Id="707" Count="1" />
+      <LineId Id="723" Count="0" />
+      <LineId Id="709" Count="0" />
+      <LineId Id="698" Count="0" />
+      <LineId Id="258" Count="0" />
       <LineId Id="621" Count="0" />
       <LineId Id="595" Count="0" />
       <LineId Id="602" Count="0" />
       <LineId Id="597" Count="3" />
       <LineId Id="594" Count="0" />
+      <LineId Id="652" Count="0" />
+      <LineId Id="651" Count="0" />
       <LineId Id="456" Count="0" />
       <LineId Id="448" Count="2" />
       <LineId Id="452" Count="0" />
-      <LineId Id="454" Count="0" />
       <LineId Id="447" Count="0" />
       <LineId Id="490" Count="2" />
-      <LineId Id="489" Count="0" />
-      <LineId Id="488" Count="0" />
-      <LineId Id="487" Count="0" />
-      <LineId Id="485" Count="1" />
       <LineId Id="325" Count="0" />
       <LineId Id="347" Count="0" />
       <LineId Id="350" Count="15" />

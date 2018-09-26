@@ -26,27 +26,27 @@ CASE state OF
 	//---------------Working
 	eSpecialStates.SLAVE_ENTER_PROCEDURE:
 		bSerialTransition := shifterLong^.Execute(eCylinderCommands.COMMAND_B);
-	16#101:
+	16#201:
 		//hold
 		transitionByte.0 := (NOT transitionByte.0) AND_THEN holderFixedEnd^.Execute(eCylinderCommands.COMMAND_B);
 		transitionByte.1 := (NOT transitionByte.1) AND_THEN holderMovingEnd^.Execute(eCylinderCommands.COMMAND_B);
 		bSerialTransition := (transitionByte = 16#3);
-	16#102:
+	16#202:
 		//strech
 		bSerialTransition := shifterShort^.Execute(eCylinderCommands.COMMAND_B);
 		IF bSerialTransition THEN
 			slaveWorkingSignal[1] := TRUE; //inform to labeler handler to work
 		END_IF
 	//-------------Releasing
-	16#110:
+	16#210:
 		//wait until
 		bSerialTransition := NOT slaveWorkingSignal[1];
-	16#111:
+	16#211:
 		//release
 		transitionByte.0 := (NOT transitionByte.0) AND_THEN holderFixedEnd^.Execute(eCylinderCommands.COMMAND_A);
 		transitionByte.1 := (NOT transitionByte.1) AND_THEN holderMovingEnd^.Execute(eCylinderCommands.COMMAND_A);
 		bSerialTransition := (transitionByte = 16#3);
-	16#112:
+	16#212:
 		//release
 		transitionByte.0 := (NOT transitionByte.0) AND_THEN shifterShort^.Execute(eCylinderCommands.COMMAND_A);
 		transitionByte.1 := (NOT transitionByte.1) AND_THEN shifterLong^.Execute(eCylinderCommands.COMMAND_A);

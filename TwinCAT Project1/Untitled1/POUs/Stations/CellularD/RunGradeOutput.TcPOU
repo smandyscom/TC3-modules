@@ -33,25 +33,25 @@ CASE state OF
 	//------------------------Working
 	eSpecialStates.SLAVE_ENTER_PROCEDURE:
 		bSerialTransition:=axisVertical^.Execute(eCylinderCommands.COMMAND_B); //down
-	16#101:
+	16#201:
 		bSerialTransition:=holder^.Execute(eCylinderCommands.COMMAND_B); //hold
-	16#102:
+	16#202:
 		bSerialTransition:=clamper^.Execute(eCylinderCommands.COMMAND_B); //clamper relase
-	16#103:
+	16#203:
 		bSerialTransition:=axisVertical^.Execute(eCylinderCommands.COMMAND_A); //up
-	16#104:
+	16#204:
 		bSerialTransition:=clamper^.Execute(eCylinderCommands.COMMAND_A); //clamper return
-	16#105:
+	16#205:
 		IF axisMoving^.ExecuteParameter(ptCommandOK) THEN
 			//TODO , according to grade to move
 			NextState := 16#110;
 		END_IF
 	//-------------------Drop
-	16#110: 
+	16#210: 
 		bSerialTransition:=axisVertical^.Execute(eCylinderCommands.COMMAND_B); //down
-	16#111:
+	16#211:
 		bSerialTransition:=holder^.Execute(eCylinderCommands.COMMAND_A); //release
-	16#112:
+	16#212:
 		IF axisMoving^.ExecuteParameter(ptCommandReady) THEN
 			NextState := eSpecialStates.SLAVE_WORK_DONE;
 		END_IF

@@ -123,6 +123,7 @@
     </Compile>
     <Compile Include="POUs\MAIN_C1A2.TcPOU">
       <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
     <Compile Include="POUs\Foundation\RunAxis.TcPOU">
       <SubType>Code</SubType>

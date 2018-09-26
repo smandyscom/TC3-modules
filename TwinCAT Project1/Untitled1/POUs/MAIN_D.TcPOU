@@ -30,12 +30,12 @@ VAR
 									argCylinder:=ADR(GVL.cylinderControls[cy04ConveyorHolder]),		
 									argObstacleSensor:= ADR(gvl.signalControls[signalCellularObstacle]),
 									argReachSensor:= ADR(gvl.signalControls[signalCellularReach]));
-	
-												
+													
 	ConveyorMaster : RunUnitCellularAIO(argParent:= ADR(Controller), 
 												argSlotBase:= ADR(GVL.materialSlots[materialConveyor]), 
 												argSlotLast:= ADR(GVL.materialSlots[materialConveyor]),
-												argUpstream:=ADR(LinearTransporter));
+												argUpstream:=ADR(LinearTransporter),
+												argAxis := 0);
 												
 	CableHolder : RunCableHolder(argParent:= ADR(Controller), 
 								argSlotBase:= ADR(GVL.materialSlots[materialTransporter]), 
@@ -86,18 +86,18 @@ VAR CONSTANT
 	//Pick and place
 	cy05ConnectorHolder : INT :=5;
 	cy06PickAndPlaceVertical : INT :=6;
-	cy07Clamper : INT ;
+	cy07Clamper : INT := 7 ;
 	//Lable handler
-	cyY01LabelGripperVertical : INT :=7;
-	cyY02LabelGripperRotate : INT :=8;
-	cyY03LabelPressorVertical : INT :=9;
-	cyY04LabelPressorPress : INT :=10;
-	cyY05LabelShifter : INT :=11;
+	cyY01LabelGripperVertical : INT := 8;
+	cyY02LabelGripperRotate : INT :=9;
+	cyY03LabelPressorVertical : INT :=10;
+	cyY04LabelPressorPress : INT :=11;
+	cyY05LabelShifter : INT :=12;
 	//Cable Holders
-	cyY06CableHolderFixedEnd : INT :=12;
-	cyY07CableHolderMovingEnd : INT :=13;
-	cyY08CableHolderShiftShort : INT :=14;
-	cyY09CableHolderShiftLong : INT :=15;	
+	cyY06CableHolderFixedEnd : INT :=13;
+	cyY07CableHolderMovingEnd : INT :=14;
+	cyY08CableHolderShiftShort : INT :=15;
+	cyY09CableHolderShiftLong : INT :=16;	
 	//Cellular A
 	signalCellularObstacle : INT :=1;
 	signalCellularReach : INT :=2;

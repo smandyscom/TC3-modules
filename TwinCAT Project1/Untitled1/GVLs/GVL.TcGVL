@@ -16,7 +16,7 @@ VAR_GLOBAL
 	
 	materialSlots : ARRAY[1..4] OF Block128Words;	
 	axisControls: ARRAY[1..9] OF RunAxis;
-	stations : ARRAY[1..32] OF POINTER TO RunUnitGeneric;
+	stations : ARRAY[1..8] OF POINTER TO RunUnitGeneric;
 	
 	cylinderControls : ARRAY[1..32] OF RunCylinder;
 	signalControls : ARRAY[1..16] OF RunSignal;

@@ -35,7 +35,7 @@ END_VAR]]></Declaration>
 
 CASE State OF 
 	eSpecialStates.INITIAL_BEGIN:
-		IF rotator^.ExecuteParameter(ptRotatorMutual) THEN
+		IF rotator=0 or (rotator<>0 AND_THEN rotator^.ExecuteParameter(ptRotatorMutual)) THEN
 			NextState := eSpecialStates.INITIAL_END;
 		END_IF	
 	//-----------------switch function
@@ -136,7 +136,7 @@ VAR_INPUT
 	
 	argUpstream : POINTER TO RunUnitTransporterBase;
 	
-	argLiner : POINTER TO RunAxis;
+	argLinear : POINTER TO RunAxis;
 	argRotator : POINTER TO RunAxis;
 	argReachSensor : POINTER TO RunSignal;
 	argInterfereSensor : POINTER TO RunSignal;
@@ -161,7 +161,7 @@ IF Upstream=0 THEN
 END_IF
 
 //device link
-liner := argLiner;
+liner := argLinear;
 
 reachSensor := argReachSensor;
 interfereSensor := argInterfereSensor;

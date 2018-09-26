@@ -8,7 +8,7 @@ UNION
 	cylinder : commCylinder;
 	signal : commSignal;
 	command : commCommandGeneric;
-	unit : commUnit;
+	unit : commUnitGeneric;
 END_UNION
 END_TYPE
 ]]></Declaration>

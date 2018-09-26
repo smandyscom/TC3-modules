@@ -56,9 +56,9 @@ CASE State OF
 	eSpecialStates.SLAVE_ENTER_PROCEDURE:
 		//waiting printer
 		bSerialTransition := bPrinted;
-	16#101:
+	16#201:
 		bSerialTransition := axis^.ExecuteParameter(ptCommandLabelTake);
-	16#102:
+	16#202:
 		bSerialTransition := gripperVertical^.Execute(eCylinderCommands.COMMAND_B);	//down
 		IF bSerialTransition THEN
 			//generate vacuum
@@ -67,7 +67,7 @@ CASE State OF
 			//
 			bVacuumTimeout.IN :=TRUE;
 		END_IF
-	16#103:
+	16#203:
 		bSerialTransition := bVacuumSensor^.debouncedOn;
 		IF bSerialTransition THEN
 			bTaken := TRUE;
@@ -76,42 +76,42 @@ CASE State OF
 		ELSIF bVacuumTimeout.Q THEN
 			//TODO , timeout alarm
 		END_IF
-	16#104:
+	16#204:
 		bSerialTransition := gripperVertical^.Execute(eCylinderCommands.COMMAND_A); //up
-	16#105:
+	16#205:
 		IF axis^.ExecuteParameter(ptCommandLabelPlace) THEN
 			//up
 			NextState := 16#110;
 		END_IF
 	//-----------------Tag
-	16#110:
+	16#210:
 		IF workingSignal^ THEN
 			//cable had been holded
 			bSerialTransition := gripperRotate^.Execute(eCylinderCommands.COMMAND_B); //rotate
 		ELSE
 			//wait signal	
 		END_IF	
-	16#111:
+	16#211:
 		bSerialTransition := gripperVertical^.Execute(eCylinderCommands.COMMAND_B); //down
 		IF bSerialTransition THEN
 			//break vacuum
 			bVacuumGenerator := FALSE; //off
 			bVacuumBreaker := TRUE; //on
 		END_IF
-	16#112:
+	16#212:
 		transitionByte.0 := (NOT transitionByte.0) AND_THEN gripperVertical^.Execute(eCylinderCommands.COMMAND_A); //up
 		transitionByte.1 := (NOT transitionByte.1) AND_THEN gripperRotate^.Execute(eCylinderCommands.COMMAND_A); //back
 		IF 	transitionByte = 16#3 THEN
 			NextState := 16#120;
 		END_IF
 	//----------------Press
-	16#120:
+	16#220:
 		bSerialTransition := shifter^.Execute(eCylinderCommands.COMMAND_B); //tool change
-	16#121:
+	16#221:
 		bSerialTransition := gripperPressorVertical^.Execute(eCylinderCommands.COMMAND_B); //down
-	16#122:
+	16#222:
 		bSerialTransition := gripperPressorPress^.Execute(eCylinderCommands.COMMAND_B);
-	16#123:
+	16#223:
 		IF gripperPressorPress^.Execute(eCylinderCommands.COMMAND_A) THEN
 			pressCounter := pressCounter+1;
 			
@@ -123,9 +123,9 @@ CASE State OF
 			END_IF
 		END_IF
 	//------------Return
-	16#130:
+	16#230:
 		bSerialTransition := gripperPressorVertical^.Execute(eCylinderCommands.COMMAND_A); //up
-	16#131:
+	16#231:
 		transitionByte.0 := (NOT transitionByte.0) AND_THEN shifter^.Execute(eCylinderCommands.COMMAND_A); //up
 		transitionByte.1 := (NOT transitionByte.1) AND_THEN axis^.ExecuteParameter(ptCommandLabelTake); //ready
 		IF transitionByte = 16#3 THEN
@@ -189,9 +189,9 @@ gripperPressorVertical := argGripperPressorVertical;
 gripperPressorPress := argGripperPressorPress;
 shifter := argShifter;
 
-ptCommandReady := axis^.ptpCommands[indexReady];
-ptCommandLabelTake := axis^.ptpCommands[indexTake];
-ptCommandLabelPlace := axis^.ptpCommands[indexPlace];
+ptCommandReady := ADR(axis^.ptpCommands[indexReady]);
+ptCommandLabelTake := ADR(axis^.ptpCommands[indexTake]);
+ptCommandLabelPlace := ADR(axis^.ptpCommands[indexPlace]);
 
 ]]></ST>
       </Implementation>

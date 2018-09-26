@@ -24,10 +24,10 @@ STRUCT
 	materialBase : WORD; //6
 	materialCount : WORD;//7
 	//
-	reserved2 : DWORD;//8-9
+	reserved1 : DWORD;//8-9
 	workingTimerCache : DWORD; //10-11 , used to reflect timer couting
 	//
-	reservedRest : ARRAY[1..52] OF WORD;
+	reservedRest : ARRAY[1..20] OF WORD; //12-31
 END_STRUCT
 END_TYPE
 

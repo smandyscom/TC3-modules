@@ -3,27 +3,17 @@
   <POU Name="InterfaceControlV1" Id="{bd206c09-8ce6-427d-b5d8-5f734ed43bc9}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK InterfaceControlV1
 VAR_INPUT
-	currentMode : eOperationModes;
+	currentMode : eOperationModes;	
 END_VAR
 VAR_OUTPUT
 	requestMode : eOperationModes;
 	requestInit : BOOL;
 	errorClear : eErrorClearWays;
-	
-	mErrorIndex : DWORD;
-	mErrorType : eCategrories;
-	mErrorCode : LWORD;
-	
+		
 	mMonitorDatas:ARRAY[1..8] OF DWORD;
 END_VAR
 VAR
-	reserved1 AT%M* : ARRAY[1..32] OF WORD;
-	control AT%M* : DWORD;
-	errorIndex AT%M* : DWORD;
-	errorType AT%M* : DWORD;
-	errorCode AT%M* : LWORD;
-	reserved2 AT%M* : ARRAY[1..8] OF WORD;
-	monitorDatas AT%M* : ARRAY[1..8] OF DWORD;
+	comm AT%MB256 : commUnitController;
 	
 	//TODO , towerlight/pushbutton controls
 	
@@ -40,36 +30,46 @@ END_VAR
       <ST><![CDATA[//Start/Stop/Manual
 CASE currentMode OF
 	eOperationModes.AUTO:
-		IF control.bPause THEN
+		IF comm.control.bPause THEN
 			requestMode := eOperationModes.SEMI_AUTO;
 		END_IF
 	eOperationModes.SEMI_AUTO:
-		IF control.bManualMode THEN
+		IF comm.control.bManualMode THEN
 			//higher priority
 			requestMode := eOperationModes.MANUAL;
-		ELSIF control.bPause THEN
+		ELSIF comm.control.bPause THEN
 			requestMode := eOperationModes.AUTO;
 		END_IF
 	eOperationModes.MANUAL:
-		IF control.bManualMode THEN
+		IF comm.control.bManualMode THEN
 			requestMode := eOperationModes.SEMI_AUTO;
 		END_IF
 END_CASE
 //Initialization
-requestInit := control.bInitialize;
+requestInit := comm.control.bInitialize;
 //Error clear request
-IF control.bErrorReset THEN
+IF comm.control.bErrorReset THEN
 	errorClear := eErrorClearWays.RESET;
-ELSIF control.bErrorIgnore THEN
+ELSIF comm.control.bErrorIgnore THEN
 	errorClear := eErrorClearWays.IGNORE;	
 END_IF
-//
-errorIndex := mErrorIndex;
-errorType := mErrorType;
-errorCode := mErrorCode;
 //one-shot control clear
-control := 0;]]></ST>
+comm.control := 0;]]></ST>
     </Implementation>
+    <Method Name="ErrorInfomation" Id="{3573c2e7-6b1f-47f1-a5a9-6f10bd5c5031}">
+      <Declaration><![CDATA[METHOD ErrorInfomation : BOOL
+VAR_INPUT
+	mErrorIndex : INT;
+	mErrorType : eCategrories;
+	mErrorCode : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[comm.errorIndex := TO_DWORD(mErrorIndex);
+comm.errorType := mErrorType;
+comm.errorCode := mErrorCode;]]></ST>
+      </Implementation>
+    </Method>
     <LineIds Name="InterfaceControlV1">
       <LineId Id="38" Count="0" />
       <LineId Id="37" Count="0" />
@@ -92,10 +92,12 @@ control := 0;]]></ST>
       <LineId Id="63" Count="0" />
       <LineId Id="65" Count="0" />
       <LineId Id="64" Count="0" />
-      <LineId Id="25" Count="0" />
-      <LineId Id="74" Count="2" />
       <LineId Id="9" Count="0" />
       <LineId Id="26" Count="0" />
+    </LineIds>
+    <LineIds Name="InterfaceControlV1.ErrorInfomation">
+      <LineId Id="5" Count="0" />
+      <LineId Id="9" Count="1" />
     </LineIds>
   </POU>
 </TcPlcObject>
