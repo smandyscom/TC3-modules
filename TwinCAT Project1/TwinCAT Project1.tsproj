@@ -3389,18 +3389,18 @@ External Setpoint Generation:
 					<Vars VarGrpType="1">
 						<Name>PlcTask Inputs</Name>
 						<Var>
-							<Name>GVL.ioMonitor</Name>
-							<Comment>
-								<![CDATA[64points , would occupied 64bytes]]>
-							</Comment>
-							<Type GUID="{236F8EE2-F105-66D4-F854-D8BD8682C421}">ARRAY [1..64] OF BOOL</Type>
-						</Var>
-						<Var>
 							<Name>MAIN_D.LabelHandler.bPrinted</Name>
 							<Comment>
 								<![CDATA[ communicate with external device]]>
 							</Comment>
 							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.ioMonitor</Name>
+							<Comment>
+								<![CDATA[64points , would occupied 64bytes]]>
+							</Comment>
+							<Type GUID="{236F8EE2-F105-66D4-F854-D8BD8682C421}">ARRAY [1..64] OF BOOL</Type>
 						</Var>
 						<Var>
 							<Name>GVL.axisControls[1].Axis.NcToPlc</Name>
@@ -4171,14 +4171,6 @@ External Setpoint Generation:
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.testOutput2</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.ioOverride</Name>
-							<Type GUID="{236F8EE2-F105-66D4-F854-D8BD8682C421}">ARRAY [1..64] OF BOOL</Type>
-						</Var>
-						<Var>
 							<Name>MAIN_D.ConveyorMaster.run</Name>
 							<Comment>
 								<![CDATA[output bit to I/O motor]]>
@@ -4199,6 +4191,14 @@ External Setpoint Generation:
 						<Var>
 							<Name>MAIN_D.LabelHandler.bVacuumBreaker</Name>
 							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.testOutput2</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.ioOverride</Name>
+							<Type GUID="{236F8EE2-F105-66D4-F854-D8BD8682C421}">ARRAY [1..64] OF BOOL</Type>
 						</Var>
 						<Var>
 							<Name>GVL.axisControls[1].Axis.PlcToNc</Name>
@@ -9868,6 +9868,7 @@ External Setpoint Generation:
 	</Project>
 	<Mappings>
 		<MappingInfo Identifier="{05000010-2001-0850-1000-040300205008}" Id="#x02030010" Watchdog="14000000040000000400000004000000"/>
+		<MappingInfo Identifier="{00000000-2001-0850-0020-500800205008}" Id="#x02030020"/>
 		<OwnerA Name="TINC^NC-Task 1 SAF^Axes^Horizon1">
 			<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 9 (EL7201-9014)">
 				<Link VarA="Drive^Inputs^In^nDataIn1" VarB="DRV Following error actual value^Following error actual value"/>
@@ -10026,7 +10027,7 @@ External Setpoint Generation:
 				<Link VarA="PlcTask Outputs^GVL.axisControls[4].Axis.PlcToNc" VarB="Inputs^FromPlc"/>
 			</OwnerB>
 			<OwnerB Name="TIPC^Untitled1^Untitled1 Instance">
-				<Link VarA="PlcTask Outputs^GVL.testOutput1" VarB="PlcTask Inputs^GVL.ioMonitor[1]"/>
+				<Link VarA="PlcTask Inputs^GVL.ioMonitor[1]" VarB="PlcTask Outputs^GVL.testOutput1"/>
 			</OwnerB>
 		</OwnerA>
 	</Mappings>

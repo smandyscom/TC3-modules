@@ -22,10 +22,10 @@ CASE CellDataBlock2Parameter.command OF
 			//rel
 			CellDataBlock2Parameter.parameter.position.PositionType := ePositionType.POSITION_REL;	
 		END_IF
-		CellDataBlock2Parameter.parameter.position.Velocity := TO_REAL(input.command.base.speed) * 0.001; //0.001mm/s -> mm/s
-		CellDataBlock2Parameter.parameter.position.Acceleration := CellDataBlock2Parameter.parameter.position.Velocity/(TO_REAL(input.command.base.accTime) * 0.001); // ms -> mm/s2
-		CellDataBlock2Parameter.parameter.position.Deceleration := CellDataBlock2Parameter.parameter.position.Velocity/(TO_REAL(input.command.base.decTime) * 0.001);
-		CellDataBlock2Parameter.parameter.position.Position := TO_REAL(input.command.position.coordinate) * 0.001;
+		CellDataBlock2Parameter.parameter.position.Velocity := TO_LREAL(input.command.base.speed) * 0.001; //0.001mm/s -> mm/s
+		CellDataBlock2Parameter.parameter.position.Acceleration := CellDataBlock2Parameter.parameter.position.Velocity/(TO_LREAL(input.command.base.accTime) * 0.001); // ms -> mm/s2
+		CellDataBlock2Parameter.parameter.position.Deceleration := CellDataBlock2Parameter.parameter.position.Velocity/(TO_LREAL(input.command.base.decTime) * 0.001);
+		CellDataBlock2Parameter.parameter.position.Position := TO_LREAL(input.command.position.coordinate) * 0.001;
 	
 	eCommandTypes.ZRET:
 		//TODO

@@ -36,9 +36,6 @@
     <Compile Include="DUTs\Communication\commManual.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\Communication\ContextUnitBase.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="DUTs\Communication\Cylinder\commCylinder.TcDUT">
       <SubType>Code</SubType>
     </Compile>

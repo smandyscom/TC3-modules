@@ -54,37 +54,39 @@ END_CASE
 CASE state OF
 	0:
 		IF comm.wordIn.bEngagedHMI AND comm.wordIn.bRun THEN
-			//ENGAGED_HMI and RUN
-			comm.wordOut.bDone := TRUE; //done on
+			//ENGAGED_HMI and RUN		
 			state := 1;
 		END_IF
 	1:
-		IF NOT comm.wordIn.bRun THEN
-			state := 2;
-		END_IF
-	2:
 		CASE comm.commitMode OF
-			//Manual execution
-			eModes.MODE_EXE_AXIS,eModes.MODE_EXE_COMMAND_BLOCK,eModes.MODE_EXE_CYLINDER,eModes.MODE_EXE_UNIT:
-				comm.wordOut.bDone := NOT controlDevice^.Control(comm.commitBlock,comm.commitMode); //return whether done
-			eModes.MODE_UPLOAD_DATA_BLOCK:
-				comm.commitBlock := controlDevice^.ConfigureRead(comm.commitSelection);
-				comm.wordOut.bDone := FALSE;
-			eModes.MODE_DOWNLOAD_DATA_BLOCK:
-				controlDevice^.ConfigureWrite(comm.commitBlock,comm.commitSelection);
-				writePersistance.START := TRUE;
-				comm.wordOut.bDone := FALSE ;//done
+				//Manual execution
+				eModes.MODE_EXE_AXIS,eModes.MODE_EXE_COMMAND_BLOCK,eModes.MODE_EXE_CYLINDER,eModes.MODE_EXE_UNIT:
+					comm.wordOut.bDone := controlDevice^.Control(comm.commitBlock,comm.commitMode); //return whether done
+				eModes.MODE_UPLOAD_DATA_BLOCK:
+					comm.commitBlock := controlDevice^.ConfigureRead(comm.commitSelection);
+					comm.wordOut.bDone := TRUE; //done on
+				eModes.MODE_DOWNLOAD_DATA_BLOCK:
+					controlDevice^.ConfigureWrite(comm.commitBlock,comm.commitSelection);
+					writePersistance.START := TRUE;
+					comm.wordOut.bDone := TRUE ;//done
+				ELSE
+					comm.wordOut.bDone := TRUE ;//done
 		END_CASE
-		
 		//interrupt operation
 		IF NOT comm.wordIn.bEngagedHMI THEN
 			controlDevice^.Stop();
-			comm.wordOut.bDone := FALSE;
+			comm.wordOut.bDone := TRUE;
 		END_IF
-		
-		IF NOT comm.wordOut.bDone OR NOT comm.wordIn.bEngagedHMI THEN
+		IF comm.wordOut.bDone THEN
 			//DONE off or ENGAGED_HMI off
-			state :=0;
+			state :=2;
+		END_IF		
+	2:
+		IF NOT comm.wordIn.bRun THEN
+			comm.wordOut.bDone := FALSE;
+			state := 0;
+		ELSE
+			//wait RUN off
 		END_IF
 END_CASE
 
@@ -105,31 +107,19 @@ writePersistance(
       <LineId Id="112" Count="18" />
       <LineId Id="213" Count="0" />
       <LineId Id="211" Count="0" />
-      <LineId Id="132" Count="4" />
-      <LineId Id="282" Count="0" />
-      <LineId Id="137" Count="1" />
+      <LineId Id="132" Count="6" />
+      <LineId Id="333" Count="0" />
+      <LineId Id="335" Count="12" />
+      <LineId Id="334" Count="0" />
+      <LineId Id="351" Count="3" />
+      <LineId Id="350" Count="0" />
+      <LineId Id="357" Count="2" />
+      <LineId Id="356" Count="0" />
       <LineId Id="278" Count="1" />
+      <LineId Id="362" Count="0" />
       <LineId Id="281" Count="0" />
+      <LineId Id="360" Count="1" />
       <LineId Id="277" Count="0" />
-      <LineId Id="139" Count="1" />
-      <LineId Id="146" Count="0" />
-      <LineId Id="141" Count="2" />
-      <LineId Id="149" Count="0" />
-      <LineId Id="162" Count="0" />
-      <LineId Id="144" Count="0" />
-      <LineId Id="150" Count="0" />
-      <LineId Id="246" Count="0" />
-      <LineId Id="160" Count="0" />
-      <LineId Id="145" Count="0" />
-      <LineId Id="214" Count="0" />
-      <LineId Id="218" Count="0" />
-      <LineId Id="215" Count="1" />
-      <LineId Id="283" Count="0" />
-      <LineId Id="217" Count="0" />
-      <LineId Id="193" Count="0" />
-      <LineId Id="154" Count="1" />
-      <LineId Id="157" Count="0" />
-      <LineId Id="156" Count="0" />
       <LineId Id="63" Count="0" />
       <LineId Id="247" Count="0" />
       <LineId Id="237" Count="0" />
