@@ -9,8 +9,8 @@ STRUCT
 	accTime:DWORD; // in ms , 4
 	decTime:DWORD; // in ms , 6
 	torqueLimit:DWORD; // in 0.01 percentage , 8
-	subIndex : WORD; //9 , indicate which bank index would be set/read
-	reserved : ARRAY[1..5] OF WORD; //10...15
+	subIndex : WORD; //10 , indicate which bank index would be set/read
+	reserved : ARRAY[1..5] OF WORD; //11...15
 END_STRUCT
 END_TYPE
 

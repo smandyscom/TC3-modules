@@ -13,6 +13,11 @@ VAR_GLOBAL
 	blockData AT%Mb512 : commUnit;
 	//
 	//fakeInput AT%I* : bool;
+	ioMonitor AT%I* : ARRAY[1..64] OF BOOL; //64points , would occupied 64bytes
+	ioOverride AT%Q* : ARRAY[1..64] OF BOOL;
+	
+	testOutput1 AT%Q* : BOOL;
+	testOutput2 AT%Q* : BOOL;	
 	
 	materialSlots : ARRAY[1..4] OF Block128Words;	
 	axisControls: ARRAY[1..9] OF RunAxis;

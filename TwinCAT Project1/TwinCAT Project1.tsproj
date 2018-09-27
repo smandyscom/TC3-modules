@@ -1321,6 +1321,15 @@ External Setpoint Generation:
 			</Relations>
 		</DataType>
 		<DataType>
+			<Name GUID="{236F8EE2-F105-66D4-F854-D8BD8682C421}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..64] OF BOOL</Name>
+			<BitSize>512</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000030}">BOOL</BaseType>
+			<ArrayInfo>
+				<LBound>1</LBound>
+				<Elements>64</Elements>
+			</ArrayInfo>
+		</DataType>
+		<DataType>
 			<Name GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..4] OF BOOL</Name>
 			<BitSize>32</BitSize>
 			<BaseType GUID="{18071995-0000-0000-0000-000000000030}">BOOL</BaseType>
@@ -3380,6 +3389,13 @@ External Setpoint Generation:
 					<Vars VarGrpType="1">
 						<Name>PlcTask Inputs</Name>
 						<Var>
+							<Name>GVL.ioMonitor</Name>
+							<Comment>
+								<![CDATA[64points , would occupied 64bytes]]>
+							</Comment>
+							<Type GUID="{236F8EE2-F105-66D4-F854-D8BD8682C421}">ARRAY [1..64] OF BOOL</Type>
+						</Var>
+						<Var>
 							<Name>MAIN_D.LabelHandler.bPrinted</Name>
 							<Comment>
 								<![CDATA[ communicate with external device]]>
@@ -4150,6 +4166,18 @@ External Setpoint Generation:
 					</Vars>
 					<Vars VarGrpType="2">
 						<Name>PlcTask Outputs</Name>
+						<Var>
+							<Name>GVL.testOutput1</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.testOutput2</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.ioOverride</Name>
+							<Type GUID="{236F8EE2-F105-66D4-F854-D8BD8682C421}">ARRAY [1..64] OF BOOL</Type>
+						</Var>
 						<Var>
 							<Name>MAIN_D.ConveyorMaster.run</Name>
 							<Comment>
@@ -9996,6 +10024,9 @@ External Setpoint Generation:
 			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Lifter3">
 				<Link VarA="PlcTask Inputs^GVL.axisControls[4].Axis.NcToPlc" VarB="Outputs^ToPlc"/>
 				<Link VarA="PlcTask Outputs^GVL.axisControls[4].Axis.PlcToNc" VarB="Inputs^FromPlc"/>
+			</OwnerB>
+			<OwnerB Name="TIPC^Untitled1^Untitled1 Instance">
+				<Link VarA="PlcTask Outputs^GVL.testOutput1" VarB="PlcTask Inputs^GVL.ioMonitor[1]"/>
 			</OwnerB>
 		</OwnerA>
 	</Mappings>
