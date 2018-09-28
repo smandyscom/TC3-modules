@@ -128,7 +128,13 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[A_SENSOR_USED_COUNT := TO_INT(input.cylinder.sensorAUsedCount);
+B_SENSOR_USED_COUNT := TO_INT(input.cylinder.sensorBUsedCount);
+
+TMR_WATCH_DOG.PT := TO_TIME(input.cylinder.timerSetValue * 0.001);
+TMR_DELAY_TO_A.PT := TO_TIME(input.cylinder.timerDelayToA * 0.001);
+TMR_DELAY_TO_B.PT := TO_TIME(input.cylinder.timerDelayToB * 0.001);
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="Control" Id="{57e57159-f3d2-45e6-85f3-9a286c6e359d}" FolderPath="CommonBase\">
@@ -139,7 +145,8 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[Execute(argCommand:= input.cylinder.command);
+Control:=true;]]></ST>
       </Implementation>
     </Method>
     <Method Name="ErrorClear" Id="{945c9ccd-86db-44c6-8d20-e9e7b141f3bf}" FolderPath="CommonBase\">
@@ -149,7 +156,13 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[CASE input OF
+	eErrorClearWays.RESET:
+		//Timer reset only
+	eErrorClearWays.IGNORE:
+		//suppress warning
+		BIT_WARN_SUPPRESS := TRUE;
+END_CASE]]></ST>
       </Implementation>
     </Method>
     <Method Name="ErrorDetect" Id="{6a0ed216-b71b-4070-ba95-2d84d65ddbd3}" FolderPath="CommonBase\">
@@ -158,7 +171,10 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[ErrorDetect := 0;
+IF BIT_WARNING THEN
+	ErrorDetect := 1;
+END_IF]]></ST>
       </Implementation>
     </Method>
     <Method Name="Execute" Id="{13693201-8c27-444e-bbfc-9d5e6a727077}">
@@ -212,9 +228,27 @@ END_IF]]></ST>
       <Declaration><![CDATA[METHOD Monitor : CellDataBlock
 VAR_INPUT
 END_VAR
-]]></Declaration>
+VAR CONSTANT
+	bit0Warn : INT :=0;
+	bit1MonGroupA : INT :=1;
+	bit2MonGroupB : INT :=2;
+	bit3CtlSuppress : INT :=3;
+	bit4TmrOn : INT :=4;
+	bit5Done : INT := 5;
+	//New
+	bit6TmrAOn : INT :=6;
+	bit7TmrBOn : INT :=7;
+END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[Monitor.cylinder.statusWord.bit0Warn := BIT_WARNING;
+Monitor.cylinder.statusWord.bit1MonGroupA := BIT_A_MATCH;
+Monitor.cylinder.statusWord.bit2MonGroupB := BIT_B_MATCH;
+Monitor.cylinder.statusWord.bit3CtlSuppress := BIT_WARN_SUPPRESS;
+Monitor.cylinder.statusWord.bit4TmrOn := TMR_WATCH_DOG.Q;
+Monitor.cylinder.statusWord.bit5Done := BIT_DONE;
+
+Monitor.cylinder.statusWord.bit6TmrAOn := TMR_DELAY_TO_A.Q;
+Monitor.cylinder.statusWord.bit7TmrBOn := TMR_DELAY_TO_B.Q;]]></ST>
       </Implementation>
     </Method>
     <Method Name="TypeCode" Id="{2fbd4fdf-fcb0-4d45-95f6-2e5788341375}" FolderPath="CommonBase\">
@@ -223,7 +257,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[TypeCode := eCategrories.SELECTION_CYLINDER;]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="RunCylinder">
@@ -236,15 +270,27 @@ END_VAR
     </LineIds>
     <LineIds Name="RunCylinder.ConfigureWrite">
       <LineId Id="5" Count="0" />
+      <LineId Id="13" Count="1" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="15" Count="1" />
+      <LineId Id="11" Count="0" />
     </LineIds>
     <LineIds Name="RunCylinder.Control">
       <LineId Id="5" Count="0" />
+      <LineId Id="11" Count="0" />
     </LineIds>
     <LineIds Name="RunCylinder.ErrorClear">
       <LineId Id="5" Count="0" />
+      <LineId Id="12" Count="1" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="11" Count="0" />
     </LineIds>
     <LineIds Name="RunCylinder.ErrorDetect">
+      <LineId Id="11" Count="0" />
       <LineId Id="5" Count="0" />
+      <LineId Id="9" Count="1" />
     </LineIds>
     <LineIds Name="RunCylinder.Execute">
       <LineId Id="9" Count="9" />
@@ -261,6 +307,11 @@ END_VAR
     </LineIds>
     <LineIds Name="RunCylinder.Monitor">
       <LineId Id="5" Count="0" />
+      <LineId Id="17" Count="3" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="26" Count="0" />
     </LineIds>
     <LineIds Name="RunCylinder.TypeCode">
       <LineId Id="5" Count="0" />

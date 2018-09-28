@@ -15,7 +15,7 @@ END_VAR
 VAR_OUTPUT
 	State : INT := 0;
 	NextState : INT := 0;
-	AlarmCode : INT := 0;
+	AlarmCode : UDINT := 0;
 END_VAR
 VAR	
 	Parent : POINTER TO RunUnitGeneric;
@@ -36,7 +36,14 @@ VAR PERSISTENT
 	slaveLinkageStatus : ARRAY[1..32] OF BOOL; // configuration
 	miscsParameters : ARRAY[1..8] of int;
 END_VAR
-]]></Declaration>
+VAR CONSTANT 
+	bit0EnStep : INT := 0;
+	bit1TrigStep : INT := 1;
+	bit2StatePause : INT :=2;
+	bit3IsBypassed : INT :=3;
+	bit4WorkingOverride : INT :=4;
+	bit5MaterialOverride : INT :=5;
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[
 //Catch parent's pause status
@@ -99,7 +106,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[//Implemented by concre derived class]]></ST>
       </Implementation>
     </Method>
     <Method Name="Control" Id="{fe69a240-a6bf-45a3-bd63-78ff17e8577a}" FolderPath="CommonBase\">
@@ -110,7 +117,12 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[bEnStep := input.unit.base.controlWord.bit0EnStep;
+bTrigStep := input.unit.base.controlWord.bit1TrigStep;
+bPause := input.unit.base.controlWord.bit2StatePause;
+bIsBypassed := input.unit.base.controlWord.bit3IsBypassed;
+bWorkingOverride := input.unit.base.controlWord.bit4WorkingOverride;
+bMaterialOverride := input.unit.base.controlWord.bit5MaterialOverride;]]></ST>
       </Implementation>
     </Method>
     <Method Name="ErrorClear" Id="{c0e62209-d0d5-44f2-8c68-278b3588f780}" FolderPath="CommonBase\">
@@ -120,7 +132,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[AlarmCode := 0; //code reset to 0]]></ST>
       </Implementation>
     </Method>
     <Method Name="ErrorDetect" Id="{f4463e33-7efc-4b67-a80e-02e00ed76350}" FolderPath="CommonBase\">
@@ -129,7 +141,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[ErrorDetect := AlarmCode;]]></ST>
       </Implementation>
     </Method>
     <Method Name="FB_init" Id="{1054404a-900b-4aa2-9841-9d1387599ab2}">
@@ -177,7 +189,21 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[Monitor.unit.base.controlWord.bit0EnStep := bEnStep;
+Monitor.unit.base.controlWord.bit1TrigStep := bTrigStep;
+Monitor.unit.base.controlWord.bit2StatePause := bPause;
+Monitor.unit.base.controlWord.bit3IsBypassed := bIsBypassed;
+Monitor.unit.base.controlWord.bit4WorkingOverride := bWorkingOverride;
+Monitor.unit.base.controlWord.bit5MaterialOverride := bMaterialOverride;
+//Transition status
+Monitor.unit.base.transitionByte := transitionByte;
+//
+Monitor.unit.base.alarmCode := TO_WORD(AlarmCode);
+Monitor.unit.base.state := TO_WORD(State);
+Monitor.unit.base.nextState := TO_WORD(NextState);
+//
+Monitor.unit.base.workingTimerCache := TO_DWORD(workingTimer.ET);
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="TypeCode" Id="{5f35ce6c-c451-4e46-809f-fa5a3eec0aed}" FolderPath="CommonBase\">
@@ -186,7 +212,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[TypeCode := eCategrories.SELECTION_UNIT;]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="RunUnitGeneric">
@@ -206,6 +232,7 @@ END_VAR
     </LineIds>
     <LineIds Name="RunUnitGeneric.Control">
       <LineId Id="5" Count="0" />
+      <LineId Id="13" Count="4" />
     </LineIds>
     <LineIds Name="RunUnitGeneric.ErrorClear">
       <LineId Id="5" Count="0" />
@@ -228,7 +255,15 @@ END_VAR
       <LineId Id="7" Count="0" />
     </LineIds>
     <LineIds Name="RunUnitGeneric.Monitor">
+      <LineId Id="9" Count="4" />
       <LineId Id="5" Count="0" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="18" Count="1" />
+      <LineId Id="21" Count="1" />
+      <LineId Id="16" Count="0" />
     </LineIds>
     <LineIds Name="RunUnitGeneric.TypeCode">
       <LineId Id="5" Count="0" />

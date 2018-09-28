@@ -3389,13 +3389,6 @@ External Setpoint Generation:
 					<Vars VarGrpType="1">
 						<Name>PlcTask Inputs</Name>
 						<Var>
-							<Name>MAIN_D.LabelHandler.bPrinted</Name>
-							<Comment>
-								<![CDATA[ communicate with external device]]>
-							</Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
 							<Name>GVL.ioMonitor</Name>
 							<Comment>
 								<![CDATA[64points , would occupied 64bytes]]>
@@ -4163,33 +4156,18 @@ External Setpoint Generation:
 							<Name>GVL.signalControls[16].input</Name>
 							<Type>BOOL</Type>
 						</Var>
+						<Var>
+							<Name>MAIN_D.LabelHandler.bPrinted</Name>
+							<Comment>
+								<![CDATA[ communicate with external device]]>
+							</Comment>
+							<Type>BOOL</Type>
+						</Var>
 					</Vars>
 					<Vars VarGrpType="2">
 						<Name>PlcTask Outputs</Name>
 						<Var>
 							<Name>GVL.testOutput1</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN_D.ConveyorMaster.run</Name>
-							<Comment>
-								<![CDATA[output bit to I/O motor]]>
-							</Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN_D.LabelHandler.bTaken</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN_D.LabelHandler.bVacuumGenerator</Name>
-							<Comment>
-								<![CDATA[ Vaccuum]]>
-							</Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN_D.LabelHandler.bVacuumBreaker</Name>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
@@ -4491,6 +4469,28 @@ External Setpoint Generation:
 						<Var>
 							<Name>GVL.cylinderControls[32].ACT_B</Name>
 							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN_D.ConveyorMaster.run</Name>
+							<Comment>
+								<![CDATA[output bit to I/O motor]]>
+							</Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN_D.LabelHandler.bTaken</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN_D.LabelHandler.bVacuumGenerator</Name>
+							<Comment>
+								<![CDATA[ Vaccuum]]>
+							</Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN_D.LabelHandler.bVacuumBreaker</Name>
+							<Type>BOOL</Type>
 						</Var>
 					</Vars>
 					<TaskPouOids>
@@ -10027,7 +10027,7 @@ External Setpoint Generation:
 				<Link VarA="PlcTask Outputs^GVL.axisControls[4].Axis.PlcToNc" VarB="Inputs^FromPlc"/>
 			</OwnerB>
 			<OwnerB Name="TIPC^Untitled1^Untitled1 Instance">
-				<Link VarA="PlcTask Inputs^GVL.ioMonitor[1]" VarB="PlcTask Outputs^GVL.testOutput1"/>
+				<Link VarA="PlcTask Outputs^GVL.testOutput1" VarB="PlcTask Inputs^GVL.ioMonitor[1]"/>
 			</OwnerB>
 		</OwnerA>
 	</Mappings>

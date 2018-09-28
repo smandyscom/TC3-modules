@@ -7,11 +7,16 @@ STRUCT
 	command : eCylinderCommands; //1
 	lastCommand : eCylinderCommands; //2
 	timerCountValue : WORD; //3
-	reserved : ARRAY[1..12] OF WORD;
+	reserved1 : ARRAY[1..12] OF WORD; //4..7
 	//context
-	timerSetValue : DWORD; //16,17
+	timerDelayToA : WORD; //8
+	timerDelayToB : WORD; //9
+	reserved2 : ARRAY[1..5] OF WORD; //10-15
+	timerSetValue : WORD; //16
+	reserved3 : WORD; //17
 	//Depre
-	
+	sensorAUsedCount : WORD; //18
+	sensorBUsedCount : WORD; //19
 END_STRUCT
 END_TYPE
 ]]></Declaration>
