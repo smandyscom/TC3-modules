@@ -122,7 +122,8 @@ bTrigStep := input.unit.base.controlWord.bit1TrigStep;
 bPause := input.unit.base.controlWord.bit2StatePause;
 bIsBypassed := input.unit.base.controlWord.bit3IsBypassed;
 bWorkingOverride := input.unit.base.controlWord.bit4WorkingOverride;
-bMaterialOverride := input.unit.base.controlWord.bit5MaterialOverride;]]></ST>
+bMaterialOverride := input.unit.base.controlWord.bit5MaterialOverride;
+Control:=true;]]></ST>
       </Implementation>
     </Method>
     <Method Name="ErrorClear" Id="{c0e62209-d0d5-44f2-8c68-278b3588f780}" FolderPath="CommonBase\">
@@ -232,7 +233,7 @@ END_VAR
     </LineIds>
     <LineIds Name="RunUnitGeneric.Control">
       <LineId Id="5" Count="0" />
-      <LineId Id="13" Count="4" />
+      <LineId Id="13" Count="5" />
     </LineIds>
     <LineIds Name="RunUnitGeneric.ErrorClear">
       <LineId Id="5" Count="0" />
