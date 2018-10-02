@@ -6,25 +6,17 @@ VAR_GLOBAL
 	//for downstream
 	downstreamSyncEngaged AT%MB127 : BOOL;
 	downstreamSyncAcknowledged AT%MB128 : BOOL;
-	//downstreamSyncAcknowledged  : BOOL;
-
-	//testValue1 AT%MW0 : WORD;
-	//testValue2 AT%MW1 : WORD;
-	blockData AT%Mb512 : commUnit;
-	//
-	//fakeInput AT%I* : bool;
-	ioMonitor AT%I* : ARRAY[1..64] OF BOOL; //64points , would occupied 64bytes
-	ioOverride AT%Q* : ARRAY[1..64] OF BOOL;
-	
-	testOutput1 AT%Q* : BOOL;
-	testOutput2 AT%Q* : BOOL;	
 	
 	materialSlots : ARRAY[1..4] OF Block128Words;	
-	axisControls: ARRAY[1..9] OF RunAxis;
+	axisControls: ARRAY[1..4] OF RunAxis;
 	stations : ARRAY[1..8] OF POINTER TO RunUnitGeneric;
 	
-	cylinderControls : ARRAY[1..32] OF RunCylinder;
+	cylinderControls : ARRAY[1..24] OF RunCylinder;
 	signalControls : ARRAY[1..16] OF RunSignal;
+	
+	safeAck AT%Q* : BOOL;
+	safeRun AT%Q* : BOOL;
+	safeComErr AT%Q* : BOOL;
 	
 	bObjectsLinked : BOOL;
 END_VAR

@@ -8,7 +8,7 @@ STRUCT
 	errorType : DWORD; //36
 	errorCode : LWORD; // 38
 	reserved2 : ARRAY[1..8] OF WORD;
-	monitorDatas : ARRAY[1..8] OF DWORD;
+	//monitorDatas : ARRAY[1..8] OF DWORD;
 END_STRUCT
 END_TYPE
 ]]></Declaration>
