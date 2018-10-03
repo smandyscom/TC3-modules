@@ -33,6 +33,7 @@ CASE currentMode OF
 		IF comm.control.bPause THEN
 			requestMode := eOperationModes.SEMI_AUTO;
 		END_IF
+		comm.controlWord.2 := FALSE;
 	eOperationModes.SEMI_AUTO:
 		IF comm.control.bManualMode THEN
 			//higher priority
@@ -40,10 +41,12 @@ CASE currentMode OF
 		ELSIF comm.control.bPause THEN
 			requestMode := eOperationModes.AUTO;
 		END_IF
+		comm.controlWord.2 := TRUE; //pause state
 	eOperationModes.MANUAL:
 		IF comm.control.bManualMode THEN
 			requestMode := eOperationModes.SEMI_AUTO;
 		END_IF
+		comm.controlWord.2 := TRUE; //pause state
 END_CASE
 //Initialization
 requestInit := comm.control.bInitialize;
@@ -75,15 +78,18 @@ comm.errorCode := mErrorCode;]]></ST>
       <LineId Id="37" Count="0" />
       <LineId Id="42" Count="0" />
       <LineId Id="44" Count="2" />
+      <LineId Id="103" Count="0" />
       <LineId Id="40" Count="0" />
       <LineId Id="59" Count="0" />
       <LineId Id="61" Count="0" />
       <LineId Id="60" Count="0" />
       <LineId Id="48" Count="1" />
       <LineId Id="47" Count="0" />
+      <LineId Id="104" Count="0" />
       <LineId Id="43" Count="0" />
       <LineId Id="51" Count="1" />
       <LineId Id="50" Count="0" />
+      <LineId Id="105" Count="0" />
       <LineId Id="41" Count="0" />
       <LineId Id="67" Count="0" />
       <LineId Id="78" Count="0" />

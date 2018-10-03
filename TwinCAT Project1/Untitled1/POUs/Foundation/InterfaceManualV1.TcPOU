@@ -3,6 +3,7 @@
   <POU Name="InterfaceManualV1" Id="{69f8e896-e3c8-4e08-b157-7fa165a49498}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK InterfaceManualV1
 VAR_INPUT
+	currentMode : eOperationModes;
 END_VAR
 VAR_OUTPUT
 END_VAR
@@ -28,7 +29,14 @@ END_VAR
       <ST><![CDATA[IF writePersistance.START THEN
 	writePersistance.START := false;
 END_IF
-
+//
+CASE currentMode OF
+	eOperationModes.AUTO:
+		comm.wordOut.bEngagedPLC := FALSE;
+		RETURN;
+	ELSE
+		comm.wordOut.bEngagedPLC := TRUE;
+END_CASE
 //monitor
 CASE TO_DWORD(comm.monitorType) OF
 	eCategrories.SELECTION_AXIS:
@@ -103,7 +111,11 @@ writePersistance(
     </Implementation>
     <LineIds Name="InterfaceManualV1">
       <LineId Id="249" Count="2" />
-      <LineId Id="248" Count="0" />
+      <LineId Id="395" Count="0" />
+      <LineId Id="387" Count="1" />
+      <LineId Id="393" Count="1" />
+      <LineId Id="390" Count="1" />
+      <LineId Id="389" Count="0" />
       <LineId Id="112" Count="18" />
       <LineId Id="213" Count="0" />
       <LineId Id="211" Count="0" />

@@ -19,9 +19,6 @@ VAR_GLOBAL
 	safeComErr AT%I* : BOOL;
 	
 	bObjectsLinked : BOOL;
-END_VAR
-VAR_GLOBAL PERSISTENT
-	testPara : ParameterSet;
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>

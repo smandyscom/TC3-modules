@@ -103,14 +103,20 @@ VAR CONSTANT
 	signalCellularReach : INT :=2;
 	//Transporter
 	signalInAndOut : INT :=3;
+	//Label handler
 	signalVacuumSensor : INT :=4;
+	//
+	signalAir : int :=5;
 	//Material slots
 	materialTransporter : INT :=1;
 	materialConveyor : INT :=2;
 	materialPickAndPlace : INT :=3;
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[IF NOT GVL.bObjectsLinked THEN
+      <ST><![CDATA[IF gvl.safeAck THEN
+	gvl.safeAck := FALSE;
+END_IF
+IF NOT GVL.bObjectsLinked THEN
 	//link
 	gvl.stations[1] := ADR(LinearTransporter);
 	gvl.stations[2] := ADR(LifterCellularA);
@@ -120,6 +126,8 @@ END_VAR]]></Declaration>
 	gvl.stations[6] := ADR(Output);
 	
 	gvl.bObjectsLinked := TRUE; //self-locked
+	
+	gvl.safeAck := TRUE;
 END_IF
 
 ConveyorProxy(
@@ -148,12 +156,15 @@ ConveyorMaster.allRelease := LifterCellularA.IsReleased;
 ]]></ST>
     </Implementation>
     <LineIds Name="MAIN_D">
+      <LineId Id="597" Count="2" />
       <LineId Id="368" Count="2" />
       <LineId Id="431" Count="1" />
       <LineId Id="475" Count="0" />
       <LineId Id="477" Count="1" />
       <LineId Id="476" Count="0" />
-      <LineId Id="389" Count="17" />
+      <LineId Id="389" Count="0" />
+      <LineId Id="589" Count="1" />
+      <LineId Id="390" Count="16" />
       <LineId Id="439" Count="0" />
       <LineId Id="436" Count="2" />
       <LineId Id="407" Count="3" />

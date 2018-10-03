@@ -73,7 +73,9 @@ IF errorDevice <>0 THEN
 	THIS^.ErrorHandler();// handling user-input reset/ignore
 END_IF
 //reflect to interface
-
+//
+interfaceManual(
+	currentMode:= THIS^.currentMode); //scan-in,scan-out,manual...
 //handling input request
 interfaceControl(
 	currentMode:= THIS^.currentMode, 
@@ -105,9 +107,7 @@ IF requestMode<>currentMode THEN
 END_IF
 //
 CASE currentMode OF	
-	eOperationModes.MANUAL:
-		interfaceManual(); //scan-in,scan-out,manual...
-	eOperationModes.AUTO,eOperationModes.SEMI_AUTO:
+		eOperationModes.AUTO,eOperationModes.SEMI_AUTO:
 		//running sequences
 		FOR nCounter :=1 TO unitUpperBound BY 1 DO
 			IF gvl.stations[nCounter] <> 0 THEN
@@ -189,7 +189,9 @@ END_VAR
       <LineId Id="597" Count="3" />
       <LineId Id="594" Count="0" />
       <LineId Id="652" Count="0" />
+      <LineId Id="760" Count="0" />
       <LineId Id="651" Count="0" />
+      <LineId Id="761" Count="0" />
       <LineId Id="456" Count="0" />
       <LineId Id="448" Count="2" />
       <LineId Id="452" Count="0" />
@@ -199,7 +201,7 @@ END_VAR
       <LineId Id="347" Count="0" />
       <LineId Id="350" Count="15" />
       <LineId Id="348" Count="1" />
-      <LineId Id="269" Count="3" />
+      <LineId Id="269" Count="1" />
       <LineId Id="274" Count="1" />
       <LineId Id="506" Count="0" />
       <LineId Id="509" Count="0" />
