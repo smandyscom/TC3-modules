@@ -8,7 +8,7 @@ VAR_GLOBAL
 	downstreamSyncAcknowledged AT%MB128 : BOOL;
 	
 	materialSlots : ARRAY[1..4] OF Block128Words;	
-	axisControls: ARRAY[1..4] OF RunAxis;
+	axisControls: ARRAY[1..5] OF RunAxis;
 	stations : ARRAY[1..8] OF POINTER TO RunUnitGeneric;
 	
 	cylinderControls : ARRAY[1..24] OF RunCylinder;
@@ -16,7 +16,7 @@ VAR_GLOBAL
 	
 	safeAck AT%Q* : BOOL;
 	safeRun AT%Q* : BOOL;
-	safeComErr AT%Q* : BOOL;
+	safeComErr AT%I* : BOOL;
 	
 	bObjectsLinked : BOOL;
 END_VAR
