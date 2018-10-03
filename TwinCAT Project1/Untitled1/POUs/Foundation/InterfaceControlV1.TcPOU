@@ -43,7 +43,7 @@ CASE currentMode OF
 		END_IF
 		comm.controlWord.2 := TRUE; //pause state
 	eOperationModes.MANUAL:
-		IF comm.control.bManualMode THEN
+		IF not comm.control.bManualMode THEN
 			requestMode := eOperationModes.SEMI_AUTO;
 		END_IF
 		comm.controlWord.2 := TRUE; //pause state
@@ -56,8 +56,8 @@ IF comm.control.bErrorReset THEN
 ELSIF comm.control.bErrorIgnore THEN
 	errorClear := eErrorClearWays.IGNORE;	
 END_IF
-//one-shot control clear
-comm.control := 0;]]></ST>
+//one-shot control clear , except bManualMode
+comm.control := 16#8 AND comm.control;]]></ST>
     </Implementation>
     <Method Name="ErrorInfomation" Id="{3573c2e7-6b1f-47f1-a5a9-6f10bd5c5031}">
       <Declaration><![CDATA[METHOD ErrorInfomation : BOOL
