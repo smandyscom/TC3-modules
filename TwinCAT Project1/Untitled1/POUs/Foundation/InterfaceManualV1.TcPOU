@@ -26,7 +26,7 @@ VAR CONSTANT
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[IF writePersistance.START THEN
+      <ST><![CDATA[IF writePersistance.START And not writePersistance.BUSY THEN
 	writePersistance.START := false;
 END_IF
 //

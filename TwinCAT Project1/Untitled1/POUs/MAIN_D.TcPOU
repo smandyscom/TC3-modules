@@ -113,7 +113,7 @@ VAR CONSTANT
 	materialPickAndPlace : INT :=3;
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[IF gvl.safeAck THEN
+      <ST><![CDATA[IF gvl.safeAck AND NOT gvl.safeComErr THEN
 	gvl.safeAck := FALSE;
 END_IF
 IF NOT GVL.bObjectsLinked THEN

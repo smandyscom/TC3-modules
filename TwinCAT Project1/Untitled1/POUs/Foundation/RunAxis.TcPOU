@@ -448,7 +448,7 @@ END_VAR]]></Declaration>
 Monitor.axis.operationMonitor.15 := fbReset.Execute;
 
 Monitor.axis.runStatus.1 := fbReadStatus.StandStill;
-Monitor.axis.runStatus.3 := fbReadStatus.Error;
+Monitor.axis.runStatus.3 := not fbReadStatus.Error;
 
 Monitor.axis.alarm := fbReadStatus.ErrorID;
 
