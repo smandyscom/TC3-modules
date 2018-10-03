@@ -86,7 +86,7 @@ CASE state OF
 			comm.wordOut.bDone := TRUE;
 		END_IF
 		IF comm.wordOut.bDone THEN
-			//DONE off or ENGAGED_HMI off
+			//DONE true or ENGAGED_HMI off
 			state :=2;
 		END_IF		
 	2:

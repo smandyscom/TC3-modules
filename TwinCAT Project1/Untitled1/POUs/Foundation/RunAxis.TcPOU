@@ -24,6 +24,8 @@ VAR
 	//Parameter writing
 	fbWriteLimitPositive : MC_WriteParameter;
 	fbWriteLimitNegtive : MC_WriteParameter;
+	fbEnableLimitPositive : MC_WriteBoolParameter;
+	fbEnableLimitNegtive : MC_WriteBoolParameter;
 	
 	timerFbReset : TON;
 	//bMonitoring : bool;
@@ -59,6 +61,30 @@ fbWriteLimitNegtive(
 	ErrorID=> );
 IF fbWriteLimitNegtive.Execute AND (fbWriteLimitNegtive.Done OR fbWriteLimitNegtive.Error) THEN
 	fbWriteLimitNegtive.Execute := FALSE;
+END_IF
+fbEnableLimitPositive(
+	Axis:= Axis , 
+	Execute:= , 
+	ParameterNumber:= EnableLimitPos, 
+	Value:= , 
+	Done=> , 
+	Busy=> , 
+	Error=> , 
+	ErrorID=> );
+IF fbEnableLimitPositive.Execute AND (fbEnableLimitPositive.Done OR fbEnableLimitPositive.Error) THEN
+	fbEnableLimitPositive.Execute := FALSE;
+END_IF
+fbEnableLimitNegtive(
+	Axis:= Axis , 
+	Execute:= , 
+	ParameterNumber:= EnableLimitNeg, 
+	Value:= , 
+	Done=> , 
+	Busy=> , 
+	Error=> , 
+	ErrorID=> );
+IF fbEnableLimitNegtive.Execute AND (fbEnableLimitNegtive.Done OR fbEnableLimitNegtive.Error) THEN
+	fbEnableLimitNegtive.Execute := false;
 END_IF
 //----------------------------
 
@@ -221,7 +247,10 @@ END_VAR
 VAR
 	temp : ParameterSet; 
 END_VAR
-]]></Declaration>
+VAR CONSTANT
+	indexEnablePosLimit : INT := 0;
+	indexEnableNegLimit : INT := 0;
+END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[//command block write-in
 CASE mode OF
@@ -232,6 +261,12 @@ CASE mode OF
 		
 		fbWriteLimitNegtive.Value := TO_REAL(input.axis.limitMinus) * 0.001;
 		fbWriteLimitNegtive.Execute := TRUE;
+		
+		fbEnableLimitPositive.Value := input.axis.boolParameter.indexEnablePosLimit;
+		fbEnableLimitPositive.Execute := TRUE;
+		
+		fbEnableLimitNegtive.Value := input.axis.boolParameter.indexEnableNegLimit;
+		fbEnableLimitNegtive.Execute := TRUE;
 		
 	eModes.MODE_EXE_COMMAND_BLOCK:
 		temp := CellDataBlock2Parameter(input:= input);
@@ -518,7 +553,14 @@ END_VAR
       <LineId Id="1249" Count="7" />
       <LineId Id="1247" Count="0" />
       <LineId Id="1246" Count="0" />
-      <LineId Id="1257" Count="2" />
+      <LineId Id="1257" Count="1" />
+      <LineId Id="1304" Count="7" />
+      <LineId Id="1303" Count="0" />
+      <LineId Id="1313" Count="2" />
+      <LineId Id="1295" Count="7" />
+      <LineId Id="1294" Count="0" />
+      <LineId Id="1316" Count="2" />
+      <LineId Id="1259" Count="0" />
       <LineId Id="1107" Count="137" />
       <LineId Id="9" Count="0" />
     </LineIds>
@@ -534,6 +576,10 @@ END_VAR
       <LineId Id="33" Count="2" />
       <LineId Id="38" Count="0" />
       <LineId Id="32" Count="0" />
+      <LineId Id="47" Count="0" />
+      <LineId Id="54" Count="1" />
+      <LineId Id="52" Count="1" />
+      <LineId Id="48" Count="0" />
       <LineId Id="14" Count="0" />
       <LineId Id="19" Count="1" />
       <LineId Id="30" Count="0" />

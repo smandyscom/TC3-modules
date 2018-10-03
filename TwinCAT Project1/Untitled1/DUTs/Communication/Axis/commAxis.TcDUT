@@ -25,7 +25,7 @@ STRUCT
 	limitMinus : DINT; //36
 	speedMax : DINT; //38
 	positionTolerance : DINT; //40
-	
+	boolParameter : WORD; //42 , bit0 , enablePosLimit , bit1 , enableNegLimit
 END_STRUCT
 END_TYPE
 ]]></Declaration>
