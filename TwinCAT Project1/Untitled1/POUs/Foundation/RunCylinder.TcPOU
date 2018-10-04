@@ -248,7 +248,9 @@ Monitor.cylinder.statusWord.bit4TmrOn := TMR_WATCH_DOG.Q;
 Monitor.cylinder.statusWord.bit5Done := BIT_DONE;
 
 Monitor.cylinder.statusWord.bit6TmrAOn := TMR_DELAY_TO_A.Q;
-Monitor.cylinder.statusWord.bit7TmrBOn := TMR_DELAY_TO_B.Q;]]></ST>
+Monitor.cylinder.statusWord.bit7TmrBOn := TMR_DELAY_TO_B.Q;
+
+Monitor.cylinder.lastCommand := LAST_COMMAND;]]></ST>
       </Implementation>
     </Method>
     <Method Name="TypeCode" Id="{2fbd4fdf-fcb0-4d45-95f6-2e5788341375}" FolderPath="CommonBase\">
@@ -312,6 +314,8 @@ END_VAR
       <LineId Id="25" Count="0" />
       <LineId Id="24" Count="0" />
       <LineId Id="26" Count="0" />
+      <LineId Id="41" Count="0" />
+      <LineId Id="40" Count="0" />
     </LineIds>
     <LineIds Name="RunCylinder.TypeCode">
       <LineId Id="5" Count="0" />
