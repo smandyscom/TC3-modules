@@ -18,7 +18,7 @@ END_VAR
       <ST><![CDATA[//Ng/OK output mechanism
 SUPER^();
 
-CASE state OF 
+CASE outputState OF 
 	//-------------------------Initialize
 	eSpecialStates.INITIAL_BEGIN:
 		transitionByte.0 := (NOT transitionByte.0) AND_THEN holder^.Execute(eCylinderCommands.COMMAND_A);

@@ -34,7 +34,7 @@ IF bSerialTransition AND State = 1 THEN
 	NextState := 16#10; //state override : release lifters
 END_IF
 
-CASE State OF
+CASE outputState OF
 	//-------------------------release lifters
 	16#10:
 	IF allRelease THEN

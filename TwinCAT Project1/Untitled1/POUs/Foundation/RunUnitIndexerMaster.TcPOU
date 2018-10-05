@@ -19,7 +19,7 @@ END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[SUPER^(); // call base class's execution
 
-CASE SUPER^.State OF
+CASE SUPER^.outputState OF
 	//0:
 		//TODO Initialize?	
 	

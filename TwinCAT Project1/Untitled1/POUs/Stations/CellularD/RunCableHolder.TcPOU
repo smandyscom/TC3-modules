@@ -13,7 +13,7 @@ END_VAR
     <Implementation>
       <ST><![CDATA[SUPER^();
 
-CASE state OF
+CASE outputState OF
 	//---------------Initialize
 	eSpecialStates.INITIAL_BEGIN:
 		transitionByte.0 := (NOT transitionByte.0) AND_THEN holderFixedEnd^.Execute(eCylinderCommands.COMMAND_A);

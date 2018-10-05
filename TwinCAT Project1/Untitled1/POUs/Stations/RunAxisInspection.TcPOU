@@ -18,7 +18,7 @@ END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[//n-Axis aoi , once position completed , trigger and wait
 
-CASE State OF
+CASE outputState OF
 	eSpecialStates.SLAVE_AXIS_INSPECTION_ENTER:
 		IF NOT transitionByte.0 THEN
 			transitionByte.0 := axis1^.ExecuteParameterIndex[nCounter + indexPosition1^];

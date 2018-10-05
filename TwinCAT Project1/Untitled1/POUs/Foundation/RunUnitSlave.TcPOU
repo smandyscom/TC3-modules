@@ -9,7 +9,7 @@ END_VAR
     <Implementation>
       <ST><![CDATA[SUPER^();
 
-CASE State OF 
+CASE outputState OF 
 	eSpecialStates.SLAVE_WORK_TRIGGER:
 		//working start
 		IF workingSignal^ THEN

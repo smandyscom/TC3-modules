@@ -91,7 +91,7 @@ fbAdsMatSyncRead(
 		ERRID=> );	
 		
 
-CASE State OF
+CASE outputState OF
 	0:
 		IF syncEngaged AND NOT syncAcknowledged THEN
 			isMatSync:= TRUE; //start mat sync

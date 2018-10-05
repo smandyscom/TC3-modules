@@ -44,7 +44,7 @@ CASE TO_DWORD(comm.monitorType) OF
 	eCategrories.SELECTION_CYLINDER:
 		monitorDevice := ADR(gvl.cylinderControls[comm.monitorIndex+1]);
 	eCategrories.SELECTION_UNIT:
-		monitorDevice := gvl.stations[comm.monitorIndex+1];
+		monitorDevice := ADR(gvl.stations[comm.monitorIndex+1]^);
 END_CASE
 comm.monitorBlock := monitorDevice^.Monitor();
 //control
@@ -54,7 +54,7 @@ CASE comm.commitSelection OF
 	eCategrories.SELECTION_CYLINDER:
 		controlDevice := ADR(gvl.cylinderControls[comm.commitIndex+1]);
 	eCategrories.SELECTION_UNIT:
-		controlDevice := gvl.stations[comm.commitIndex+1];
+		controlDevice := ADR(gvl.stations[comm.commitIndex+1]^);
 	eCategrories.SELECTION_COMMAND_BLOCK:
 		//axis should be pre-selected
 		controlDevice := ADR(gvl.axisControls[comm.commitBlock.command.base.axisId+1]);

@@ -22,7 +22,9 @@ TYPE eSpecialStates :
 	
 	SLAVE_AXIS_INSPECTION_ENTER := 16#300, //enter iteration region
 	SLAVE_AXIS_INSPECTION_ITERATION := 16#301,
-	SLAVE_AXIS_INSPECTION_EXIT := 16#400 //exit iteration region
+	SLAVE_AXIS_INSPECTION_EXIT := 16#400, //exit iteration region
+	
+	FORBIDDEN := 16#FFFF
 ) INT ;
 END_TYPE
 ]]></Declaration>

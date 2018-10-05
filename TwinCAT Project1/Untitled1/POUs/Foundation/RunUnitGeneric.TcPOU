@@ -30,6 +30,8 @@ VAR
 	
 	isTransit : BOOL ;
 	workingTimer : LTON;
+	
+	outputState : int;
 END_VAR
 VAR PERSISTENT
 	//station specific settings area (user settings
@@ -51,7 +53,7 @@ IF Parent^.bPause AND NOT bLastParentStatus THEN
 	bPause := TRUE;
 END_IF
 
-IF NOT bLastParentStatus AND Parent^.bPause THEN
+IF NOT Parent^.bPause AND bPause THEN
 	bPause := FALSE;
 END_IF
 
@@ -67,18 +69,18 @@ IF NextState <> State THEN
 	transitionByte := 0;
 	bSerialTransition := FALSE;
 	AlarmCode := 0;
+	
+	State := NextState; //release and go
 END_IF
 
 
 //transit condition
 isTransit := (NOT bEnStep OR (bEnStep AND bTrigStep)) AND NOT bPause;
 
-IF State <> NextState THEN
-	IF  isTransit THEN
-		State := NextState; //release and go
-	ELSE
-		State := 16#FF;
-	END_IF
+IF isTransit THEN
+	outputState := State; //release and go
+ELSE
+	outputState := eSpecialStates.FORBIDDEN;
 END_IF
 
 //Reset trigger step
@@ -218,10 +220,14 @@ END_VAR
     </Method>
     <LineIds Name="RunUnitGeneric">
       <LineId Id="232" Count="0" />
-      <LineId Id="234" Count="22" />
-      <LineId Id="258" Count="6" />
-      <LineId Id="266" Count="2" />
-      <LineId Id="271" Count="3" />
+      <LineId Id="234" Count="20" />
+      <LineId Id="326" Count="0" />
+      <LineId Id="328" Count="0" />
+      <LineId Id="255" Count="1" />
+      <LineId Id="258" Count="1" />
+      <LineId Id="329" Count="5" />
+      <LineId Id="260" Count="0" />
+      <LineId Id="272" Count="2" />
       <LineId Id="278" Count="1" />
       <LineId Id="9" Count="0" />
     </LineIds>

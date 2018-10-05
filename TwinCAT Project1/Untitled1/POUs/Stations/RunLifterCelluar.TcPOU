@@ -36,14 +36,14 @@ END_VAR
     <Implementation>
       <ST><![CDATA[SUPER^();
 
-CASE State OF
+CASE outputState OF
 	//-------------------------Initialize
 	eSpecialStates.INITIAL_BEGIN:
 		bSerialTransition:=Cylinder^.Execute(eCylinderCommands.COMMAND_A);//MC on would be taken by method call
 	eSpecialStates.INITIAL_STATE_1:
 		bSerialTransition :=  AxisVertical^.ExecuteParameter(ptCommandLifterRelease);
 	eSpecialStates.INITIAL_STATE_2:
-		IF AxisHorizon^.ExecuteParameter(ptCommandHorizonHit) THEN
+		IF AxisHorizon=0 OR (AxisHorizon<>0 AND_THEN AxisHorizon^.ExecuteParameter(ptCommandHorizonHit)) THEN
 			NextState := eSpecialStates.INITIAL_END;
 		END_IF
 	//-------------------------Hit

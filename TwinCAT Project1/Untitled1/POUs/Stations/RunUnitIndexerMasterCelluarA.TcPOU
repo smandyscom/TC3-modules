@@ -76,7 +76,7 @@ IF State >=3 AND State <=7 AND_THEN Upstream<>0 AND Upstream^.syncEngaged AND NO
 	
 END_IF
 
-CASE State OF
+CASE outputState OF
 	//-------------------------release lifters
 	16#10:
 	commandSetZero.command := eCommandTypes.SET_POSITION;

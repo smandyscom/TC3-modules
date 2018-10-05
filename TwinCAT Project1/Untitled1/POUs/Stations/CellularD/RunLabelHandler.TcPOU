@@ -38,7 +38,7 @@ END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[SUPER^();
 
-CASE State OF 
+CASE outputState OF 
 	//-------------------Initializing
 	eSpecialStates.INITIAL_BEGIN:
 		//all cylinder off

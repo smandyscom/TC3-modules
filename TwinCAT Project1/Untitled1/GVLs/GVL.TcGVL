@@ -11,8 +11,8 @@ VAR_GLOBAL
 	axisControls: ARRAY[1..5] OF RunAxis;
 	stations : ARRAY[1..8] OF POINTER TO RunUnitGeneric;
 	
-	cylinderControls : ARRAY[1..24] OF RunCylinder;
-	signalControls : ARRAY[1..16] OF RunSignal;
+	cylinderControls : ARRAY[1..16] OF RunCylinder;
+	signalControls : ARRAY[1..10] OF RunSignal;
 	
 	safeAck AT%Q* : BOOL;
 	safeRun AT%Q* : BOOL;

@@ -33,7 +33,7 @@ END_VAR]]></Declaration>
 //interfere auto cut axis	(high priority
 
 
-CASE State OF 
+CASE outputState OF 
 	eSpecialStates.INITIAL_BEGIN:
 		IF rotator=0 or (rotator<>0 AND_THEN rotator^.ExecuteParameter(ptRotatorMutual)) THEN
 			NextState := eSpecialStates.INITIAL_END;
