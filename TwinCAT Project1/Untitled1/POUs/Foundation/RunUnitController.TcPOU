@@ -7,7 +7,7 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-	currentMode : eOperationModes := eOperationModes.SEMI_AUTO; //default in semi-auto
+	currentMode : eOperationModes := eOperationModes.MANUAL; //default in semi-auto
 	
 	nCounter : INT;
 	bAllInitialized : BOOL := FALSE;
@@ -86,18 +86,15 @@ IF interfaceControl.requestInit THEN
 	requestInitialize := TRUE; // memorize
 END_IF	
 //mode switcher pre-check
+bPause := NOT (currentMode = eOperationModes.AUTO);
 IF requestMode<>currentMode THEN
 	CASE requestMode OF 
 		eOperationModes.MANUAL,eOperationModes.SEMI_AUTO:
 			//direct changes
-			IF currentMode = eOperationModes.AUTO THEN
-				THIS^.bPause := TRUE;//first time to pause
-			END_IF
 			currentMode := requestMode;
 		eOperationModes.AUTO:
 			//check : no error , manual channel work done
 			IF errorDevice=0 THEN
-				THIS^.bPause := FALSE;//release
 				currentMode := eOperationModes.AUTO;
 			ELSE
 				//refuce to change , maintain
@@ -198,8 +195,11 @@ END_VAR
       <LineId Id="447" Count="0" />
       <LineId Id="490" Count="2" />
       <LineId Id="325" Count="0" />
+      <LineId Id="795" Count="0" />
       <LineId Id="347" Count="0" />
-      <LineId Id="350" Count="15" />
+      <LineId Id="350" Count="2" />
+      <LineId Id="356" Count="3" />
+      <LineId Id="361" Count="4" />
       <LineId Id="348" Count="1" />
       <LineId Id="269" Count="1" />
       <LineId Id="274" Count="1" />

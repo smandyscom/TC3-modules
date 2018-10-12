@@ -104,7 +104,7 @@ CASE State OF
 		END_IF
 END_CASE
 
-SUPER^();]]></ST>
+Initialize:= SUPER^.Initialize();]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="RunAxisInspection">

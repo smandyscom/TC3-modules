@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <DUT Name="ioBundleLabelGripper" Id="{431dc885-5d16-47c6-9557-4542163359f1}">
+    <Declaration><![CDATA[TYPE ioBundleLabelGripper :
+STRUCT
+	vacuumGripper AT%Q* : BIT;
+	breakGripper AT%Q* : BIT;
+	
+	vacuumPressor AT%Q* : BIT;
+	breakPressor AT%Q* : BIT;
+	
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

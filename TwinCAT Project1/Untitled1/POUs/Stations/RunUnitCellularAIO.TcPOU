@@ -14,24 +14,37 @@ END_VAR
 VAR
 	//output bit to I/O motor
 	run AT%Q* : BOOL;
+	overheat at%I* : bool;
+	
 	runTimer : TON;
 	//
 	alarmTimer : ton;
+	
+
+END_VAR
+VAR PERSISTENT
 	//Checkpoints
 	commandTriggerRaise: TIME; //trigger point
 	commandReceivingTime : TIME; //if not all lifter done until then , slowdown conveyor motion
-
-END_VAR
-]]></Declaration>
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[//implement state 3
 isLastSlotOccupied := TRUE; //always occupied , force to transmit to downstream
 
 SUPER^(); //run indexer master
 
-IF bSerialTransition AND State = 1 THEN
+IF bSerialTransition AND State = 0 THEN
 	triggerRelease:=TRUE;
 	NextState := 16#10; //state override : release lifters
+END_IF
+IF bSerialTransition AND state=2 THEN
+	//moving
+	//timer setup and run
+		runTimer.IN := TRUE;
+		runTimer.PT := commandTriggerRaise;
+		run := TRUE;
+
+	NextState := 16#11; //re-direct
 END_IF
 
 CASE outputState OF
@@ -39,17 +52,11 @@ CASE outputState OF
 	16#10:
 	IF allRelease THEN
 		//reset
-		triggerRelease:=FALSE;
-		
-		//timer setup and run
-		runTimer.IN := TRUE;
-		runTimer.PT := commandTriggerRaise;
-		run := TRUE;
-				
-		NextState:=2; //merge back default sequence
+		triggerRelease:=FALSE;				
+		NextState := 2; //wait syncAckowledged 
 	END_IF
 	//------------------start running
-	2:
+	16#11:
 	IF runTimer.Q THEN	
 		triggerHit := TRUE;//until trigger raise reached , trigger all lifter to move
 		bSerialTransition:= TRUE; //serial transition
@@ -58,7 +65,7 @@ CASE outputState OF
 	ELSE
 		//on-going , not trigger lifter
 	END_IF
-	3:
+	16#12:
 	IF allHit THEN
 		triggerHit:=FALSE;
 		syncEngaged := FALSE ;// sending over
@@ -66,13 +73,13 @@ CASE outputState OF
 	ELSIF alarmTimer.Q THEN
 		//sending error , raising alarm
 	END_IF
-	4:
+	16#13:
 	IF allReach THEN	
 		bSerialTransition := TRUE; //since working signal raised by individual lifter?
 	ELSIF alarmTimer.Q THEN	
 		//receiving error		
 	END_IF
-	5:
+	16#14:
 	IF Upstream<>0 AND_THEN Upstream^.syncEngaged THEN
 		//After all reached , then pull upstream
 		Upstream^.syncAcknowledged := TRUE;//pull upstream when ready
@@ -85,13 +92,13 @@ CASE outputState OF
 	ELSE 
 		//waiting upstream
 	END_IF
-	6:
+	16#15:
 	// on extension , only one oppertunity
 	IF runTimer.Q THEN
 		runTimer.IN := FALSE;
 		run := FALSE; //conveyor stopped
 		
-		NextState := 16#20;//done
+		NextState := 0;//done
 	ELSE
 		//wait motion done	
 	END_IF
@@ -138,7 +145,18 @@ Initialize := SUPER^.Initialize();]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="RunUnitCellularAIO">
-      <LineId Id="228" Count="68" />
+      <LineId Id="329" Count="0" />
+      <LineId Id="229" Count="7" />
+      <LineId Id="335" Count="0" />
+      <LineId Id="338" Count="0" />
+      <LineId Id="344" Count="0" />
+      <LineId Id="342" Count="1" />
+      <LineId Id="340" Count="0" />
+      <LineId Id="339" Count="0" />
+      <LineId Id="336" Count="1" />
+      <LineId Id="237" Count="6" />
+      <LineId Id="330" Count="0" />
+      <LineId Id="251" Count="45" />
       <LineId Id="304" Count="0" />
       <LineId Id="297" Count="3" />
       <LineId Id="158" Count="0" />

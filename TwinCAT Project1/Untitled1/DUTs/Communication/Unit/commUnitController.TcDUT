@@ -3,7 +3,7 @@
   <DUT Name="commUnitController" Id="{3540f8c1-cc91-4ec1-8a4f-7596595f2c82}">
     <Declaration><![CDATA[TYPE commUnitController EXTENDS commUnit :
 STRUCT
-	control : DWORD; //32
+	control : DWORD := 16#8; //32
 	errorIndex : DWORD; //34
 	errorType : DWORD; //36
 	errorCode : LWORD; // 38

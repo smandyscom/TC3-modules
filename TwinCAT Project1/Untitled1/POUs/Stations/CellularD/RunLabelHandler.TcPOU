@@ -8,13 +8,14 @@ VAR_OUTPUT
 END_VAR
 VAR
 	// communicate with external device
-	bPrinted AT%I* : BOOL;
-	bTaken AT%Q* : BOOL;
+	bPrinted  : BOOL;
+	bTaken  : BOOL;
 	// Vaccuum
-	bVacuumGenerator AT%Q* : BOOL;
-	bVacuumBreaker AT%Q* :BOOL;
+	bVacuumGenerator  : BOOL;
+	bVacuumBreaker  :BOOL;
 	bVacuumSensor : POINTER TO RunSignal;
 	
+	temp : bool;
 	//
 	axis : POINTER TO RunAxis;
 	//
@@ -38,15 +39,17 @@ END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[SUPER^();
 
+temp := true;
+
 CASE outputState OF 
 	//-------------------Initializing
 	eSpecialStates.INITIAL_BEGIN:
 		//all cylinder off
-		transitionByte.0 := (NOT transitionByte.0) AND_THEN gripperVertical^.Execute(eCylinderCommands.COMMAND_A);
-		transitionByte.1 := (NOT transitionByte.1) AND_THEN gripperRotate^.Execute(eCylinderCommands.COMMAND_A);
-		transitionByte.2 := (NOT transitionByte.2) AND_THEN gripperPressorVertical^.Execute(eCylinderCommands.COMMAND_A);
-		transitionByte.3 := (NOT transitionByte.3) AND_THEN gripperPressorPress^.Execute(eCylinderCommands.COMMAND_A);
-		transitionByte.4 := (NOT transitionByte.4) AND_THEN shifter^.Execute(eCylinderCommands.COMMAND_A);
+		transitionByte.0 := gripperVertical^.Execute(eCylinderCommands.COMMAND_A);
+		transitionByte.1 := gripperRotate^.Execute(eCylinderCommands.COMMAND_A);
+		transitionByte.2 := gripperPressorVertical^.Execute(eCylinderCommands.COMMAND_A);
+		transitionByte.3 := gripperPressorPress^.Execute(eCylinderCommands.COMMAND_A);
+		transitionByte.4 := shifter^.Execute(eCylinderCommands.COMMAND_A);
 		bSerialTransition := (transitionByte = 16#1F);
 	eSpecialStates.INITIAL_STATE_1:
 		IF axis^.ExecuteParameter(ptCommandReady) THEN
@@ -198,6 +201,7 @@ ptCommandLabelPlace := ADR(axis^.ptpCommands[indexPlace]);
     </Method>
     <LineIds Name="RunLabelHandler">
       <LineId Id="9" Count="0" />
+      <LineId Id="190" Count="1" />
       <LineId Id="23" Count="0" />
       <LineId Id="22" Count="0" />
       <LineId Id="24" Count="0" />

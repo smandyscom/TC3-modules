@@ -22,8 +22,8 @@ VAR
 	fbReadCommandPosition : MC_ReadParameter;
 	fbReadStatus : MC_ReadStatus;
 	//Parameter writing
-	fbWriteLimitPositive : MC_WriteParameter;
-	fbWriteLimitNegtive : MC_WriteParameter;
+	fbWriteLimitPositive : MC_WriteParameterPersistent;
+	fbWriteLimitNegtive : MC_WriteParameterPersistent;
 	fbEnableLimitPositive : MC_WriteBoolParameter;
 	fbEnableLimitNegtive : MC_WriteBoolParameter;
 	

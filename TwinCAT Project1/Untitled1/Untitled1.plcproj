@@ -90,6 +90,18 @@
     <Compile Include="DUTs\Internal\ParametersPosition.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\ioBundleControl.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\ioBundleLabelGripper.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\ioBundlePrinterApplicator.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\ioBundleSafety.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\Material\MaterialBlock.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -98,7 +110,6 @@
     </Compile>
     <Compile Include="GVLs\GVL.TcGVL">
       <SubType>Code</SubType>
-      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="PlcTask.TcTTO">
       <SubType>Code</SubType>
@@ -191,7 +202,7 @@
     <Compile Include="POUs\Stations\RunLifterCelluar.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\Stations\RunUnitIndexerMasterCelluarA.TcPOU">
+    <Compile Include="POUs\Stations\RunUnitCelluarA.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\TEST_AXIS.TcPOU">

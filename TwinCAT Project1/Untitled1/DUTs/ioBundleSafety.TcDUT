@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <DUT Name="ioBundleSafety" Id="{4ac46e6d-043e-400e-912f-b4935a7e6f1e}">
+    <Declaration><![CDATA[TYPE ioBundleSafety :
+STRUCT
+	safeAck AT%Q* : BIT;
+	safeRun AT%Q* : BIT;
+	safeComErr AT%I* : BIT;
+	//direct status
+	door1 AT%I* : BIT;
+	door2 AT%I* : BIT;
+	door3 AT%I* : BIT;
+	door4 AT%I* : BIT;
+	
+	eStop1 AT%I* : BIT;
+	eStop2 AT%I* : BIT;
+	
+	lightScreen AT%I* : BIT;
+	//indirect status
+	airChoke AT%I* : BIT;
+	doorAll AT%I* : BIT;
+	eStop AT%I* : BIT;
+	servoSto AT%I* : BIT;
+	//bypass
+	airOff AT%Q* : BIT;
+	stoBypass AT%Q* : BIT;
+	doorUnlockAll AT%Q* : BIT;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

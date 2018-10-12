@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
-  <POU Name="RunUnitIndexerMasterCelluarA" Id="{8c290897-f573-4530-b2b8-1a75c3433cf9}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK RunUnitIndexerMasterCelluarA EXTENDS RunUnitIndexerMaster
+  <POU Name="RunUnitCelluarA" Id="{8c290897-f573-4530-b2b8-1a75c3433cf9}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunUnitCelluarA EXTENDS RunUnitIndexerMaster
 VAR_INPUT
 	allHit : BOOL;
 	allReach : BOOL;
@@ -218,7 +218,7 @@ NextState := eSpecialStates.INITIAL_END;
 Initialize := SUPER^.Initialize();]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="RunUnitIndexerMasterCelluarA">
+    <LineIds Name="RunUnitCelluarA">
       <LineId Id="1642" Count="0" />
       <LineId Id="1801" Count="0" />
       <LineId Id="1643" Count="2" />
@@ -232,7 +232,7 @@ Initialize := SUPER^.Initialize();]]></ST>
       <LineId Id="1737" Count="24" />
       <LineId Id="9" Count="0" />
     </LineIds>
-    <LineIds Name="RunUnitIndexerMasterCelluarA.FB_init">
+    <LineIds Name="RunUnitCelluarA.FB_init">
       <LineId Id="15" Count="5" />
       <LineId Id="14" Count="0" />
       <LineId Id="72" Count="0" />
@@ -247,7 +247,7 @@ Initialize := SUPER^.Initialize();]]></ST>
       <LineId Id="73" Count="2" />
       <LineId Id="32" Count="0" />
     </LineIds>
-    <LineIds Name="RunUnitIndexerMasterCelluarA.Initialize">
+    <LineIds Name="RunUnitCelluarA.Initialize">
       <LineId Id="6" Count="1" />
       <LineId Id="5" Count="0" />
     </LineIds>
