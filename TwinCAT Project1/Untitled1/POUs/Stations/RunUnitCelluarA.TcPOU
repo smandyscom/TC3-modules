@@ -122,39 +122,36 @@ CASE outputState OF
 			slowExecute:=TRUE;//able to slowdown to hit
 			syncEngaged := false ;// sending over
 			bSerialTransition:= TRUE; //serial transition
-		ELSE
-			//NextState := 16#E0;	//any lifter fails
+		ELSIF timeoutTimer.Q then
 			// reminder
 		END_IF
 	//Else : on going , not reached the check point
 	END_IF
 	6:
 	IF Upstream<>0 AND_THEN Upstream^.syncAcknowledged AND fastDone THEN
-		//IF fastDone THEN
-			//wait first command block done , otherwise would raise 0x4292 (buffer fulled)
-			finalGoalExecute:=TRUE;//need do extension
-			bSerialTransition:= TRUE; //serial transition
-		//END_IF
+		//wait first command block done , otherwise would raise 0x4292 (buffer fulled)
+		finalGoalExecute:=TRUE;//need do extension
+		bSerialTransition:= TRUE; //serial transition	
 	ELSIF allReach THEN
 		NextState := 16#20; //manually put carrier
-	//ELSE
-		//TODO , not allowed , have to pull upstream anyway
-		//NextState := 16#20;//not pulled upstream , done
 	END_IF
 	7:
 	// on extension , only one oppertunity
-	IF finalGoalDone THEN
-		NextState := 16#20;//done
-	//ELSE , wait motion done	
-	END_IF
+	bSerialTransition := finalGoalDone;
 	//------------------------end of running
-	16#20:
-	IF allReach THEN	
-		NextState :=1; //since working signal raised by individual lifter?
-	ELSE	
-		//NextState := 16#F0;//failed
-		// reminder		
+	8:
+	bSerialTransition := allReach;
+	IF NOT bSerialTransition AND timeoutTimer.Q THEN	
+		// reminder
 	END_IF
+	9:
+	IF Upstream <> 0 AND_THEN NOT Upstream^.syncEngaged THEN
+		Upstream^.syncAcknowledged := FALSE; // received carrier
+		NextState :=1; //since working signal raised by individual lifter?
+	ELSE
+		// upstream not synchroized			
+	END_IF
+	
 	//------------------------error states
 	16#E0:
 	//(lifter raise fails)recovery , call raise stopper again , if fails , raise alarm again
@@ -162,7 +159,8 @@ CASE outputState OF
 	16#F0:
 	//(all reach fails)recovery
 	
-END_CASE]]></ST>
+END_CASE
+]]></ST>
     </Implementation>
     <Method Name="FB_init" Id="{96d07f02-073e-4434-a75c-09e5135212ba}">
       <Declaration><![CDATA[METHOD FB_init : BOOL
@@ -227,10 +225,27 @@ Initialize := SUPER^.Initialize();]]></ST>
       <LineId Id="1762" Count="0" />
       <LineId Id="1765" Count="0" />
       <LineId Id="1763" Count="0" />
-      <LineId Id="1704" Count="32" />
+      <LineId Id="1704" Count="20" />
+      <LineId Id="1726" Count="5" />
+      <LineId Id="1733" Count="2" />
       <LineId Id="1798" Count="1" />
-      <LineId Id="1737" Count="24" />
+      <LineId Id="1740" Count="2" />
+      <LineId Id="1853" Count="0" />
+      <LineId Id="1747" Count="1" />
+      <LineId Id="1854" Count="0" />
+      <LineId Id="1749" Count="1" />
+      <LineId Id="1754" Count="0" />
+      <LineId Id="1841" Count="0" />
+      <LineId Id="1844" Count="0" />
+      <LineId Id="1846" Count="0" />
+      <LineId Id="1852" Count="0" />
+      <LineId Id="1848" Count="0" />
+      <LineId Id="1850" Count="0" />
+      <LineId Id="1847" Count="0" />
+      <LineId Id="1842" Count="0" />
+      <LineId Id="1755" Count="6" />
       <LineId Id="9" Count="0" />
+      <LineId Id="1863" Count="0" />
     </LineIds>
     <LineIds Name="RunUnitCelluarA.FB_init">
       <LineId Id="15" Count="5" />

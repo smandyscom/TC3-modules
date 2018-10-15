@@ -17,8 +17,6 @@ VAR
 	overheat at%I* : bool;
 	
 	runTimer : TON;
-	//
-	alarmTimer : ton;
 	
 
 END_VAR
@@ -70,14 +68,14 @@ CASE outputState OF
 		triggerHit:=FALSE;
 		syncEngaged := FALSE ;// sending over
 		bSerialTransition:= TRUE; //serial transition
-	ELSIF alarmTimer.Q THEN
+	ELSIF timeoutTimer.Q THEN
 		//sending error , raising alarm
 	END_IF
 	16#13:
 	IF allReach THEN	
 		bSerialTransition := TRUE; //since working signal raised by individual lifter?
-	ELSIF alarmTimer.Q THEN	
-		//receiving error		
+	ELSIF timeoutTimer.Q THEN	
+		//receiving error , should stop conveyor	
 	END_IF
 	16#14:
 	IF Upstream<>0 AND_THEN Upstream^.syncEngaged THEN
@@ -85,28 +83,36 @@ CASE outputState OF
 		Upstream^.syncAcknowledged := TRUE;//pull upstream when ready
 		//Data transmit
 		SlotBase^.wordOut.0 := TRUE; //TODO , follow that status
-		bSerialTransition:= TRUE; //serial transition
-		//
-		runTimer.PT := commandReceivingTime;
-		runTimer.IN := TRUE;
-	ELSE 
-		//waiting upstream
+		bSerialTransition:= TRUE; //serial transition	
+	ELSIF timeoutTimer.Q THEN 
+		//waiting upstream , reminder
 	END_IF
 	16#15:
+	//wait until upstream action done
+	bSerialTransition := Upstream<>0 AND_THEN NOT Upstream^.syncEngaged;
+	IF bSerialTransition THEN
+		//start count-down
+		runTimer.PT := commandReceivingTime;
+		runTimer.IN := TRUE;
+	ELSIF NOT bSerialTransition AND timeoutTimer.Q THEN
+		//reminder	
+	END_IF
+	16#16:
 	// on extension , only one oppertunity
 	IF runTimer.Q THEN
 		runTimer.IN := FALSE;
 		run := FALSE; //conveyor stopped
 		
+		Upstream^.syncAcknowledged := FALSE; //inform done
+		
 		NextState := 0;//done
 	ELSE
 		//wait motion done	
-	END_IF
+	END_IF	
 	//------------------------end of running
 END_CASE
 //run timer
-runTimer(IN:= , PT:= , Q=> , ET=> );
-alarmTimer(IN:= , PT:= , Q=> , ET=> );]]></ST>
+runTimer(IN:= , PT:= , Q=> , ET=> );]]></ST>
     </Implementation>
     <Method Name="FB_init" Id="{94431706-316d-43bf-8737-4bc97fe6d821}">
       <Declaration><![CDATA[METHOD FB_init : BOOL
@@ -156,11 +162,24 @@ Initialize := SUPER^.Initialize();]]></ST>
       <LineId Id="336" Count="1" />
       <LineId Id="237" Count="6" />
       <LineId Id="330" Count="0" />
-      <LineId Id="251" Count="45" />
+      <LineId Id="251" Count="31" />
+      <LineId Id="286" Count="2" />
+      <LineId Id="347" Count="0" />
+      <LineId Id="353" Count="0" />
+      <LineId Id="352" Count="0" />
+      <LineId Id="349" Count="1" />
+      <LineId Id="358" Count="0" />
+      <LineId Id="356" Count="0" />
+      <LineId Id="354" Count="1" />
+      <LineId Id="351" Count="0" />
+      <LineId Id="289" Count="4" />
+      <LineId Id="360" Count="0" />
+      <LineId Id="294" Count="0" />
+      <LineId Id="359" Count="0" />
+      <LineId Id="295" Count="1" />
       <LineId Id="304" Count="0" />
       <LineId Id="297" Count="3" />
       <LineId Id="158" Count="0" />
-      <LineId Id="303" Count="0" />
     </LineIds>
     <LineIds Name="RunUnitCellularAIO.FB_init">
       <LineId Id="16" Count="5" />
