@@ -21,8 +21,8 @@ SUPER^();
 CASE outputState OF 
 	//-------------------------Initialize
 	eSpecialStates.INITIAL_BEGIN:
-		transitionByte.0 := (NOT transitionByte.0) AND_THEN holder^.Execute(eCylinderCommands.COMMAND_A);
-		transitionByte.1 := (NOT transitionByte.1) AND_THEN clamper^.Execute(eCylinderCommands.COMMAND_A);
+		transitionByte.0 := holder^.Execute(eCylinderCommands.COMMAND_A);
+		transitionByte.1 := clamper^.Execute(eCylinderCommands.COMMAND_A);
 		bSerialTransition := (transitionByte = 16#3);
 	eSpecialStates.INITIAL_STATE_1:
 		bSerialTransition :=  axisVertical^.Execute(eCylinderCommands.COMMAND_A);

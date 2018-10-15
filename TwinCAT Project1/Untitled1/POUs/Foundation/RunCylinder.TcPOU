@@ -132,8 +132,8 @@ END_VAR
 B_SENSOR_USED_COUNT := TO_INT(input.cylinder.sensorBUsedCount);
 
 TMR_WATCH_DOG.PT := TO_TIME(input.cylinder.timerSetValue);
-TMR_DELAY_TO_A.PT := TO_TIME(input.cylinder.timerDelayToA);
-TMR_DELAY_TO_B.PT := TO_TIME(input.cylinder.timerDelayToB);
+TMR_DELAY_TO_A.PT := TO_TIME(input.cylinder.timerSetValue);
+TMR_DELAY_TO_B.PT := TO_TIME(input.cylinder.timerSetValue);
 ]]></ST>
       </Implementation>
     </Method>

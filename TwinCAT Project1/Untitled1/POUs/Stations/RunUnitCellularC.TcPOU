@@ -83,7 +83,7 @@ CASE outputState OF
 	16#2007:
 		IF pusherCylinder^.Execute(eCylinderCommands.COMMAND_A) AND NOT syncAcknowledged THEN
 			//make sure synchronized
-			NextState := 0; //rewind
+			NextState := 16#1000; //rewind
 		END_IF
 	//---------------------receiving procedure
 	16#1000:
@@ -117,7 +117,17 @@ CASE outputState OF
 		END_IF
 	16#1004:
 		IF holderCylinder^.Execute(eCylinderCommands.COMMAND_B) THEN
-			NextState := 0;
+			NextState := 16#3000;
+		END_IF
+	//------------------Work
+	16#3000:
+		bSerialTransition := liner^.ExecuteParameter(ptLinerWork);
+		IF bSerialTransition THEN
+			slaveWorkingSignal[1] := slaveLinkageStatus[1]; //start working
+		END_IF
+	16#3001:
+		IF NOT slaveWorkingSignal[1] THEN
+			NextState := 16#2000;
 		END_IF
 END_CASE
 ]]></ST>
@@ -237,6 +247,10 @@ END_IF
       <LineId Id="131" Count="0" />
       <LineId Id="199" Count="0" />
       <LineId Id="271" Count="2" />
+      <LineId Id="282" Count="2" />
+      <LineId Id="287" Count="2" />
+      <LineId Id="285" Count="0" />
+      <LineId Id="291" Count="2" />
       <LineId Id="30" Count="0" />
       <LineId Id="27" Count="0" />
     </LineIds>

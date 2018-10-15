@@ -56,7 +56,9 @@ VAR
 									argGripperRotate := ADR(gvl.cylinderControls[cyY02LabelGripperRotate]),
 									argGripperPressorVertical := ADR(gvl.cylinderControls[cyY03LabelPressorVertical]),
 									argGripperPressorPress := ADR(gvl.cylinderControls[cyY04LabelPressorPress]),
-									argShifter := ADR(gvl.cylinderControls[cyY05LabelShifter]));
+									argShifter := ADR(gvl.cylinderControls[cyY05LabelShifter]),
+									argIoPrinter := ADR(gvl.ioPrinter),
+									argIoVacuum := adr(gvl.ioLabelHandler));
 	
 									
 	Output : RunGradeOutput(argParent:= ADR(Controller), 

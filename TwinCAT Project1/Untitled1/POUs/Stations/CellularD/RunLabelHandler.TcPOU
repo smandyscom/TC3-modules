@@ -8,14 +8,10 @@ VAR_OUTPUT
 END_VAR
 VAR
 	// communicate with external device
-	bPrinted  : BOOL;
-	bTaken  : BOOL;
+	ioPrinter : POINTER TO  ioBundlePrinterApplicator;
 	// Vaccuum
-	bVacuumGenerator  : BOOL;
-	bVacuumBreaker  :BOOL;
+	ioVacuum : POINTER TO ioBundleLabelGripper;
 	bVacuumSensor : POINTER TO RunSignal;
-	
-	temp : bool;
 	//
 	axis : POINTER TO RunAxis;
 	//
@@ -30,7 +26,8 @@ VAR
 	ptCommandLabelPlace : POINTER TO ParameterSet;
 	//
 	pressCounter : INT := 0;
-	
+	//
+	bFirstCycle : bool := false;
 END_VAR
 VAR PERSISTENT
 	bVacuumTimeout : TON;
@@ -39,7 +36,10 @@ END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[SUPER^();
 
-temp := true;
+IF NOT bFirstCycle AND outputState=0 THEN
+	NextState := 16#400;
+	bFirstCycle := TRUE;
+END_IF
 
 CASE outputState OF 
 	//-------------------Initializing
@@ -56,91 +56,79 @@ CASE outputState OF
 			NextState := eSpecialStates.INITIAL_END;
 		END_IF
 	//-------------------Working
-	eSpecialStates.SLAVE_ENTER_PROCEDURE:
+	16#400:
 		//waiting printer
-		bSerialTransition := bPrinted;
-	16#201:
+		bSerialTransition := NOT ioPrinter^.prtEnd;
+	16#401:
 		bSerialTransition := axis^.ExecuteParameter(ptCommandLabelTake);
-	16#202:
+	16#402:
 		bSerialTransition := gripperVertical^.Execute(eCylinderCommands.COMMAND_B);	//down
 		IF bSerialTransition THEN
 			//generate vacuum
-			bVacuumGenerator := TRUE; //on
-			bVacuumBreaker := FALSE;
+			ioVacuum^.vacuumGripper := TRUE; //on
+			ioVacuum^.breakGripper := FALSE;
 			//
 			bVacuumTimeout.IN :=TRUE;
 		END_IF
-	16#203:
+	16#403:
 		bSerialTransition := bVacuumSensor^.debouncedOn;
 		IF bSerialTransition THEN
-			bTaken := TRUE;
-			//
 			bVacuumTimeout.IN :=FALSE; //reset
 		ELSIF bVacuumTimeout.Q THEN
 			//TODO , timeout alarm
 		END_IF
-	16#204:
+	16#404:
 		bSerialTransition := gripperVertical^.Execute(eCylinderCommands.COMMAND_A); //up
-	16#205:
+	16#405:
 		IF axis^.ExecuteParameter(ptCommandLabelPlace) THEN
 			//up
-			NextState := 16#110;
+			NextState := 0; //wait trigger
 		END_IF
 	//-----------------Tag
-	16#210:
-		IF workingSignal^ THEN
-			//cable had been holded
-			bSerialTransition := gripperRotate^.Execute(eCylinderCommands.COMMAND_B); //rotate
-		ELSE
-			//wait signal	
-		END_IF	
-	16#211:
+	eSpecialStates.SLAVE_ENTER_PROCEDURE:
 		bSerialTransition := gripperVertical^.Execute(eCylinderCommands.COMMAND_B); //down
 		IF bSerialTransition THEN
 			//break vacuum
-			bVacuumGenerator := FALSE; //off
-			bVacuumBreaker := TRUE; //on
+			ioVacuum^.vacuumGripper := FALSE; //off
+			ioVacuum^.breakGripper := TRUE;
 		END_IF
-	16#212:
-		transitionByte.0 := (NOT transitionByte.0) AND_THEN gripperVertical^.Execute(eCylinderCommands.COMMAND_A); //up
-		transitionByte.1 := (NOT transitionByte.1) AND_THEN gripperRotate^.Execute(eCylinderCommands.COMMAND_A); //back
-		IF 	transitionByte = 16#3 THEN
-			NextState := 16#120;
-		END_IF
+	16#201:
+		transitionByte.0 := gripperVertical^.Execute(eCylinderCommands.COMMAND_A); //up
+		transitionByte.1 := gripperRotate^.Execute(eCylinderCommands.COMMAND_A); //back
+		bSerialTransition := (transitionByte = 16#3);
 	//----------------Press
-	16#220:
+	16#202:
 		bSerialTransition := shifter^.Execute(eCylinderCommands.COMMAND_B); //tool change
-	16#221:
+	16#203:
 		bSerialTransition := gripperPressorVertical^.Execute(eCylinderCommands.COMMAND_B); //down
-	16#222:
+	16#204:
 		bSerialTransition := gripperPressorPress^.Execute(eCylinderCommands.COMMAND_B);
-	16#223:
+	16#205:
 		IF gripperPressorPress^.Execute(eCylinderCommands.COMMAND_A) THEN
 			pressCounter := pressCounter+1;
 			
 			IF pressCounter >= pressGoal THEN
 				//press back-forth
-				NextState := 16#130;
+				NextState := 16#230;
 			ELSE
-				NextState := 16#122;
+				NextState := 16#205;
 			END_IF
 		END_IF
 	//------------Return
 	16#230:
 		bSerialTransition := gripperPressorVertical^.Execute(eCylinderCommands.COMMAND_A); //up
 	16#231:
-		transitionByte.0 := (NOT transitionByte.0) AND_THEN shifter^.Execute(eCylinderCommands.COMMAND_A); //up
-		transitionByte.1 := (NOT transitionByte.1) AND_THEN axis^.ExecuteParameter(ptCommandLabelTake); //ready
-		IF transitionByte = 16#3 THEN
+		bSerialTransition := shifter^.Execute(eCylinderCommands.COMMAND_A); //up
+	16#232:
+		//ready
+		IF axis^.ExecuteParameter(ptCommandLabelTake) THEN
 			pressCounter:=0;
-			NextState := eSpecialStates.SLAVE_WORK_DONE;
+			workingSignal^ := FALSE; //off
+			NextState := 16#400;
 		END_IF
 END_CASE
 bVacuumTimeout(IN:= , PT:= , Q=> , ET=> );
-//handshake reset
-IF bTaken AND NOT bPrinted THEN
-	bTaken := FALSE;
-END_IF]]></ST>
+]]></ST>
     </Implementation>
     <Method Name="FB_init" Id="{8e22ea07-e6ac-4cce-a3dd-c0421a83bdd3}">
       <Declaration><![CDATA[METHOD FB_init : BOOL
@@ -164,6 +152,9 @@ VAR_INPUT
 	argGripperPressorVertical : POINTER TO RunCylinder;
 	argGripperPressorPress : POINTER TO RunCylinder;
 	argShifter : POINTER TO RunCylinder;
+	//
+	argIoPrinter : POINTER TO ioBundlePrinterApplicator;
+	argIoVacuum : POINTER TO ioBundleLabelGripper;
 END_VAR
 VAR CONSTANT
 	indexReady : INT := 1;
@@ -196,12 +187,17 @@ ptCommandReady := ADR(axis^.ptpCommands[indexReady]);
 ptCommandLabelTake := ADR(axis^.ptpCommands[indexTake]);
 ptCommandLabelPlace := ADR(axis^.ptpCommands[indexPlace]);
 
-]]></ST>
+bVacuumSensor := argVacuumSensor;
+
+ioPrinter := argIoPrinter;
+ioVacuum := argIoVacuum;]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="RunLabelHandler">
       <LineId Id="9" Count="0" />
-      <LineId Id="190" Count="1" />
+      <LineId Id="232" Count="2" />
+      <LineId Id="238" Count="0" />
+      <LineId Id="235" Count="0" />
       <LineId Id="23" Count="0" />
       <LineId Id="22" Count="0" />
       <LineId Id="24" Count="0" />
@@ -220,8 +216,7 @@ ptCommandLabelPlace := ADR(axis^.ptpCommands[indexPlace]);
       <LineId Id="59" Count="0" />
       <LineId Id="55" Count="1" />
       <LineId Id="136" Count="0" />
-      <LineId Id="143" Count="0" />
-      <LineId Id="154" Count="1" />
+      <LineId Id="155" Count="0" />
       <LineId Id="137" Count="0" />
       <LineId Id="142" Count="0" />
       <LineId Id="138" Count="0" />
@@ -232,19 +227,14 @@ ptCommandLabelPlace := ADR(axis^.ptpCommands[indexPlace]);
       <LineId Id="68" Count="0" />
       <LineId Id="67" Count="0" />
       <LineId Id="70" Count="0" />
-      <LineId Id="63" Count="0" />
-      <LineId Id="74" Count="0" />
-      <LineId Id="77" Count="0" />
-      <LineId Id="80" Count="0" />
-      <LineId Id="78" Count="1" />
-      <LineId Id="76" Count="0" />
       <LineId Id="81" Count="1" />
       <LineId Id="85" Count="0" />
-      <LineId Id="90" Count="1" />
-      <LineId Id="86" Count="1" />
+      <LineId Id="90" Count="0" />
+      <LineId Id="227" Count="1" />
+      <LineId Id="87" Count="0" />
       <LineId Id="83" Count="1" />
       <LineId Id="92" Count="0" />
-      <LineId Id="99" Count="2" />
+      <LineId Id="237" Count="0" />
       <LineId Id="94" Count="2" />
       <LineId Id="102" Count="1" />
       <LineId Id="105" Count="2" />
@@ -258,16 +248,14 @@ ptCommandLabelPlace := ADR(axis^.ptpCommands[indexPlace]);
       <LineId Id="114" Count="0" />
       <LineId Id="123" Count="0" />
       <LineId Id="132" Count="1" />
-      <LineId Id="125" Count="1" />
-      <LineId Id="131" Count="0" />
-      <LineId Id="127" Count="0" />
+      <LineId Id="239" Count="1" />
+      <LineId Id="125" Count="2" />
       <LineId Id="144" Count="0" />
+      <LineId Id="236" Count="0" />
       <LineId Id="134" Count="1" />
       <LineId Id="25" Count="0" />
       <LineId Id="149" Count="0" />
-      <LineId Id="146" Count="0" />
-      <LineId Id="145" Count="0" />
-      <LineId Id="147" Count="1" />
+      <LineId Id="148" Count="0" />
     </LineIds>
     <LineIds Name="RunLabelHandler.FB_init">
       <LineId Id="25" Count="8" />
@@ -279,8 +267,10 @@ ptCommandLabelPlace := ADR(axis^.ptpCommands[indexPlace]);
       <LineId Id="50" Count="0" />
       <LineId Id="45" Count="0" />
       <LineId Id="52" Count="1" />
+      <LineId Id="85" Count="1" />
       <LineId Id="51" Count="0" />
       <LineId Id="44" Count="0" />
+      <LineId Id="84" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

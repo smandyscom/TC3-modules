@@ -16,10 +16,10 @@ END_VAR
 CASE outputState OF
 	//---------------Initialize
 	eSpecialStates.INITIAL_BEGIN:
-		transitionByte.0 := (NOT transitionByte.0) AND_THEN holderFixedEnd^.Execute(eCylinderCommands.COMMAND_A);
-		transitionByte.1 := (NOT transitionByte.1) AND_THEN holderMovingEnd^.Execute(eCylinderCommands.COMMAND_A);
-		transitionByte.2 := (NOT transitionByte.2) AND_THEN shifterShort^.Execute(eCylinderCommands.COMMAND_A);
-		transitionByte.3 := (NOT transitionByte.3) AND_THEN shifterLong^.Execute(eCylinderCommands.COMMAND_A);
+		transitionByte.0 :=  holderFixedEnd^.Execute(eCylinderCommands.COMMAND_A);
+		transitionByte.1 :=  holderMovingEnd^.Execute(eCylinderCommands.COMMAND_A);
+		transitionByte.2 :=  shifterShort^.Execute(eCylinderCommands.COMMAND_A);
+		transitionByte.3 :=  shifterLong^.Execute(eCylinderCommands.COMMAND_A);
 		IF transitionByte = 16#F THEN
 			NextState := eSpecialStates.INITIAL_END;
 		END_IF
@@ -28,14 +28,15 @@ CASE outputState OF
 		bSerialTransition := shifterLong^.Execute(eCylinderCommands.COMMAND_B);
 	16#201:
 		//hold
-		transitionByte.0 := (NOT transitionByte.0) AND_THEN holderFixedEnd^.Execute(eCylinderCommands.COMMAND_B);
-		transitionByte.1 := (NOT transitionByte.1) AND_THEN holderMovingEnd^.Execute(eCylinderCommands.COMMAND_B);
+		transitionByte.0 :=  holderFixedEnd^.Execute(eCylinderCommands.COMMAND_B);
+		transitionByte.1 :=  holderMovingEnd^.Execute(eCylinderCommands.COMMAND_B);
 		bSerialTransition := (transitionByte = 16#3);
+		//TODO , inform transporter moving work2
 	16#202:
 		//strech
-		bSerialTransition := shifterShort^.Execute(eCylinderCommands.COMMAND_B);
-		IF bSerialTransition THEN
+		IF shifterShort^.Execute(eCylinderCommands.COMMAND_B) THEN
 			slaveWorkingSignal[1] := TRUE; //inform to labeler handler to work
+			NextState := 16#210;
 		END_IF
 	//-------------Releasing
 	16#210:
@@ -43,13 +44,13 @@ CASE outputState OF
 		bSerialTransition := NOT slaveWorkingSignal[1];
 	16#211:
 		//release
-		transitionByte.0 := (NOT transitionByte.0) AND_THEN holderFixedEnd^.Execute(eCylinderCommands.COMMAND_A);
-		transitionByte.1 := (NOT transitionByte.1) AND_THEN holderMovingEnd^.Execute(eCylinderCommands.COMMAND_A);
+		transitionByte.0 := holderFixedEnd^.Execute(eCylinderCommands.COMMAND_A);
+		transitionByte.1 := holderMovingEnd^.Execute(eCylinderCommands.COMMAND_A);
 		bSerialTransition := (transitionByte = 16#3);
 	16#212:
 		//release
-		transitionByte.0 := (NOT transitionByte.0) AND_THEN shifterShort^.Execute(eCylinderCommands.COMMAND_A);
-		transitionByte.1 := (NOT transitionByte.1) AND_THEN shifterLong^.Execute(eCylinderCommands.COMMAND_A);
+		transitionByte.0 := shifterShort^.Execute(eCylinderCommands.COMMAND_A);
+		transitionByte.1 := shifterLong^.Execute(eCylinderCommands.COMMAND_A);
 		IF transitionByte = 16#3 THEN
 			NextState := eSpecialStates.SLAVE_WORK_DONE;
 		END_IF
@@ -108,9 +109,12 @@ shifterLong := argShifterLong;]]></ST>
       <LineId Id="55" Count="0" />
       <LineId Id="49" Count="1" />
       <LineId Id="54" Count="0" />
+      <LineId Id="93" Count="0" />
       <LineId Id="47" Count="0" />
-      <LineId Id="56" Count="1" />
-      <LineId Id="64" Count="2" />
+      <LineId Id="56" Count="0" />
+      <LineId Id="64" Count="1" />
+      <LineId Id="92" Count="0" />
+      <LineId Id="66" Count="0" />
       <LineId Id="71" Count="0" />
       <LineId Id="58" Count="1" />
       <LineId Id="70" Count="0" />
