@@ -35,7 +35,8 @@ VAR
 												argSlotBase:= ADR(GVL.materialSlots[materialConveyor]), 
 												argSlotLast:= ADR(GVL.materialSlots[materialConveyor]),
 												argUpstream:=ADR(LinearTransporter),
-												argAxis := 0);
+												argAxis := 0,
+												argIo := ADR(gvl.ioConveyor));
 												
 	CableHolder : RunCableHolder(argParent:= ADR(Controller), 
 								argSlotBase:= ADR(GVL.materialSlots[materialTransporter]), 
@@ -44,7 +45,8 @@ VAR
 								argHolderFixedEnd := ADR(gvl.cylinderControls[cyY06CableHolderFixedEnd]),
 								argHolderMovingEnd := ADR(gvl.cylinderControls[cyY07CableHolderMovingEnd]),
 								argShifterShort := ADR(gvl.cylinderControls[cyY08CableHolderShiftShort]),
-								argShifterLong := ADR(gvl.cylinderControls[cyY09CableHolderShiftLong]));
+								argShifterLong := ADR(gvl.cylinderControls[cyY09CableHolderShiftLong]),
+								argAxis := ADR(GVL.axisControls[axisTransporter]));
 								
 	LabelHandler : RunLabelHandler(argParent :=  ADR(Controller), 
 									argSlotBase := ADR(GVL.materialSlots[materialTransporter]), 

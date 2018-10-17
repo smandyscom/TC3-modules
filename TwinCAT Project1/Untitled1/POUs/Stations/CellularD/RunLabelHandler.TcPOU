@@ -57,11 +57,19 @@ CASE outputState OF
 		END_IF
 	//-------------------Working
 	16#400:
-		//waiting printer
-		bSerialTransition := NOT ioPrinter^.prtEnd;
+		bSerialTransition := ioPrinter^.prtData;
+		IF bSerialTransition THEN
+			ioPrinter^.prtStart := TRUE;
+		END_IF
 	16#401:
-		bSerialTransition := axis^.ExecuteParameter(ptCommandLabelTake);
+		//waiting printer
+		bSerialTransition := NOT ioPrinter^.prtEnd AND NOT ioPrinter^.prtData;
+		IF bSerialTransition THEN
+			ioPrinter^.prtStart := false;
+		END_IF
 	16#402:
+		bSerialTransition := axis^.ExecuteParameter(ptCommandLabelTake);
+	16#403:
 		bSerialTransition := gripperVertical^.Execute(eCylinderCommands.COMMAND_B);	//down
 		IF bSerialTransition THEN
 			//generate vacuum
@@ -70,16 +78,16 @@ CASE outputState OF
 			//
 			bVacuumTimeout.IN :=TRUE;
 		END_IF
-	16#403:
+	16#404:
 		bSerialTransition := bVacuumSensor^.debouncedOn;
 		IF bSerialTransition THEN
 			bVacuumTimeout.IN :=FALSE; //reset
 		ELSIF bVacuumTimeout.Q THEN
 			//TODO , timeout alarm
 		END_IF
-	16#404:
-		bSerialTransition := gripperVertical^.Execute(eCylinderCommands.COMMAND_A); //up
 	16#405:
+		bSerialTransition := gripperVertical^.Execute(eCylinderCommands.COMMAND_A); //up
+	16#406:
 		IF axis^.ExecuteParameter(ptCommandLabelPlace) THEN
 			//up
 			NextState := 0; //wait trigger
@@ -119,11 +127,13 @@ CASE outputState OF
 		bSerialTransition := gripperPressorVertical^.Execute(eCylinderCommands.COMMAND_A); //up
 	16#231:
 		bSerialTransition := shifter^.Execute(eCylinderCommands.COMMAND_A); //up
+		IF bSerialTransition THEN
+			workingSignal^ := FALSE; //off
+		END_IF
 	16#232:
 		//ready
 		IF axis^.ExecuteParameter(ptCommandLabelTake) THEN
 			pressCounter:=0;
-			workingSignal^ := FALSE; //off
 			NextState := 16#400;
 		END_IF
 END_CASE
@@ -202,9 +212,15 @@ ioVacuum := argIoVacuum;]]></ST>
       <LineId Id="22" Count="0" />
       <LineId Id="24" Count="0" />
       <LineId Id="28" Count="11" />
-      <LineId Id="26" Count="1" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="241" Count="1" />
+      <LineId Id="244" Count="0" />
+      <LineId Id="247" Count="0" />
+      <LineId Id="246" Count="0" />
+      <LineId Id="27" Count="0" />
       <LineId Id="40" Count="0" />
       <LineId Id="47" Count="0" />
+      <LineId Id="248" Count="2" />
       <LineId Id="41" Count="1" />
       <LineId Id="53" Count="1" />
       <LineId Id="57" Count="0" />
@@ -249,9 +265,9 @@ ioVacuum := argIoVacuum;]]></ST>
       <LineId Id="123" Count="0" />
       <LineId Id="132" Count="1" />
       <LineId Id="239" Count="1" />
+      <LineId Id="251" Count="2" />
       <LineId Id="125" Count="2" />
       <LineId Id="144" Count="0" />
-      <LineId Id="236" Count="0" />
       <LineId Id="134" Count="1" />
       <LineId Id="25" Count="0" />
       <LineId Id="149" Count="0" />

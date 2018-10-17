@@ -13,8 +13,9 @@ VAR_OUTPUT
 END_VAR
 VAR
 	//output bit to I/O motor
-	run AT%Q* : BOOL;
-	overheat at%I* : bool;
+	//run AT%Q* : BOOL;
+	//overheat at%I* : bool;
+	ioConveyor : pointer to ioBundleConveyor;
 	
 	runTimer : TON;
 	
@@ -40,7 +41,7 @@ IF bSerialTransition AND state=2 THEN
 	//timer setup and run
 		runTimer.IN := TRUE;
 		runTimer.PT := commandTriggerRaise;
-		run := TRUE;
+		ioConveyor^.run := TRUE;
 
 	NextState := 16#11; //re-direct
 END_IF
@@ -101,7 +102,7 @@ CASE outputState OF
 	// on extension , only one oppertunity
 	IF runTimer.Q THEN
 		runTimer.IN := FALSE;
-		run := FALSE; //conveyor stopped
+		ioConveyor^.run := FALSE; //conveyor stopped
 		
 		Upstream^.syncAcknowledged := FALSE; //inform done
 		
@@ -127,6 +128,7 @@ VAR_INPUT
 	argUpstream : POINTER TO RunUnitTransporterBase;
 	argAxis : POINTER TO RunAxis;
 
+	argIo : pointer to ioBundleConveyor;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -136,7 +138,9 @@ SlotBase := argSlotBase;
 SlotLast := argSlotLast;
 
 Axis := 0; //no servo axis
-Upstream := argUpstream;]]></ST>
+Upstream := argUpstream;
+
+ioConveyor := argIo;]]></ST>
       </Implementation>
     </Method>
     <Method Name="Initialize" Id="{a1a56396-50b5-4a67-b24b-77ca39f7b67a}">
@@ -184,6 +188,8 @@ Initialize := SUPER^.Initialize();]]></ST>
     <LineIds Name="RunUnitCellularAIO.FB_init">
       <LineId Id="16" Count="5" />
       <LineId Id="15" Count="0" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="36" Count="0" />
     </LineIds>
     <LineIds Name="RunUnitCellularAIO.Initialize">
       <LineId Id="6" Count="1" />

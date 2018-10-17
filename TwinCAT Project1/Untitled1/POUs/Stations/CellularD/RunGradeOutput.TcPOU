@@ -44,7 +44,7 @@ CASE outputState OF
 	16#205:
 		IF axisMoving^.ExecuteParameter(ptCommandOK) THEN
 			//TODO , according to grade to move
-			NextState := 16#110;
+			NextState := 16#210;
 		END_IF
 	//-------------------Drop
 	16#210: 

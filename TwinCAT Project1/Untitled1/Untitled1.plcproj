@@ -93,6 +93,9 @@
     <Compile Include="DUTs\ioBundleControl.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\ioBundleConveyor.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\ioBundleLabelGripper.TcDUT">
       <SubType>Code</SubType>
     </Compile>

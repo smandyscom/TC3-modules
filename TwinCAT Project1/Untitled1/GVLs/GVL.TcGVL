@@ -4,6 +4,7 @@
     <Declaration><![CDATA[{attribute 'qualified_only'}
 VAR_GLOBAL
 	//
+	ioConveyor : ioBundleConveyor;
 	ioControl : ioBundleControl;
 	ioSafety : ioBundleSafety;
 	ioPrinter : ioBundlePrinterApplicator;
