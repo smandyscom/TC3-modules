@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <DUT Name="ioBundleConveyor" Id="{95094da7-bad8-406b-acbb-3ef1757e47da}">
+    <Declaration><![CDATA[TYPE ioBundleConveyor :
+STRUCT
+	overheat AT%I* : BIT;
+	run AT%Q* : BIT;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
