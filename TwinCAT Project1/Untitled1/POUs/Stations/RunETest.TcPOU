@@ -4,22 +4,62 @@
     <Declaration><![CDATA[FUNCTION_BLOCK RunETest EXTENDS RunAxisInspection
 VAR
 	//Cylinders
-	connectorHolder : RunCylinder;
-	cableHolder : RunCylinder;
-	plugin : RunCylinder;
+	connectorHolder : POINTER TO RunCylinder;
+	cableHolder : POINTER TO RunCylinder;
+	plugin : POINTER TO RunCylinder;
 	//Sensors
-	tongueExistedA : RunSignal;
-	tongueExistedB : RunSignal;
-	tongueGlueA : RunSignal;
-	tongueGlueB : RunSignal;
+	tongueExistedA : POINTER TO RunSignal;
+	tongueExistedB : POINTER TO RunSignal;
+	tongueGlueA : POINTER TO RunSignal;
+	tongueGlueB : POINTER TO RunSignal;
 	//from tester
-	cableAttached AT%I* : BOOL;
-	cableGrade AT%I* : BOOL;
+	ioBundle : POINTER TO ioBundleET;
+END_VAR
+VAR CONSTANT
+	indexStandby : INT := 1;
+	indexPosition1 : INT := 2; //2..5
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Method Name="FB_init" Id="{efefce5e-b774-42d4-a90d-6714e5f02940}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	
+	argParent : POINTER TO RunUnitGeneric;
+	argSlotBase : POINTER TO MaterialBlock;
+	argSlotLast : POINTER TO MaterialBlock;
+	
+	argWorkingSignal : POINTER TO BOOL;
+	
+	argAxis1 : POINTER TO RunAxis;
+	argAxis2 : POINTER TO RunAxis;
+	
+	argIoBundle : pointer to ioBundleET;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//initialize 
+Parent := argParent;
+SlotBase := argSlotBase;
+SlotLast := argSlotLast;
+//
+IF bInitRetains THEN
+	NextState := eSpecialStates.INITIAL_BEGIN;
+END_IF
+
+workingSignal := argWorkingSignal; //link
+
+axis1 := argAxis1;
+axis2 := argAxis2;
+
+//
+ioBundle := argIoBundle;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="Initialize" Id="{b1cb528c-756c-4543-b261-8a9a85e25c02}">
       <Declaration><![CDATA[METHOD Initialize : BOOL
 VAR_INPUT
@@ -31,6 +71,13 @@ END_VAR
     </Method>
     <LineIds Name="RunETest">
       <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="RunETest.FB_init">
+      <LineId Id="19" Count="11" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="32" Count="0" />
+      <LineId Id="31" Count="0" />
     </LineIds>
     <LineIds Name="RunETest.Initialize">
       <LineId Id="5" Count="0" />

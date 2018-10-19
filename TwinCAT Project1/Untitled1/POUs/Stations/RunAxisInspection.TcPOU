@@ -11,9 +11,18 @@ VAR
 	axis2 : POINTER TO RunAxis;
 	
 	nCounter : INT := 0;
-	indexStandBy : POINTER TO INT := 1;
-	indexPosition1 : POINTER TO INT := 2;
-	nGoal : POINTER TO INT := 4;
+	
+	
+END_VAR
+VAR PERSISTENT
+	//Axis1
+	indexStandByAxis1 : INT := 1;
+	indexPosition1Axis1 : INT := 2;
+	//Axis2
+	indexStandByAxis2 : INT := 1;
+	indexPosition1Axis2 : INT := 2;
+	//
+	nGoal : INT := 4;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[//n-Axis aoi , once position completed , trigger and wait
@@ -21,12 +30,12 @@ END_VAR]]></Declaration>
 CASE outputState OF
 	eSpecialStates.SLAVE_AXIS_INSPECTION_ENTER:
 		IF NOT transitionByte.0 THEN
-			transitionByte.0 := axis1^.ExecuteParameterIndex[nCounter + indexPosition1^];
+			transitionByte.0 := axis1^.ExecuteParameterIndex(nCounter + indexPosition1Axis1);
 		END_IF
 		IF axis2 = 0 THEN
 			transitionByte.1 := TRUE; // axis2 is not existed
 		ELSIF NOT transitionByte.1 THEN
-			transitionByte.1 := axis2^.ExecuteParameterIndex[nCounter + indexPosition1^]; // axis2 is existed
+			transitionByte.1 := axis2^.ExecuteParameterIndex(nCounter + indexPosition1Axis2); // axis2 is existed
 		END_IF
 		IF transitionByte = 3 THEN
 			//once inspection done
@@ -35,7 +44,7 @@ CASE outputState OF
 	eSpecialStates.SLAVE_AXIS_INSPECTION_ITERATION:
 		IF TRUE THEN
 			//once inspection reach 
-			IF nCounter < nGoal^ THEN			
+			IF nCounter < nGoal THEN			
 				nCounter := nCounter + 1;
 			ELSE
 				nCounter := 0; //reset
@@ -60,6 +69,8 @@ VAR_INPUT
 	
 	argAxis1 : POINTER TO RunAxis;
 	argAxis2 : POINTER TO RunAxis;
+	
+	
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -76,10 +87,7 @@ workingSignal := argWorkingSignal; //link
 
 axis1 := argAxis1;
 axis2 := argAxis2;
-
-indexStandBy := ADR(miscsParameters[1]);
-indexPosition1 := ADR(miscsParameters[2]);
-nGoal := ADR(miscsParameters[3]);]]></ST>
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="Initialize" Id="{130164f8-aa24-4f6f-8c9b-a99078376a66}">
@@ -92,12 +100,12 @@ END_VAR
 CASE State OF 
 	eSpecialStates.INITIAL_BEGIN:
 		IF NOT transitionByte.0 THEN
-			transitionByte.0 := axis1^.ExecuteParameterIndex[indexStandBy];
+			transitionByte.0 := axis1^.ExecuteParameterIndex(indexStandByAxis1);
 		END_IF
 		IF axis2 = 0 THEN
 			transitionByte.1 := TRUE; //axis 2 is not existed
 		ELSIF NOT transitionByte.1 THEN
-			transitionByte.0 := axis2^.ExecuteParameterIndex[indexStandBy];
+			transitionByte.0 := axis2^.ExecuteParameterIndex(indexStandByAxis2);
 		END_IF
 		IF transitionByte = 3 THEN
 			NextState := eSpecialStates.INITIAL_END;
@@ -139,9 +147,6 @@ Initialize:= SUPER^.Initialize();]]></ST>
       <LineId Id="27" Count="0" />
       <LineId Id="26" Count="0" />
       <LineId Id="28" Count="0" />
-      <LineId Id="30" Count="0" />
-      <LineId Id="29" Count="0" />
-      <LineId Id="33" Count="0" />
       <LineId Id="31" Count="0" />
     </LineIds>
     <LineIds Name="RunAxisInspection.Initialize">
