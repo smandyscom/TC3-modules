@@ -15,6 +15,7 @@ VAR
 	fbPower : MC_Power;
 	fbReset: MC_Reset;
 	fbSetPosition: MC_SetPosition;
+	fbStop : MC_Stop;
 	
 	//Status reading
 	fbReadActualVelocity: MC_ReadParameter;
@@ -180,6 +181,23 @@ fbReadStatus(
 	Accelerating=> , 
 	Decelerating=> , 
 	Status=> );
+
+fbStop(
+	Axis:= Axis, 
+	Execute:= , 
+	Deceleration:= , 
+	Jerk:= , 
+	Options:= , 
+	Done=> , 
+	Busy=> , 
+	Active=> , 
+	CommandAborted=> , 
+	Error=> , 
+	ErrorID=> );
+//Reset after cylic
+IF fbStop.Execute THEN
+	fbStop.Execute := FALSE;
+END_IF
 	
 IF NOT fbPower.Enable THEN
 	RETURN; //do not execute following commands
@@ -535,7 +553,8 @@ END_VAR]]></Declaration>
 FOR nCounter:=1 TO 3 BY 1 DO
 	fbMoveAbs[nCounter].Execute := FALSE;
 END_FOR
-fbMoveHome.Execute := FALSE;]]></ST>
+fbMoveHome.Execute := FALSE;
+fbStop.Execute := true;]]></ST>
       </Implementation>
     </Method>
     <Method Name="TypeCode" Id="{d7c803da-ddd0-409e-b8b9-d71f78281c2b}" FolderPath="CommonBase\">
@@ -561,7 +580,13 @@ END_VAR
       <LineId Id="1294" Count="0" />
       <LineId Id="1316" Count="2" />
       <LineId Id="1259" Count="0" />
-      <LineId Id="1107" Count="137" />
+      <LineId Id="1107" Count="92" />
+      <LineId Id="1355" Count="11" />
+      <LineId Id="1200" Count="0" />
+      <LineId Id="1370" Count="0" />
+      <LineId Id="1367" Count="2" />
+      <LineId Id="1354" Count="0" />
+      <LineId Id="1201" Count="43" />
       <LineId Id="9" Count="0" />
     </LineIds>
     <LineIds Name="RunAxis.ConfigureRead">
@@ -699,6 +724,7 @@ END_VAR
       <LineId Id="5" Count="0" />
       <LineId Id="7" Count="0" />
       <LineId Id="10" Count="0" />
+      <LineId Id="18" Count="0" />
     </LineIds>
     <LineIds Name="RunAxis.TypeCode">
       <LineId Id="5" Count="0" />
