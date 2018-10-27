@@ -84,9 +84,9 @@ CASE SUPER^.outputState OF
 END_CASE
 
 // Handshaking sequence (face to upstream
-IF Upstream <> 0 AND_THEN NOT Upstream^.syncEngaged THEN
-	Upstream^.syncAcknowledged := FALSE; //reset upstream
-END_IF
+//IF Upstream <> 0 AND_THEN NOT Upstream^.syncEngaged THEN
+//	Upstream^.syncAcknowledged := FALSE; //reset upstream
+//END_IF
 ]]></ST>
     </Implementation>
     <Method Name="FB_init" Id="{b6ef164b-1316-42c1-8dbc-2d2d314e57b5}">
