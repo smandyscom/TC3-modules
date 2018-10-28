@@ -7,6 +7,14 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
+	//File handler
+	fbOpen : FB_FileOpen;
+	fbWrite : FB_FileWrite;
+	fbClose : FB_FileClose;
+	fileHandle : UINT;
+	filePath : STRING := '';
+	fileContent : STRING := '100,2';
+	fileBytes : ARRAY[0..15] OF BYTE;
 	// communicate with external device
 	ioPrinter : POINTER TO  ioBundlePrinterApplicator;
 	// Vaccuum
@@ -36,8 +44,9 @@ END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[SUPER^();
 
+//into initial state
 IF NOT bFirstCycle AND outputState=0 THEN
-	NextState := 16#400;
+	NextState := 16#300;
 	bFirstCycle := TRUE;
 END_IF
 
@@ -53,9 +62,28 @@ CASE outputState OF
 		bSerialTransition := (transitionByte = 16#1F);
 	eSpecialStates.INITIAL_STATE_1:
 		IF axis^.ExecuteParameter(ptCommandReady) THEN
+			bFirstCycle := FALSE;
 			NextState := eSpecialStates.INITIAL_END;
 		END_IF
 	//-------------------Working
+	16#300:
+		fbOpen.bExecute:=TRUE;
+		bSerialTransition := TRUE;
+	16#301:
+		bSerialTransition := NOT fbOpen.bBusy;
+	16#302:
+		fbWrite.bExecute := TRUE;
+		bSerialTransition := TRUE;
+	16#303:
+		bSerialTransition := NOT fbWrite.bBusy;
+	16#304:
+		fbClose.bExecute := TRUE;
+		bSerialTransition := TRUE;
+	16#305:
+		IF NOT fbClose.bBusy THEN
+			NextState:=16#400;
+		END_IF
+	//-----------------------------
 	16#400:
 		bSerialTransition := ioPrinter^.prtData;
 		IF bSerialTransition THEN
@@ -138,7 +166,39 @@ CASE outputState OF
 		END_IF
 END_CASE
 bVacuumTimeout(IN:= , PT:= , Q=> , ET=> );
-]]></ST>
+
+
+//file 
+fbOpen(
+	sNetId:= , 
+	sPathName:= filePath, 
+	nMode:= FOPEN_MODEWRITE, 
+	ePath:= filePath, 
+	bExecute:= , 
+	tTimeout:= , 
+	bBusy=> , 
+	bError=> , 
+	nErrId=> , 
+	hFile=> fileHandle);
+fbWrite(
+	sNetId:= , 
+	hFile:= fileHandle, 
+	pWriteBuff:= ADR(fileBytes), 
+	cbWriteLen:= SIZEOF(fileBytes), 
+	bExecute:= , 
+	tTimeout:= , 
+	bBusy=> , 
+	bError=> , 
+	nErrId=> , 
+	cbWrite=> );
+fbClose(
+	sNetId:= , 
+	hFile:= fileHandle, 
+	bExecute:= , 
+	tTimeout:= , 
+	bBusy=> , 
+	bError=> , 
+	nErrId=> );]]></ST>
     </Implementation>
     <Method Name="FB_init" Id="{8e22ea07-e6ac-4cce-a3dd-c0421a83bdd3}">
       <Declaration><![CDATA[METHOD FB_init : BOOL
@@ -205,14 +265,20 @@ ioVacuum := argIoVacuum;]]></ST>
     </Method>
     <LineIds Name="RunLabelHandler">
       <LineId Id="9" Count="0" />
+      <LineId Id="287" Count="0" />
       <LineId Id="232" Count="2" />
       <LineId Id="238" Count="0" />
       <LineId Id="235" Count="0" />
       <LineId Id="23" Count="0" />
       <LineId Id="22" Count="0" />
       <LineId Id="24" Count="0" />
-      <LineId Id="28" Count="11" />
+      <LineId Id="28" Count="9" />
+      <LineId Id="288" Count="0" />
+      <LineId Id="38" Count="1" />
       <LineId Id="26" Count="0" />
+      <LineId Id="327" Count="14" />
+      <LineId Id="344" Count="1" />
+      <LineId Id="343" Count="0" />
       <LineId Id="241" Count="1" />
       <LineId Id="244" Count="0" />
       <LineId Id="247" Count="0" />
@@ -271,7 +337,14 @@ ioVacuum := argIoVacuum;]]></ST>
       <LineId Id="134" Count="1" />
       <LineId Id="25" Count="0" />
       <LineId Id="149" Count="0" />
+      <LineId Id="295" Count="1" />
       <LineId Id="148" Count="0" />
+      <LineId Id="298" Count="9" />
+      <LineId Id="297" Count="0" />
+      <LineId Id="309" Count="9" />
+      <LineId Id="308" Count="0" />
+      <LineId Id="320" Count="6" />
+      <LineId Id="319" Count="0" />
     </LineIds>
     <LineIds Name="RunLabelHandler.FB_init">
       <LineId Id="25" Count="8" />
