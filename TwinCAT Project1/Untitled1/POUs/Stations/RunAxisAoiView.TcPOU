@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <POU Name="RunAxisAoiView" Id="{dd3c82d7-e0e7-490b-93f3-e200f9619a5e}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunAxisAoiView EXTENDS RunAxisInspection
+VAR
+	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[SUPER^();
+
+CASE outputState OF
+	eSpecialStates.SLAVE_ENTER_PROCEDURE:
+		//align
+		IF sideAligner^.Execute(argCommand:= eCylinderCommands.COMMAND_B) THEN
+			NextState := eSpecialStates.SLAVE_AXIS_INSPECTION_ENTER;
+		END_IF
+	//----------------------------------
+	eSpecialStates.SLAVE_AXIS_INSPECTION_EXIT:
+		//release
+		IF sideAligner^.Execute(eCylinderCommands.COMMAND_A) THEN
+			NextState := eSpecialStates.SLAVE_WORK_DONE;
+		END_IF
+END_CASE]]></ST>
+    </Implementation>
+    <LineIds Name="RunAxisAoiView">
+      <LineId Id="9" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="15" Count="2" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="20" Count="2" />
+      <LineId Id="14" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

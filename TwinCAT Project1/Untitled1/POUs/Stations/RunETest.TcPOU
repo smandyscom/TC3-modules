@@ -3,6 +3,7 @@
   <POU Name="RunETest" Id="{72e72744-8d8b-4127-a1f7-17ac70d49060}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunETest EXTENDS RunAxisInspection
 VAR
+	
 	//Cylinders
 	connectorHolder : POINTER TO RunCylinder;
 	cableHolder : POINTER TO RunCylinder;
@@ -15,13 +16,48 @@ VAR
 	//from tester
 	ioBundle : POINTER TO ioBundleET;
 END_VAR
-VAR CONSTANT
-	indexStandby : INT := 1;
-	indexPosition1 : INT := 2; //2..5
-END_VAR
-]]></Declaration>
+VAR PERSISTENT
+	indexCommandPick : INT := 9;
+END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[]]></ST>
+      <ST><![CDATA[SUPER^();
+
+CASE outputState OF
+	eSpecialStates.SLAVE_ENTER_PROCEDURE:
+		bSerialTransition := connectorHolder^.Execute(eCylinderCommands.COMMAND_B);
+	16#201:
+		bSerialTransition := plugin^.Execute(eCylinderCommands.COMMAND_B);
+	16#202:
+		bSerialTransition := axis1^.ExecuteParameterIndex(indexCommandPick); //down to pick
+	16#203:
+		IF cableHolder^.Execute(eCylinderCommands.COMMAND_B) THEN
+			//hold , going to swing
+			NextState := eSpecialStates.SLAVE_AXIS_INSPECTION_ENTER;
+		END_IF
+	//-----------------
+	eSpecialStates.SLAVE_AXIS_INSPECTION_EXIT:
+		//TODO , read status and report
+		bSerialTransition := TRUE;
+	16#401:
+		bSerialTransition := axis1^.ExecuteParameterIndex(indexCommandPick); //back to to pick
+	16#402:
+		bSerialTransition := cableHolder^.Execute(eCylinderCommands.COMMAND_A);
+	16#403:
+		bSerialTransition := plugin^.Execute(eCylinderCommands.COMMAND_A);
+	16#404:
+		bSerialTransition := connectorHolder^.Execute(eCylinderCommands.COMMAND_A);
+	16#405:
+		//all axis backto standby
+		IF NOT transitionByte.0 AND_THEN axis1^.ExecuteParameterIndex(indexStandByAxis1) THEN
+			transitionByte.0 := TRUE;
+		END_IF
+		IF NOT transitionByte.0 AND_THEN axis2^.ExecuteParameterIndex(indexStandByAxis2) THEN
+			transitionByte.1 := TRUE;
+		END_IF
+		IF transitionByte=3 THEN
+			NextState := eSpecialStates.SLAVE_WORK_DONE;
+		END_IF
+END_CASE]]></ST>
     </Implementation>
     <Method Name="FB_init" Id="{efefce5e-b774-42d4-a90d-6714e5f02940}">
       <Declaration><![CDATA[METHOD FB_init : BOOL
@@ -37,6 +73,17 @@ VAR_INPUT
 	
 	argAxis1 : POINTER TO RunAxis;
 	argAxis2 : POINTER TO RunAxis;
+	
+	argSideAligner : pointer to RunCylinder;
+	
+	argConnectorHolder : POINTER TO RunCylinder;
+	argCableHolder : POINTER TO RunCylinder;
+	argPlugin : POINTER TO RunCylinder;
+	//Sensors
+	argTongueExistedA : POINTER TO RunSignal;
+	argTongueExistedB : POINTER TO RunSignal;
+	argTongueGlueA : POINTER TO RunSignal;
+	argTongueGlueB : POINTER TO RunSignal;
 	
 	argIoBundle : pointer to ioBundleET;
 END_VAR
@@ -57,6 +104,14 @@ axis1 := argAxis1;
 axis2 := argAxis2;
 
 //
+connectorHolder := argConnectorHolder;
+cableHolder :=argCableHolder;
+plugin :=argPlugin;
+	//Sensors
+tongueExistedA :=argTongueExistedA;
+tongueExistedB :=argTongueExistedB;
+tongueGlueA :=argTongueGlueA;
+tongueGlueB :=argTongueGlueB;
 ioBundle := argIoBundle;]]></ST>
       </Implementation>
     </Method>
@@ -66,20 +121,68 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[SUPER^();]]></ST>
+        <ST><![CDATA[
+CASE outputState OF
+	eSpecialStates.INITIAL_BEGIN:
+		// release all cylinder
+		IF NOT transitionByte.0 AND_THEN plugin^.Execute(argCommand:= eCylinderCommands.COMMAND_A) THEN
+			transitionByte.0 := TRUE;
+		END_IF
+		IF NOT transitionByte.1 AND_THEN connectorHolder^.Execute(argCommand:= eCylinderCommands.COMMAND_A) THEN
+			transitionByte.1 := TRUE;
+		END_IF
+		IF NOT transitionByte.2 AND_THEN cableHolder^.Execute(argCommand:= eCylinderCommands.COMMAND_A) THEN
+			transitionByte.2 := TRUE;
+		END_IF
+		IF transitionByte=7 THEN
+			NextState := eSpecialStates.INITIAL_STATE_7; // to return axis
+		END_IF
+END_CASE
+
+
+Initialize:= SUPER^.Initialize(); //do axis return]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="RunETest">
       <LineId Id="9" Count="0" />
+      <LineId Id="29" Count="0" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="32" Count="4" />
+      <LineId Id="39" Count="1" />
+      <LineId Id="43" Count="0" />
+      <LineId Id="45" Count="0" />
+      <LineId Id="44" Count="0" />
+      <LineId Id="42" Count="0" />
+      <LineId Id="46" Count="15" />
+      <LineId Id="63" Count="1" />
+      <LineId Id="62" Count="0" />
+      <LineId Id="65" Count="2" />
+      <LineId Id="38" Count="0" />
     </LineIds>
     <LineIds Name="RunETest.FB_init">
       <LineId Id="19" Count="11" />
       <LineId Id="16" Count="0" />
       <LineId Id="33" Count="0" />
       <LineId Id="32" Count="0" />
+      <LineId Id="62" Count="6" />
+      <LineId Id="61" Count="0" />
       <LineId Id="31" Count="0" />
     </LineIds>
     <LineIds Name="RunETest.Initialize">
+      <LineId Id="9" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="15" Count="2" />
+      <LineId Id="20" Count="1" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="23" Count="1" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="25" Count="2" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="10" Count="0" />
       <LineId Id="5" Count="0" />
     </LineIds>
   </POU>

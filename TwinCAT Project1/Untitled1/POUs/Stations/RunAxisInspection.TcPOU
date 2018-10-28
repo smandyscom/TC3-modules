@@ -2,17 +2,12 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
   <POU Name="RunAxisInspection" Id="{a6e0aedf-0dab-4fac-b5f4-4cfe5e671281}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunAxisInspection EXTENDS RunUnitSlave
-VAR_INPUT
-END_VAR
-VAR_OUTPUT
-END_VAR
 VAR
 	axis1 : POINTER TO RunAxis;
 	axis2 : POINTER TO RunAxis;
+	sideAligner : POINTER TO RunCylinder := 0;
 	
 	nCounter : INT := 0;
-	
-	
 END_VAR
 VAR PERSISTENT
 	//Axis1
@@ -26,6 +21,7 @@ VAR PERSISTENT
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[//n-Axis aoi , once position completed , trigger and wait
+SUPER^();
 
 CASE outputState OF
 	eSpecialStates.SLAVE_AXIS_INSPECTION_ENTER:
@@ -40,9 +36,10 @@ CASE outputState OF
 		IF transitionByte = 3 THEN
 			//once inspection done
 			NextState := eSpecialStates.SLAVE_AXIS_INSPECTION_ITERATION; //both axis done motion
+			slaveWorkingSignal[1] := slaveLinkageStatus[1]; //trigger slave
 		END_IF
 	eSpecialStates.SLAVE_AXIS_INSPECTION_ITERATION:
-		IF TRUE THEN
+		IF NOT slaveWorkingSignal[1] THEN
 			//once inspection reach 
 			IF nCounter < nGoal THEN			
 				nCounter := nCounter + 1;
@@ -70,7 +67,7 @@ VAR_INPUT
 	argAxis1 : POINTER TO RunAxis;
 	argAxis2 : POINTER TO RunAxis;
 	
-	
+	argSideAligner : pointer to RunCylinder;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -87,7 +84,7 @@ workingSignal := argWorkingSignal; //link
 
 axis1 := argAxis1;
 axis2 := argAxis2;
-]]></ST>
+sideAligner := argSideAligner;]]></ST>
       </Implementation>
     </Method>
     <Method Name="Initialize" Id="{130164f8-aa24-4f6f-8c9b-a99078376a66}">
@@ -97,17 +94,19 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-CASE State OF 
-	eSpecialStates.INITIAL_BEGIN:
-		IF NOT transitionByte.0 THEN
-			transitionByte.0 := axis1^.ExecuteParameterIndex(indexStandByAxis1);
+//default initialization sequence
+CASE outputState OF 
+	eSpecialStates.INITIAL_STATE_7:
+		IF NOT transitionByte.0 AND_THEN axis1^.ExecuteParameterIndex(indexStandByAxis1) THEN
+			transitionByte.0 := TRUE;
 		END_IF
-		IF axis2 = 0 THEN
+		IF NOT transitionByte.1 AND_THEN (axis2 = 0 OR axis2<>0 AND_THEN axis2^.ExecuteParameterIndex(indexStandByAxis2)) THEN
 			transitionByte.1 := TRUE; //axis 2 is not existed
-		ELSIF NOT transitionByte.1 THEN
-			transitionByte.0 := axis2^.ExecuteParameterIndex(indexStandByAxis2);
 		END_IF
-		IF transitionByte = 3 THEN
+		IF NOT transitionByte.2 AND_THEN (sideAligner=0 OR (sideAligner<>0 AND_THEN sideAligner^.Execute(eCylinderCommands.COMMAND_A))) THEN
+			transitionByte.2 := TRUE; //aligner backoff
+		END_IF
+		IF transitionByte = 7 THEN
 			NextState := eSpecialStates.INITIAL_END;
 		END_IF
 END_CASE
@@ -117,6 +116,7 @@ Initialize:= SUPER^.Initialize();]]></ST>
     </Method>
     <LineIds Name="RunAxisInspection">
       <LineId Id="9" Count="0" />
+      <LineId Id="90" Count="0" />
       <LineId Id="11" Count="0" />
       <LineId Id="10" Count="0" />
       <LineId Id="12" Count="0" />
@@ -127,7 +127,9 @@ Initialize:= SUPER^.Initialize();]]></ST>
       <LineId Id="46" Count="0" />
       <LineId Id="50" Count="0" />
       <LineId Id="57" Count="0" />
-      <LineId Id="51" Count="1" />
+      <LineId Id="51" Count="0" />
+      <LineId Id="89" Count="0" />
+      <LineId Id="52" Count="0" />
       <LineId Id="41" Count="0" />
       <LineId Id="49" Count="0" />
       <LineId Id="53" Count="0" />
@@ -150,12 +152,12 @@ Initialize:= SUPER^.Initialize();]]></ST>
       <LineId Id="31" Count="0" />
     </LineIds>
     <LineIds Name="RunAxisInspection.Initialize">
+      <LineId Id="25" Count="0" />
       <LineId Id="6" Count="0" />
       <LineId Id="5" Count="0" />
       <LineId Id="7" Count="0" />
-      <LineId Id="9" Count="4" />
-      <LineId Id="15" Count="1" />
-      <LineId Id="14" Count="0" />
+      <LineId Id="9" Count="5" />
+      <LineId Id="26" Count="2" />
       <LineId Id="17" Count="2" />
       <LineId Id="8" Count="0" />
       <LineId Id="21" Count="0" />

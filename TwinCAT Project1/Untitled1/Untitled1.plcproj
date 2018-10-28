@@ -171,6 +171,9 @@
     <Compile Include="POUs\Stations\CellularD\RunLabelHandler.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Stations\RunAxisAoiView.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Stations\RunAxisInspection.TcPOU">
       <SubType>Code</SubType>
     </Compile>
