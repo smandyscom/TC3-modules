@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <POU Name="RunMaterial" Id="{9073517c-3b61-4b10-a156-8338bfb2c574}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunMaterial
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	header AT%M* : MaterialHeader;
+	block AT%M* : MaterialBlock;
+END_VAR
+VAR PERSISTENT
+	isNotLinked : bool; //if not linked , do not handshaking
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Property Name="Act" Id="{236bb699-4edc-4d48-a62f-bc4ddb0aabdf}">
+      <Declaration><![CDATA[PROPERTY Act : bool]]></Declaration>
+      <Get Name="Get" Id="{579db0b6-a439-4489-af03-b8d193df4417}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Act := header.wordOut.1;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{d98760fd-3777-4f25-8402-51e31ca98d9b}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IF isNotLinked THEN
+	return;
+END_IF
+
+header.wordOut.1 := Act;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="Data" Id="{79a915a5-cf76-4b51-8c57-c4d23e98aa43}">
+      <Declaration><![CDATA[PROPERTY Data : MaterialBlock]]></Declaration>
+      <Get Name="Get" Id="{83a4552a-77c4-4f9d-9bfa-8112928f18d9}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Data := block;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{0928f0d4-1ea0-4c84-980c-5f4b4a3fc0c4}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[block := Data;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="Id" Id="{76cc9878-8344-4469-85c7-4021594103e7}">
+      <Declaration><![CDATA[PROPERTY Id : DWORD]]></Declaration>
+      <Get Name="Get" Id="{52057c29-0d31-4150-8be7-d3db7c8824a2}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Id := header.id;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{4db29320-7c5f-4cee-bfd1-83007f696f64}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[header.id := id;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="Valid" Id="{81a23da7-5efb-49a3-9451-5b7d459a1adb}">
+      <Declaration><![CDATA[PROPERTY Valid : bool]]></Declaration>
+      <Get Name="Get" Id="{d2210c58-6905-4049-a4ca-7630c9005422}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Valid := header.wordOut.2;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{4d838795-a156-4765-b1a6-c8dafa3a1944}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[header.wordOut.2 := Valid;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <LineIds Name="RunMaterial">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="RunMaterial.Act.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="RunMaterial.Act.Set">
+      <LineId Id="5" Count="0" />
+      <LineId Id="7" Count="1" />
+      <LineId Id="6" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="RunMaterial.Data.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="RunMaterial.Data.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="RunMaterial.Id.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="RunMaterial.Id.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="RunMaterial.Valid.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="RunMaterial.Valid.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

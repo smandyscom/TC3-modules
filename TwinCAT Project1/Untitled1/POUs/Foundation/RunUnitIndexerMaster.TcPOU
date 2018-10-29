@@ -20,14 +20,22 @@ END_VAR]]></Declaration>
       <ST><![CDATA[SUPER^(); // call base class's execution
 
 CASE SUPER^.outputState OF
-	//0:
+	0:
 		//TODO Initialize?	
 	
 		//FOR nCounter:=1 TO 3 BY 1 DO
 		//	slaveWorkingSignal[nCounter] := slaveLinkageStatus[nCounter];
 		//END_FOR
 		//bSerialTransition := TRUE;
-	0,1:
+		
+		//check material synchronization to Databse
+		//All slot act must be off
+		condition := TRUE;
+		FOR nCounter:=0 TO SlotCount-1 BY 1 DO
+			condition := condition AND NOT SlotBase[nCounter].Act;
+		END_FOR
+		bSerialTransition := condition;
+	1:
 		//if all working status meets , transition
 		//all working signal should be zero
 		//seted by downstream
@@ -39,7 +47,7 @@ CASE SUPER^.outputState OF
 		FOR nCounter:=1 TO 3 BY 1 DO
 			condition := condition AND NOT slaveWorkingSignal[nCounter];
 		END_FOR
-		//TODO check material synchronization to Databse
+		
 		//raise working signals for all linked slave
 		IF condition AND NOT syncAcknowledged THEN
 		
@@ -48,13 +56,13 @@ CASE SUPER^.outputState OF
 				IF nCounter = SlotCount THEN
 					syncMatValue:= SlotBase[nCounter].id; // for the last slot
 				END_IF
-				SlotBase[nCounter].id := SlotBase[nCounter-1].id;
-				SlotBase[nCounter].wordOut.0 := SlotBase[nCounter-1].wordOut.0;
+				SlotBase[nCounter].Id := SlotBase[nCounter-1].id;
+				SlotBase[nCounter].Valid := SlotBase[nCounter-1].Valid;
 			END_FOR
 			
 			bSerialTransition := TRUE;
 						
-			isLastSlotOccupied := SlotLast^.wordOut.0; //check out last slot status
+			isLastSlotOccupied := SlotLast^.Valid; //check out last slot status
 		END_IF
 	2:
 		//2 modes
@@ -96,8 +104,8 @@ VAR_INPUT
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
 	
 	argParent : POINTER TO RunUnitGeneric;
-	argSlotBase : POINTER TO MaterialBlock;
-	argSlotLast : POINTER TO MaterialBlock;
+	argSlotBase : POINTER TO RunMaterial;
+	argSlotLast : POINTER TO RunMaterial;
 	
 	argUpstream : POINTER TO RunUnitTransporterBase;
 	argAxis : POINTER TO RunAxis;
@@ -122,11 +130,17 @@ END_IF
     <LineIds Name="RunUnitIndexerMaster">
       <LineId Id="295" Count="4" />
       <LineId Id="412" Count="0" />
-      <LineId Id="301" Count="6" />
+      <LineId Id="301" Count="3" />
+      <LineId Id="427" Count="0" />
+      <LineId Id="436" Count="0" />
+      <LineId Id="428" Count="0" />
+      <LineId Id="430" Count="3" />
+      <LineId Id="435" Count="0" />
+      <LineId Id="305" Count="2" />
       <LineId Id="390" Count="2" />
       <LineId Id="388" Count="1" />
       <LineId Id="308" Count="3" />
-      <LineId Id="387" Count="0" />
+      <LineId Id="437" Count="0" />
       <LineId Id="386" Count="0" />
       <LineId Id="312" Count="0" />
       <LineId Id="395" Count="1" />

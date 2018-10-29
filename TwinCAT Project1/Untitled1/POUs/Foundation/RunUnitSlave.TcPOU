@@ -37,8 +37,8 @@ VAR_INPUT
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
 	
 	argParent : POINTER TO RunUnitGeneric;
-	argSlotBase : POINTER TO MaterialBlock;
-	argSlotLast : POINTER TO MaterialBlock;
+	argSlotBase : POINTER TO RunMaterial;
+	argSlotLast : POINTER TO RunMaterial;
 	
 	argWorkingSignal : POINTER TO BOOL;
 END_VAR

@@ -65,7 +65,7 @@ END_IF
 IF State >=3 AND State <=6 AND_THEN Upstream<>0 AND Upstream^.syncEngaged AND NOT Upstream^.syncAcknowledged THEN	
 	Upstream^.syncAcknowledged := TRUE;//pull upstream when ready
 	//Data transmit
-	SlotBase^.wordOut.0 := TRUE; //TODO , follow that status
+	//SlotBase^.wordOut.0 := TRUE; //TODO , follow that status
 	//SlotBase^.id := Upstream^.syncMatValue;
 	//set-up final goal
 	commandFinalGoal.command := eCommandTypes.POSITION;
@@ -169,8 +169,8 @@ VAR_INPUT
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
 	
 	argParent : POINTER TO RunUnitGeneric;
-	argSlotBase : POINTER TO MaterialBlock;
-	argSlotLast : POINTER TO MaterialBlock;
+	argSlotBase : POINTER TO RunMaterial;
+	argSlotLast : POINTER TO RunMaterial;
 	
 	argUpstream : POINTER TO RunUnitTransporterBase;
 	argAxis : POINTER TO RunAxis;
