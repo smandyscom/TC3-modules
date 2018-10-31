@@ -28,10 +28,8 @@ CASE outputState OF
 		IF NOT transitionByte.0 THEN
 			transitionByte.0 := axis1^.ExecuteParameterIndex(nCounter + indexPosition1Axis1);
 		END_IF
-		IF axis2 = 0 THEN
-			transitionByte.1 := TRUE; // axis2 is not existed
-		ELSIF NOT transitionByte.1 THEN
-			transitionByte.1 := axis2^.ExecuteParameterIndex(nCounter + indexPosition1Axis2); // axis2 is existed
+		IF NOT transitionByte.1 AND_THEN (axis2 = 0 OR (axis2<>0 AND_THEN axis2^.ExecuteParameterIndex(nCounter + indexPosition1Axis2))) THEN
+			transitionByte.1 := TRUE; // axis2 is not existed or // axis2 is existed
 		END_IF
 		IF transitionByte = 3 THEN
 			//once inspection done
@@ -122,9 +120,7 @@ Initialize:= SUPER^.Initialize();]]></ST>
       <LineId Id="12" Count="0" />
       <LineId Id="37" Count="0" />
       <LineId Id="39" Count="1" />
-      <LineId Id="44" Count="1" />
-      <LineId Id="47" Count="1" />
-      <LineId Id="46" Count="0" />
+      <LineId Id="44" Count="2" />
       <LineId Id="50" Count="0" />
       <LineId Id="57" Count="0" />
       <LineId Id="51" Count="0" />

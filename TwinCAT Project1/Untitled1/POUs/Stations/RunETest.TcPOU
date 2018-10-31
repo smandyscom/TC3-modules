@@ -51,7 +51,7 @@ CASE outputState OF
 		IF NOT transitionByte.0 AND_THEN axis1^.ExecuteParameterIndex(indexStandByAxis1) THEN
 			transitionByte.0 := TRUE;
 		END_IF
-		IF NOT transitionByte.0 AND_THEN axis2^.ExecuteParameterIndex(indexStandByAxis2) THEN
+		IF NOT transitionByte.1 AND_THEN axis2^.ExecuteParameterIndex(indexStandByAxis2) THEN
 			transitionByte.1 := TRUE;
 		END_IF
 		IF transitionByte=3 THEN

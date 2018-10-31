@@ -123,17 +123,15 @@ CASE outputState OF
 		END_IF
 	//------------------Work
 	16#3000:
-		IF NOT transitionByte.0 AND_THEN liner^.ExecuteParameter(ptLinerWork) THEN
-			transitionByte.0 := TRUE;
-		END_IF
-		IF NOT transitionByte.1 AND_THEN (rotator=0 OR (rotator<>0 AND_THEN rotator^.ExecuteParameter(ptRotatorMutual))) THEN
-			transitionByte.1 := TRUE;
-		END_IF
-		IF transitionByte = 16#3 THEN
-			bSerialTransition :=TRUE;
-			slaveWorkingSignal[1] := slaveLinkageStatus[1]; //start working
+		IF NOT bSerialTransition AND_THEN (rotator=0 OR (rotator<>0 AND_THEN rotator^.ExecuteParameter(ptRotatorMutual))) THEN
+			bSerialTransition := TRUE;
 		END_IF
 	16#3001:
+		IF NOT bSerialTransition AND_THEN liner^.ExecuteParameter(ptLinerWork) THEN
+			bSerialTransition := TRUE;
+			slaveWorkingSignal[1] := slaveLinkageStatus[1]; //start working
+		END_IF
+	16#3002:
 		IF NOT slaveWorkingSignal[1] THEN
 			NextState := 16#2000;
 		END_IF
@@ -260,14 +258,14 @@ END_IF
       <LineId Id="338" Count="0" />
       <LineId Id="341" Count="1" />
       <LineId Id="282" Count="1" />
-      <LineId Id="343" Count="2" />
       <LineId Id="347" Count="1" />
       <LineId Id="346" Count="0" />
-      <LineId Id="287" Count="0" />
-      <LineId Id="349" Count="0" />
-      <LineId Id="288" Count="1" />
       <LineId Id="285" Count="0" />
-      <LineId Id="291" Count="2" />
+      <LineId Id="378" Count="2" />
+      <LineId Id="293" Count="0" />
+      <LineId Id="374" Count="0" />
+      <LineId Id="376" Count="1" />
+      <LineId Id="375" Count="0" />
       <LineId Id="30" Count="0" />
       <LineId Id="27" Count="0" />
     </LineIds>
