@@ -129,6 +129,9 @@
     <Compile Include="POUs\Foundation\RunUnitSlave.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Foundation\SemephoreV1.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Helper\CellDataBlock2Parameter.TcPOU">
       <SubType>Code</SubType>
     </Compile>

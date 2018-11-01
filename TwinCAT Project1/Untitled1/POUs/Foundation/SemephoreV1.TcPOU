@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <POU Name="SemephoreV1" Id="{c757335b-0259-4bad-9739-4559055a1f86}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK SemephoreV1
+VAR_INPUT
+	currentState : eOperationModes;
+	isError : BOOL;
+	isInitializing : BOOL;
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	io : POINTER TO ioBundleControl;
+	
+	buzzerTimer : TON;
+	buzzerCounter : INT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//reset all
+io^.lightGreen := FALSE;
+io^.lightRed := FALSE;
+io^.lightYellow := FALSE;
+io^.lightWhite := FALSE;
+io^.towerGreen := FALSE;
+io^.towerRed := FALSE;
+io^.towerYellow := FALSE;
+//io^.towerBuzzer := FALSE;
+
+CASE currentState OF
+	eOperationModes.AUTO:
+		io^.lightGreen := TRUE;
+	eOperationModes.MANUAL,eOperationModes.SEMI_AUTO:
+		io^.lightRed := TRUE;
+		io^.towerYellow := TRUE;
+END_CASE
+
+io^.lightYellow := isError OR isInitializing;
+io^.towerRed := isError;
+io^.towerYellow := isInitializing;
+
+//buzser
+buzzerTimer(IN:= isError, PT:= T#100MS, Q=> io^.towerBuzzer, ET=> );
+IF buzzerTimer.Q THEN
+	buzzerCounter := buzzerCounter+1;
+END_IF
+IF isError AND buzzerCounter > 5 THEN
+	buzzerTimer.IN := FALSE;
+END_IF]]></ST>
+    </Implementation>
+    <Method Name="FB_init" Id="{5d97e876-0d51-4c4d-9ca6-9c927dbc5548}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	
+	argIo : pointer to ioBundleControl;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[io := argIo;]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="SemephoreV1">
+      <LineId Id="27" Count="0" />
+      <LineId Id="25" Count="1" />
+      <LineId Id="28" Count="5" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="14" Count="1" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="39" Count="0" />
+      <LineId Id="38" Count="0" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="42" Count="5" />
+    </LineIds>
+    <LineIds Name="SemephoreV1.FB_init">
+      <LineId Id="7" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
