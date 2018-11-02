@@ -173,7 +173,7 @@ fbOpen(
 	sNetId:= , 
 	sPathName:= filePath, 
 	nMode:= FOPEN_MODEWRITE, 
-	ePath:= filePath, 
+	ePath:= , 
 	bExecute:= , 
 	tTimeout:= , 
 	bBusy=> , 
