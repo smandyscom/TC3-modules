@@ -18,9 +18,9 @@ VAR
 	isProxyMode : BOOL := FALSE;
 	
 	pollingTimer : TON;
-	fbAdsSyncRead : ADSREAD;
-	fbAdsSyncWrite : ADSWRITE;
-	fbAdsMatSyncRead : ADSREAD;
+	fbAdsSyncRead : FB_ReadAdsSymByName;
+	fbAdsSyncWrite : FB_WriteAdsSymByName;
+	fbAdsMatSyncRead : FB_ReadAdsSymByName;
 	
 	isMatSync : BOOL := FALSE;
 	
@@ -29,11 +29,15 @@ VAR PERSISTENT
 	//proxy mode parameters
 	netId : T_AmsNetID;
 	port : T_AmsPort := 851; //Tc3
-	indexGroup : UDINT := TO_UDINT(eAdsIndexGroups.PLCADS_RWM);
 	
-	offsetUpstreamSyncEngaged : UDINT := 127;
-	offsetUpstreamSyncAckowledged  : UDINT := 128;
-	offsetUpstreamSyncMatSync : UDINT := 130; //64bits
+	varNameSyncEngaged : STRING;
+	varNameSyncAckowledged : STRING;
+	varNameSyncMatSync : STRING;
+	
+	//indexGroup : UDINT := TO_UDINT(eAdsIndexGroups.PLCADS_RWM);
+	//offsetUpstreamSyncEngaged : UDINT := 127;
+	//offsetUpstreamSyncAckowledged  : UDINT := 128;
+	//offsetUpstreamSyncMatSync : UDINT := 130; //64bits
 	
 	timeoutTimer : TON;	
 END_VAR
@@ -62,44 +66,43 @@ pollingTimer(IN:= NOT pollingTimer.Q, PT:= T#50MS, Q=> , ET=> );
 
 //do ADS data exchanging
 fbAdsSyncRead(
-		NETID:= netId, 
-		PORT:= port, 
-		IDXGRP:= indexGroup, 
-		IDXOFFS:= offsetUpstreamSyncEngaged, 
-		LEN:= SIZEOF(syncEngaged), 
-		DESTADDR:= ADR(syncEngaged), 
-		READ:= pollingTimer.Q, 
-		TMOUT:= , 
-		BUSY=> , 
-		ERR=> , 
-		ERRID=> );
-	
-fbAdsSyncWrite(
-		NETID:= netId, 
-		PORT:= port, 
-		IDXGRP:= indexGroup, 
-		IDXOFFS:= offsetUpstreamSyncAckowledged, 
-		LEN:= SIZEOF(syncAcknowledged), 
-		SRCADDR:= ADR(syncAcknowledged), 
-		WRITE:= pollingTimer.Q, 
-		TMOUT:= , 
-		BUSY=> , 
-		ERR=> , 
-		ERRID=> );
-	
-fbAdsMatSyncRead(
-		NETID:= netId, 
-		PORT:= port, 
-		IDXGRP:= indexGroup, 
-		IDXOFFS:= offsetUpstreamSyncMatSync, 
-		LEN:= SIZEOF(syncMatValue), 
-		DESTADDR:= ADR(syncMatValue), 
-		READ:= NOT fbAdsMatSyncRead.BUSY AND isMatSync, 
-		TMOUT:= , 
-		BUSY=> , 
-		ERR=> , 
-		ERRID=> );	
+	bRead:= pollingTimer.Q, 
+	sNetId:= netId, 
+	nPort:= port, 
+	sVarName:= varNameSyncEngaged, 
+	nDestAddr:= ADR(syncEngaged), 
+	nLen:= SIZEOF(syncEngaged), 
+	tTimeout:= , 
+	eComMode:= , 
+	bBusy=> , 
+	bError=> , 
+	nErrorId=> );
 		
+fbAdsSyncWrite(
+	bWrite:= pollingTimer.Q, 
+	sNetId:= netId, 
+	nPort:= port, 
+	sVarName:= varNameSyncAckowledged, 
+	nSrcAddr:= ADR(syncAcknowledged), 
+	nLen:= SIZEOF(syncAcknowledged), 
+	tTimeout:= , 
+	eComMode:= , 
+	bBusy=> , 
+	bError=> , 
+	nErrorId=> );		
+			
+fbAdsMatSyncRead(
+	bRead:= NOT fbAdsMatSyncRead.bBusy AND isMatSync, 
+	sNetId:= netId, 
+	nPort:= port, 
+	sVarName:= varNameSyncMatSync, 
+	nDestAddr:= ADR(syncMatValue), 
+	nLen:= SIZEOF(syncMatValue), 
+	tTimeout:= , 
+	eComMode:= , 
+	bBusy=> , 
+	bError=> , 
+	nErrorId=> );	
 
 CASE outputState OF
 	0:
@@ -108,7 +111,7 @@ CASE outputState OF
 			bSerialTransition := TRUE;
 		END_IF
 	1: 
-		IF NOT fbAdsMatSyncRead.READ THEN
+		IF NOT fbAdsMatSyncRead.bRead THEN
 			//done
 			isMatSync := FALSE;
 			NextState := 0;
@@ -123,8 +126,8 @@ VAR_INPUT
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
 	
 	argParent : POINTER TO RunUnitGeneric;
-	argSlotBase : POINTER TO MaterialBlock;
-	argSlotLast : POINTER TO MaterialBlock;
+	argSlotBase : POINTER TO RunMaterial;
+	argSlotLast : POINTER TO RunMaterial;
 	
 	argUpstream : POINTER TO RunUnitTransporterBase;
 END_VAR
@@ -149,9 +152,15 @@ END_IF]]></ST>
       <LineId Id="712" Count="0" />
       <LineId Id="544" Count="3" />
       <LineId Id="673" Count="1" />
-      <LineId Id="548" Count="13" />
+      <LineId Id="548" Count="1" />
+      <LineId Id="756" Count="10" />
+      <LineId Id="755" Count="0" />
       <LineId Id="637" Count="0" />
-      <LineId Id="563" Count="39" />
+      <LineId Id="771" Count="10" />
+      <LineId Id="575" Count="0" />
+      <LineId Id="770" Count="0" />
+      <LineId Id="785" Count="10" />
+      <LineId Id="588" Count="14" />
       <LineId Id="329" Count="0" />
     </LineIds>
     <LineIds Name="RunUnitTransporterBase.FB_init">

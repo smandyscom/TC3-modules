@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
-  <POU Name="RunUnitCelluarA" Id="{8c290897-f573-4530-b2b8-1a75c3433cf9}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK RunUnitCelluarA EXTENDS RunUnitIndexerMaster
+  <POU Name="RunUnitCellularA" Id="{8c290897-f573-4530-b2b8-1a75c3433cf9}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunUnitCellularA EXTENDS RunUnitIndexerMaster
 VAR_INPUT
 	allHit : BOOL;
 	allReach : BOOL;
@@ -23,7 +23,7 @@ VAR
 	//lifters : ARRAY[1..3] OF POINTER TO RunLifterCelluar;
 	commandSetZero : ParameterSet;
 	commandFinalGoal : ParameterSet;
-	commandConpensate : ParameterSet;
+	ptCommandConpensate : POINTER TO ParameterSet;
 
 	fastExecute : BOOL;
 	slowExecute : BOOL;
@@ -62,17 +62,17 @@ IF bSerialTransition AND State = 1 THEN
 	NextState := 16#10; //state override : release lifters
 END_IF
 
-IF State >=3 AND State <=7 AND_THEN Upstream<>0 AND Upstream^.syncEngaged AND NOT Upstream^.syncAcknowledged THEN	
+IF State >=3 AND State <=6 AND_THEN Upstream<>0 AND Upstream^.syncEngaged AND NOT Upstream^.syncAcknowledged THEN	
 	Upstream^.syncAcknowledged := TRUE;//pull upstream when ready
 	//Data transmit
-	SlotBase^.wordOut.0 := TRUE; //TODO , follow that status
+	//SlotBase^.wordOut.0 := TRUE; //TODO , follow that status
 	//SlotBase^.id := Upstream^.syncMatValue;
 	//set-up final goal
 	commandFinalGoal.command := eCommandTypes.POSITION;
 	commandFinalGoal.parameter.position.Velocity := ptCommandFast^.parameter.position.Velocity;
 	commandFinalGoal.parameter.position.Acceleration := ptCommandFast^.parameter.position.Acceleration;
 	commandFinalGoal.parameter.position.Deceleration := ptCommandFast^.parameter.position.Deceleration;
-	commandFinalGoal.parameter.position.Position := Axis^.PositionFeedback + ptCommandSlow^.parameter.position.Position + 65; //goal extended
+	commandFinalGoal.parameter.position.Position := Axis^.PositionFeedback + ptCommandSlow^.parameter.position.Position + ptCommandConpensate^.parameter.position.Position; //goal extended
 	
 END_IF
 
@@ -133,7 +133,7 @@ CASE outputState OF
 		finalGoalExecute:=TRUE;//need do extension
 		bSerialTransition:= TRUE; //serial transition	
 	ELSIF allReach THEN
-		NextState := 16#20; //manually put carrier
+		//NextState := 16#20; //manually put carrier
 	END_IF
 	7:
 	// on extension , only one oppertunity
@@ -169,8 +169,8 @@ VAR_INPUT
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
 	
 	argParent : POINTER TO RunUnitGeneric;
-	argSlotBase : POINTER TO MaterialBlock;
-	argSlotLast : POINTER TO MaterialBlock;
+	argSlotBase : POINTER TO RunMaterial;
+	argSlotLast : POINTER TO RunMaterial;
 	
 	argUpstream : POINTER TO RunUnitTransporterBase;
 	argAxis : POINTER TO RunAxis;
@@ -179,8 +179,7 @@ END_VAR
 VAR CONSTANT
 	indexFast : INT := 1;
 	indexSlow : INT := 2;
-	indexRaise : INT := 3;
-	indexCheck : INT :=4;
+	indexComp : INT := 3;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[//initialize 
@@ -195,8 +194,7 @@ Upstream := argUpstream;
 IF Axis<>0 THEN
 	ptCommandFast := ADR(Axis^.ptpCommands[indexFast]);
 	ptCommandSlow := ADR(Axis^.ptpCommands[indexSlow]);
-	//ptCommandTriggerRaise := ADR(Axis^.ptpCommands[indexRaise]); //trigger point
-	//ptCommandCheckRaise :=ADR(Axis^.ptpCommands[indexCheck]); //if not all lifter done until then , slowdown conveyor motion
+	ptCommandConpensate := ADR(Axis^.ptpCommands[indexComp]);
 	commandTriggerRaise.parameter.position.Position := 250; //carrier length
 END_IF
 
@@ -216,7 +214,7 @@ NextState := eSpecialStates.INITIAL_END;
 Initialize := SUPER^.Initialize();]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="RunUnitCelluarA">
+    <LineIds Name="RunUnitCellularA">
       <LineId Id="1642" Count="0" />
       <LineId Id="1801" Count="0" />
       <LineId Id="1643" Count="2" />
@@ -247,7 +245,7 @@ Initialize := SUPER^.Initialize();]]></ST>
       <LineId Id="9" Count="0" />
       <LineId Id="1863" Count="0" />
     </LineIds>
-    <LineIds Name="RunUnitCelluarA.FB_init">
+    <LineIds Name="RunUnitCellularA.FB_init">
       <LineId Id="15" Count="5" />
       <LineId Id="14" Count="0" />
       <LineId Id="72" Count="0" />
@@ -255,14 +253,13 @@ Initialize := SUPER^.Initialize();]]></ST>
       <LineId Id="63" Count="0" />
       <LineId Id="66" Count="0" />
       <LineId Id="69" Count="0" />
-      <LineId Id="68" Count="0" />
-      <LineId Id="64" Count="0" />
+      <LineId Id="114" Count="0" />
       <LineId Id="96" Count="0" />
       <LineId Id="65" Count="0" />
       <LineId Id="73" Count="2" />
       <LineId Id="32" Count="0" />
     </LineIds>
-    <LineIds Name="RunUnitCelluarA.Initialize">
+    <LineIds Name="RunUnitCellularA.Initialize">
       <LineId Id="6" Count="1" />
       <LineId Id="5" Count="0" />
     </LineIds>

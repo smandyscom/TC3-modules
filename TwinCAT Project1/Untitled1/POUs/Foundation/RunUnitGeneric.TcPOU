@@ -20,9 +20,9 @@ END_VAR
 VAR	
 	Parent : POINTER TO RunUnitGeneric;
 	
-	SlotBase : POINTER TO MaterialBlock;
-	SlotCount : int ;
-	SlotLast : POINTER TO MaterialBlock;
+	SlotBase : POINTER TO RunMaterial;
+	SlotCount : INT ;
+	SlotLast : POINTER TO RunMaterial;
 	
 	bLastParentStatus : BIT; // memorize last parent status	
 	bSerialTransition : BIT;
@@ -36,7 +36,7 @@ END_VAR
 VAR PERSISTENT
 	//station specific settings area (user settings
 	slaveLinkageStatus : ARRAY[1..32] OF BOOL; // configuration
-	miscsParameters : ARRAY[1..8] of int;
+	//miscsParameters : ARRAY[1..8] of int;
 END_VAR
 VAR CONSTANT 
 	bit0EnStep : INT := 0;
@@ -154,8 +154,8 @@ VAR_INPUT
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
 	
 	argParent : POINTER TO RunUnitGeneric;
-	argSlotBase : POINTER TO MaterialBlock;
-	argSlotLast : POINTER TO MaterialBlock;
+	argSlotBase : POINTER TO RunMaterial;
+	argSlotLast : POINTER TO RunMaterial;
 END_VAR
 ]]></Declaration>
       <Implementation>

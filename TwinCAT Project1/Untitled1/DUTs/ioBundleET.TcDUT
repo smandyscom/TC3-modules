@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <DUT Name="ioBundleET" Id="{cdadf5ca-dec1-4072-9b7c-58fd05cdef02}">
+    <Declaration><![CDATA[TYPE ioBundleET :
+STRUCT
+	external AT%Q* : BIT;
+	hipot AT%Q* : BIT;
+	i1 AT%Q* : BIT;
+	i2 AT%Q* : BIT;
+	
+	o1 AT%I* : BIT;
+	o2 AT%I* : BIT;
+	o3 AT%I* : BIT; //pin7, attached
+	o4 AT%I* : BIT; //pin8, OK/NG
+	o5 AT%I* : BIT;
+	o6 at%I* : BIT;
+
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

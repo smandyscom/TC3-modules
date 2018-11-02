@@ -96,6 +96,9 @@
     <Compile Include="DUTs\ioBundleConveyor.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\ioBundleET.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\ioBundleLabelGripper.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -118,6 +121,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Foundation\CommonBase.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Foundation\RunMaterial.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Foundation\RunUnitSlave.TcPOU">
@@ -168,6 +174,9 @@
     <Compile Include="POUs\Stations\CellularD\RunLabelHandler.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Stations\RunAxisAoiView.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Stations\RunAxisInspection.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -175,6 +184,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Stations\RunETest.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Stations\RunInputV1.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Stations\RunUnitCellularAIO.TcPOU">
@@ -186,7 +198,7 @@
     <Compile Include="POUs\Stations\RunLifterCelluar.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\Stations\RunUnitCelluarA.TcPOU">
+    <Compile Include="POUs\Stations\RunUnitCellularA.TcPOU">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -210,13 +222,13 @@
     <Folder Include="POUs" />
   </ItemGroup>
   <ItemGroup>
+    <PlaceholderReference Include="Tc2_DataExchange">
+      <DefaultResolution>Tc2_DataExchange, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_DataExchange</Namespace>
+    </PlaceholderReference>
     <PlaceholderReference Include="Tc2_MC2">
       <DefaultResolution>Tc2_MC2, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_MC2</Namespace>
-    </PlaceholderReference>
-    <PlaceholderReference Include="Tc2_ModbusSrv">
-      <DefaultResolution>Tc2_ModbusSrv, * (Beckhoff Automation GmbH)</DefaultResolution>
-      <Namespace>Tc2_ModbusSrv</Namespace>
     </PlaceholderReference>
     <PlaceholderReference Include="Tc2_Standard">
       <DefaultResolution>Tc2_Standard, * (Beckhoff Automation GmbH)</DefaultResolution>
