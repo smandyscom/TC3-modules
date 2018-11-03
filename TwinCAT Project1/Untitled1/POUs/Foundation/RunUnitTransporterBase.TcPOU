@@ -145,6 +145,28 @@ IF Upstream=0 THEN
 END_IF]]></ST>
       </Implementation>
     </Method>
+    <Method Name="Initialize" Id="{79ae30a2-42c5-4835-a8e6-46d0a2798a9c}">
+      <Declaration><![CDATA[METHOD Initialize : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+//reset sync signal
+CASE outputState OF
+	eSpecialStates.INITIAL_BEGIN:
+		syncEngaged := FALSE; //reset
+		IF Upstream <> 0 THEN
+			Upstream^.syncAcknowledged := FALSE; //reset
+		END_IF
+		//direct change state
+		NextState := eSpecialStates.INITIAL_END;
+END_CASE
+
+Initialize := SUPER^.Initialize();
+]]></ST>
+      </Implementation>
+    </Method>
     <LineIds Name="RunUnitTransporterBase">
       <LineId Id="538" Count="5" />
       <LineId Id="711" Count="0" />
@@ -167,6 +189,19 @@ END_IF]]></ST>
       <LineId Id="15" Count="4" />
       <LineId Id="21" Count="3" />
       <LineId Id="11" Count="0" />
+    </LineIds>
+    <LineIds Name="RunUnitTransporterBase.Initialize">
+      <LineId Id="9" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="18" Count="3" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="6" Count="0" />
+      <LineId Id="5" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
