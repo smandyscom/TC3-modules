@@ -24,9 +24,9 @@ CASE outputState OF
 		IF bSerialTransition THEN
 			//TODO , material transfer
 		END_IF
-		IF materialValidSensor THEN
-			clamper^.Execute(eCylinderCommands.COMMAND_A);
-		END_IF
+		//IF materialValidSensor THEN
+		//	clamper^.Execute(eCylinderCommands.COMMAND_A);
+		//END_IF
 	16#203:
 		IF clamper^.Execute(eCylinderCommands.COMMAND_A) THEN
 			//closure
@@ -66,6 +66,15 @@ workingSignal := argWorkingSignal; //link
 clamper := argClamper;]]></ST>
       </Implementation>
     </Method>
+    <Method Name="Initialize" Id="{71942685-e4a4-4702-ac08-2d35b3a9e76b}">
+      <Declaration><![CDATA[METHOD Initialize : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Initialize := clamper^.Execute(eCylinderCommands.COMMAND_A); //release clamper]]></ST>
+      </Implementation>
+    </Method>
     <LineIds Name="RunInputV1">
       <LineId Id="9" Count="0" />
       <LineId Id="14" Count="0" />
@@ -89,6 +98,9 @@ clamper := argClamper;]]></ST>
       <LineId Id="13" Count="0" />
       <LineId Id="26" Count="0" />
       <LineId Id="25" Count="0" />
+    </LineIds>
+    <LineIds Name="RunInputV1.Initialize">
+      <LineId Id="5" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
