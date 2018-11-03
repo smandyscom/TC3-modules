@@ -23,6 +23,21 @@ CASE outputState OF
 		END_IF
 END_CASE]]></ST>
     </Implementation>
+    <Method Name="Initialize" Id="{bce0c290-06e8-4f8e-9747-fe861d1b9107}">
+      <Declaration><![CDATA[METHOD Initialize : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//default initialization sequence
+CASE outputState OF 
+	eSpecialStates.INITIAL_BEGIN:
+		NextState := eSpecialStates.INITIAL_STATE_7;
+END_CASE
+
+Initialize := SUPER^.Initialize();]]></ST>
+      </Implementation>
+    </Method>
     <LineIds Name="RunAxisAoiView">
       <LineId Id="9" Count="0" />
       <LineId Id="12" Count="0" />
@@ -35,6 +50,14 @@ END_CASE]]></ST>
       <LineId Id="26" Count="0" />
       <LineId Id="20" Count="2" />
       <LineId Id="14" Count="0" />
+    </LineIds>
+    <LineIds Name="RunAxisAoiView.Initialize">
+      <LineId Id="11" Count="0" />
+      <LineId Id="5" Count="1" />
+      <LineId Id="8" Count="0" />
+      <LineId Id="7" Count="0" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="9" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

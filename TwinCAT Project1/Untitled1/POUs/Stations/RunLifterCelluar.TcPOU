@@ -69,7 +69,7 @@ CASE outputState OF
 	bSerialTransition := Cylinder^.Execute(eCylinderCommands.COMMAND_B);
 	5:
 	//to working position
-	IF AxisHorizon^.ExecuteParameter(ptCommandHorizonWorking) THEN
+	IF AxisHorizon=0 OR (AxisHorizon<>0 AND_THEN AxisHorizon^.ExecuteParameter(ptCommandHorizonWorking)) THEN
 		//dispatching work to station
 		//Dispatch working signal to all station
 		FOR nCounter := 1 TO 4 BY 1 DO
@@ -84,7 +84,7 @@ CASE outputState OF
 		mRelease := FALSE;
 	END_IF
 	16#21:
-	bSerialTransition :=  AxisHorizon^.ExecuteParameter(ptCommandHorizonHit);
+	bSerialTransition := AxisHorizon=0 OR (AxisHorizon<>0 AND_THEN  AxisHorizon^.ExecuteParameter(ptCommandHorizonHit));
 	16#22:	
 	bSerialTransition := Cylinder^.Execute(eCylinderCommands.COMMAND_A);	//release holder
 	16#23:
