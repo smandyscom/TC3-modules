@@ -35,9 +35,11 @@ END_VAR]]></Declaration>
 
 CASE outputState OF 
 	eSpecialStates.INITIAL_BEGIN:
-		IF rotator=0 or (rotator<>0 AND_THEN rotator^.ExecuteParameter(ptRotatorMutual)) THEN
+		bSerialTransition := holderCylinder^.Execute(eCylinderCommands.COMMAND_B); //hold
+	eSpecialStates.INITIAL_STATE_1:
+		IF (rotator=0 OR (rotator<>0 AND_THEN rotator^.ExecuteParameter(ptRotatorMutual))) THEN
 			NextState := eSpecialStates.INITIAL_END;
-		END_IF	
+		END_IF
 	//-----------------switch function
 	0:
 		IF reachSensor^.debouncedOn THEN
@@ -203,8 +205,9 @@ END_IF
       <LineId Id="11" Count="0" />
       <LineId Id="10" Count="0" />
       <LineId Id="28" Count="0" />
-      <LineId Id="171" Count="1" />
-      <LineId Id="182" Count="1" />
+      <LineId Id="414" Count="2" />
+      <LineId Id="418" Count="1" />
+      <LineId Id="417" Count="0" />
       <LineId Id="42" Count="1" />
       <LineId Id="45" Count="1" />
       <LineId Id="146" Count="0" />
