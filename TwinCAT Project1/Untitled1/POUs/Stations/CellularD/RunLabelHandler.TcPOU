@@ -12,7 +12,7 @@ VAR
 	fbWrite : FB_FileWrite;
 	fbClose : FB_FileClose;
 	fileHandle : UINT;
-	filePath : STRING := '';
+	
 	fileContent : STRING := '100,2';
 	fileBytes : ARRAY[0..15] OF BYTE;
 	// communicate with external device
@@ -40,6 +40,7 @@ END_VAR
 VAR PERSISTENT
 	bVacuumTimeout : TON;
 	pressGoal : INT := 3;
+	filePath : STRING := '';
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[SUPER^();
@@ -71,16 +72,23 @@ CASE outputState OF
 		bSerialTransition := TRUE;
 	16#301:
 		bSerialTransition := NOT fbOpen.bBusy;
+		IF bSerialTransition THEN
+			fbOpen.bExecute:=FALSE;
+		END_IF
 	16#302:
 		fbWrite.bExecute := TRUE;
 		bSerialTransition := TRUE;
 	16#303:
 		bSerialTransition := NOT fbWrite.bBusy;
+		IF bSerialTransition THEN
+			fbWrite.bExecute:=FALSE;
+		END_IF
 	16#304:
 		fbClose.bExecute := TRUE;
 		bSerialTransition := TRUE;
 	16#305:
 		IF NOT fbClose.bBusy THEN
+			fbClose.bExecute := false;
 			NextState:=16#400;
 		END_IF
 	//-----------------------------
@@ -90,14 +98,14 @@ CASE outputState OF
 			ioPrinter^.prtStart := TRUE;
 		END_IF
 	16#401:
-		//waiting printer
-		bSerialTransition := NOT ioPrinter^.prtEnd AND NOT ioPrinter^.prtData;
-		IF bSerialTransition THEN
-			ioPrinter^.prtStart := false;
-		END_IF
+		ioPrinter^.prtStart := FALSE;
+		bSerialTransition := TRUE;
 	16#402:
-		bSerialTransition := axis^.ExecuteParameter(ptCommandLabelTake);
+		//waiting printer
+		bSerialTransition := NOT ioPrinter^.prtEnd AND NOT ioPrinter^.prtData ;
 	16#403:
+		bSerialTransition := axis^.ExecuteParameter(ptCommandLabelTake);
+	16#404:
 		bSerialTransition := gripperVertical^.Execute(eCylinderCommands.COMMAND_B);	//down
 		IF bSerialTransition THEN
 			//generate vacuum
@@ -106,16 +114,16 @@ CASE outputState OF
 			//
 			bVacuumTimeout.IN :=TRUE;
 		END_IF
-	16#404:
+	16#405:
 		bSerialTransition := bVacuumSensor^.debouncedOn;
 		IF bSerialTransition THEN
 			bVacuumTimeout.IN :=FALSE; //reset
 		ELSIF bVacuumTimeout.Q THEN
 			//TODO , timeout alarm
 		END_IF
-	16#405:
-		bSerialTransition := gripperVertical^.Execute(eCylinderCommands.COMMAND_A); //up
 	16#406:
+		bSerialTransition := gripperVertical^.Execute(eCylinderCommands.COMMAND_A); //up
+	16#407:
 		IF axis^.ExecuteParameter(ptCommandLabelPlace) THEN
 			//up
 			NextState := 0; //wait trigger
@@ -157,12 +165,13 @@ CASE outputState OF
 		bSerialTransition := shifter^.Execute(eCylinderCommands.COMMAND_A); //up
 		IF bSerialTransition THEN
 			workingSignal^ := FALSE; //off
+			bWorkingOverride:= false;
 		END_IF
 	16#232:
 		//ready
 		IF axis^.ExecuteParameter(ptCommandLabelTake) THEN
 			pressCounter:=0;
-			NextState := 16#400;
+			NextState := 16#300;
 		END_IF
 END_CASE
 bVacuumTimeout(IN:= , PT:= , Q=> , ET=> );
@@ -207,8 +216,8 @@ VAR_INPUT
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
 	
 	argParent : POINTER TO RunUnitGeneric;
-	argSlotBase : POINTER TO MaterialBlock;
-	argSlotLast : POINTER TO MaterialBlock;
+	argSlotBase : POINTER TO RunMaterial;
+	argSlotLast : POINTER TO RunMaterial;
 	
 	argWorkingSignal : POINTER TO BOOL;
 	
@@ -276,17 +285,23 @@ ioVacuum := argIoVacuum;]]></ST>
       <LineId Id="288" Count="0" />
       <LineId Id="38" Count="1" />
       <LineId Id="26" Count="0" />
-      <LineId Id="327" Count="14" />
+      <LineId Id="327" Count="4" />
+      <LineId Id="386" Count="2" />
+      <LineId Id="332" Count="4" />
+      <LineId Id="390" Count="1" />
+      <LineId Id="389" Count="0" />
+      <LineId Id="337" Count="4" />
+      <LineId Id="392" Count="0" />
       <LineId Id="344" Count="1" />
       <LineId Id="343" Count="0" />
       <LineId Id="241" Count="1" />
       <LineId Id="244" Count="0" />
       <LineId Id="247" Count="0" />
       <LineId Id="246" Count="0" />
+      <LineId Id="393" Count="2" />
       <LineId Id="27" Count="0" />
       <LineId Id="40" Count="0" />
       <LineId Id="47" Count="0" />
-      <LineId Id="248" Count="2" />
       <LineId Id="41" Count="1" />
       <LineId Id="53" Count="1" />
       <LineId Id="57" Count="0" />
@@ -331,7 +346,9 @@ ioVacuum := argIoVacuum;]]></ST>
       <LineId Id="123" Count="0" />
       <LineId Id="132" Count="1" />
       <LineId Id="239" Count="1" />
-      <LineId Id="251" Count="2" />
+      <LineId Id="251" Count="1" />
+      <LineId Id="396" Count="0" />
+      <LineId Id="253" Count="0" />
       <LineId Id="125" Count="2" />
       <LineId Id="144" Count="0" />
       <LineId Id="134" Count="1" />
