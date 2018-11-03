@@ -32,7 +32,7 @@ isLastSlotOccupied := TRUE; //always occupied , force to transmit to downstream
 
 SUPER^(); //run indexer master
 
-IF bSerialTransition AND State = 0 THEN
+IF bSerialTransition AND State = 1 THEN
 	triggerRelease:=TRUE;
 	NextState := 16#10; //state override : release lifters
 END_IF
@@ -83,7 +83,7 @@ CASE outputState OF
 		//After all reached , then pull upstream
 		Upstream^.syncAcknowledged := TRUE;//pull upstream when ready
 		//Data transmit
-		SlotBase^.wordOut.0 := TRUE; //TODO , follow that status
+		//SlotBase^.wordOut.0 := TRUE; //TODO , follow that status
 		bSerialTransition:= TRUE; //serial transition	
 	ELSIF timeoutTimer.Q THEN 
 		//waiting upstream , reminder
@@ -122,8 +122,8 @@ VAR_INPUT
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
 	
 	argParent : POINTER TO RunUnitGeneric;
-	argSlotBase : POINTER TO MaterialBlock;
-	argSlotLast : POINTER TO MaterialBlock;
+	argSlotBase : POINTER TO RunMaterial;
+	argSlotLast : POINTER TO RunMaterial;
 	
 	argUpstream : POINTER TO RunUnitTransporterBase;
 	argAxis : POINTER TO RunAxis;

@@ -24,9 +24,9 @@ CASE outputState OF
 		IF bSerialTransition THEN
 			//TODO , material transfer
 		END_IF
-		IF materialValidSensor THEN
-			clamper^.Execute(eCylinderCommands.COMMAND_A);
-		END_IF
+		//IF materialValidSensor THEN
+		//	clamper^.Execute(eCylinderCommands.COMMAND_A);
+		//END_IF
 	16#203:
 		IF clamper^.Execute(eCylinderCommands.COMMAND_A) THEN
 			//closure
@@ -36,6 +36,45 @@ END_CASE
 
 ]]></ST>
     </Implementation>
+    <Method Name="FB_init" Id="{6e9ca68a-b2aa-44f6-88fb-ae41aaca9008}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	
+	argParent : POINTER TO RunUnitGeneric;
+	argSlotBase : POINTER TO RunMaterial;
+	argSlotLast : POINTER TO RunMaterial;
+	
+	argWorkingSignal : POINTER TO BOOL;
+	
+	argClamper : POINTER TO RunCylinder;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//initialize 
+Parent := argParent;
+SlotBase := argSlotBase;
+SlotLast := argSlotLast;
+//
+IF bInitRetains THEN
+	NextState := eSpecialStates.INITIAL_BEGIN;
+END_IF
+
+workingSignal := argWorkingSignal; //link
+//link
+clamper := argClamper;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Initialize" Id="{71942685-e4a4-4702-ac08-2d35b3a9e76b}">
+      <Declaration><![CDATA[METHOD Initialize : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Initialize := clamper^.Execute(eCylinderCommands.COMMAND_A); //release clamper]]></ST>
+      </Implementation>
+    </Method>
     <LineIds Name="RunInputV1">
       <LineId Id="9" Count="0" />
       <LineId Id="14" Count="0" />
@@ -53,6 +92,15 @@ END_CASE
       <LineId Id="16" Count="0" />
       <LineId Id="25" Count="0" />
       <LineId Id="24" Count="0" />
+    </LineIds>
+    <LineIds Name="RunInputV1.FB_init">
+      <LineId Id="16" Count="8" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="25" Count="0" />
+    </LineIds>
+    <LineIds Name="RunInputV1.Initialize">
+      <LineId Id="5" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

@@ -30,8 +30,10 @@ CASE outputState OF
 	16#202:
 		bSerialTransition := axis1^.ExecuteParameterIndex(indexCommandPick); //down to pick
 	16#203:
-		IF cableHolder^.Execute(eCylinderCommands.COMMAND_B) THEN
-			//hold , going to swing
+		bSerialTransition := cableHolder^.Execute(eCylinderCommands.COMMAND_B) ;//hold 
+	16#204:
+		IF connectorHolder^.Execute(eCylinderCommands.COMMAND_A) THEN
+			//going to swing
 			NextState := eSpecialStates.SLAVE_AXIS_INSPECTION_ENTER;
 		END_IF
 	//-----------------
@@ -149,10 +151,11 @@ Initialize:= SUPER^.Initialize(); //do axis return]]></ST>
       <LineId Id="28" Count="0" />
       <LineId Id="30" Count="0" />
       <LineId Id="32" Count="4" />
-      <LineId Id="39" Count="1" />
-      <LineId Id="43" Count="0" />
-      <LineId Id="45" Count="0" />
+      <LineId Id="39" Count="0" />
       <LineId Id="44" Count="0" />
+      <LineId Id="85" Count="1" />
+      <LineId Id="89" Count="0" />
+      <LineId Id="87" Count="1" />
       <LineId Id="42" Count="0" />
       <LineId Id="46" Count="15" />
       <LineId Id="63" Count="1" />

@@ -66,7 +66,10 @@ CASE outputState OF
 	bSerialTransition := AxisVertical^.ExecuteParameter(ptCommandLifterWorking);
 	4:
 	//hold
-	IF Cylinder^.Execute(eCylinderCommands.COMMAND_B)THEN
+	bSerialTransition := Cylinder^.Execute(eCylinderCommands.COMMAND_B);
+	5:
+	//to working position
+	IF AxisHorizon=0 OR (AxisHorizon<>0 AND_THEN AxisHorizon^.ExecuteParameter(ptCommandHorizonWorking)) THEN
 		//dispatching work to station
 		//Dispatch working signal to all station
 		FOR nCounter := 1 TO 4 BY 1 DO
@@ -80,11 +83,13 @@ CASE outputState OF
 	IF bSerialTransition THEN
 		mRelease := FALSE;
 	END_IF
-	16#21:	
+	16#21:
+	bSerialTransition := AxisHorizon=0 OR (AxisHorizon<>0 AND_THEN  AxisHorizon^.ExecuteParameter(ptCommandHorizonHit));
+	16#22:	
 	bSerialTransition := Cylinder^.Execute(eCylinderCommands.COMMAND_A);	//release holder
-	16#22:
-	bSerialTransition :=  AxisVertical^.ExecuteParameter(ptCommandLifterRelease);
 	16#23:
+	bSerialTransition :=  AxisVertical^.ExecuteParameter(ptCommandLifterRelease);
+	16#24:
 	IF NOT ptReachSensorStatus^ THEN
 		//make sure all state reseted
 		NextState := 0;
@@ -212,7 +217,14 @@ END_VAR
       </Set>
     </Property>
     <LineIds Name="RunLifterCelluar">
-      <LineId Id="549" Count="57" />
+      <LineId Id="549" Count="31" />
+      <LineId Id="588" Count="0" />
+      <LineId Id="655" Count="2" />
+      <LineId Id="660" Count="4" />
+      <LineId Id="658" Count="1" />
+      <LineId Id="589" Count="5" />
+      <LineId Id="653" Count="1" />
+      <LineId Id="595" Count="11" />
       <LineId Id="617" Count="0" />
       <LineId Id="621" Count="0" />
       <LineId Id="618" Count="2" />
