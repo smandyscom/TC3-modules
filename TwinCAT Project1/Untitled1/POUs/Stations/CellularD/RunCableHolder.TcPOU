@@ -11,6 +11,7 @@ VAR
 	//axis (share
 	axis : POINTER TO RunAxis;
 	ptDrag : POINTER TO ParameterSet;
+	ptRelease : pointer to ParameterSet;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -47,16 +48,18 @@ CASE outputState OF
 		//wait until
 		bSerialTransition := NOT slaveWorkingSignal[1];
 	16#211:
-		//release
-		transitionByte.0 := holderFixedEnd^.Execute(eCylinderCommands.COMMAND_A);
-		transitionByte.1 := holderMovingEnd^.Execute(eCylinderCommands.COMMAND_A);
-		bSerialTransition := (transitionByte = 16#3);
+		bSerialTransition := holderFixedEnd^.Execute(eCylinderCommands.COMMAND_A); //release
 	16#212:
+		bSerialTransition := axis^.ExecuteParameter(ptRelease);//inform transporter moving release
+	16#213:
 		//release
-		transitionByte.0 := shifterShort^.Execute(eCylinderCommands.COMMAND_A);
-		transitionByte.1 := shifterLong^.Execute(eCylinderCommands.COMMAND_A);
-		IF transitionByte = 16#3 THEN
-			NextState := eSpecialStates.SLAVE_WORK_DONE;
+		bSerialTransition := shifterLong^.Execute(eCylinderCommands.COMMAND_A);
+	16#214:
+		//release
+		bSerialTransition := holderMovingEnd^.Execute(eCylinderCommands.COMMAND_A);
+	16#215:
+		IF shifterShort^.Execute(eCylinderCommands.COMMAND_A) THEN
+			NextState := eSpecialStates.SLAVE_WORK_DONE; //rewind
 		END_IF
 END_CASE]]></ST>
     </Implementation>
@@ -83,6 +86,7 @@ VAR_INPUT
 END_VAR
 VAR CONSTANT
 	indexDrag : INT :=8;
+	indexRelease : int :=9;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -105,7 +109,8 @@ shifterLong := argShifterLong;
 
 //
 axis := argAxis;
-ptDrag := ADR(axis^.ptpCommands[indexDrag]);]]></ST>
+ptDrag := ADR(axis^.ptpCommands[indexDrag]);
+ptRelease := ADR(axis^.ptpCommands[indexRelease]);]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="RunCableHolder">
@@ -131,13 +136,13 @@ ptDrag := ADR(axis^.ptpCommands[indexDrag]);]]></ST>
       <LineId Id="71" Count="0" />
       <LineId Id="58" Count="1" />
       <LineId Id="70" Count="0" />
-      <LineId Id="72" Count="0" />
-      <LineId Id="74" Count="2" />
-      <LineId Id="73" Count="0" />
-      <LineId Id="77" Count="0" />
-      <LineId Id="79" Count="2" />
-      <LineId Id="78" Count="0" />
-      <LineId Id="82" Count="1" />
+      <LineId Id="136" Count="0" />
+      <LineId Id="145" Count="2" />
+      <LineId Id="117" Count="1" />
+      <LineId Id="143" Count="0" />
+      <LineId Id="124" Count="1" />
+      <LineId Id="127" Count="0" />
+      <LineId Id="138" Count="3" />
       <LineId Id="24" Count="0" />
     </LineIds>
     <LineIds Name="RunCableHolder.FB_init">
@@ -150,6 +155,7 @@ ptDrag := ADR(axis^.ptpCommands[indexDrag]);]]></ST>
       <LineId Id="61" Count="0" />
       <LineId Id="60" Count="0" />
       <LineId Id="62" Count="1" />
+      <LineId Id="88" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
