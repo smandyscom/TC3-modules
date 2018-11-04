@@ -48,7 +48,11 @@ CASE outputState OF
 		//wait until
 		bSerialTransition := NOT slaveWorkingSignal[1];
 	16#211:
-		bSerialTransition := holderFixedEnd^.Execute(eCylinderCommands.COMMAND_A); //release
+		transitionByte.0 := holderFixedEnd^.Execute(eCylinderCommands.COMMAND_A); //release
+		transitionByte.1 := holderMovingEnd^.Execute(eCylinderCommands.COMMAND_A);
+		IF transitionByte = 16#3 THEN
+			bSerialTransition := TRUE;
+		END_IF
 	16#212:
 		bSerialTransition := axis^.ExecuteParameter(ptRelease);//inform transporter moving release
 	16#213:
@@ -137,7 +141,9 @@ ptRelease := ADR(axis^.ptpCommands[indexRelease]);]]></ST>
       <LineId Id="58" Count="1" />
       <LineId Id="70" Count="0" />
       <LineId Id="136" Count="0" />
-      <LineId Id="145" Count="2" />
+      <LineId Id="145" Count="0" />
+      <LineId Id="149" Count="3" />
+      <LineId Id="146" Count="1" />
       <LineId Id="117" Count="1" />
       <LineId Id="143" Count="0" />
       <LineId Id="124" Count="1" />
