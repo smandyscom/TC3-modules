@@ -152,7 +152,7 @@ ptCommandLifterHit := ADR(AxisVertical^.ptpCommands[indexHit]); // raise to hit
 ptCommandLifterRelease :=  ADR(AxisVertical^.ptpCommands[indexRelease]);; //release
 ptCommandLifterWorking :=  ADR(AxisVertical^.ptpCommands[indexWorking]);; //lift carrier to working position
 //horizon
-ptCommandHorizonWorking := ADR(AxisHorizon^.ptpCommands[indexRelease]);
+ptCommandHorizonWorking := ADR(AxisHorizon^.ptpCommands[indexWorking]);
 ptCommandHorizonHit :=ADR(AxisHorizon^.ptpCommands[indexHit]);
 //sensor
 ptObstacleSensorStatus := ADR(argObstacleSensor^.debouncedOn); //fibers
