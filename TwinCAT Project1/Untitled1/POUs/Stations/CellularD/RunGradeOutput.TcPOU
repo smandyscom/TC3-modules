@@ -41,6 +41,11 @@ CASE outputState OF
 		bSerialTransition:=axisVertical^.Execute(eCylinderCommands.COMMAND_A); //up
 	16#204:
 		bSerialTransition:=clamper^.Execute(eCylinderCommands.COMMAND_A); //clamper return
+		IF bSerialTransition THEN
+			workingSignal^ := FALSE; //release
+			bWorkingOverride:= FALSE;
+			bMaterialOverride:= false;
+		END_IF
 	16#205:
 		IF axisMoving^.ExecuteParameter(ptCommandOK) THEN
 			//TODO , according to grade to move
@@ -52,8 +57,10 @@ CASE outputState OF
 	16#211:
 		bSerialTransition:=holder^.Execute(eCylinderCommands.COMMAND_A); //release
 	16#212:
+		bSerialTransition:=axisVertical^.Execute(eCylinderCommands.COMMAND_A); //up
+	16#213:
 		IF axisMoving^.ExecuteParameter(ptCommandReady) THEN
-			NextState := eSpecialStates.SLAVE_WORK_DONE;
+			NextState := 0;
 		END_IF
 END_CASE]]></ST>
     </Implementation>
@@ -119,13 +126,18 @@ clamper := argClamper;]]></ST>
       <LineId Id="37" Count="1" />
       <LineId Id="65" Count="0" />
       <LineId Id="67" Count="0" />
+      <LineId Id="98" Count="1" />
+      <LineId Id="101" Count="1" />
+      <LineId Id="100" Count="0" />
       <LineId Id="39" Count="1" />
       <LineId Id="47" Count="0" />
       <LineId Id="49" Count="0" />
       <LineId Id="48" Count="0" />
       <LineId Id="50" Count="0" />
       <LineId Id="41" Count="2" />
-      <LineId Id="51" Count="4" />
+      <LineId Id="51" Count="0" />
+      <LineId Id="84" Count="1" />
+      <LineId Id="52" Count="3" />
       <LineId Id="17" Count="0" />
     </LineIds>
     <LineIds Name="RunGradeOutput.FB_init">
