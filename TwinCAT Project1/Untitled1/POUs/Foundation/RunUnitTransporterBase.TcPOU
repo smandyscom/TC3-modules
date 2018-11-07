@@ -34,11 +34,6 @@ VAR PERSISTENT
 	varNameSyncAckowledged : STRING;
 	varNameSyncMatSync : STRING;
 	
-	//indexGroup : UDINT := TO_UDINT(eAdsIndexGroups.PLCADS_RWM);
-	//offsetUpstreamSyncEngaged : UDINT := 127;
-	//offsetUpstreamSyncAckowledged  : UDINT := 128;
-	//offsetUpstreamSyncMatSync : UDINT := 130; //64bits
-	
 	timeoutTimer : TON;	
 END_VAR
 ]]></Declaration>

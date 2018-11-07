@@ -34,13 +34,15 @@ VAR
 	finalGoalDone : BOOL;
 			
 END_VAR
-]]></Declaration>
+VAR CONSTANT
+	alarmCodeJammed : UDINT := 16#101;
+	alarmCodeNotReach : UDINT := 16#102;
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[//implement state 3
 isLastSlotOccupied := TRUE; //always occupied , force to transmit to downstream
 
 SUPER^(); //run indexer master
-
 
 //Buffer modes
 IF NOT fastDone AND fastExecute THEN
@@ -55,7 +57,6 @@ IF NOT finalGoalDone AND finalGoalExecute THEN
 	finalGoalDone := Axis^.ExecuteParameterBuffer(ADR(commandFinalGoal),
 	bufferIndex:=3);
 END_IF
-
 
 IF bSerialTransition AND State = 1 THEN
 	triggerRelease:=TRUE;
@@ -74,6 +75,12 @@ IF State >=3 AND State <=6 AND_THEN Upstream<>0 AND Upstream^.syncEngaged AND NO
 	commandFinalGoal.parameter.position.Deceleration := ptCommandFast^.parameter.position.Deceleration;
 	commandFinalGoal.parameter.position.Position := Axis^.PositionFeedback + ptCommandSlow^.parameter.position.Position + ptCommandConpensate^.parameter.position.Position; //goal extended
 	
+	//entered atomic operation , do not interrupt
+	atomicOperation:=TRUE;
+END_IF
+//once alarm occured , release atomic 
+IF atomicOperation AND AlarmCode<>0 THEN
+	atomicOperation := FALSE; 
 END_IF
 
 CASE outputState OF
@@ -109,8 +116,7 @@ CASE outputState OF
 	fastExecute := TRUE; //start to go
 	bSerialTransition:= TRUE; //serial transition
 	4:
-	IF Axis^.PositionFeedback >= commandTriggerRaise.parameter.position.Position THEN
-		
+	IF Axis^.PositionFeedback >= commandTriggerRaise.parameter.position.Position THEN		
 		triggerHit := TRUE;//until trigger raise reached , trigger all lifter to move
 		bSerialTransition:= TRUE; //serial transition
 	//Else : on-going , not trigger lifter
@@ -119,11 +125,12 @@ CASE outputState OF
 	IF Axis^.PositionFeedback >= commandCheckRaise.parameter.position.Position THEN
 		IF allHit THEN
 			triggerHit:=false;
-			slowExecute:=TRUE;//able to slowdown to hit
+			slowExecute:=TRUE;//able to slowdown to bump
 			syncEngaged := false ;// sending over
 			bSerialTransition:= TRUE; //serial transition
-		ELSIF timeoutTimer.Q then
-			// reminder
+		ELSIF fastDone THEN
+			//fast had executed , but not all hit , trigger alarm (stop doing next move
+			AlarmCode := alarmCodeJammed;
 		END_IF
 	//Else : on going , not reached the check point
 	END_IF
@@ -135,30 +142,25 @@ CASE outputState OF
 	ELSIF allReach THEN
 		//NextState := 16#20; //manually put carrier
 	END_IF
+	//---------------------------------------------
 	7:
 	// on extension , only one oppertunity
 	bSerialTransition := finalGoalDone;
 	//------------------------end of running
 	8:
-	bSerialTransition := allReach;
-	IF NOT bSerialTransition AND timeoutTimer.Q THEN	
-		// reminder
+	IF allReach THEN
+		bSerialTransition := TRUE;
+	ELSE
+		AlarmCode := alarmCodeNotReach;
 	END_IF
 	9:
 	IF Upstream <> 0 AND_THEN NOT Upstream^.syncEngaged THEN
 		Upstream^.syncAcknowledged := FALSE; // received carrier
-		NextState :=1; //since working signal raised by individual lifter?
+		NextState :=1; //since working signal raised by individual lifter? 
+		//TDOD , material transmission merge 
 	ELSE
 		// upstream not synchroized			
 	END_IF
-	
-	//------------------------error states
-	16#E0:
-	//(lifter raise fails)recovery , call raise stopper again , if fails , raise alarm again
-	//any lifter fails , execute stop ( or not)
-	16#F0:
-	//(all reach fails)recovery
-	
 END_CASE
 ]]></ST>
     </Implementation>
@@ -206,31 +208,43 @@ END_IF]]></ST>
     <LineIds Name="RunUnitCellularA">
       <LineId Id="1642" Count="0" />
       <LineId Id="1801" Count="0" />
-      <LineId Id="1643" Count="2" />
-      <LineId Id="1647" Count="56" />
+      <LineId Id="1643" Count="1" />
+      <LineId Id="1647" Count="13" />
+      <LineId Id="1662" Count="17" />
+      <LineId Id="1898" Count="0" />
+      <LineId Id="1897" Count="0" />
+      <LineId Id="1680" Count="0" />
+      <LineId Id="1912" Count="0" />
+      <LineId Id="1908" Count="2" />
+      <LineId Id="1681" Count="22" />
       <LineId Id="1764" Count="0" />
       <LineId Id="1762" Count="0" />
       <LineId Id="1765" Count="0" />
       <LineId Id="1763" Count="0" />
-      <LineId Id="1704" Count="20" />
-      <LineId Id="1726" Count="5" />
+      <LineId Id="1704" Count="7" />
+      <LineId Id="1713" Count="11" />
+      <LineId Id="1902" Count="1" />
+      <LineId Id="1727" Count="4" />
       <LineId Id="1733" Count="2" />
       <LineId Id="1798" Count="1" />
-      <LineId Id="1740" Count="2" />
+      <LineId Id="1740" Count="0" />
+      <LineId Id="1907" Count="0" />
+      <LineId Id="1741" Count="1" />
       <LineId Id="1853" Count="0" />
       <LineId Id="1747" Count="1" />
-      <LineId Id="1854" Count="0" />
-      <LineId Id="1749" Count="1" />
-      <LineId Id="1754" Count="0" />
+      <LineId Id="1913" Count="0" />
+      <LineId Id="1917" Count="0" />
+      <LineId Id="1914" Count="0" />
+      <LineId Id="1916" Count="0" />
+      <LineId Id="1915" Count="0" />
       <LineId Id="1841" Count="0" />
       <LineId Id="1844" Count="0" />
       <LineId Id="1846" Count="0" />
       <LineId Id="1852" Count="0" />
+      <LineId Id="1918" Count="0" />
       <LineId Id="1848" Count="0" />
       <LineId Id="1850" Count="0" />
       <LineId Id="1847" Count="0" />
-      <LineId Id="1842" Count="0" />
-      <LineId Id="1755" Count="6" />
       <LineId Id="9" Count="0" />
       <LineId Id="1863" Count="0" />
     </LineIds>

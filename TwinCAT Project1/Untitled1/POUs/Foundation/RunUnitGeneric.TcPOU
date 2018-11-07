@@ -33,8 +33,8 @@ VAR
 	
 	outputState : INT;
 	
-	//interrupt forbidden
-	interruptForbidden : bool := false;
+	//do not stop in atomic operation
+	atomicOperation : BOOL := FALSE;
 END_VAR
 VAR PERSISTENT
 	//station specific settings area (user settings
@@ -78,7 +78,7 @@ END_IF
 
 
 //transit condition
-isTransit := (NOT bEnStep OR (bEnStep AND bTrigStep)) AND NOT bPause;
+isTransit := ((NOT bEnStep OR (bEnStep AND bTrigStep)) AND NOT bPause) OR atomicOperation;
 
 IF isTransit THEN
 	outputState := State; //release and go
