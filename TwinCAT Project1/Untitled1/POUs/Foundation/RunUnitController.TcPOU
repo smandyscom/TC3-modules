@@ -7,6 +7,7 @@ END_VAR
 VAR_OUTPUT
 	currentMode : eOperationModes := eOperationModes.MANUAL; //default in semi-auto
 	isInitializing : BOOL;
+	isError : bool;
 END_VAR
 VAR		
 	nCounter : INT;
@@ -74,6 +75,7 @@ IF errorDevice <>0 THEN
 		
 	ErrorHandler();// handling user-input reset/ignore
 END_IF
+isError := errorDevice <>0;
 //reflect to interface
 interfaceManual(
 	currentMode:= THIS^.currentMode); //scan-in,scan-out,manual...
@@ -222,6 +224,7 @@ END_VAR
       <LineId Id="602" Count="0" />
       <LineId Id="597" Count="3" />
       <LineId Id="594" Count="0" />
+      <LineId Id="880" Count="0" />
       <LineId Id="652" Count="0" />
       <LineId Id="651" Count="0" />
       <LineId Id="761" Count="0" />
