@@ -12,9 +12,9 @@ VAR_OUTPUT
 	triggerRelease : BOOL;
 END_VAR
 VAR
-	// conveyor related , Fast + Slow = pitch
-	ptCommandFast : POINTER TO ParameterSet;
-	ptCommandSlow : POINTER TO ParameterSet;
+	// conveyor related 
+	ptCommandFast : POINTER TO ParameterSet; // as error stop position (jammed
+	ptCommandSlow : POINTER TO ParameterSet; // as Pitch1
 	
 	//Checkpoints
 	commandTriggerRaise: ParameterSet; //trigger point
@@ -23,7 +23,7 @@ VAR
 	//lifters : ARRAY[1..3] OF POINTER TO RunLifterCelluar;
 	commandSetZero : ParameterSet;
 	commandFinalGoal : ParameterSet;
-	ptCommandConpensate : POINTER TO ParameterSet;
+	ptCommandPitch2 : POINTER TO ParameterSet;
 
 	fastExecute : BOOL;
 	slowExecute : BOOL;
@@ -73,8 +73,12 @@ IF State >=3 AND State <=6 AND_THEN Upstream<>0 AND Upstream^.syncEngaged AND NO
 	commandFinalGoal.parameter.position.Velocity := ptCommandFast^.parameter.position.Velocity;
 	commandFinalGoal.parameter.position.Acceleration := ptCommandFast^.parameter.position.Acceleration;
 	commandFinalGoal.parameter.position.Deceleration := ptCommandFast^.parameter.position.Deceleration;
-	commandFinalGoal.parameter.position.Position := Axis^.PositionFeedback + ptCommandSlow^.parameter.position.Position + ptCommandConpensate^.parameter.position.Position; //goal extended
+	commandFinalGoal.parameter.position.Position := Axis^.PositionFeedback + ptCommandPitch2^.parameter.position.Position; //goal extended
 	
+	//prevent backward
+	IF commandFinalGoal.parameter.position.Position < ptCommandSlow^.parameter.position.Position THEN
+		commandFinalGoal.parameter.position.Position := ptCommandSlow^.parameter.position.Position;
+	END_IF
 	//entered atomic operation , do not interrupt
 	atomicOperation:=TRUE;
 END_IF
@@ -196,7 +200,7 @@ Upstream := argUpstream;
 IF Axis<>0 THEN
 	ptCommandFast := ADR(Axis^.ptpCommands[indexFast]);
 	ptCommandSlow := ADR(Axis^.ptpCommands[indexSlow]);
-	ptCommandConpensate := ADR(Axis^.ptpCommands[indexComp]);
+	ptCommandPitch2 := ADR(Axis^.ptpCommands[indexComp]);
 	commandTriggerRaise.parameter.position.Position := 250; //carrier length
 END_IF
 
@@ -206,46 +210,7 @@ END_IF]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="RunUnitCellularA">
-      <LineId Id="1642" Count="0" />
-      <LineId Id="1801" Count="0" />
-      <LineId Id="1643" Count="1" />
-      <LineId Id="1647" Count="13" />
-      <LineId Id="1662" Count="17" />
-      <LineId Id="1898" Count="0" />
-      <LineId Id="1897" Count="0" />
-      <LineId Id="1680" Count="0" />
-      <LineId Id="1912" Count="0" />
-      <LineId Id="1908" Count="2" />
-      <LineId Id="1681" Count="22" />
-      <LineId Id="1764" Count="0" />
-      <LineId Id="1762" Count="0" />
-      <LineId Id="1765" Count="0" />
-      <LineId Id="1763" Count="0" />
-      <LineId Id="1704" Count="7" />
-      <LineId Id="1713" Count="11" />
-      <LineId Id="1902" Count="1" />
-      <LineId Id="1727" Count="4" />
-      <LineId Id="1733" Count="2" />
-      <LineId Id="1798" Count="1" />
-      <LineId Id="1740" Count="0" />
-      <LineId Id="1907" Count="0" />
-      <LineId Id="1741" Count="1" />
-      <LineId Id="1853" Count="0" />
-      <LineId Id="1747" Count="1" />
-      <LineId Id="1913" Count="0" />
-      <LineId Id="1917" Count="0" />
-      <LineId Id="1914" Count="0" />
-      <LineId Id="1916" Count="0" />
-      <LineId Id="1915" Count="0" />
-      <LineId Id="1841" Count="0" />
-      <LineId Id="1844" Count="0" />
-      <LineId Id="1846" Count="0" />
-      <LineId Id="1852" Count="0" />
-      <LineId Id="1918" Count="0" />
-      <LineId Id="1848" Count="0" />
-      <LineId Id="1850" Count="0" />
-      <LineId Id="1847" Count="0" />
-      <LineId Id="9" Count="0" />
+      <LineId Id="1995" Count="126" />
       <LineId Id="1863" Count="0" />
     </LineIds>
     <LineIds Name="RunUnitCellularA.FB_init">

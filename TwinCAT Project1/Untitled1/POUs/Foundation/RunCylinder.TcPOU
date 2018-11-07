@@ -178,7 +178,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[ErrorDetect := 0;
 IF BIT_WARNING THEN
-	ErrorDetect := 1;
+	ErrorDetect := COMMAND_CACHED; //distinguish different error 
 END_IF]]></ST>
       </Implementation>
     </Method>
@@ -306,7 +306,8 @@ END_VAR
     <LineIds Name="RunCylinder.ErrorDetect">
       <LineId Id="11" Count="0" />
       <LineId Id="5" Count="0" />
-      <LineId Id="9" Count="1" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="10" Count="0" />
     </LineIds>
     <LineIds Name="RunCylinder.Execute">
       <LineId Id="9" Count="9" />
