@@ -7,11 +7,12 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-	connectorHolder : POINTER TO RunCylinder;
+	connectorHolder : POINTER TO RunCylinder; //also the cable holder
 	transporter : POINTER TO RunCylinder;
 	openClamp : POINTER TO RunCylinder;
 END_VAR
 VAR PERSISTENT
+	indexCommandReadyPick : int;
 	indexCommandPick : INT;
 END_VAR]]></Declaration>
     <Implementation>
@@ -19,27 +20,19 @@ END_VAR]]></Declaration>
 
 CASE outputState OF
 	eSpecialStates.SLAVE_ENTER_PROCEDURE:
-		IF NOT transitionByte.0 AND_THEN sideAligner^.Execute(argCommand:= eCylinderCommands.COMMAND_B) THEN
-			transitionByte.0 := TRUE;//align
-		END_IF
-		IF NOT transitionByte.1 AND_THEN axis1^.ExecuteParameterIndex(indexCommand:= indexCommandPick) THEN
-			transitionByte.1 := TRUE;//down
-		END_IF
-		IF transitionByte=3 THEN
-			bSerialTransition := TRUE;
-		END_IF
+		bSerialTransition := axis1^.ExecuteParameterIndex(indexCommand:= indexCommandPick);
 	16#201:
 		bSerialTransition:=connectorHolder^.Execute(argCommand:= eCylinderCommands.COMMAND_B); //hold
 	16#202:
 		bSerialTransition:=openClamp^.Execute(argCommand:= eCylinderCommands.COMMAND_B); //release
 	16#203:
-		bSerialTransition:=axis1^.ExecuteParameterIndex(indexCommand:= indexPosition1Axis1); //up
+		bSerialTransition:=axis1^.ExecuteParameterIndex(indexCommand:= indexStandByAxis1); //up ( standby position should not interfere with cam
 	16#204:
 		//go to inspection 1 simulatanously
 		IF NOT transitionByte.0 AND_THEN transporter^.Execute(argCommand:= eCylinderCommands.COMMAND_B) THEN
 			transitionByte.0 := TRUE;
 		END_IF
-		IF NOT transitionByte.1 AND_THEN axis2^.ExecuteParameterIndex(indexCommand:= indexPosition1Axis2) THEN
+		IF NOT transitionByte.1 AND_THEN axis2^.ExecuteParameterIndex(indexCommand:= indexStandByAxis2) THEN
 			transitionByte.1 := TRUE;
 		END_IF
 		IF transitionByte=3 THEN
@@ -47,7 +40,13 @@ CASE outputState OF
 		END_IF
 	//----------------------Return
 	eSpecialStates.SLAVE_AXIS_INSPECTION_EXIT:
-		//go to inspection 1 simulatanously
+		//up ( standby position should not interfere with cam
+		IF axis1^.ExecuteParameterIndex(indexCommand:= indexStandByAxis1) THEN
+			NextState := 16#500;
+		END_IF
+	//----------------------
+	16#500:
+		//return simulatanously
 		IF NOT transitionByte.0 AND_THEN transporter^.Execute(argCommand:= eCylinderCommands.COMMAND_A) THEN
 			transitionByte.0 := TRUE;
 		END_IF
@@ -57,20 +56,14 @@ CASE outputState OF
 		IF transitionByte=3 THEN
 			NextState := 16#500;
 		END_IF
-	16#500:
-		bSerialTransition:=axis1^.ExecuteParameterIndex(indexCommand:= indexCommandPick);//down
 	16#501:
-		bSerialTransition:=connectorHolder^.Execute(argCommand:= eCylinderCommands.COMMAND_A); //release
+		bSerialTransition:=axis1^.ExecuteParameterIndex(indexCommand:= indexCommandPick);//down
 	16#502:
-		bSerialTransition:=openClamp^.Execute(argCommand:= eCylinderCommands.COMMAND_A); //hold
+		bSerialTransition:=connectorHolder^.Execute(argCommand:= eCylinderCommands.COMMAND_A); //release
 	16#503:
-		IF NOT transitionByte.0 AND_THEN sideAligner^.Execute(argCommand:= eCylinderCommands.COMMAND_A) THEN
-			transitionByte.0 := TRUE;//align
-		END_IF
-		IF NOT transitionByte.1 AND_THEN axis1^.ExecuteParameterIndex(indexCommand:= indexStandByAxis1) THEN
-			transitionByte.1 := TRUE;//down
-		END_IF
-		IF transitionByte=3 THEN
+		bSerialTransition:=openClamp^.Execute(argCommand:= eCylinderCommands.COMMAND_A); //hold
+	16#504:
+		IF axis1^.ExecuteParameterIndex(indexCommand:= indexCommandReadyPick) THEN
 			NextState := eSpecialStates.SLAVE_WORK_DONE;
 		END_IF
 END_CASE]]></ST>
@@ -131,7 +124,7 @@ CASE outputState OF
 		IF NOT transitionByte.0 AND_THEN connectorHolder^.Execute(argCommand:= eCylinderCommands.COMMAND_A) THEN
 			transitionByte.0 := TRUE;
 		END_IF
-		IF NOT transitionByte.1 AND_THEN cableHolder^.Execute(argCommand:= eCylinderCommands.COMMAND_A) THEN
+		IF NOT transitionByte.1 AND_THEN transporter^.Execute(argCommand:= eCylinderCommands.COMMAND_A) THEN
 			transitionByte.1 := TRUE;
 		END_IF
 		IF NOT transitionByte.2 AND_THEN openClamp^.Execute(argCommand:= eCylinderCommands.COMMAND_A) THEN
@@ -150,18 +143,22 @@ Initialize := SUPER^.Initialize();]]></ST>
       <LineId Id="21" Count="0" />
       <LineId Id="20" Count="0" />
       <LineId Id="22" Count="0" />
-      <LineId Id="64" Count="8" />
+      <LineId Id="95" Count="0" />
       <LineId Id="31" Count="6" />
       <LineId Id="44" Count="0" />
       <LineId Id="38" Count="5" />
       <LineId Id="45" Count="2" />
       <LineId Id="28" Count="0" />
+      <LineId Id="96" Count="0" />
+      <LineId Id="98" Count="0" />
+      <LineId Id="97" Count="0" />
+      <LineId Id="99" Count="2" />
       <LineId Id="24" Count="0" />
       <LineId Id="49" Count="8" />
       <LineId Id="48" Count="0" />
       <LineId Id="58" Count="5" />
       <LineId Id="73" Count="0" />
-      <LineId Id="75" Count="7" />
+      <LineId Id="81" Count="1" />
       <LineId Id="74" Count="0" />
       <LineId Id="23" Count="0" />
     </LineIds>
