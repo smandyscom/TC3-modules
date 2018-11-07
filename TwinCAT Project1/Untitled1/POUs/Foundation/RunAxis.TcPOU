@@ -34,6 +34,7 @@ VAR
 END_VAR
 VAR PERSISTENT
 	ptpCommands : ARRAY[1..12] OF ParameterSet; //collect command blocks relative to this axis here
+	moveAbsCount : INT := 1;
 END_VAR
 VAR CONSTANT
 	typeCode : eCategrories := eCategrories.SELECTION_AXIS;
@@ -217,7 +218,7 @@ IF NOT fbPower.Enable THEN
 END_IF
 	//execute founction blocks once powered
 	//possible to configure how many buffer used
-	FOR nCounter:=1 TO 3 BY 1 DO
+	FOR nCounter:=1 TO moveAbsCount BY 1 DO
 	fbMoveAbs[nCounter](
 		Axis:= Axis, 
 		Execute:= , 
