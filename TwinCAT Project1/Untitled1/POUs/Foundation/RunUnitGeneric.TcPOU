@@ -190,13 +190,18 @@ END_IF
 
 Initialize := (State = eSpecialStates.INITIAL_END);
 
-//clear all remained signal
-FOR nCounter:=1 TO 32 BY 1 DO
-	slaveWorkingSignal[nCounter] := FALSE;
-END_FOR
-bWorkingOverride := FALSE;
-bMaterialOverride:=FALSE;
-bEnStep:=FALSE;]]></ST>
+IF Initialize THEN
+	//clear all remained signal
+	FOR nCounter:=1 TO 32 BY 1 DO
+		slaveWorkingSignal[nCounter] := FALSE;
+	END_FOR
+	//clear all internal status
+	bEnStep := FALSE;
+	bTrigStep := FALSE;
+	bIsBypassed := FALSE;
+	bWorkingOverride := FALSE;
+	bMaterialOverride := FALSE;	
+END_IF]]></ST>
       </Implementation>
     </Method>
     <Method Name="Monitor" Id="{8df8139c-9882-4bf6-9048-c2ce81b63c35}" FolderPath="CommonBase\">
@@ -273,10 +278,12 @@ END_VAR
       <LineId Id="20" Count="2" />
       <LineId Id="14" Count="0" />
       <LineId Id="7" Count="0" />
+      <LineId Id="36" Count="0" />
       <LineId Id="27" Count="0" />
-      <LineId Id="26" Count="0" />
-      <LineId Id="28" Count="0" />
-      <LineId Id="31" Count="4" />
+      <LineId Id="39" Count="2" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="43" Count="5" />
+      <LineId Id="38" Count="0" />
     </LineIds>
     <LineIds Name="RunUnitGeneric.Monitor">
       <LineId Id="9" Count="4" />

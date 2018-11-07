@@ -72,7 +72,16 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Initialize := clamper^.Execute(eCylinderCommands.COMMAND_A); //release clamper]]></ST>
+        <ST><![CDATA[
+CASE outputState OF
+	eSpecialStates.INITIAL_BEGIN:
+		IF clamper^.Execute(eCylinderCommands.COMMAND_A) THEN
+			//release clamper
+			NextState := eSpecialStates.INITIAL_END;
+		END_IF
+END_CASE
+
+Initialize := SUPER^.Initialize();]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="RunInputV1">
@@ -100,6 +109,13 @@ END_VAR
       <LineId Id="25" Count="0" />
     </LineIds>
     <LineIds Name="RunInputV1.Initialize">
+      <LineId Id="9" Count="1" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="15" Count="1" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="11" Count="0" />
       <LineId Id="5" Count="0" />
     </LineIds>
   </POU>
