@@ -51,6 +51,7 @@ END_CASE
 //Initialization
 requestInit := comm.control.bInitialize;
 //Error clear request
+errorClear := eErrorClearWays.NO_ACTION;
 IF comm.control.bErrorReset OR pbYellow THEN
 	errorClear := eErrorClearWays.RESET;
 ELSIF comm.control.bErrorIgnore THEN
@@ -93,7 +94,9 @@ comm.errorCode := mErrorCode;]]></ST>
       <LineId Id="41" Count="0" />
       <LineId Id="67" Count="0" />
       <LineId Id="78" Count="0" />
-      <LineId Id="55" Count="1" />
+      <LineId Id="55" Count="0" />
+      <LineId Id="130" Count="0" />
+      <LineId Id="56" Count="0" />
       <LineId Id="66" Count="0" />
       <LineId Id="63" Count="0" />
       <LineId Id="65" Count="0" />

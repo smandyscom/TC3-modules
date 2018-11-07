@@ -45,6 +45,7 @@ FOR nCounter :=1 TO axisUpperBound BY 1 DO
 	//error detection
 	IF errorDevice=0 AND errorDelayDetect.Q AND gvl.axisControls[nCounter].ErrorDetect() <> 0 THEN
 		//error scaned
+		errorIndex := nCounter;
 		errorDevice := ADR(gvl.axisControls[nCounter]);
 	END_IF
 END_FOR
@@ -53,6 +54,7 @@ FOR nCounter :=1 TO cylinderUpperBound BY 1 DO
 	//error detection
 	IF errorDevice=0 AND errorDelayDetect.Q AND gvl.cylinderControls[nCounter].ErrorDetect() <> 0 THEN
 		//error scaned
+		errorIndex := nCounter;
 		errorDevice := ADR(gvl.cylinderControls[nCounter]);
 	END_IF
 END_FOR
@@ -63,13 +65,14 @@ FOR nCounter :=1 TO unitUpperBound BY 1 DO
 	//error detection
 	IF errorDevice=0 AND errorDelayDetect.Q AND gvl.stations[nCounter] <> 0 AND_THEN gvl.stations[nCounter]^.ErrorDetect() <> 0THEN
 		//station
+		errorIndex := nCounter;
 		errorDevice := gvl.stations[nCounter];
 	END_IF
 END_FOR
 //routines
 errorDelayDetect(IN:= (errorDevice = 0), PT:= T#100MS, Q=> , ET=> );	//after reset , wait 100ms to detect
 IF errorDevice <>0 THEN
-	errorIndex := nCounter-1;
+	//errorIndex := nCounter-1;
 	errorType := errorDevice^.TypeCode();
 	errorCode := errorDevice^.ErrorDetect();
 		
@@ -90,7 +93,7 @@ interfaceControl(
 	mMonitorDatas=> );
 IF interfaceControl.requestInit THEN
 	requestInitialize := TRUE; // memorize
-END_IF	
+END_IF
 //mode switcher pre-check
 bPause := NOT (currentMode = eOperationModes.AUTO);
 IF requestMode<>currentMode THEN
@@ -149,9 +152,9 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[//once error scanned
-IF requestMode = eOperationModes.AUTO THEN
+IF currentMode = eOperationModes.AUTO THEN
 	//once error deteted and in AUTO mode , forcely switch to SEMI_AUTO
-	requestMode := eOperationModes.SEMI_AUTO;
+	currentMode := eOperationModes.SEMI_AUTO;
 END_IF
 //reset error handling
 IF requestErrorClear <> eErrorClearWays.NO_ACTION THEN
@@ -206,15 +209,19 @@ END_VAR
       <LineId Id="304" Count="0" />
       <LineId Id="686" Count="1" />
       <LineId Id="713" Count="1" />
-      <LineId Id="718" Count="1" />
+      <LineId Id="718" Count="0" />
+      <LineId Id="917" Count="0" />
+      <LineId Id="719" Count="0" />
       <LineId Id="716" Count="0" />
       <LineId Id="688" Count="0" />
       <LineId Id="690" Count="1" />
       <LineId Id="699" Count="2" />
+      <LineId Id="918" Count="0" />
       <LineId Id="724" Count="0" />
       <LineId Id="702" Count="0" />
       <LineId Id="692" Count="5" />
       <LineId Id="707" Count="1" />
+      <LineId Id="919" Count="0" />
       <LineId Id="723" Count="0" />
       <LineId Id="709" Count="0" />
       <LineId Id="698" Count="0" />
