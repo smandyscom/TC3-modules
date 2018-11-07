@@ -41,9 +41,16 @@ VAR PERSISTENT
 	bVacuumTimeout : TON;
 	pressGoal : INT := 3;
 	filePath : STRING := '';
+	printerStartDurance : TON;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[SUPER^();
+
+//auto reset printer-start signal
+printerStartDurance(IN:= ioPrinter^.prtStart, PT:= , Q=> , ET=> );
+IF ioPrinter^.prtStart AND printerStartDurance.Q THEN
+	ioPrinter^.prtStart := FALSE; // auto off
+END_IF
 
 //into initial state
 IF NOT bFirstCycle AND outputState=0 THEN
@@ -62,7 +69,12 @@ CASE outputState OF
 		transitionByte.4 := shifter^.Execute(eCylinderCommands.COMMAND_A);
 		bSerialTransition := (transitionByte = 16#1F);
 	eSpecialStates.INITIAL_STATE_1:
-		IF axis^.ExecuteParameter(ptCommandReady) THEN
+		bSerialTransition := axis^.ExecuteParameter(ptCommandReady);
+	eSpecialStates.INITIAL_STATE_2:
+		IF ioPrinter^.prtData THEN
+			ioPrinter^.prtStart := TRUE; //clear all cached data
+		ELSE
+			//no data remained , go ahead
 			bFirstCycle := FALSE;
 			NextState := eSpecialStates.INITIAL_END;
 		END_IF
@@ -98,14 +110,11 @@ CASE outputState OF
 			ioPrinter^.prtStart := TRUE;
 		END_IF
 	16#401:
-		ioPrinter^.prtStart := FALSE;
-		bSerialTransition := TRUE;
-	16#402:
 		//waiting printer
 		bSerialTransition := NOT ioPrinter^.prtEnd AND NOT ioPrinter^.prtData ;
-	16#403:
+	16#402:
 		bSerialTransition := axis^.ExecuteParameter(ptCommandLabelTake);
-	16#404:
+	16#403:
 		bSerialTransition := gripperVertical^.Execute(eCylinderCommands.COMMAND_B);	//down
 		IF bSerialTransition THEN
 			//generate vacuum
@@ -114,16 +123,16 @@ CASE outputState OF
 			//
 			bVacuumTimeout.IN :=TRUE;
 		END_IF
-	16#405:
+	16#404:
 		bSerialTransition := bVacuumSensor^.debouncedOn;
 		IF bSerialTransition THEN
 			bVacuumTimeout.IN :=FALSE; //reset
 		ELSIF bVacuumTimeout.Q THEN
 			//TODO , timeout alarm
 		END_IF
-	16#406:
+	16#405:
 		bSerialTransition := gripperVertical^.Execute(eCylinderCommands.COMMAND_A); //up
-	16#407:
+	16#406:
 		IF axis^.ExecuteParameter(ptCommandLabelPlace) THEN
 			//up
 			NextState := 0; //wait trigger
@@ -274,6 +283,9 @@ ioVacuum := argIoVacuum;]]></ST>
     </Method>
     <LineIds Name="RunLabelHandler">
       <LineId Id="9" Count="0" />
+      <LineId Id="445" Count="0" />
+      <LineId Id="442" Count="2" />
+      <LineId Id="446" Count="1" />
       <LineId Id="287" Count="0" />
       <LineId Id="232" Count="2" />
       <LineId Id="238" Count="0" />
@@ -281,9 +293,13 @@ ioVacuum := argIoVacuum;]]></ST>
       <LineId Id="23" Count="0" />
       <LineId Id="22" Count="0" />
       <LineId Id="24" Count="0" />
-      <LineId Id="28" Count="9" />
-      <LineId Id="288" Count="0" />
-      <LineId Id="38" Count="1" />
+      <LineId Id="28" Count="8" />
+      <LineId Id="452" Count="0" />
+      <LineId Id="437" Count="2" />
+      <LineId Id="453" Count="0" />
+      <LineId Id="456" Count="0" />
+      <LineId Id="454" Count="1" />
+      <LineId Id="440" Count="0" />
       <LineId Id="26" Count="0" />
       <LineId Id="327" Count="4" />
       <LineId Id="386" Count="2" />
@@ -298,7 +314,6 @@ ioVacuum := argIoVacuum;]]></ST>
       <LineId Id="244" Count="0" />
       <LineId Id="247" Count="0" />
       <LineId Id="246" Count="0" />
-      <LineId Id="393" Count="2" />
       <LineId Id="27" Count="0" />
       <LineId Id="40" Count="0" />
       <LineId Id="47" Count="0" />
