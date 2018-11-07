@@ -31,7 +31,10 @@ VAR
 	isTransit : BOOL ;
 	workingTimer : LTON;
 	
-	outputState : int;
+	outputState : INT;
+	
+	//interrupt forbidden
+	interruptForbidden : bool := false;
 END_VAR
 VAR PERSISTENT
 	//station specific settings area (user settings
@@ -176,14 +179,24 @@ END_IF
       <Declaration><![CDATA[METHOD Initialize : BOOL
 VAR_INPUT
 END_VAR
-]]></Declaration>
+VAR
+	nCounter : int;
+END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[//once initializing method call , redirect current state to initalizing region
 IF (TO_UINT(State) AND TO_UINT(eSpecialStates.INITIAL_REGION)) =0 THEN
 	NextState := eSpecialStates.INITIAL_BEGIN; //not in intializing region , change
 END_IF
 
-Initialize := (State = eSpecialStates.INITIAL_END);]]></ST>
+Initialize := (State = eSpecialStates.INITIAL_END);
+
+//clear all remained signal
+FOR nCounter:=1 TO 32 BY 1 DO
+	slaveWorkingSignal[nCounter] := FALSE;
+END_FOR
+bWorkingOverride := FALSE;
+bMaterialOverride:=FALSE;
+bEnStep:=FALSE;]]></ST>
       </Implementation>
     </Method>
     <Method Name="Monitor" Id="{8df8139c-9882-4bf6-9048-c2ce81b63c35}" FolderPath="CommonBase\">
@@ -260,6 +273,10 @@ END_VAR
       <LineId Id="20" Count="2" />
       <LineId Id="14" Count="0" />
       <LineId Id="7" Count="0" />
+      <LineId Id="27" Count="0" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="31" Count="4" />
     </LineIds>
     <LineIds Name="RunUnitGeneric.Monitor">
       <LineId Id="9" Count="4" />
