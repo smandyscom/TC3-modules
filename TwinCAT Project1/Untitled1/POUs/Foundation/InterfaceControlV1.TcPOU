@@ -17,9 +17,6 @@ VAR_OUTPUT
 END_VAR
 VAR
 	comm AT%MB256 : commUnitController;
-	
-	//TODO , towerlight/pushbutton controls
-	
 END_VAR
 VAR CONSTANT
 	bErrorReset : INT := 0;

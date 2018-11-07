@@ -6,7 +6,6 @@ VAR_INPUT
 END_VAR
 VAR_OUTPUT
 	currentMode : eOperationModes := eOperationModes.MANUAL; //default in semi-auto
-	isError : BOOL;
 	isInitializing : bool;
 END_VAR
 VAR		
@@ -73,9 +72,8 @@ IF errorDevice <>0 THEN
 	errorType := errorDevice^.TypeCode();
 	errorCode := errorDevice^.ErrorDetect();
 		
-	THIS^.ErrorHandler();// handling user-input reset/ignore
+	ErrorHandler();// handling user-input reset/ignore
 END_IF
-isError := errorDevice <>0;
 //reflect to interface
 interfaceManual(
 	currentMode:= THIS^.currentMode); //scan-in,scan-out,manual...
@@ -155,7 +153,7 @@ IF requestMode = eOperationModes.AUTO THEN
 END_IF
 //reset error handling
 IF requestErrorClear <> eErrorClearWays.NO_ACTION THEN
-	errorDevice^.ErrorClear(requestErrorClear);
+	errorDevice^.ErrorClear(requestErrorClear); //call error clear function
 	requestErrorClear := eErrorClearWays.NO_ACTION;
 	errorDevice := 0 ;// cut link
 END_IF
@@ -224,7 +222,6 @@ END_VAR
       <LineId Id="602" Count="0" />
       <LineId Id="597" Count="3" />
       <LineId Id="594" Count="0" />
-      <LineId Id="839" Count="0" />
       <LineId Id="652" Count="0" />
       <LineId Id="651" Count="0" />
       <LineId Id="761" Count="0" />
