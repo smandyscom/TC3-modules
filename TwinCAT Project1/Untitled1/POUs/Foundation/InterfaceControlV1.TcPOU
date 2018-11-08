@@ -7,6 +7,10 @@ VAR_INPUT
 	pbGreen : BOOL; //start
 	pbRed : BOOL;	//stop
 	pbYellow: BOOL; //error reset
+	//
+	errorType : DWORD;
+	errorIndex : DWORD;
+	errorCode : LWORD;
 END_VAR
 VAR_OUTPUT
 	requestMode : eOperationModes;
@@ -17,6 +21,8 @@ VAR_OUTPUT
 END_VAR
 VAR
 	comm AT%MB256 : commUnitController;
+	
+	errorCodePointer : POINTER TO DWORD;
 END_VAR
 VAR CONSTANT
 	bErrorReset : INT := 0;
@@ -58,7 +64,13 @@ ELSIF comm.control.bErrorIgnore THEN
 	errorClear := eErrorClearWays.IGNORE;	
 END_IF
 //one-shot control clear , except bManualMode
-comm.control := 16#8 AND comm.control;]]></ST>
+comm.control := 16#8 AND comm.control;
+//error infomation
+comm.errorType := errorType;
+comm.errorIndex := errorIndex;
+errorCodePointer := ADR(errorCode);
+comm.errorCode1 := errorCodePointer[0]; //seperated
+comm.errorCode2 := errorCodePointer[1]; //seperated]]></ST>
     </Implementation>
     <Method Name="ErrorInfomation" Id="{3573c2e7-6b1f-47f1-a5a9-6f10bd5c5031}">
       <Declaration><![CDATA[METHOD ErrorInfomation : BOOL
@@ -71,38 +83,14 @@ END_VAR
       <Implementation>
         <ST><![CDATA[comm.errorIndex := TO_DWORD(mErrorIndex);
 comm.errorType := mErrorType;
-comm.errorCode := mErrorCode;]]></ST>
+comm.errorCode1 := mErrorCode;]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="InterfaceControlV1">
-      <LineId Id="38" Count="0" />
-      <LineId Id="37" Count="0" />
-      <LineId Id="42" Count="0" />
-      <LineId Id="44" Count="2" />
-      <LineId Id="103" Count="0" />
-      <LineId Id="40" Count="0" />
-      <LineId Id="59" Count="0" />
-      <LineId Id="61" Count="0" />
-      <LineId Id="60" Count="0" />
-      <LineId Id="48" Count="1" />
-      <LineId Id="47" Count="0" />
-      <LineId Id="104" Count="0" />
-      <LineId Id="43" Count="0" />
-      <LineId Id="51" Count="1" />
-      <LineId Id="50" Count="0" />
-      <LineId Id="105" Count="0" />
-      <LineId Id="41" Count="0" />
-      <LineId Id="67" Count="0" />
-      <LineId Id="78" Count="0" />
-      <LineId Id="55" Count="0" />
-      <LineId Id="130" Count="0" />
-      <LineId Id="56" Count="0" />
-      <LineId Id="66" Count="0" />
-      <LineId Id="63" Count="0" />
-      <LineId Id="65" Count="0" />
-      <LineId Id="64" Count="0" />
-      <LineId Id="9" Count="0" />
-      <LineId Id="26" Count="0" />
+      <LineId Id="383" Count="34" />
+      <LineId Id="420" Count="0" />
+      <LineId Id="165" Count="0" />
+      <LineId Id="421" Count="0" />
     </LineIds>
     <LineIds Name="InterfaceControlV1.ErrorInfomation">
       <LineId Id="5" Count="0" />

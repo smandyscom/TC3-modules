@@ -45,7 +45,7 @@ FOR nCounter :=1 TO axisUpperBound BY 1 DO
 	//error detection
 	IF errorDevice=0 AND errorDelayDetect.Q AND gvl.axisControls[nCounter].ErrorDetect() <> 0 THEN
 		//error scaned
-		errorIndex := nCounter;
+		interfaceControl.errorIndex := TO_DWORD(nCounter-1);
 		errorDevice := ADR(gvl.axisControls[nCounter]);
 	END_IF
 END_FOR
@@ -54,7 +54,7 @@ FOR nCounter :=1 TO cylinderUpperBound BY 1 DO
 	//error detection
 	IF errorDevice=0 AND errorDelayDetect.Q AND gvl.cylinderControls[nCounter].ErrorDetect() <> 0 THEN
 		//error scaned
-		errorIndex := nCounter;
+		interfaceControl.errorIndex := TO_DWORD(nCounter-1);
 		errorDevice := ADR(gvl.cylinderControls[nCounter]);
 	END_IF
 END_FOR
@@ -65,7 +65,7 @@ FOR nCounter :=1 TO unitUpperBound BY 1 DO
 	//error detection
 	IF errorDevice=0 AND errorDelayDetect.Q AND gvl.stations[nCounter] <> 0 AND_THEN gvl.stations[nCounter]^.ErrorDetect() <> 0THEN
 		//station
-		errorIndex := nCounter;
+		interfaceControl.errorIndex := TO_DWORD(nCounter-1);
 		errorDevice := gvl.stations[nCounter];
 	END_IF
 END_FOR
@@ -73,10 +73,14 @@ END_FOR
 errorDelayDetect(IN:= (errorDevice = 0), PT:= T#100MS, Q=> , ET=> );	//after reset , wait 100ms to detect
 IF errorDevice <>0 THEN
 	//errorIndex := nCounter-1;
-	errorType := errorDevice^.TypeCode();
-	errorCode := errorDevice^.ErrorDetect();
+	interfaceControl.errorType := errorDevice^.TypeCode();
+	interfaceControl.errorCode := errorDevice^.ErrorDetect();
 		
 	ErrorHandler();// handling user-input reset/ignore
+ELSE
+	interfaceControl.errorType := 0;
+	interfaceControl.errorIndex := 0;
+	interfaceControl.errorCode := 0;
 END_IF
 isError := errorDevice <>0;
 //reflect to interface
@@ -230,6 +234,9 @@ END_VAR
       <LineId Id="595" Count="0" />
       <LineId Id="602" Count="0" />
       <LineId Id="597" Count="3" />
+      <LineId Id="956" Count="0" />
+      <LineId Id="958" Count="1" />
+      <LineId Id="957" Count="0" />
       <LineId Id="594" Count="0" />
       <LineId Id="880" Count="0" />
       <LineId Id="652" Count="0" />

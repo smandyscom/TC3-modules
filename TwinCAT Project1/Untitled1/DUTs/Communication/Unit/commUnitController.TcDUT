@@ -6,7 +6,10 @@ STRUCT
 	control : DWORD := 16#8; //32
 	errorIndex : DWORD; //34
 	errorType : DWORD; //36
-	errorCode : LWORD; // 38
+	//due to memory alignment issue , had to seperate two dword
+	errorCode1 : DWORD; // 38
+	errorCode2 : DWORD; // 40
+	
 	reserved2 : ARRAY[1..8] OF WORD;
 	//monitorDatas : ARRAY[1..8] OF DWORD;
 END_STRUCT
