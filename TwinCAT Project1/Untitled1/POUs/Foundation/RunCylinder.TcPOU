@@ -51,14 +51,12 @@ END_FOR
 
 // if watch dog had been reset due to command changed in previous scan
 // restart
-IF NOT TMR_WATCH_DOG.IN THEN
-	TMR_WATCH_DOG.IN := TRUE;
-END_IF
+//IF NOT TMR_WATCH_DOG.IN THEN
+//	TMR_WATCH_DOG.IN := TRUE;
+//END_IF
 
 // once command changes , reset timer counter
 IF COMMAND_CACHED <> LAST_COMMAND THEN
-	//ptBlock^.TMR_WATCH_DOG.IN:=false;	//invalid , do not across a scan
-	TMR_WATCH_DOG.IN:=FALSE;
 	TMR_DELAY_TO_A.IN := (COMMAND_CACHED=eCylinderCommands.COMMAND_A); //active A delay timer
 	TMR_DELAY_TO_B.IN := (COMMAND_CACHED=eCylinderCommands.COMMAND_B); //if no sensor B , active B delay timer
 	
@@ -84,19 +82,26 @@ CASE COMMAND_CACHED OF
 	
 	eCylinderCommands.COMMAND_A:
 	IF TMR_DELAY_TO_A.Q THEN
-		bMatched:= (BIT_A_MATCH ) AND (NOT BIT_B_MATCH OR B_SENSOR_USED_COUNT=0);
+		bMatched:= (BIT_A_MATCH OR (A_SENSOR_USED_COUNT=0)) AND ((NOT BIT_B_MATCH) OR (B_SENSOR_USED_COUNT=0));
 	END_IF
 	
 	eCylinderCommands.COMMAND_B:
 	IF TMR_DELAY_TO_B.Q THEN
-		bMatched:= (NOT BIT_A_MATCH OR A_SENSOR_USED_COUNT=0) AND (BIT_B_MATCH );
+		bMatched:= ((NOT BIT_A_MATCH) OR (A_SENSOR_USED_COUNT=0)) AND (BIT_B_MATCH OR (B_SENSOR_USED_COUNT=0) );
 	END_IF
 		
 END_CASE
 
+//start
+IF NOT bMatched AND (TMR_DELAY_TO_B.Q OR TMR_DELAY_TO_A.Q) THEN
+	TMR_WATCH_DOG.in := TRUE;
+ELSE
+	TMR_WATCH_DOG.in := FALSE;
+END_IF
+
 // status update
 BIT_DONE := bMatched OR (NOT bMatched AND BIT_WARN_SUPPRESS AND TMR_WATCH_DOG.Q);
-BIT_WARNING := NOT bMatched AND NOT BIT_WARN_SUPPRESS AND TMR_WATCH_DOG.Q;
+BIT_WARNING := (NOT bMatched) AND (NOT BIT_WARN_SUPPRESS) AND TMR_WATCH_DOG.Q AND (TMR_DELAY_TO_B.Q OR TMR_DELAY_TO_A.Q);
 
 
 // cache last command
@@ -173,7 +178,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[ErrorDetect := 0;
 IF BIT_WARNING THEN
-	ErrorDetect := 1;
+	ErrorDetect := COMMAND_CACHED; //distinguish different error 
 END_IF]]></ST>
       </Implementation>
     </Method>
@@ -263,7 +268,16 @@ END_VAR
       </Implementation>
     </Method>
     <LineIds Name="RunCylinder">
-      <LineId Id="144" Count="66" />
+      <LineId Id="144" Count="22" />
+      <LineId Id="169" Count="24" />
+      <LineId Id="270" Count="1" />
+      <LineId Id="196" Count="6" />
+      <LineId Id="276" Count="0" />
+      <LineId Id="272" Count="2" />
+      <LineId Id="277" Count="0" />
+      <LineId Id="280" Count="0" />
+      <LineId Id="275" Count="0" />
+      <LineId Id="203" Count="7" />
       <LineId Id="233" Count="5" />
       <LineId Id="9" Count="0" />
     </LineIds>
@@ -292,7 +306,8 @@ END_VAR
     <LineIds Name="RunCylinder.ErrorDetect">
       <LineId Id="11" Count="0" />
       <LineId Id="5" Count="0" />
-      <LineId Id="9" Count="1" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="10" Count="0" />
     </LineIds>
     <LineIds Name="RunCylinder.Execute">
       <LineId Id="9" Count="9" />

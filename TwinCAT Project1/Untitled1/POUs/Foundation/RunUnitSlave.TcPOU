@@ -56,25 +56,6 @@ END_IF
 workingSignal := argWorkingSignal; //link]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Initialize" Id="{d85590e7-7777-4ed2-a542-a41058c1988e}">
-      <Declaration><![CDATA[METHOD Initialize : BOOL
-VAR_INPUT
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[
-IF State = eSpecialStates.INITIAL_END THEN
-	//clear all internal status
-	bEnStep := FALSE;
-	bTrigStep := FALSE;
-	bIsBypassed := FALSE;
-	bWorkingOverride := FALSE;
-	bMaterialOverride := FALSE;
-	workingSignal^ := FALSE;	
-END_IF
-Initialize := SUPER^.Initialize();]]></ST>
-      </Implementation>
-    </Method>
     <LineIds Name="RunUnitSlave">
       <LineId Id="9" Count="0" />
       <LineId Id="11" Count="0" />
@@ -95,14 +76,6 @@ Initialize := SUPER^.Initialize();]]></ST>
       <LineId Id="16" Count="6" />
       <LineId Id="14" Count="1" />
       <LineId Id="11" Count="0" />
-    </LineIds>
-    <LineIds Name="RunUnitSlave.Initialize">
-      <LineId Id="5" Count="0" />
-      <LineId Id="15" Count="0" />
-      <LineId Id="24" Count="0" />
-      <LineId Id="19" Count="4" />
-      <LineId Id="17" Count="1" />
-      <LineId Id="13" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

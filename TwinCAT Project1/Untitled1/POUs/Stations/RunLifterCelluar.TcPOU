@@ -53,10 +53,12 @@ CASE outputState OF
 	// 2. cylinder  in A
 	// 3. all sensor off
 	bSerialTransition := mHit AND NOT ptObstacleSensorStatus^ ;//if execute flag on
+	atomicOperation := bSerialTransition; //once satisfied , do not be interrupted (on-the-fly operation
 	1:
 	bSerialTransition := AxisVertical^.ExecuteParameter(ptBlock:=ptCommandLifterHit);
 	IF bSerialTransition THEN
 		mHit := FALSE; //reset
+		atomicOperation := FALSE; //release
 	END_IF
 	2:
 	//once reach sensor detected , n
@@ -152,7 +154,7 @@ ptCommandLifterHit := ADR(AxisVertical^.ptpCommands[indexHit]); // raise to hit
 ptCommandLifterRelease :=  ADR(AxisVertical^.ptpCommands[indexRelease]);; //release
 ptCommandLifterWorking :=  ADR(AxisVertical^.ptpCommands[indexWorking]);; //lift carrier to working position
 //horizon
-ptCommandHorizonWorking := ADR(AxisHorizon^.ptpCommands[indexRelease]);
+ptCommandHorizonWorking := ADR(AxisHorizon^.ptpCommands[indexWorking]);
 ptCommandHorizonHit :=ADR(AxisHorizon^.ptpCommands[indexHit]);
 //sensor
 ptObstacleSensorStatus := ADR(argObstacleSensor^.debouncedOn); //fibers
@@ -217,7 +219,11 @@ END_VAR
       </Set>
     </Property>
     <LineIds Name="RunLifterCelluar">
-      <LineId Id="549" Count="31" />
+      <LineId Id="549" Count="18" />
+      <LineId Id="696" Count="0" />
+      <LineId Id="568" Count="3" />
+      <LineId Id="697" Count="0" />
+      <LineId Id="572" Count="8" />
       <LineId Id="588" Count="0" />
       <LineId Id="655" Count="2" />
       <LineId Id="660" Count="4" />

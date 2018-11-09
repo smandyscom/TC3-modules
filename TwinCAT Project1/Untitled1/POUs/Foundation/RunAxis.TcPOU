@@ -22,6 +22,7 @@ VAR
 	fbReadActualPosition : MC_ReadActualPosition;
 	fbReadCommandPosition : MC_ReadParameter;
 	fbReadStatus : MC_ReadStatus;
+	fbReadControlOutput : MC_ReadParameter;
 	//Parameter writing
 	fbWriteLimitPositive : MC_WriteParameterPersistent;
 	fbWriteLimitNegtive : MC_WriteParameterPersistent;
@@ -33,6 +34,7 @@ VAR
 END_VAR
 VAR PERSISTENT
 	ptpCommands : ARRAY[1..12] OF ParameterSet; //collect command blocks relative to this axis here
+	moveAbsCount : INT := 1;
 END_VAR
 VAR CONSTANT
 	typeCode : eCategrories := eCategrories.SELECTION_AXIS;
@@ -161,7 +163,17 @@ fbReadActualPosition(
 	Error=> , 
 	ErrorID=> , 
 	Position=> PositionFeedback);
-
+fbReadControlOutput(
+	Axis:= axis, 
+	Enable:= TRUE, 
+	ParameterNumber:= AxisDriveMaxOutputLimitation, 
+	ReadMode:= READMODE_CYCLIC, 
+	Valid=> , 
+	Busy=> , 
+	Error=> , 
+	ErrorID=> , 
+	Value=> );
+	
 fbReadStatus(
 	Axis:= axis, 
 	Enable:= TRUE, 
@@ -181,7 +193,7 @@ fbReadStatus(
 	Accelerating=> , 
 	Decelerating=> , 
 	Status=> );
-
+	
 fbStop(
 	Axis:= Axis, 
 	Execute:= , 
@@ -194,6 +206,8 @@ fbStop(
 	CommandAborted=> , 
 	Error=> , 
 	ErrorID=> );
+	
+	
 //Reset after cylic
 IF fbStop.Execute THEN
 	fbStop.Execute := FALSE;
@@ -204,7 +218,7 @@ IF NOT fbPower.Enable THEN
 END_IF
 	//execute founction blocks once powered
 	//possible to configure how many buffer used
-	FOR nCounter:=1 TO 3 BY 1 DO
+	FOR nCounter:=1 TO moveAbsCount BY 1 DO
 	fbMoveAbs[nCounter](
 		Axis:= Axis, 
 		Execute:= , 
@@ -330,11 +344,19 @@ END_CASE]]></ST>
 VAR_INPUT
 	input : eErrorClearWays;
 END_VAR
+VAR
+	nCounter : int :=1;
+END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[CASE input OF
+        <ST><![CDATA[//automated mode,error reset
+CASE input OF
 	eErrorClearWays.RESET:
-		fbReset.Execute := true;
+		fbReset.Execute := TRUE;
+		//cancel all execution
+		FOR nCounter:=1 TO 3 BY 1 DO
+			fbMoveAbs[nCounter].Execute := FALSE;
+		END_FOR
 END_CASE]]></ST>
       </Implementation>
     </Method>
@@ -342,9 +364,32 @@ END_CASE]]></ST>
       <Declaration><![CDATA[METHOD ErrorDetect : UDINT
 VAR_INPUT
 END_VAR
+VAR
+	nCounter : int := 1;	
+END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[ErrorDetect := fbReadStatus.ErrorID;]]></ST>
+        <ST><![CDATA[//Monitor all error including parameter error /drive error / logic dirve error
+ErrorDetect := fbPower.ErrorID;
+IF ErrorDetect = 0 THEN
+	ErrorDetect := fbReadStatus.ErrorID;
+END_IF
+IF ErrorDetect = 0 THEN
+	ErrorDetect := fbMoveHome.ErrorID;
+END_IF
+IF ErrorDetect = 0 THEN
+	ErrorDetect := fbStop.ErrorID;
+END_IF
+IF ErrorDetect = 0 THEN
+	ErrorDetect := fbSetPosition.ErrorID;
+END_IF
+//monitor all
+FOR nCounter:=1 TO 3 BY 1 DO
+	IF ErrorDetect = 0 THEN
+		ErrorDetect := fbMoveAbs[nCounter].ErrorID;
+	END_IF
+END_FOR
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="ExecuteParameter" Id="{71f56729-8e13-4b1e-a80c-858adc37a723}">
@@ -442,7 +487,7 @@ ELSE
 END_CASE
 
 //auto stop execute when error , would do raising edge again when error eliminated
-ptMcExecute^ := NOT ptMcError^ AND NOT ptMcDone^ AND NOT ptMcCommandAbort^;
+ptMcExecute^ :=  NOT ptMcDone^ ;
 
 //power on if going to execute
 IF ptMcExecute^ AND fbPower.Enable=FALSE THEN
@@ -503,13 +548,15 @@ END_VAR]]></Declaration>
 Monitor.axis.operationMonitor.15 := fbReset.Execute;
 
 Monitor.axis.runStatus.1 := fbReadStatus.StandStill;
-Monitor.axis.runStatus.3 := not fbReadStatus.Error;
+Monitor.axis.runStatus.3 := ErrorDetect()=0;
 
-Monitor.axis.alarm := fbReadStatus.ErrorID;
+//Monitor.axis.warning := fbReadStatus.ErrorID;
+Monitor.axis.warning := ErrorDetect();
 
 Monitor.axis.posCommand := TO_DINT(fbReadCommandPosition.Value * 1000);
 Monitor.axis.posFeedback := TO_DINT(fbReadActualPosition.Position * 1000);
 Monitor.axis.speedFeedback := TO_DINT(fbReadActualVelocity.Value * 1000);
+Monitor.axis.torqueFeedback := TO_DINT(fbReadControlOutput.Value * 100);
 ]]></ST>
       </Implementation>
     </Method>
@@ -582,9 +629,14 @@ END_VAR
       <LineId Id="1294" Count="0" />
       <LineId Id="1316" Count="2" />
       <LineId Id="1259" Count="0" />
-      <LineId Id="1107" Count="92" />
-      <LineId Id="1355" Count="11" />
+      <LineId Id="1107" Count="72" />
+      <LineId Id="1410" Count="8" />
+      <LineId Id="1409" Count="0" />
+      <LineId Id="1180" Count="19" />
+      <LineId Id="1421" Count="0" />
+      <LineId Id="1356" Count="10" />
       <LineId Id="1200" Count="0" />
+      <LineId Id="1407" Count="1" />
       <LineId Id="1370" Count="0" />
       <LineId Id="1367" Count="2" />
       <LineId Id="1354" Count="0" />
@@ -633,12 +685,25 @@ END_VAR
       <LineId Id="13" Count="0" />
     </LineIds>
     <LineIds Name="RunAxis.ErrorClear">
+      <LineId Id="17" Count="0" />
       <LineId Id="5" Count="0" />
       <LineId Id="10" Count="0" />
       <LineId Id="12" Count="0" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="18" Count="1" />
+      <LineId Id="23" Count="0" />
       <LineId Id="11" Count="0" />
     </LineIds>
     <LineIds Name="RunAxis.ErrorDetect">
+      <LineId Id="31" Count="0" />
+      <LineId Id="23" Count="6" />
+      <LineId Id="36" Count="1" />
+      <LineId Id="35" Count="0" />
+      <LineId Id="33" Count="1" />
+      <LineId Id="32" Count="0" />
+      <LineId Id="11" Count="1" />
+      <LineId Id="20" Count="2" />
+      <LineId Id="9" Count="0" />
       <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="RunAxis.ExecuteParameter">
@@ -711,8 +776,10 @@ END_VAR
       <LineId Id="14" Count="0" />
       <LineId Id="11" Count="0" />
       <LineId Id="10" Count="0" />
+      <LineId Id="24" Count="0" />
       <LineId Id="16" Count="0" />
       <LineId Id="18" Count="2" />
+      <LineId Id="23" Count="0" />
       <LineId Id="17" Count="0" />
     </LineIds>
     <LineIds Name="RunAxis.PositionCommand.Get">

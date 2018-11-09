@@ -17,7 +17,8 @@ VAR
 	ioBundle : POINTER TO ioBundleET;
 END_VAR
 VAR PERSISTENT
-	indexCommandPick : INT := 9;
+	indexCommandPick : INT := 1;
+	indexReleaseConnectorHolder : int := 1;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[SUPER^();
@@ -32,7 +33,7 @@ CASE outputState OF
 	16#203:
 		bSerialTransition := cableHolder^.Execute(eCylinderCommands.COMMAND_B) ;//hold 
 	16#204:
-		IF connectorHolder^.Execute(eCylinderCommands.COMMAND_A) THEN
+		IF TRUE THEN
 			//going to swing
 			NextState := eSpecialStates.SLAVE_AXIS_INSPECTION_ENTER;
 		END_IF
@@ -59,7 +60,11 @@ CASE outputState OF
 		IF transitionByte=3 THEN
 			NextState := eSpecialStates.SLAVE_WORK_DONE;
 		END_IF
-END_CASE]]></ST>
+END_CASE
+//release to swing // release connector holder when horizon moving
+IF (slaveWorkingSignal[1] AND ((nCounter=indexReleaseConnectorHolder AND_THEN connectorHolder^.Execute(eCylinderCommands.COMMAND_A)) OR nCounter<>indexReleaseConnectorHolder)) THEN
+	slaveWorkingSignal[1] := FALSE;
+END_IF]]></ST>
     </Implementation>
     <Method Name="FB_init" Id="{efefce5e-b774-42d4-a90d-6714e5f02940}">
       <Declaration><![CDATA[METHOD FB_init : BOOL
@@ -162,6 +167,9 @@ Initialize:= SUPER^.Initialize(); //do axis return]]></ST>
       <LineId Id="62" Count="0" />
       <LineId Id="65" Count="2" />
       <LineId Id="38" Count="0" />
+      <LineId Id="108" Count="0" />
+      <LineId Id="107" Count="0" />
+      <LineId Id="109" Count="1" />
     </LineIds>
     <LineIds Name="RunETest.FB_init">
       <LineId Id="19" Count="11" />
