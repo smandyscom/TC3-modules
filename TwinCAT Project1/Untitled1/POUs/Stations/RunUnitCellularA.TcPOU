@@ -70,9 +70,9 @@ IF State >=3 AND State <=6 AND_THEN Upstream<>0 AND Upstream^.syncEngaged AND NO
 	//SlotBase^.id := Upstream^.syncMatValue;
 	//set-up final goal
 	commandFinalGoal.command := eCommandTypes.POSITION;
-	commandFinalGoal.parameter.position.Velocity := ptCommandFast^.parameter.position.Velocity;
-	commandFinalGoal.parameter.position.Acceleration := ptCommandFast^.parameter.position.Acceleration;
-	commandFinalGoal.parameter.position.Deceleration := ptCommandFast^.parameter.position.Deceleration;
+	commandFinalGoal.parameter.position.Velocity := ptCommandPitch2^.parameter.position.Velocity;
+	commandFinalGoal.parameter.position.Acceleration := ptCommandPitch2^.parameter.position.Acceleration;
+	commandFinalGoal.parameter.position.Deceleration := ptCommandPitch2^.parameter.position.Deceleration;
 	commandFinalGoal.parameter.position.Position := Axis^.PositionFeedback + ptCommandPitch2^.parameter.position.Position; //goal extended
 	
 	//prevent backward
