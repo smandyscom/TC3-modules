@@ -6,8 +6,8 @@ VAR_INPUT
 END_VAR
 VAR_OUTPUT
 	currentMode : eOperationModes := eOperationModes.MANUAL; //default in semi-auto
-	isError : BOOL;
-	isInitializing : bool;
+	isInitializing : BOOL;
+	isError : bool;
 END_VAR
 VAR		
 	nCounter : INT;
@@ -15,7 +15,6 @@ VAR
 	
 	//user control
 	requestInitialize : BOOL;
-	requestMode : eOperationModes := eOperationModes.SEMI_AUTO;
 	//error
 	requestErrorClear : eErrorClearWays := eErrorClearWays.NO_ACTION;
 	errorDevice : POINTER TO CommonBase := 0; //null reference
@@ -45,6 +44,7 @@ FOR nCounter :=1 TO axisUpperBound BY 1 DO
 	//error detection
 	IF errorDevice=0 AND errorDelayDetect.Q AND gvl.axisControls[nCounter].ErrorDetect() <> 0 THEN
 		//error scaned
+		interfaceControl.errorIndex := TO_DWORD(nCounter-1);
 		errorDevice := ADR(gvl.axisControls[nCounter]);
 	END_IF
 END_FOR
@@ -53,6 +53,7 @@ FOR nCounter :=1 TO cylinderUpperBound BY 1 DO
 	//error detection
 	IF errorDevice=0 AND errorDelayDetect.Q AND gvl.cylinderControls[nCounter].ErrorDetect() <> 0 THEN
 		//error scaned
+		interfaceControl.errorIndex := TO_DWORD(nCounter-1);
 		errorDevice := ADR(gvl.cylinderControls[nCounter]);
 	END_IF
 END_FOR
@@ -63,17 +64,23 @@ FOR nCounter :=1 TO unitUpperBound BY 1 DO
 	//error detection
 	IF errorDevice=0 AND errorDelayDetect.Q AND gvl.stations[nCounter] <> 0 AND_THEN gvl.stations[nCounter]^.ErrorDetect() <> 0THEN
 		//station
+		interfaceControl.errorIndex := TO_DWORD(nCounter-1);
 		errorDevice := gvl.stations[nCounter];
 	END_IF
 END_FOR
 //routines
 errorDelayDetect(IN:= (errorDevice = 0), PT:= T#100MS, Q=> , ET=> );	//after reset , wait 100ms to detect
 IF errorDevice <>0 THEN
-	errorIndex := nCounter-1;
-	errorType := errorDevice^.TypeCode();
-	errorCode := errorDevice^.ErrorDetect();
+	//errorIndex := nCounter-1;
+	interfaceControl.errorType := errorDevice^.TypeCode();
+	interfaceControl.errorCode := errorDevice^.ErrorDetect();
 		
-	THIS^.ErrorHandler();// handling user-input reset/ignore
+	ErrorHandler();// handling user-input reset/ignore
+ELSE
+	//reset
+	interfaceControl.errorType := 0;
+	interfaceControl.errorIndex := 0;
+	interfaceControl.errorCode := 0;
 END_IF
 isError := errorDevice <>0;
 //reflect to interface
@@ -85,26 +92,24 @@ interfaceControl(
 	pbGreen := pbGreen^.debouncedOn,
 	pbRed := pbRed^.debouncedOn,
 	pbYellow := pbYellow^.debouncedOn,
-	requestMode=> THIS^.requestMode, 
 	errorClear=> THIS^.requestErrorClear, 
 	mMonitorDatas=> );
 IF interfaceControl.requestInit THEN
 	requestInitialize := TRUE; // memorize
-END_IF	
+END_IF
 //mode switcher pre-check
 bPause := NOT (currentMode = eOperationModes.AUTO);
-IF requestMode<>currentMode THEN
-	CASE requestMode OF 
+IF interfaceControl.requestMode <> currentMode THEN
+	CASE interfaceControl.requestMode OF 
 		eOperationModes.MANUAL,eOperationModes.SEMI_AUTO:
 			//direct changes
-			currentMode := requestMode;
+			currentMode := interfaceControl.requestMode;
 		eOperationModes.AUTO:
 			//check : no error , manual channel work done
 			IF errorDevice=0 THEN
 				currentMode := eOperationModes.AUTO;
 			ELSE
 				//refuce to change , maintain
-				requestMode := currentMode;
 			END_IF 
 	END_CASE
 END_IF
@@ -138,7 +143,7 @@ CASE currentMode OF
 		END_IF		
 END_CASE
 
-//
+//status reflect
 isInitializing := requestInitialize AND NOT bAllInitialized;]]></ST>
     </Implementation>
     <Method Name="ErrorHandler" Id="{a0eb5aec-6465-4175-9953-8d5b0f3a2dc2}">
@@ -149,13 +154,13 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[//once error scanned
-IF requestMode = eOperationModes.AUTO THEN
+IF currentMode = eOperationModes.AUTO THEN
 	//once error deteted and in AUTO mode , forcely switch to SEMI_AUTO
-	requestMode := eOperationModes.SEMI_AUTO;
+	currentMode := eOperationModes.SEMI_AUTO;
 END_IF
 //reset error handling
 IF requestErrorClear <> eErrorClearWays.NO_ACTION THEN
-	errorDevice^.ErrorClear(requestErrorClear);
+	errorDevice^.ErrorClear(requestErrorClear); //call error clear function
 	requestErrorClear := eErrorClearWays.NO_ACTION;
 	errorDevice := 0 ;// cut link
 END_IF
@@ -206,15 +211,19 @@ END_VAR
       <LineId Id="304" Count="0" />
       <LineId Id="686" Count="1" />
       <LineId Id="713" Count="1" />
-      <LineId Id="718" Count="1" />
+      <LineId Id="718" Count="0" />
+      <LineId Id="917" Count="0" />
+      <LineId Id="719" Count="0" />
       <LineId Id="716" Count="0" />
       <LineId Id="688" Count="0" />
       <LineId Id="690" Count="1" />
       <LineId Id="699" Count="2" />
+      <LineId Id="918" Count="0" />
       <LineId Id="724" Count="0" />
       <LineId Id="702" Count="0" />
       <LineId Id="692" Count="5" />
       <LineId Id="707" Count="1" />
+      <LineId Id="919" Count="0" />
       <LineId Id="723" Count="0" />
       <LineId Id="709" Count="0" />
       <LineId Id="698" Count="0" />
@@ -223,15 +232,18 @@ END_VAR
       <LineId Id="595" Count="0" />
       <LineId Id="602" Count="0" />
       <LineId Id="597" Count="3" />
+      <LineId Id="956" Count="0" />
+      <LineId Id="962" Count="0" />
+      <LineId Id="958" Count="1" />
+      <LineId Id="957" Count="0" />
       <LineId Id="594" Count="0" />
-      <LineId Id="839" Count="0" />
+      <LineId Id="880" Count="0" />
       <LineId Id="652" Count="0" />
       <LineId Id="651" Count="0" />
       <LineId Id="761" Count="0" />
       <LineId Id="456" Count="0" />
       <LineId Id="448" Count="1" />
       <LineId Id="833" Count="2" />
-      <LineId Id="450" Count="0" />
       <LineId Id="452" Count="0" />
       <LineId Id="447" Count="0" />
       <LineId Id="490" Count="2" />
@@ -240,7 +252,8 @@ END_VAR
       <LineId Id="347" Count="0" />
       <LineId Id="350" Count="2" />
       <LineId Id="356" Count="3" />
-      <LineId Id="361" Count="4" />
+      <LineId Id="361" Count="2" />
+      <LineId Id="365" Count="0" />
       <LineId Id="348" Count="1" />
       <LineId Id="269" Count="1" />
       <LineId Id="274" Count="1" />

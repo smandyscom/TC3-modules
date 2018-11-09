@@ -31,7 +31,10 @@ VAR
 	isTransit : BOOL ;
 	workingTimer : LTON;
 	
-	outputState : int;
+	outputState : INT;
+	
+	//do not stop in atomic operation
+	atomicOperation : BOOL := FALSE;
 END_VAR
 VAR PERSISTENT
 	//station specific settings area (user settings
@@ -75,7 +78,7 @@ END_IF
 
 
 //transit condition
-isTransit := (NOT bEnStep OR (bEnStep AND bTrigStep)) AND NOT bPause;
+isTransit := ((NOT bEnStep OR (bEnStep AND bTrigStep)) AND NOT bPause) OR atomicOperation;
 
 IF isTransit THEN
 	outputState := State; //release and go
@@ -176,14 +179,29 @@ END_IF
       <Declaration><![CDATA[METHOD Initialize : BOOL
 VAR_INPUT
 END_VAR
-]]></Declaration>
+VAR
+	nCounter : int;
+END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[//once initializing method call , redirect current state to initalizing region
 IF (TO_UINT(State) AND TO_UINT(eSpecialStates.INITIAL_REGION)) =0 THEN
 	NextState := eSpecialStates.INITIAL_BEGIN; //not in intializing region , change
 END_IF
 
-Initialize := (State = eSpecialStates.INITIAL_END);]]></ST>
+Initialize := (State = eSpecialStates.INITIAL_END);
+
+IF Initialize THEN
+	//clear all remained signal
+	FOR nCounter:=1 TO 32 BY 1 DO
+		slaveWorkingSignal[nCounter] := FALSE;
+	END_FOR
+	//clear all internal status
+	bEnStep := FALSE;
+	bTrigStep := FALSE;
+	bIsBypassed := FALSE;
+	bWorkingOverride := FALSE;
+	bMaterialOverride := FALSE;	
+END_IF]]></ST>
       </Implementation>
     </Method>
     <Method Name="Monitor" Id="{8df8139c-9882-4bf6-9048-c2ce81b63c35}" FolderPath="CommonBase\">
@@ -260,6 +278,12 @@ END_VAR
       <LineId Id="20" Count="2" />
       <LineId Id="14" Count="0" />
       <LineId Id="7" Count="0" />
+      <LineId Id="36" Count="0" />
+      <LineId Id="27" Count="0" />
+      <LineId Id="39" Count="2" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="43" Count="5" />
+      <LineId Id="38" Count="0" />
     </LineIds>
     <LineIds Name="RunUnitGeneric.Monitor">
       <LineId Id="9" Count="4" />
