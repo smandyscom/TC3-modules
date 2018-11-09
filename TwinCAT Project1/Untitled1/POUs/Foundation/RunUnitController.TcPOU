@@ -15,7 +15,6 @@ VAR
 	
 	//user control
 	requestInitialize : BOOL;
-	requestMode : eOperationModes := eOperationModes.SEMI_AUTO;
 	//error
 	requestErrorClear : eErrorClearWays := eErrorClearWays.NO_ACTION;
 	errorDevice : POINTER TO CommonBase := 0; //null reference
@@ -78,6 +77,7 @@ IF errorDevice <>0 THEN
 		
 	ErrorHandler();// handling user-input reset/ignore
 ELSE
+	//reset
 	interfaceControl.errorType := 0;
 	interfaceControl.errorIndex := 0;
 	interfaceControl.errorCode := 0;
@@ -92,7 +92,6 @@ interfaceControl(
 	pbGreen := pbGreen^.debouncedOn,
 	pbRed := pbRed^.debouncedOn,
 	pbYellow := pbYellow^.debouncedOn,
-	requestMode=> THIS^.requestMode, 
 	errorClear=> THIS^.requestErrorClear, 
 	mMonitorDatas=> );
 IF interfaceControl.requestInit THEN
@@ -100,18 +99,17 @@ IF interfaceControl.requestInit THEN
 END_IF
 //mode switcher pre-check
 bPause := NOT (currentMode = eOperationModes.AUTO);
-IF requestMode<>currentMode THEN
-	CASE requestMode OF 
+IF interfaceControl.requestMode <> currentMode THEN
+	CASE interfaceControl.requestMode OF 
 		eOperationModes.MANUAL,eOperationModes.SEMI_AUTO:
 			//direct changes
-			currentMode := requestMode;
+			currentMode := interfaceControl.requestMode;
 		eOperationModes.AUTO:
 			//check : no error , manual channel work done
 			IF errorDevice=0 THEN
 				currentMode := eOperationModes.AUTO;
 			ELSE
 				//refuce to change , maintain
-				requestMode := currentMode;
 			END_IF 
 	END_CASE
 END_IF
@@ -145,7 +143,7 @@ CASE currentMode OF
 		END_IF		
 END_CASE
 
-//
+//status reflect
 isInitializing := requestInitialize AND NOT bAllInitialized;]]></ST>
     </Implementation>
     <Method Name="ErrorHandler" Id="{a0eb5aec-6465-4175-9953-8d5b0f3a2dc2}">
@@ -235,6 +233,7 @@ END_VAR
       <LineId Id="602" Count="0" />
       <LineId Id="597" Count="3" />
       <LineId Id="956" Count="0" />
+      <LineId Id="962" Count="0" />
       <LineId Id="958" Count="1" />
       <LineId Id="957" Count="0" />
       <LineId Id="594" Count="0" />
@@ -245,7 +244,6 @@ END_VAR
       <LineId Id="456" Count="0" />
       <LineId Id="448" Count="1" />
       <LineId Id="833" Count="2" />
-      <LineId Id="450" Count="0" />
       <LineId Id="452" Count="0" />
       <LineId Id="447" Count="0" />
       <LineId Id="490" Count="2" />
@@ -254,7 +252,8 @@ END_VAR
       <LineId Id="347" Count="0" />
       <LineId Id="350" Count="2" />
       <LineId Id="356" Count="3" />
-      <LineId Id="361" Count="4" />
+      <LineId Id="361" Count="2" />
+      <LineId Id="365" Count="0" />
       <LineId Id="348" Count="1" />
       <LineId Id="269" Count="1" />
       <LineId Id="274" Count="1" />

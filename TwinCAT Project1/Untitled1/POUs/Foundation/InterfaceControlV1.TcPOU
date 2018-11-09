@@ -34,6 +34,10 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[//Start/Stop/Manual
+
+//default request mode = current mode
+requestMode := currentMode;
+
 CASE currentMode OF
 	eOperationModes.AUTO:
 		IF comm.control.bPause OR pbRed THEN
@@ -87,7 +91,11 @@ comm.errorCode1 := mErrorCode;]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="InterfaceControlV1">
-      <LineId Id="383" Count="34" />
+      <LineId Id="383" Count="0" />
+      <LineId Id="423" Count="1" />
+      <LineId Id="422" Count="0" />
+      <LineId Id="455" Count="0" />
+      <LineId Id="384" Count="33" />
       <LineId Id="420" Count="0" />
       <LineId Id="165" Count="0" />
       <LineId Id="421" Count="0" />
