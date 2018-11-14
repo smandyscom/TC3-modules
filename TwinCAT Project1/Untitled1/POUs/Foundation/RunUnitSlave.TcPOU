@@ -25,10 +25,14 @@ CASE outputState OF
 	eSpecialStates.SLAVE_WORK_DONE:
 		//working done
 		workingSignal^ := FALSE;
-		bWorkingOverride := FALSE;
 		bMaterialOverride := FALSE;
 		NextState := eSpecialStates.SLAVE_WORK_TRIGGER; // rewind
-END_CASE]]></ST>
+END_CASE
+
+//sychoronizing
+IF NOT workingSignal^ AND bWorkingOverride THEN
+	bWorkingOverride := TRUE;
+END_IF]]></ST>
     </Implementation>
     <Method Name="FB_init" Id="{5fe09d05-6f33-419c-ac80-1bcb29fd85fb}">
       <Declaration><![CDATA[METHOD FB_init : BOOL
@@ -69,8 +73,13 @@ workingSignal := argWorkingSignal; //link]]></ST>
       <LineId Id="32" Count="0" />
       <LineId Id="29" Count="1" />
       <LineId Id="25" Count="0" />
-      <LineId Id="16" Count="5" />
+      <LineId Id="16" Count="2" />
+      <LineId Id="20" Count="1" />
       <LineId Id="13" Count="0" />
+      <LineId Id="41" Count="0" />
+      <LineId Id="38" Count="0" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="39" Count="1" />
     </LineIds>
     <LineIds Name="RunUnitSlave.FB_init">
       <LineId Id="16" Count="6" />

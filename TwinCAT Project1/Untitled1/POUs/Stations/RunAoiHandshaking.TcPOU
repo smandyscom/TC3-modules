@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <POU Name="RunAoiHandshaking" Id="{41658605-8ecb-499b-8b78-02efc9885402}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunAoiHandshaking EXTENDS RunUnitSlave
+VAR_INPUT
+	isLastShot : BOOL;
+END_VAR
+VAR
+	registers : ARRAY[0..127] OF WORD; // memory poll to modbus server
+	//pointers
+	motionOnline : POINTER TO WORD := ADR(registers[indexMotionOnline]);
+	motionTrigger: POINTER TO WORD := ADR(registers[indexMotionTrigger]);
+	aoiOnline: POINTER TO WORD := ADR(registers[indexAoiOnline]);
+	aoiAcknowledge: POINTER TO WORD := ADR(registers[indexAoiAcknowledge]);
+	//-----------------------------------
+	aoiData0 : POINTER TO MaterialBlock := ADR(registers[indexAoiData0]);
+	//-----------------------------------
+END_VAR
+VAR CONSTANT
+	indexMotionOnline : INT := 0;
+	indexMotionTrigger : INT :=1;
+	indexAoiOnline : INT := 4;
+	indexAoiAcknowledge : INT :=5;
+	indexAoiData0 : INT :=32;
+END_VAR
+VAR PERSISTENT	
+	timeoutTimer : TON;
+END_VAR
+
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[SUPER^();
+
+//set motion offline once bypassed
+IF bIsBypassed THEN
+	motionOnline^ := 0;
+ELSE
+	motionOnline^ := 1;
+END_IF
+
+timeoutTimer(IN:= , PT:= , Q=> , ET=> );
+IF NOT timeoutTimer.IN THEN
+	timeoutTimer.IN := TRUE;
+END_IF
+
+CASE outputState OF
+	eSpecialStates.SLAVE_ENTER_PROCEDURE:
+		//MEMSET(destAddr:= aoiData0, fillByte:= 0, n:= 128); //reset aoi datas,
+		
+		aoiData0^.data[0] := 16#FF;//set 0xff to AOI_DATA_0 as marker
+		IF NOT bIsBypassed THEN
+			//go ahead
+			motionTrigger^ := 1;
+			//aoiAcknowledge^ := 0; //auto reset?
+			bSerialTransition := TRUE;
+		ELSE
+			//bypassed
+			NextState := 16#300;
+		END_IF
+	16#201:
+		//check AOI acknowledged
+		IF aoiAcknowledge^ = 1 THEN
+			motionTrigger^ := 0;
+			bSerialTransition := TRUE;
+			
+			//inform motion to do next position ahead the handshaking procedure
+			workingSignal^ := FALSE;
+			
+		ELSIF timeoutTimer.Q THEN
+			//timeout warning
+		END_IF
+	16#202:
+		//wait until AOI_DATA write-in once last shot
+		transitionByte.0 := (aoiAcknowledge^=0) AND (NOT isLastShot OR (isLastShot AND aoiData0^.data[0] <> 16#FF));
+		IF transitionByte.0 THEN
+			NextState := 16#300;
+		ELSIF timeoutTimer.Q THEN
+			//timeout warning
+		END_IF
+	//-----------------------------------
+	16#300:
+		//move data to Slot
+		SlotBase^.Data := aoiData0^;
+		
+		//trigger Database communiction
+		IF isLastShot THEN
+			SlotBase^.Act := TRUE;
+		END_IF
+		
+		NextState := 0;
+END_CASE
+
+IF bSerialTransition OR NextState<>outputState THEN
+	timeoutTimer.IN := FALSE; //reset
+END_IF
+
+//once AOI_Offline detected , to bypass
+IF NOT aoiOnline^=1 AND NOT bIsBypassed THEN
+	bIsBypassed := TRUE;
+	motionTrigger^ := 0;	//reset motion trigger
+	aoiData0^.data[0] := 0; //OK/NG data reset
+	NextState := 16#300;
+END_IF]]></ST>
+    </Implementation>
+    <LineIds Name="RunAoiHandshaking">
+      <LineId Id="128" Count="16" />
+      <LineId Id="211" Count="0" />
+      <LineId Id="145" Count="2" />
+      <LineId Id="180" Count="2" />
+      <LineId Id="148" Count="1" />
+      <LineId Id="183" Count="0" />
+      <LineId Id="150" Count="1" />
+      <LineId Id="185" Count="0" />
+      <LineId Id="152" Count="2" />
+      <LineId Id="195" Count="0" />
+      <LineId Id="201" Count="0" />
+      <LineId Id="198" Count="0" />
+      <LineId Id="197" Count="0" />
+      <LineId Id="155" Count="3" />
+      <LineId Id="186" Count="0" />
+      <LineId Id="159" Count="0" />
+      <LineId Id="188" Count="3" />
+      <LineId Id="162" Count="3" />
+      <LineId Id="192" Count="0" />
+      <LineId Id="205" Count="0" />
+      <LineId Id="210" Count="0" />
+      <LineId Id="206" Count="0" />
+      <LineId Id="208" Count="1" />
+      <LineId Id="207" Count="0" />
+      <LineId Id="167" Count="12" />
+      <LineId Id="63" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
