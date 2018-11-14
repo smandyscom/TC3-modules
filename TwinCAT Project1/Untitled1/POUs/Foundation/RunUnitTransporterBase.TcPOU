@@ -5,7 +5,8 @@
 VAR_INPUT	
 	//self
 	syncAcknowledged AT%M*  : BOOL; //downstream replied starting ackowledge , face to downstream
-	syncMatValue  : LINT := 0;
+	syncMatId AT%M* : LINT := 0;
+	syncMatValid AT%M* : BOOL := FALSE;
 END_VAR
 VAR_OUTPUT
 	//self
@@ -20,7 +21,8 @@ VAR
 	pollingTimer : TON;
 	fbAdsSyncRead : FB_ReadAdsSymByName;
 	fbAdsSyncWrite : FB_WriteAdsSymByName;
-	fbAdsMatSyncRead : FB_ReadAdsSymByName;
+	fbAdsSyncMatIdRead : FB_ReadAdsSymByName;
+	fbAdsSyncMatValidRead : FB_ReadAdsSymByName;
 	
 	isMatSync : BOOL := FALSE;
 	
@@ -32,7 +34,8 @@ VAR PERSISTENT
 	
 	varNameSyncEngaged : STRING;
 	varNameSyncAckowledged : STRING;
-	varNameSyncMatSync : STRING;
+	varNameSyncMatIdSync : STRING;
+	varNameSyncMatValidSync : STRING;
 	
 	timeoutTimer : TON;	
 END_VAR
@@ -40,10 +43,6 @@ END_VAR
     <Implementation>
       <ST><![CDATA[//non proxy 	
 SUPER^();
-// Handshaking sequence (face to upstream
-//IF Upstream <> 0 AND_THEN NOT Upstream^.syncEngaged THEN
-//	Upstream^.syncAcknowledged := FALSE; //reset upstream
-//END_IF
 
 IF (outputState <> NextState) OR bSerialTransition THEN
 	//once state transit , reset timer
@@ -86,18 +85,31 @@ fbAdsSyncWrite(
 	bError=> , 
 	nErrorId=> );		
 			
-fbAdsMatSyncRead(
-	bRead:= NOT fbAdsMatSyncRead.bBusy AND isMatSync, 
+fbAdsSyncMatIdRead(
+	bRead:= NOT fbAdsSyncMatIdRead.bBusy AND isMatSync, 
 	sNetId:= netId, 
 	nPort:= port, 
-	sVarName:= varNameSyncMatSync, 
-	nDestAddr:= ADR(syncMatValue), 
-	nLen:= SIZEOF(syncMatValue), 
+	sVarName:= varNameSyncMatIdSync, 
+	nDestAddr:= ADR(syncMatId), 
+	nLen:= SIZEOF(syncMatId), 
 	tTimeout:= , 
 	eComMode:= , 
 	bBusy=> , 
 	bError=> , 
-	nErrorId=> );	
+	nErrorId=> );
+fbAdsSyncMatValidRead(
+	bRead:= NOT fbAdsSyncMatValidRead.bBusy AND isMatSync, 
+	sNetId:= netId, 
+	nPort:= port, 
+	sVarName:= varNameSyncMatValidSync, 
+	nDestAddr:= ADR(syncMatValid), 
+	nLen:= SIZEOF(syncMatValid), 
+	tTimeout:= , 
+	eComMode:= , 
+	bBusy=> , 
+	bError=> , 
+	nErrorId=> );
+	
 
 CASE outputState OF
 	0:
@@ -106,7 +118,7 @@ CASE outputState OF
 			bSerialTransition := TRUE;
 		END_IF
 	1: 
-		IF NOT fbAdsMatSyncRead.bRead THEN
+		IF NOT fbAdsSyncMatIdRead.bRead AND NOT fbAdsSyncMatValidRead.bRead THEN
 			//done
 			isMatSync := FALSE;
 			NextState := 0;
@@ -163,21 +175,11 @@ Initialize := SUPER^.Initialize();
       </Implementation>
     </Method>
     <LineIds Name="RunUnitTransporterBase">
-      <LineId Id="538" Count="5" />
-      <LineId Id="711" Count="0" />
-      <LineId Id="713" Count="5" />
-      <LineId Id="712" Count="0" />
-      <LineId Id="544" Count="3" />
-      <LineId Id="673" Count="1" />
-      <LineId Id="548" Count="1" />
-      <LineId Id="756" Count="10" />
-      <LineId Id="755" Count="0" />
-      <LineId Id="637" Count="0" />
-      <LineId Id="771" Count="10" />
-      <LineId Id="575" Count="0" />
-      <LineId Id="770" Count="0" />
-      <LineId Id="785" Count="10" />
-      <LineId Id="588" Count="14" />
+      <LineId Id="980" Count="55" />
+      <LineId Id="1053" Count="10" />
+      <LineId Id="1052" Count="0" />
+      <LineId Id="1051" Count="0" />
+      <LineId Id="1036" Count="13" />
       <LineId Id="329" Count="0" />
     </LineIds>
     <LineIds Name="RunUnitTransporterBase.FB_init">

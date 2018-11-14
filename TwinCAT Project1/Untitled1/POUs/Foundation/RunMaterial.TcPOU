@@ -74,7 +74,7 @@ END_VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[header.id := id;]]></ST>
+          <ST><![CDATA[header.id := Id;]]></ST>
         </Implementation>
       </Set>
     </Property>
