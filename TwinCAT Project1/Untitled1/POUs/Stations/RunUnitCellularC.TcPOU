@@ -69,6 +69,8 @@ CASE outputState OF
 	16#2004:
 		IF holderCylinder^.Execute(eCylinderCommands.COMMAND_A) THEN
 			//release , wait to send
+			syncMatValid := SlotBase^.Valid;
+			syncMatId := SlotBase^.Id;
 			syncEngaged := TRUE;
 			bSerialTransition := TRUE;
 		END_IF
@@ -108,6 +110,10 @@ CASE outputState OF
 			bSerialTransition := rotator=0 OR (rotator<>0 AND_THEN rotator^.ExecuteParameter(ptRotatorReceive));
 	16#1003:
 		IF Upstream<>0 AND_THEN Upstream^.syncEngaged THEN
+			//receive data
+			SlotBase^.Valid := Upstream^.syncMatValid;
+			SlotBase^.Id := Upstream^.syncMatId;
+			//reply
 			Upstream^.syncAcknowledged := TRUE; //
 			bSerialTransition := TRUE;
 		END_IF
@@ -223,6 +229,7 @@ END_IF
       <LineId Id="186" Count="1" />
       <LineId Id="239" Count="0" />
       <LineId Id="70" Count="2" />
+      <LineId Id="470" Count="1" />
       <LineId Id="74" Count="1" />
       <LineId Id="73" Count="0" />
       <LineId Id="76" Count="2" />
@@ -247,7 +254,11 @@ END_IF
       <LineId Id="324" Count="0" />
       <LineId Id="331" Count="0" />
       <LineId Id="340" Count="0" />
-      <LineId Id="126" Count="1" />
+      <LineId Id="126" Count="0" />
+      <LineId Id="483" Count="1" />
+      <LineId Id="481" Count="0" />
+      <LineId Id="485" Count="0" />
+      <LineId Id="127" Count="0" />
       <LineId Id="129" Count="0" />
       <LineId Id="128" Count="0" />
       <LineId Id="267" Count="0" />

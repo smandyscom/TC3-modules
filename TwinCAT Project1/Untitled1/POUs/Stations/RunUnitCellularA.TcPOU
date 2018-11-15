@@ -33,14 +33,10 @@ VAR
 	slowDone: BOOL;
 	finalGoalDone : BOOL;
 			
-END_VAR
-VAR CONSTANT
-	alarmCodeJammed : UDINT := 16#101;
-	alarmCodeNotReach : UDINT := 16#102;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[//implement state 3
-isLastSlotOccupied := TRUE; //always occupied , force to transmit to downstream
+isLastSlotOccupied := TRUE; //always pass carreir even empty material
 
 SUPER^(); //run indexer master
 
@@ -63,11 +59,12 @@ IF bSerialTransition AND State = 1 THEN
 	NextState := 16#10; //state override : release lifters
 END_IF
 
-IF State >=3 AND State <=6 AND_THEN Upstream<>0 AND Upstream^.syncEngaged AND NOT Upstream^.syncAcknowledged THEN	
+IF State >=3 AND State <=6 AND_THEN Upstream<>0 AND Upstream^.syncEngaged AND NOT Upstream^.syncAcknowledged THEN
+	//receive data
+	SlotBase^.Id := Upstream^.syncMatId;
+	SlotBase^.Valid := Upstream^.syncMatValid;
+	//reply	
 	Upstream^.syncAcknowledged := TRUE;//pull upstream when ready
-	//Data transmit
-	//SlotBase^.wordOut.0 := TRUE; //TODO , follow that status
-	//SlotBase^.id := Upstream^.syncMatValue;
 	//set-up final goal
 	commandFinalGoal.command := eCommandTypes.POSITION;
 	commandFinalGoal.parameter.position.Velocity := ptCommandPitch2^.parameter.position.Velocity;
@@ -134,7 +131,7 @@ CASE outputState OF
 			bSerialTransition:= TRUE; //serial transition
 		ELSIF fastDone THEN
 			//fast had executed , but not all hit , trigger alarm (stop doing next move
-			AlarmCode := alarmCodeJammed;
+			AlarmCode := eErrorCodes.AC_CONVEYOR_JAMMED;
 		END_IF
 	//Else : on going , not reached the check point
 	END_IF
@@ -144,7 +141,7 @@ CASE outputState OF
 		finalGoalExecute:=TRUE;//need do extension
 		bSerialTransition:= TRUE; //serial transition	
 	ELSIF allReach THEN
-		//NextState := 16#20; //manually put carrier
+		//manually put carrier in?
 	END_IF
 	//---------------------------------------------
 	7:
@@ -155,13 +152,12 @@ CASE outputState OF
 	IF allReach THEN
 		bSerialTransition := TRUE;
 	ELSE
-		AlarmCode := alarmCodeNotReach;
+		AlarmCode := eErrorCodes.AC_CONVEYOR_NOT_REACHED;
 	END_IF
 	9:
 	IF Upstream <> 0 AND_THEN NOT Upstream^.syncEngaged THEN
 		Upstream^.syncAcknowledged := FALSE; // received carrier
 		NextState :=1; //since working signal raised by individual lifter? 
-		//TDOD , material transmission merge 
 	ELSE
 		// upstream not synchroized			
 	END_IF
@@ -210,7 +206,12 @@ END_IF]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="RunUnitCellularA">
-      <LineId Id="1995" Count="126" />
+      <LineId Id="1995" Count="24" />
+      <LineId Id="2158" Count="0" />
+      <LineId Id="2160" Count="2" />
+      <LineId Id="2020" Count="0" />
+      <LineId Id="2024" Count="92" />
+      <LineId Id="2118" Count="3" />
       <LineId Id="1863" Count="0" />
     </LineIds>
     <LineIds Name="RunUnitCellularA.FB_init">

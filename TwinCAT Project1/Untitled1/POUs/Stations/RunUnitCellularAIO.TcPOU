@@ -28,7 +28,7 @@ VAR PERSISTENT
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[//implement state 3
-isLastSlotOccupied := TRUE; //always occupied , force to transmit to downstream
+isLastSlotOccupied := TRUE; //always pass carreir even empty material
 
 SUPER^(); //run indexer master
 
@@ -71,19 +71,22 @@ CASE outputState OF
 		bSerialTransition:= TRUE; //serial transition
 	ELSIF timeoutTimer.Q THEN
 		//sending error , raising alarm
+		AlarmCode := eErrorCodes.AC_CONVEYOR_JAMMED;
 	END_IF
 	16#13:
 	IF allReach THEN	
 		bSerialTransition := TRUE; //since working signal raised by individual lifter?
 	ELSIF timeoutTimer.Q THEN	
 		//receiving error , should stop conveyor	
+		AlarmCode := eErrorCodes.AC_CONVEYOR_NOT_REACHED;
 	END_IF
 	16#14:
 	IF Upstream<>0 AND_THEN Upstream^.syncEngaged THEN
+		//receive data
+		SlotBase^.Valid := Upstream^.syncMatValid;
+		SlotBase^.Id := Upstream^.syncMatId;
 		//After all reached , then pull upstream
 		Upstream^.syncAcknowledged := TRUE;//pull upstream when ready
-		//Data transmit
-		//SlotBase^.wordOut.0 := TRUE; //TODO , follow that status
 		bSerialTransition:= TRUE; //serial transition	
 	ELSIF timeoutTimer.Q THEN 
 		//waiting upstream , reminder
@@ -166,7 +169,16 @@ Initialize := SUPER^.Initialize();]]></ST>
       <LineId Id="336" Count="1" />
       <LineId Id="237" Count="6" />
       <LineId Id="330" Count="0" />
-      <LineId Id="251" Count="31" />
+      <LineId Id="251" Count="17" />
+      <LineId Id="389" Count="0" />
+      <LineId Id="269" Count="5" />
+      <LineId Id="388" Count="0" />
+      <LineId Id="275" Count="2" />
+      <LineId Id="387" Count="0" />
+      <LineId Id="386" Count="0" />
+      <LineId Id="385" Count="0" />
+      <LineId Id="278" Count="1" />
+      <LineId Id="282" Count="0" />
       <LineId Id="286" Count="2" />
       <LineId Id="347" Count="0" />
       <LineId Id="353" Count="0" />

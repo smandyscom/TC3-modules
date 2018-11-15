@@ -57,6 +57,9 @@
     <Compile Include="DUTs\Definitions\eCommandTypes.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\Definitions\eErrorCodes.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\Definitions\eModes.TcDUT">
       <SubType>Code</SubType>
     </Compile>

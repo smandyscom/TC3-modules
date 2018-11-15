@@ -45,15 +45,15 @@ CASE SUPER^.outputState OF
 		END_IF
 		//raise working signals for all linked slave
 		IF transitionByte.0 AND NOT syncAcknowledged THEN
-		
+			//move last slot's information to buffer area
+			syncMatId:= SlotLast^.Id; // for the last slot
+			syncMatValid := SlotLast^.Valid;// ready to sync
 			//Do data shifting (move is valid/id)
 			FOR nCounter:=SlotCount TO 2 BY -1 DO	
 				SlotBase[nCounter].Id := SlotBase[nCounter-1].id;
 				SlotBase[nCounter].Valid := SlotBase[nCounter-1].Valid;
 			END_FOR
-			syncMatId:= SlotLast^.Id; // for the last slot
-			syncMatValid := SlotLast^.Valid;// ready to sync
-					
+				
 			bSerialTransition := TRUE;
 						
 			isLastSlotOccupied := SlotLast^.Valid; //check out last slot status
@@ -112,10 +112,12 @@ SlotCount :=  TO_INT((SlotLast-SlotBase)/SIZEOF(RunMaterial) + 1);]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="RunUnitIndexerMaster">
-      <LineId Id="460" Count="33" />
-      <LineId Id="497" Count="3" />
-      <LineId Id="526" Count="1" />
-      <LineId Id="501" Count="15" />
+      <LineId Id="460" Count="30" />
+      <LineId Id="530" Count="0" />
+      <LineId Id="491" Count="0" />
+      <LineId Id="528" Count="0" />
+      <LineId Id="492" Count="1" />
+      <LineId Id="497" Count="19" />
       <LineId Id="518" Count="6" />
       <LineId Id="9" Count="0" />
     </LineIds>
