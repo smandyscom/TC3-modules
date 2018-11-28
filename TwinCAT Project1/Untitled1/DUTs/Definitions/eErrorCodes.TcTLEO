@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <EnumerationTextList Name="eErrorCodes" Id="{60e3e194-83de-45c5-919c-9caed3f38b0b}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE eErrorCodes : 
+(
+	AC_CONVEYOR_JAMMED := 16#101 , 
+	AC_CONVEYOR_NOT_REACHED := 16#102  
+) UDINT;
+END_TYPE
+]]></Declaration>
+    <XmlArchive>
+      <Data>
+        <o xml:space="preserve" t="TextListEnumerationTextListObject">
+          <l n="TextList" t="ArrayList" cet="TextListRow">
+            <o>
+              <v n="TextID">"AC_CONVEYOR_JAMMED"</v>
+              <v n="TextDefault">"16#101"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"AC_CONVEYOR_NOT_REACHED"</v>
+              <v n="TextDefault">"16#102"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">""</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+          </l>
+          <l n="Languages" t="ArrayList" />
+          <v n="GuidInit">{ce668f6e-73c7-4196-a6e3-44c679535235}</v>
+          <v n="GuidReInit">{680012ad-b195-4143-9ac8-923d8e8dfb09}</v>
+          <v n="GuidExitX">{38717646-e3ad-455a-b95a-557b1ecd45f4}</v>
+        </o>
+      </Data>
+      <TypeList>
+        <Type n="ArrayList">System.Collections.ArrayList</Type>
+        <Type n="Guid">System.Guid</Type>
+        <Type n="String">System.String</Type>
+        <Type n="TextListEnumerationTextListObject">{4b60233c-f940-4beb-b331-82133b520151}</Type>
+        <Type n="TextListRow">{53da1be7-ad25-47c3-b0e8-e26286dad2e0}</Type>
+      </TypeList>
+    </XmlArchive>
+  </EnumerationTextList>
+</TcPlcObject>

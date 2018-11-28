@@ -4,10 +4,14 @@
     <Declaration><![CDATA[TYPE MaterialHeader :
 STRUCT
 	wordOut : WORD; //0, bit1:Act,bit2:IsValid,bit3:schedualed
-	syncAction : WORD; //1,not used
-	wordIn : WORD;//2,Done,bit0:engaged,bit1:done
-	id : DWORD;//3-4
+	//syncAction : WORD; //1,not used
+	reserved1 : ARRAY[1..7] OF WORD; //1-7
+	wordIn : WORD;//8 , 2,Done,bit0:engaged,bit1:done
+	reserved2 : ARRAY[9..15] OF WORD; //9-15
 	
+	id : DWORD;//16
+	
+	reserved3 : ARRAY[18..63] of word;//18-63
 	//Protocal ver2 , Act on->Act off
 END_STRUCT
 END_TYPE

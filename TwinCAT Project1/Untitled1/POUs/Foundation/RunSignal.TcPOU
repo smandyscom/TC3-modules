@@ -24,6 +24,29 @@ raw := input;
 debouncedOnTimer(IN:= input, PT:= , Q=> debouncedOn, ET=> );
 debouncedOffTimer(IN:= NOT input, PT:= , Q=> debouncedoff, ET=> );]]></ST>
     </Implementation>
+    <Folder Name="CommonBase" Id="{ffc1ce20-d0f1-44f8-8792-2f966b14be1c}" />
+    <Method Name="ConfigureRead" Id="{a12d05cb-7391-4f12-9f9c-52f812ce9a7d}" FolderPath="CommonBase\">
+      <Declaration><![CDATA[METHOD ConfigureRead : CellDataBlock
+VAR_INPUT
+	mode : eModes;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ConfigureWrite" Id="{6bdc42d6-cbc4-4a8a-bfcd-b648766e27b5}" FolderPath="CommonBase\">
+      <Declaration><![CDATA[METHOD ConfigureWrite : BOOL
+VAR_INPUT
+	input : CellDataBlock;
+	mode : eModes;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[debouncedOffTimer.PT := TO_TIME(input.signal.widthOff);
+debouncedOnTimer.PT := TO_TIME(input.signal.widthOn);]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="FB_init" Id="{87ea7c0f-d400-4141-b585-3dd2db5cdf88}">
       <Declaration><![CDATA[METHOD FB_init : BOOL
 VAR_INPUT
@@ -38,6 +61,24 @@ END_VAR
 END_IF]]></ST>
       </Implementation>
     </Method>
+    <Method Name="Monitor" Id="{502646b2-e6fc-4522-882f-20960251e59a}" FolderPath="CommonBase\">
+      <Declaration><![CDATA[METHOD Monitor : CellDataBlock
+VAR_INPUT
+END_VAR
+VAR CONSTANT
+	indexDebouncedOn : INT := 0;
+	indexDebouncedOff : INT := 1;
+	indexRaw : INT := 2;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Monitor.signal.widthOffCount := TO_WORD(debouncedOffTimer.ET);
+Monitor.signal.widthOnCount := TO_WORD(debouncedOnTimer.ET);
+
+Monitor.signal.outputWord.indexDebouncedOn := debouncedOn;
+Monitor.signal.outputWord.indexDebouncedOff := debouncedOff;
+Monitor.signal.outputWord.indexRaw := raw;]]></ST>
+      </Implementation>
+    </Method>
     <LineIds Name="RunSignal">
       <LineId Id="28" Count="0" />
       <LineId Id="9" Count="0" />
@@ -45,10 +86,23 @@ END_IF]]></ST>
       <LineId Id="29" Count="0" />
       <LineId Id="31" Count="0" />
     </LineIds>
+    <LineIds Name="RunSignal.ConfigureRead">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="RunSignal.ConfigureWrite">
+      <LineId Id="5" Count="0" />
+      <LineId Id="8" Count="0" />
+    </LineIds>
     <LineIds Name="RunSignal.FB_init">
       <LineId Id="7" Count="1" />
       <LineId Id="10" Count="0" />
       <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="RunSignal.Monitor">
+      <LineId Id="5" Count="1" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="13" Count="1" />
     </LineIds>
   </POU>
 </TcPlcObject>

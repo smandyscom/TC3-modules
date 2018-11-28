@@ -126,6 +126,8 @@ CASE currentMode OF
 		IF  requestInitialize THEN
 			//initialize all stations
 			bAllInitialized := TRUE;
+			interfaceControl.state := TO_WORD(eSpecialStates.MAIN_INITIALIZING); //status reflection
+			
 			FOR nCounter:=1 TO unitUpperBound BY 1 DO
 				IF gvl.stations[nCounter] <> 0 THEN
 					// if every station comes initialized
@@ -139,6 +141,7 @@ CASE currentMode OF
 					END_IF
 				END_FOR	
 				requestInitialize := FALSE; //clear after done
+				interfaceControl.state := TO_WORD(eSpecialStates.MAIN_INITIALIZED); //status reflection
 			END_IF
 		END_IF		
 END_CASE
@@ -195,7 +198,9 @@ END_IF
 //input
 pbRed := argPbRed;
 pbGreen := argPbGreen;
-pbYellow := argPbYellow;]]></ST>
+pbYellow := argPbYellow;
+
+interfaceControl.state := TO_WORD(eSpecialStates.MAIN_WAIT_INITIALIZING);]]></ST>
       </Implementation>
     </Method>
     <Method Name="Initialize" Id="{cb68dc91-f1ca-48a3-a360-7027131d9307}">
@@ -264,7 +269,11 @@ END_VAR
       <LineId Id="545" Count="0" />
       <LineId Id="548" Count="0" />
       <LineId Id="565" Count="0" />
-      <LineId Id="550" Count="14" />
+      <LineId Id="550" Count="0" />
+      <LineId Id="998" Count="1" />
+      <LineId Id="551" Count="12" />
+      <LineId Id="1000" Count="0" />
+      <LineId Id="564" Count="0" />
       <LineId Id="546" Count="0" />
       <LineId Id="276" Count="0" />
       <LineId Id="842" Count="0" />
@@ -289,6 +298,8 @@ END_VAR
       <LineId Id="28" Count="0" />
       <LineId Id="27" Count="0" />
       <LineId Id="20" Count="1" />
+      <LineId Id="43" Count="0" />
+      <LineId Id="42" Count="0" />
     </LineIds>
     <LineIds Name="RunUnitController.Initialize">
       <LineId Id="5" Count="0" />

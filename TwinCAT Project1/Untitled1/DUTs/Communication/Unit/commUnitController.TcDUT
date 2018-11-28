@@ -10,8 +10,8 @@ STRUCT
 	errorCode1 : DWORD; // 38
 	errorCode2 : DWORD; // 40
 	
-	reserved2 : ARRAY[1..8] OF WORD;
-	//monitorDatas : ARRAY[1..8] OF DWORD;
+	reserved2 : ARRAY[42..47] OF WORD; //42-46
+	monitorDatas : ARRAY[0..7] OF DWORD; //48-62
 END_STRUCT
 END_TYPE
 ]]></Declaration>

@@ -43,6 +43,8 @@ CASE TO_DWORD(comm.monitorType) OF
 		monitorDevice := ADR(gvl.axisControls[comm.monitorIndex+1]); // index start from 1
 	eCategrories.SELECTION_CYLINDER:
 		monitorDevice := ADR(gvl.cylinderControls[comm.monitorIndex+1]);
+	eCategrories.SELECTION_SIGNAL:
+		monitorDevice := ADR(gvl.signalControls[comm.monitorIndex+1]);
 	eCategrories.SELECTION_UNIT:
 		monitorDevice := ADR(gvl.stations[comm.monitorIndex+1]^);
 END_CASE
@@ -58,6 +60,8 @@ CASE comm.commitSelection OF
 	eCategrories.SELECTION_COMMAND_BLOCK:
 		//axis should be pre-selected
 		controlDevice := ADR(gvl.axisControls[comm.commitBlock.command.base.axisId+1]);
+	eCategrories.SELECTION_SIGNAL:
+		controlDevice := ADR(gvl.signalControls[comm.commitIndex+1]);
 END_CASE
 CASE state OF
 	0:
@@ -116,9 +120,12 @@ writePersistance(
       <LineId Id="393" Count="1" />
       <LineId Id="390" Count="1" />
       <LineId Id="389" Count="0" />
-      <LineId Id="112" Count="18" />
+      <LineId Id="112" Count="5" />
+      <LineId Id="419" Count="1" />
+      <LineId Id="118" Count="12" />
       <LineId Id="213" Count="0" />
       <LineId Id="211" Count="0" />
+      <LineId Id="421" Count="1" />
       <LineId Id="132" Count="6" />
       <LineId Id="333" Count="0" />
       <LineId Id="335" Count="12" />

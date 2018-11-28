@@ -11,6 +11,8 @@ VAR_INPUT
 	errorType : DWORD;
 	errorIndex : DWORD;
 	errorCode : LWORD;
+	//
+	state : WORD;
 END_VAR
 VAR_OUTPUT
 	requestMode : eOperationModes;
@@ -74,7 +76,9 @@ comm.errorType := errorType;
 comm.errorIndex := errorIndex;
 errorCodePointer := ADR(errorCode);
 comm.errorCode1 := errorCodePointer[0]; //seperated
-comm.errorCode2 := errorCodePointer[1]; //seperated]]></ST>
+comm.errorCode2 := errorCodePointer[1]; //seperated
+//
+comm.state := state;]]></ST>
     </Implementation>
     <Method Name="ErrorInfomation" Id="{3573c2e7-6b1f-47f1-a5a9-6f10bd5c5031}">
       <Declaration><![CDATA[METHOD ErrorInfomation : BOOL
@@ -99,6 +103,7 @@ comm.errorCode1 := mErrorCode;]]></ST>
       <LineId Id="420" Count="0" />
       <LineId Id="165" Count="0" />
       <LineId Id="421" Count="0" />
+      <LineId Id="486" Count="1" />
     </LineIds>
     <LineIds Name="InterfaceControlV1.ErrorInfomation">
       <LineId Id="5" Count="0" />
