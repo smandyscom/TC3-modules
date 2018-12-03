@@ -5,6 +5,7 @@
 UNION
 	base : commUnit;
 	controller : commUnitController;
+	config : commUnitConfig;
 	//master : UnitIndexerMaster;
 	//slave : UnitIndexerSlave;
 END_UNION

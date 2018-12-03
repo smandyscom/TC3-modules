@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <DUT Name="commUnitConfig" Id="{4b0a5ad5-bbdc-45ab-a479-8df6412da007}">
+    <Declaration><![CDATA[TYPE commUnitConfig :
+STRUCT
+	unitId : WORD; //0
+	configId: WORD;//1
+	value : DWORD;//2
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

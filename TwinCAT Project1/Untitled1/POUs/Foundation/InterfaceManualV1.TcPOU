@@ -56,7 +56,14 @@ CASE comm.commitSelection OF
 	eCategrories.SELECTION_CYLINDER:
 		controlDevice := ADR(gvl.cylinderControls[comm.commitIndex+1]);
 	eCategrories.SELECTION_UNIT:
-		controlDevice := ADR(gvl.stations[comm.commitIndex+1]^);
+		 
+		CASE comm.commitMode OF
+			eModes.MODE_DOWNLOAD_DATA_BLOCK,eModes.MODE_UPLOAD_DATA_BLOCK:
+				//configuration
+				controlDevice := ADR(gvl.stations[comm.commitBlock.unit.config.unitId+1]^);
+			ELSE
+				controlDevice := ADR(gvl.stations[comm.commitIndex+1]^);
+		END_CASE
 	eCategrories.SELECTION_COMMAND_BLOCK:
 		//axis should be pre-selected
 		controlDevice := ADR(gvl.axisControls[comm.commitBlock.command.base.axisId+1]);
@@ -122,7 +129,13 @@ writePersistance(
       <LineId Id="389" Count="0" />
       <LineId Id="112" Count="5" />
       <LineId Id="419" Count="1" />
-      <LineId Id="118" Count="12" />
+      <LineId Id="118" Count="10" />
+      <LineId Id="459" Count="0" />
+      <LineId Id="453" Count="1" />
+      <LineId Id="460" Count="0" />
+      <LineId Id="456" Count="2" />
+      <LineId Id="455" Count="0" />
+      <LineId Id="130" Count="0" />
       <LineId Id="213" Count="0" />
       <LineId Id="211" Count="0" />
       <LineId Id="421" Count="1" />

@@ -111,7 +111,8 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[//Implemented by concre derived class]]></ST>
+        <ST><![CDATA[//Implemented by concre derived class
+ConfigureWrite := true;]]></ST>
       </Implementation>
     </Method>
     <Method Name="Control" Id="{fe69a240-a6bf-45a3-bd63-78ff17e8577a}" FolderPath="CommonBase\">
@@ -254,6 +255,7 @@ END_VAR
     </LineIds>
     <LineIds Name="RunUnitGeneric.ConfigureWrite">
       <LineId Id="5" Count="0" />
+      <LineId Id="11" Count="0" />
     </LineIds>
     <LineIds Name="RunUnitGeneric.Control">
       <LineId Id="5" Count="0" />
