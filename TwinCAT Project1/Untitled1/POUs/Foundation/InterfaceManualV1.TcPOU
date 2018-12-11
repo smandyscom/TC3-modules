@@ -17,6 +17,9 @@ VAR
 	
 	//need to explicit call write persistance data , to store into non-violate memory
 	writePersistance : WritePersistentData;
+	
+	elapsed : TON ;
+	m_elapsed :TIME;
 END_VAR
 VAR CONSTANT
 	bEngagedHMI : INT := 0;
@@ -73,7 +76,8 @@ END_CASE
 CASE state OF
 	0:
 		IF comm.wordIn.bEngagedHMI AND comm.wordIn.bRun THEN
-			//ENGAGED_HMI and RUN		
+			//ENGAGED_HMI and RUN
+			elapsed.IN := TRUE;		
 			state := 1;
 		END_IF
 	1:
@@ -98,6 +102,8 @@ CASE state OF
 		END_IF
 		IF comm.wordOut.bDone THEN
 			//DONE true or ENGAGED_HMI off
+			m_elapsed := elapsed.ET;
+			elapsed.IN := FALSE;
 			state :=2;
 		END_IF		
 	2:
@@ -109,6 +115,7 @@ CASE state OF
 		END_IF
 END_CASE
 
+elapsed(IN:= , PT:= , Q=> , ET=> );
 //Write-in non-violate memory
 writePersistance(
 		NETID:= , 
@@ -139,13 +146,18 @@ writePersistance(
       <LineId Id="213" Count="0" />
       <LineId Id="211" Count="0" />
       <LineId Id="421" Count="1" />
-      <LineId Id="132" Count="6" />
+      <LineId Id="132" Count="4" />
+      <LineId Id="464" Count="0" />
+      <LineId Id="137" Count="1" />
       <LineId Id="333" Count="0" />
       <LineId Id="335" Count="12" />
       <LineId Id="334" Count="0" />
       <LineId Id="351" Count="3" />
       <LineId Id="350" Count="0" />
-      <LineId Id="357" Count="2" />
+      <LineId Id="357" Count="1" />
+      <LineId Id="467" Count="0" />
+      <LineId Id="465" Count="0" />
+      <LineId Id="359" Count="0" />
       <LineId Id="356" Count="0" />
       <LineId Id="278" Count="1" />
       <LineId Id="362" Count="0" />
@@ -153,6 +165,7 @@ writePersistance(
       <LineId Id="360" Count="1" />
       <LineId Id="277" Count="0" />
       <LineId Id="63" Count="0" />
+      <LineId Id="463" Count="0" />
       <LineId Id="247" Count="0" />
       <LineId Id="237" Count="0" />
       <LineId Id="239" Count="6" />

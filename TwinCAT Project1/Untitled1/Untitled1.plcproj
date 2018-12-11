@@ -45,6 +45,9 @@
     <Compile Include="DUTs\Communication\Unit\commUnit.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\Communication\Unit\commUnitConfig.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\Communication\Unit\commUnitGeneric.TcDUT">
       <SubType>Code</SubType>
     </Compile>

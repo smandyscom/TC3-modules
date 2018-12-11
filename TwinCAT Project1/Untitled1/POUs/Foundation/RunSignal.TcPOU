@@ -32,7 +32,8 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[ConfigureRead.signal.widthOn := TO_WORD(debouncedOnTimer.PT);
+ConfigureRead.signal.widthOff := TO_WORD(debouncedOffTimer.PT);]]></ST>
       </Implementation>
     </Method>
     <Method Name="ConfigureWrite" Id="{6bdc42d6-cbc4-4a8a-bfcd-b648766e27b5}" FolderPath="CommonBase\">
@@ -87,6 +88,7 @@ Monitor.signal.outputWord.indexRaw := raw;]]></ST>
       <LineId Id="31" Count="0" />
     </LineIds>
     <LineIds Name="RunSignal.ConfigureRead">
+      <LineId Id="10" Count="0" />
       <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="RunSignal.ConfigureWrite">
