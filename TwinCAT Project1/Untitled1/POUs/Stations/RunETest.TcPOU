@@ -15,19 +15,42 @@ VAR
 	tongueGlueB : POINTER TO RunSignal;
 	//from tester
 	ioBundle : POINTER TO ioBundleET;
+	//
+	isOK : BOOL;
+	isRedo : BOOL;
+	etSeriesNgCounter : UINT;
+	etRedoCounter : UINT;
+	//
+	block : MaterialBlock;
 END_VAR
 VAR PERSISTENT
 	indexCommandPick : INT := 1;
-	indexReleaseConnectorHolder : int := 1;
+	indexReleaseConnectorHolder : INT := 1;
+	
+	etUsageCounter : UINT;
+	etUsageThreshold : UINT;
+	
+	etNgAlarmSwitch : BOOL;
+	etSeriesNgThreshold : UINT;
+	etRedoGoal : UINT;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[SUPER^();
+
+IF etUsageCounter>=etUsageThreshold THEN
+	//!Clear by manual operation
+	AlarmCode := eErrorCodes.AC_ET_USAGE_MEET; 
+END_IF
 
 CASE outputState OF
 	eSpecialStates.SLAVE_ENTER_PROCEDURE:
 		bSerialTransition := connectorHolder^.Execute(eCylinderCommands.COMMAND_B);
 	16#201:
 		bSerialTransition := plugin^.Execute(eCylinderCommands.COMMAND_B);
+		IF bSerialTransition THEN
+			//usage count-up
+			etUsageCounter := etUsageCounter+1;
+		END_IF
 	16#202:
 		bSerialTransition := axis1^.ExecuteParameterIndex(indexCommandPick); //down to pick
 	16#203:
@@ -40,6 +63,34 @@ CASE outputState OF
 	//-----------------
 	eSpecialStates.SLAVE_AXIS_INSPECTION_EXIT:
 		//TODO , read status and report
+		isOK := tongueExistedA^.debouncedOn AND tongueExistedB^.debouncedOn AND  tongueGlueA^.debouncedOff AND tongueGlueB^.debouncedOff AND ioBundle^.o3;
+		
+		isRedo := FALSE;//reset
+		IF isOK THEN
+			//ok
+			etSeriesNgCounter := 0;
+		ELSE
+			//ng
+			etSeriesNgCounter := etSeriesNgCounter+1;
+			IF 	(etSeriesNgCounter >= etSeriesNgThreshold) AND etNgAlarmSwitch AND (etRedoCounter >=etRedoGoal) THEN
+				//raise alarm
+				AlarmCode := eErrorCodes.AC_ET_SERIES_NG;
+				etSeriesNgCounter := 0;
+			ELSIF etRedoCounter < etRedoGoal THEN
+				//not reach , redo
+				isRedo := TRUE;
+			END_IF
+		END_IF		
+		//report
+		block.data[0] := TO_WORD(isOK);
+		block.data[1] := TO_WORD(ioBundle^.o3); //et
+		block.data[2] := TO_WORD(tongueExistedA^.debouncedOn);
+		block.data[3] := TO_WORD(tongueExistedB^.debouncedOn);
+		block.data[4] := TO_WORD(tongueGlueA^.debouncedOff);
+		block.data[5] := TO_WORD(tongueGlueB^.debouncedOff);
+		SlotBase^.Data := block;
+		SlotBase^.Act := TRUE;
+		
 		bSerialTransition := TRUE;
 	16#401:
 		bSerialTransition := axis1^.ExecuteParameterIndex(indexCommandPick); //back to to pick
@@ -58,7 +109,13 @@ CASE outputState OF
 			transitionByte.1 := TRUE;
 		END_IF
 		IF transitionByte=3 THEN
-			NextState := eSpecialStates.SLAVE_WORK_DONE;
+			IF isRedo THEN
+				etRedoCounter := etRedoCounter+1;
+				NextState := eSpecialStates.SLAVE_ENTER_PROCEDURE;
+			ELSE
+				etRedoCounter :=0; //reset
+				NextState := eSpecialStates.SLAVE_WORK_DONE;
+			END_IF
 		END_IF
 END_CASE
 //release to swing // release connector holder when horizon moving
@@ -152,20 +209,56 @@ Initialize:= SUPER^.Initialize(); //do axis return]]></ST>
     </Method>
     <LineIds Name="RunETest">
       <LineId Id="9" Count="0" />
+      <LineId Id="136" Count="1" />
+      <LineId Id="143" Count="0" />
+      <LineId Id="138" Count="1" />
       <LineId Id="29" Count="0" />
       <LineId Id="28" Count="0" />
       <LineId Id="30" Count="0" />
-      <LineId Id="32" Count="4" />
+      <LineId Id="32" Count="2" />
+      <LineId Id="140" Count="0" />
+      <LineId Id="144" Count="0" />
+      <LineId Id="141" Count="1" />
+      <LineId Id="35" Count="1" />
       <LineId Id="39" Count="0" />
       <LineId Id="44" Count="0" />
       <LineId Id="85" Count="1" />
       <LineId Id="89" Count="0" />
       <LineId Id="87" Count="1" />
       <LineId Id="42" Count="0" />
-      <LineId Id="46" Count="15" />
+      <LineId Id="46" Count="1" />
+      <LineId Id="148" Count="0" />
+      <LineId Id="186" Count="1" />
+      <LineId Id="153" Count="0" />
+      <LineId Id="176" Count="0" />
+      <LineId Id="154" Count="0" />
+      <LineId Id="157" Count="0" />
+      <LineId Id="175" Count="0" />
+      <LineId Id="159" Count="0" />
+      <LineId Id="165" Count="1" />
+      <LineId Id="169" Count="0" />
+      <LineId Id="168" Count="0" />
+      <LineId Id="170" Count="1" />
+      <LineId Id="174" Count="0" />
+      <LineId Id="167" Count="0" />
+      <LineId Id="155" Count="0" />
+      <LineId Id="149" Count="0" />
+      <LineId Id="189" Count="0" />
+      <LineId Id="192" Count="5" />
+      <LineId Id="150" Count="0" />
+      <LineId Id="198" Count="0" />
+      <LineId Id="48" Count="13" />
       <LineId Id="63" Count="1" />
       <LineId Id="62" Count="0" />
-      <LineId Id="65" Count="2" />
+      <LineId Id="65" Count="0" />
+      <LineId Id="177" Count="0" />
+      <LineId Id="184" Count="0" />
+      <LineId Id="183" Count="0" />
+      <LineId Id="180" Count="0" />
+      <LineId Id="185" Count="0" />
+      <LineId Id="182" Count="0" />
+      <LineId Id="181" Count="0" />
+      <LineId Id="67" Count="0" />
       <LineId Id="38" Count="0" />
       <LineId Id="108" Count="0" />
       <LineId Id="107" Count="0" />

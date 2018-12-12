@@ -6,7 +6,9 @@
 TYPE eErrorCodes : 
 (
 	AC_CONVEYOR_JAMMED := 16#101 , 
-	AC_CONVEYOR_NOT_REACHED := 16#102  
+	AC_CONVEYOR_NOT_REACHED := 16#102,  
+	AC_ET_USAGE_MEET := 16#201,
+	AC_ET_SERIES_NG := 16#202
 ) UDINT;
 END_TYPE
 ]]></Declaration>
@@ -22,6 +24,16 @@ END_TYPE
             <o>
               <v n="TextID">"AC_CONVEYOR_NOT_REACHED"</v>
               <v n="TextDefault">"16#102"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"AC_ET_USAGE_MEET"</v>
+              <v n="TextDefault">"16#201"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"AC_ET_SERIES_NG"</v>
+              <v n="TextDefault">"16#202"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
