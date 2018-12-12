@@ -18,8 +18,9 @@ VAR_OUTPUT
 	requestMode : eOperationModes;
 	requestInit : BOOL;
 	errorClear : eErrorClearWays;
+	
+	materialClear : BOOL;
 		
-	mMonitorDatas:ARRAY[1..8] OF DWORD;
 END_VAR
 VAR
 	comm AT%MB256 : commUnitController;
@@ -32,6 +33,7 @@ VAR CONSTANT
 	bInitialize : INT :=2;
 	bManualMode : INT :=3;
 	bErrorIgnore : INT :=4;
+	bClear : INT :=5;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -69,6 +71,8 @@ IF comm.control.bErrorReset OR pbYellow THEN
 ELSIF comm.control.bErrorIgnore THEN
 	errorClear := eErrorClearWays.IGNORE;	
 END_IF
+//material clear
+materialClear := comm.control.bClear; 
 //one-shot control clear , except bManualMode
 comm.control := 16#8 AND comm.control;
 //error infomation
@@ -94,12 +98,26 @@ comm.errorType := mErrorType;
 comm.errorCode1 := mErrorCode;]]></ST>
       </Implementation>
     </Method>
+    <Method Name="MonitorData" Id="{a19454ba-8d3d-4329-9b28-915f38916bd6}">
+      <Declaration><![CDATA[METHOD MonitorData : DWORD
+VAR_INPUT
+	index : INT;
+	value : DWORD;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[comm.monitorDatas[index] := value;]]></ST>
+      </Implementation>
+    </Method>
     <LineIds Name="InterfaceControlV1">
       <LineId Id="383" Count="0" />
       <LineId Id="423" Count="1" />
       <LineId Id="422" Count="0" />
       <LineId Id="455" Count="0" />
-      <LineId Id="384" Count="33" />
+      <LineId Id="384" Count="28" />
+      <LineId Id="524" Count="0" />
+      <LineId Id="523" Count="0" />
+      <LineId Id="413" Count="4" />
       <LineId Id="420" Count="0" />
       <LineId Id="165" Count="0" />
       <LineId Id="421" Count="0" />
@@ -108,6 +126,9 @@ comm.errorCode1 := mErrorCode;]]></ST>
     <LineIds Name="InterfaceControlV1.ErrorInfomation">
       <LineId Id="5" Count="0" />
       <LineId Id="9" Count="1" />
+    </LineIds>
+    <LineIds Name="InterfaceControlV1.MonitorData">
+      <LineId Id="5" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

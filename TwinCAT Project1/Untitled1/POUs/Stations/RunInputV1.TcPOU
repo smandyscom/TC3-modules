@@ -3,30 +3,62 @@
   <POU Name="RunInputV1" Id="{68b3e97e-d64b-4e62-becb-dd70186a6197}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunInputV1 EXTENDS RunUnitSlave
 VAR_INPUT
-	trigger : BOOL; //link to handy(on)/or light screen
+	handy : BOOL; //link to handy(on)
+	lightScreen : BOOL; //link to light screen
+		
+	materialRemains : INT; //link to the counter of all controllers
+	
 	materialValidSensor : BOOL; //link to approximity
+END_VAR
+VAR_OUTPUT
+	inputCounter : UINT;
 END_VAR
 VAR
 	clamper : POINTER TO RunCylinder;
+	
+	controller : POINTER TO RunUnitController; //link to parent
+	toggleClear : BOOL; // link to HMI clear request
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[SUPER^();
+
+//status backup
+IF NOT toggleClear AND controller^.interfaceControl^.materialClear THEN
+	toggleClear := TRUE;
+END_IF
 
 CASE outputState OF
 	eSpecialStates.SLAVE_ENTER_PROCEDURE:
 		bSerialTransition := clamper^.Execute(eCylinderCommands.COMMAND_B); //release
 	16#201:
 		//wait until trigger off
-		bSerialTransition := NOT trigger;
-	16#202:
-		bSerialTransition := trigger;
+		bSerialTransition := NOT handy;
 		IF bSerialTransition THEN
-			//TODO , material transfer
+			SlotBase^.Valid := FALSE; //reset
 		END_IF
-		//IF materialValidSensor THEN
-		//	clamper^.Execute(eCylinderCommands.COMMAND_A);
-		//END_IF
+		//
+		IF toggleClear AND materialRemains = 0 THEN
+			toggleClear := FALSE;
+		END_IF
+	16#202:
+		//conditions
+		//1. bypassed
+		//2. handy on
+		//3. toggle clear
+		//4. material existed with light screen off
+		IF toggleClear OR bIsBypassed OR handy OR NOT (lightScreen AND SlotBase^.Valid) THEN
+			bSerialTransition := TRUE;
+		END_IF
+		//once material detected , clamper imdiatly
+		IF NOT SlotBase^.Valid AND materialValidSensor THEN
+			clamper^.Execute(eCylinderCommands.COMMAND_A);
+			SlotBase^.Valid := TRUE;
+			//count-up
+			inputCounter := inputCounter + 1;
+			// material transfer
+			SlotBase^.Act := TRUE;
+		END_IF
 	16#203:
 		IF clamper^.Execute(eCylinderCommands.COMMAND_A) THEN
 			//closure
@@ -61,6 +93,8 @@ IF bInitRetains THEN
 	NextState := eSpecialStates.INITIAL_BEGIN;
 END_IF
 
+controller := Parent;
+
 workingSignal := argWorkingSignal; //link
 //link
 clamper := argClamper;]]></ST>
@@ -85,25 +119,31 @@ Initialize := SUPER^.Initialize();]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="RunInputV1">
-      <LineId Id="9" Count="0" />
-      <LineId Id="14" Count="0" />
-      <LineId Id="13" Count="0" />
-      <LineId Id="15" Count="0" />
-      <LineId Id="17" Count="2" />
-      <LineId Id="30" Count="0" />
-      <LineId Id="28" Count="1" />
-      <LineId Id="31" Count="5" />
-      <LineId Id="20" Count="0" />
-      <LineId Id="23" Count="0" />
-      <LineId Id="38" Count="0" />
-      <LineId Id="40" Count="0" />
-      <LineId Id="39" Count="0" />
-      <LineId Id="16" Count="0" />
-      <LineId Id="25" Count="0" />
+      <LineId Id="57" Count="0" />
+      <LineId Id="119" Count="0" />
+      <LineId Id="115" Count="3" />
+      <LineId Id="58" Count="6" />
+      <LineId Id="84" Count="2" />
+      <LineId Id="98" Count="0" />
+      <LineId Id="95" Count="2" />
+      <LineId Id="65" Count="0" />
+      <LineId Id="89" Count="4" />
+      <LineId Id="67" Count="0" />
+      <LineId Id="107" Count="0" />
+      <LineId Id="69" Count="1" />
+      <LineId Id="81" Count="0" />
+      <LineId Id="71" Count="0" />
+      <LineId Id="83" Count="0" />
+      <LineId Id="94" Count="0" />
+      <LineId Id="104" Count="1" />
+      <LineId Id="109" Count="0" />
+      <LineId Id="72" Count="7" />
       <LineId Id="24" Count="0" />
     </LineIds>
     <LineIds Name="RunInputV1.FB_init">
-      <LineId Id="16" Count="8" />
+      <LineId Id="16" Count="7" />
+      <LineId Id="40" Count="1" />
+      <LineId Id="24" Count="0" />
       <LineId Id="13" Count="0" />
       <LineId Id="26" Count="0" />
       <LineId Id="25" Count="0" />
