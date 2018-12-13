@@ -15,7 +15,9 @@ VAR
 	block : MaterialBlock;
 	ptDesitination : POINTER TO parameterset;
 END_VAR
-
+VAR PERSISTENT
+	isQuery : bool ; //whether query material data when material income
+END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[//Ng/OK output mechanism
@@ -41,7 +43,7 @@ CASE outputState OF
 		SlotLast^.Id := SlotBase^.Id;
 		SlotLast^.Valid := SlotLast^.Valid;
 		IF SlotLast^.Valid THEN
-			SlotLast^.Act := TRUE; //query grade
+			SlotLast^.Act := isQuery; //query grade
 			bSerialTransition := TRUE;
 		ELSE
 			NextState := eSpecialStates.SLAVE_WORK_DONE;		
@@ -145,7 +147,7 @@ clamper := argClamper;]]></ST>
       <LineId Id="16" Count="0" />
       <LineId Id="32" Count="1" />
       <LineId Id="115" Count="5" />
-      <LineId Id="128" Count="0" />
+      <LineId Id="168" Count="0" />
       <LineId Id="125" Count="0" />
       <LineId Id="121" Count="0" />
       <LineId Id="124" Count="0" />

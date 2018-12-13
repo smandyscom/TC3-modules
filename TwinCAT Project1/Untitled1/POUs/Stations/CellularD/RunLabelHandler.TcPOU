@@ -80,6 +80,7 @@ CASE outputState OF
 		END_IF
 	//-------------------Working
 	16#300:
+		//TODO , label printing triggered by HMI , according to the data from DB
 		fbOpen.bExecute:=TRUE;
 		bSerialTransition := TRUE;
 	16#301:
@@ -301,7 +302,9 @@ ioVacuum := argIoVacuum;]]></ST>
       <LineId Id="454" Count="1" />
       <LineId Id="440" Count="0" />
       <LineId Id="26" Count="0" />
-      <LineId Id="327" Count="4" />
+      <LineId Id="327" Count="0" />
+      <LineId Id="498" Count="0" />
+      <LineId Id="328" Count="3" />
       <LineId Id="386" Count="2" />
       <LineId Id="332" Count="4" />
       <LineId Id="390" Count="1" />

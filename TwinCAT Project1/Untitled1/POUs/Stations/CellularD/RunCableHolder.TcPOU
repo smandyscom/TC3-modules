@@ -29,15 +29,22 @@ CASE outputState OF
 		END_IF
 	//---------------Working
 	eSpecialStates.SLAVE_ENTER_PROCEDURE:
-		bSerialTransition := shifterLong^.Execute(eCylinderCommands.COMMAND_B);
+		IF SlotBase^.Valid THEN
+			bSerialTransition := TRUE;
+		ELSE
+			NextState := eSpecialStates.SLAVE_WORK_DONE;	
+		END_IF
+		//TODO , check ok/ng?
 	16#201:
+		bSerialTransition := shifterLong^.Execute(eCylinderCommands.COMMAND_B);
+	16#202:
 		//hold
 		transitionByte.0 :=  holderFixedEnd^.Execute(eCylinderCommands.COMMAND_B);
 		transitionByte.1 :=  holderMovingEnd^.Execute(eCylinderCommands.COMMAND_B);
 		bSerialTransition := (transitionByte = 16#3);
-	16#202:
-		bSerialTransition := axis^.ExecuteParameter(ptDrag);//inform transporter moving work2
 	16#203:
+		bSerialTransition := axis^.ExecuteParameter(ptDrag);//inform transporter moving work2
+	16#204:
 		//strech
 		IF shifterShort^.Execute(eCylinderCommands.COMMAND_B) THEN
 			slaveWorkingSignal[1] := TRUE; //inform to labeler handler to work
@@ -127,7 +134,13 @@ ptRelease := ADR(axis^.ptpCommands[indexRelease]);]]></ST>
       <LineId Id="33" Count="1" />
       <LineId Id="37" Count="3" />
       <LineId Id="25" Count="0" />
-      <LineId Id="41" Count="2" />
+      <LineId Id="41" Count="0" />
+      <LineId Id="167" Count="1" />
+      <LineId Id="170" Count="1" />
+      <LineId Id="169" Count="0" />
+      <LineId Id="174" Count="0" />
+      <LineId Id="172" Count="1" />
+      <LineId Id="43" Count="0" />
       <LineId Id="55" Count="0" />
       <LineId Id="49" Count="1" />
       <LineId Id="54" Count="0" />
