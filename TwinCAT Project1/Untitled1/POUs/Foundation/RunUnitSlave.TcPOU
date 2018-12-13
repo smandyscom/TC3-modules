@@ -18,11 +18,18 @@ CASE outputState OF
 		END_IF
 		IF bWorkingOverride AND NOT bIsBypassed THEN
 			NextState := eSpecialStates.SLAVE_ENTER_PROCEDURE; // enter working procedure
+			//--------------------
+			//	Material override
+			//--------------------
+			IF SlotBase^.Valid THEN
+				bMaterialOverride := TRUE;
+			END_IF			
 		ELSIF bWorkingOverride AND bIsBypassed THEN
 			NextState := eSpecialStates.SLAVE_WORK_DONE;
 		ELSE
 			//do nothing
 		END_IF
+		
 	eSpecialStates.SLAVE_WORK_DONE:
 		//working done
 		workingSignal^ := FALSE;
@@ -78,10 +85,13 @@ workingSignal := argWorkingSignal; //link]]></ST>
       <LineId Id="27" Count="1" />
       <LineId Id="23" Count="0" />
       <LineId Id="31" Count="0" />
+      <LineId Id="68" Count="4" />
+      <LineId Id="66" Count="0" />
       <LineId Id="24" Count="0" />
       <LineId Id="32" Count="0" />
       <LineId Id="29" Count="1" />
       <LineId Id="25" Count="0" />
+      <LineId Id="65" Count="0" />
       <LineId Id="16" Count="2" />
       <LineId Id="20" Count="1" />
       <LineId Id="13" Count="0" />

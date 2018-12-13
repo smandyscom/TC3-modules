@@ -12,14 +12,8 @@ VAR_OUTPUT
 	triggerRelease : BOOL;
 END_VAR
 VAR
-	//output bit to I/O motor
-	//run AT%Q* : BOOL;
-	//overheat at%I* : bool;
-	ioConveyor : pointer to ioBundleConveyor;
-	
+	ioConveyor : POINTER TO ioBundleConveyor;
 	runTimer : TON;
-	
-
 END_VAR
 VAR PERSISTENT
 	//Checkpoints
@@ -33,15 +27,14 @@ isLastSlotOccupied := TRUE; //always pass carreir even empty material
 SUPER^(); //run indexer master
 
 IF bSerialTransition AND State = 1 THEN
-	triggerRelease:=TRUE;
 	NextState := 16#10; //state override : release lifters
 END_IF
 IF bSerialTransition AND state=2 THEN
 	//moving
 	//timer setup and run
-		runTimer.IN := TRUE;
-		runTimer.PT := commandTriggerRaise;
-		ioConveyor^.run := TRUE;
+	runTimer.IN := TRUE;
+	runTimer.PT := commandTriggerRaise;
+	ioConveyor^.run := TRUE;
 
 	NextState := 16#11; //re-direct
 END_IF
@@ -107,6 +100,7 @@ CASE outputState OF
 		runTimer.IN := FALSE;
 		ioConveyor^.run := FALSE; //conveyor stopped
 		
+		triggerRelease:=TRUE;
 		Upstream^.syncAcknowledged := FALSE; //inform done
 		
 		NextState := 0;//done
@@ -159,7 +153,8 @@ Initialize := SUPER^.Initialize();]]></ST>
     </Method>
     <LineIds Name="RunUnitCellularAIO">
       <LineId Id="329" Count="0" />
-      <LineId Id="229" Count="7" />
+      <LineId Id="229" Count="4" />
+      <LineId Id="235" Count="1" />
       <LineId Id="335" Count="0" />
       <LineId Id="338" Count="0" />
       <LineId Id="344" Count="0" />
@@ -190,6 +185,7 @@ Initialize := SUPER^.Initialize();]]></ST>
       <LineId Id="351" Count="0" />
       <LineId Id="289" Count="4" />
       <LineId Id="360" Count="0" />
+      <LineId Id="414" Count="0" />
       <LineId Id="294" Count="0" />
       <LineId Id="359" Count="0" />
       <LineId Id="295" Count="1" />

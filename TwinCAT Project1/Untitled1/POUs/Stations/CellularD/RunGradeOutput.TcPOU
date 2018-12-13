@@ -11,6 +11,9 @@ VAR
 	ptCommandReady : POINTER TO ParameterSet;
 	ptCommandOK : POINTER TO ParameterSet;
 	ptCommandNG : POINTER TO ParameterSet;
+	//
+	block : MaterialBlock;
+	ptDesitination : POINTER TO parameterset;
 END_VAR
 
 ]]></Declaration>
@@ -32,33 +35,52 @@ CASE outputState OF
 		END_IF
 	//------------------------Working
 	eSpecialStates.SLAVE_ENTER_PROCEDURE:
-		bSerialTransition:=axisVertical^.Execute(eCylinderCommands.COMMAND_B); //down
+		//---------------
+		//	Material infor exchanging
+		//---------------
+		SlotLast^.Id := SlotBase^.Id;
+		SlotLast^.Valid := SlotLast^.Valid;
+		IF SlotLast^.Valid THEN
+			SlotLast^.Act := TRUE; //query grade
+			bSerialTransition := TRUE;
+		ELSE
+			NextState := eSpecialStates.SLAVE_WORK_DONE;		
+		END_IF
 	16#201:
-		bSerialTransition:=holder^.Execute(eCylinderCommands.COMMAND_B); //hold
+		bSerialTransition:=axisVertical^.Execute(eCylinderCommands.COMMAND_B); //down
 	16#202:
-		bSerialTransition:=clamper^.Execute(eCylinderCommands.COMMAND_B); //clamper relase
+		bSerialTransition:=holder^.Execute(eCylinderCommands.COMMAND_B); //hold
 	16#203:
-		bSerialTransition:=axisVertical^.Execute(eCylinderCommands.COMMAND_A); //up
+		bSerialTransition:=clamper^.Execute(eCylinderCommands.COMMAND_B); //clamper relase
 	16#204:
+		bSerialTransition:=axisVertical^.Execute(eCylinderCommands.COMMAND_A); //up
+	16#205:
 		bSerialTransition:=clamper^.Execute(eCylinderCommands.COMMAND_A); //clamper return
 		IF bSerialTransition THEN
-			workingSignal^ := FALSE; //release
-			bWorkingOverride:= FALSE;
-			bMaterialOverride:= false;
+			workingSignal^ := FALSE; //release conveyor
 		END_IF
-	16#205:
-		IF axisMoving^.ExecuteParameter(ptCommandOK) THEN
-			//TODO , according to grade to move
+	16#206:
+		bSerialTransition := NOT SlotLast^.Act; //wait until query over
+		IF bSerialTransition THEN
+			block := SlotLast^.Data;
+			CASE block.data[0] OF
+				0:
+					//ng
+					ptDesitination := ptCommandNG;
+				1:
+					//ok
+					ptDesitination := ptCommandOK;
+			END_CASE
+		END_IF
+	16#207:
+		IF axisMoving^.ExecuteParameter(ptDesitination) THEN
+			//according TO grade TO MOVE
 			NextState := 16#210;
 		END_IF
 	//-------------------Drop
 	16#210: 
-		bSerialTransition:=axisVertical^.Execute(eCylinderCommands.COMMAND_B); //down
-	16#211:
 		bSerialTransition:=holder^.Execute(eCylinderCommands.COMMAND_A); //release
-	16#212:
-		bSerialTransition:=axisVertical^.Execute(eCylinderCommands.COMMAND_A); //up
-	16#213:
+	16#211:
 		IF axisMoving^.ExecuteParameter(ptCommandReady) THEN
 			NextState := 0;
 		END_IF
@@ -121,22 +143,37 @@ clamper := argClamper;]]></ST>
       <LineId Id="71" Count="0" />
       <LineId Id="21" Count="4" />
       <LineId Id="16" Count="0" />
-      <LineId Id="32" Count="4" />
+      <LineId Id="32" Count="1" />
+      <LineId Id="115" Count="5" />
+      <LineId Id="128" Count="0" />
+      <LineId Id="125" Count="0" />
+      <LineId Id="121" Count="0" />
+      <LineId Id="124" Count="0" />
+      <LineId Id="122" Count="0" />
+      <LineId Id="126" Count="1" />
+      <LineId Id="35" Count="1" />
       <LineId Id="63" Count="1" />
       <LineId Id="37" Count="1" />
       <LineId Id="65" Count="0" />
       <LineId Id="67" Count="0" />
-      <LineId Id="98" Count="1" />
-      <LineId Id="101" Count="1" />
-      <LineId Id="100" Count="0" />
+      <LineId Id="98" Count="2" />
+      <LineId Id="132" Count="2" />
+      <LineId Id="151" Count="0" />
+      <LineId Id="139" Count="1" />
+      <LineId Id="143" Count="0" />
+      <LineId Id="147" Count="0" />
+      <LineId Id="142" Count="0" />
+      <LineId Id="144" Count="0" />
+      <LineId Id="149" Count="0" />
+      <LineId Id="141" Count="0" />
+      <LineId Id="136" Count="0" />
       <LineId Id="39" Count="1" />
       <LineId Id="47" Count="0" />
       <LineId Id="49" Count="0" />
       <LineId Id="48" Count="0" />
       <LineId Id="50" Count="0" />
-      <LineId Id="41" Count="2" />
-      <LineId Id="51" Count="0" />
-      <LineId Id="84" Count="1" />
+      <LineId Id="41" Count="0" />
+      <LineId Id="152" Count="0" />
       <LineId Id="52" Count="3" />
       <LineId Id="17" Count="0" />
     </LineIds>
