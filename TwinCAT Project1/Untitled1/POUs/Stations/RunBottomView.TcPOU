@@ -20,7 +20,7 @@ END_VAR]]></Declaration>
 
 CASE outputState OF
 	eSpecialStates.SLAVE_ENTER_PROCEDURE:
-		bSerialTransition := axis1^.ExecuteParameterIndex(indexCommand:= indexCommandPick);
+		bSerialTransition := axis1^.ExecuteParameterIndex(indexCommand:= indexCommandPick); //down
 	16#201:
 		bSerialTransition:=connectorHolder^.Execute(argCommand:= eCylinderCommands.COMMAND_B); //hold
 	16#202:
@@ -33,6 +33,7 @@ CASE outputState OF
 			transitionByte.0 := TRUE;
 		END_IF
 		IF NOT transitionByte.1 AND_THEN axis2^.ExecuteParameterIndex(indexCommand:= indexStandByAxis2) THEN
+			//axis2 : CCD moving carriage
 			transitionByte.1 := TRUE;
 		END_IF
 		IF transitionByte=3 THEN
@@ -75,8 +76,8 @@ VAR_INPUT
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
 	
 	argParent : POINTER TO RunUnitGeneric;
-	argSlotBase : POINTER TO MaterialBlock;
-	argSlotLast : POINTER TO MaterialBlock;
+	argSlotBase : POINTER TO RunMaterial;
+	argSlotLast : POINTER TO RunMaterial;
 	
 	argWorkingSignal : POINTER TO BOOL;
 	
@@ -104,7 +105,7 @@ workingSignal := argWorkingSignal; //link
 
 axis1 := argAxis1;
 axis2 := argAxis2;
-sideAligner := argSideAligner;
+sideAligner := 0;
 
 connectorHolder := argConnectorHolder;
 transporter := argTransporter;
@@ -146,7 +147,9 @@ Initialize := SUPER^.Initialize();]]></ST>
       <LineId Id="95" Count="0" />
       <LineId Id="31" Count="6" />
       <LineId Id="44" Count="0" />
-      <LineId Id="38" Count="5" />
+      <LineId Id="38" Count="3" />
+      <LineId Id="115" Count="0" />
+      <LineId Id="42" Count="1" />
       <LineId Id="45" Count="2" />
       <LineId Id="28" Count="0" />
       <LineId Id="96" Count="0" />
