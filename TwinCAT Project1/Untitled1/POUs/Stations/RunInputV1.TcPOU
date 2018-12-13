@@ -6,7 +6,7 @@ VAR_INPUT
 	handy : BOOL; //link to handy(on)
 	lightScreen : BOOL; //link to light screen
 		
-	materialRemains : INT; //link to the counter of all controllers
+	materialRemains : UINT; //link to the counter of all controllers
 	
 	materialValidSensor : BOOL; //link to approximity
 END_VAR
