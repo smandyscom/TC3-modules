@@ -25,6 +25,7 @@ VAR
 END_VAR
 VAR PERSISTENT
 	//TODO memorize carrier existed?
+	isQuery : bool ; //whether query material data when material income
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[SUPER^();
@@ -123,6 +124,9 @@ CASE outputState OF
 		END_IF
 	16#1004:
 		bSerialTransition := interfereSensor^.debouncedOff AND reachSensor^.debouncedOn;
+		IF  bSerialTransition THEN
+			SlotBase^.Act := isQuery;
+		END_IF
 	16#1005:
 		IF Upstream<>0 AND_THEN NOT Upstream^.syncEngaged THEN
 			Upstream^.syncAcknowledged := FALSE; //completely follow upstream ,
@@ -137,10 +141,14 @@ CASE outputState OF
 		IF NOT bSerialTransition AND_THEN (rotator=0 OR (rotator<>0 AND_THEN rotator^.ExecuteParameter(ptRotatorMutual))) THEN
 			bSerialTransition := TRUE;
 		END_IF
-	16#3001:
-		IF NOT bSerialTransition AND_THEN liner^.ExecuteParameter(ptLinerWork) THEN
-			bSerialTransition := TRUE;
+	16#3001:	
+		IF NOT transitionByte.0 AND_THEN liner^.ExecuteParameter(ptLinerWork) THEN
+			transitionByte.0 := TRUE;	
+		END_IF
+		transitionByte.1 := NOT SlotBase^.Act;
+		IF transitionByte = 3 THEN
 			slaveWorkingSignal[1] := slaveLinkageStatus[1]; //start working
+			bSerialTransition := TRUE;
 		END_IF
 	16#3002:
 		IF NOT slaveWorkingSignal[1] THEN
@@ -271,6 +279,7 @@ END_IF
       <LineId Id="128" Count="0" />
       <LineId Id="267" Count="0" />
       <LineId Id="270" Count="0" />
+      <LineId Id="542" Count="2" />
       <LineId Id="130" Count="0" />
       <LineId Id="132" Count="0" />
       <LineId Id="208" Count="0" />
@@ -283,8 +292,11 @@ END_IF
       <LineId Id="347" Count="1" />
       <LineId Id="346" Count="0" />
       <LineId Id="285" Count="0" />
-      <LineId Id="378" Count="2" />
+      <LineId Id="378" Count="1" />
       <LineId Id="293" Count="0" />
+      <LineId Id="547" Count="2" />
+      <LineId Id="551" Count="0" />
+      <LineId Id="550" Count="0" />
       <LineId Id="374" Count="0" />
       <LineId Id="376" Count="1" />
       <LineId Id="375" Count="0" />
