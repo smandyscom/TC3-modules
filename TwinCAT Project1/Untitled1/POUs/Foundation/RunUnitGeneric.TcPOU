@@ -29,6 +29,8 @@ VAR
 	transitionByte : BYTE;
 	
 	isTransit : BOOL ;
+	
+	workingTimerCache : LTIME;
 	workingTimer : LTON;
 	
 	outputState : INT;
@@ -52,11 +54,11 @@ END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[
 //Catch parent's pause status
-IF Parent^.bPause AND NOT bLastParentStatus THEN
+IF Parent<>0 AND_THEN (Parent^.bPause AND NOT bLastParentStatus) THEN
 	bPause := TRUE;
 END_IF
 
-IF NOT Parent^.bPause AND bPause THEN
+IF Parent<>0 AND_THEN (NOT Parent^.bPause AND bPause) THEN
 	bPause := FALSE;
 END_IF
 
@@ -224,7 +226,14 @@ Monitor.unit.base.alarmCode := TO_WORD(AlarmCode);
 Monitor.unit.base.state := TO_WORD(State);
 Monitor.unit.base.nextState := TO_WORD(NextState);
 //
-Monitor.unit.base.workingTimerCache := TO_DWORD(workingTimer.ET);
+IF workingTimer.IN THEN
+	//timer is running , reflect real value
+	Monitor.unit.base.workingTimerCache := TO_DWORD(workingTimer.ET);
+ELSE
+	//timer is stopped , reflect cached value
+	Monitor.unit.base.workingTimerCache := TO_DWORD(workingTimerCache);
+END_IF
+
 ]]></ST>
       </Implementation>
     </Method>
@@ -295,7 +304,13 @@ END_VAR
       <LineId Id="17" Count="0" />
       <LineId Id="15" Count="0" />
       <LineId Id="18" Count="1" />
-      <LineId Id="21" Count="1" />
+      <LineId Id="21" Count="0" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="29" Count="0" />
+      <LineId Id="27" Count="0" />
+      <LineId Id="30" Count="2" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="22" Count="0" />
       <LineId Id="16" Count="0" />
     </LineIds>
     <LineIds Name="RunUnitGeneric.TypeCode">

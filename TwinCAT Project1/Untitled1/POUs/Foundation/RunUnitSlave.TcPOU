@@ -13,6 +13,7 @@ CASE outputState OF
 	eSpecialStates.SLAVE_WORK_TRIGGER:
 		//working start
 		IF workingSignal^ THEN
+			workingTimer.IN := TRUE;
 			bWorkingOverride := TRUE; // backup working override signal
 		END_IF
 		IF bWorkingOverride AND NOT bIsBypassed THEN
@@ -31,7 +32,13 @@ END_CASE
 
 //sychoronizing
 IF NOT workingSignal^ AND bWorkingOverride THEN
-	bWorkingOverride := TRUE;
+	bWorkingOverride := FALSE;
+END_IF
+
+//stop watch
+IF workingTimer.IN AND NOT workingSignal^ THEN
+	workingTimerCache := workingTimer.ET;
+	workingTimer.IN := FALSE;
 END_IF]]></ST>
     </Implementation>
     <Method Name="FB_init" Id="{5fe09d05-6f33-419c-ac80-1bcb29fd85fb}">
@@ -66,7 +73,9 @@ workingSignal := argWorkingSignal; //link]]></ST>
       <LineId Id="10" Count="0" />
       <LineId Id="12" Count="0" />
       <LineId Id="15" Count="0" />
-      <LineId Id="26" Count="2" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="46" Count="0" />
+      <LineId Id="27" Count="1" />
       <LineId Id="23" Count="0" />
       <LineId Id="31" Count="0" />
       <LineId Id="24" Count="0" />
@@ -80,6 +89,11 @@ workingSignal := argWorkingSignal; //link]]></ST>
       <LineId Id="38" Count="0" />
       <LineId Id="37" Count="0" />
       <LineId Id="39" Count="1" />
+      <LineId Id="48" Count="0" />
+      <LineId Id="47" Count="0" />
+      <LineId Id="49" Count="0" />
+      <LineId Id="54" Count="0" />
+      <LineId Id="50" Count="1" />
     </LineIds>
     <LineIds Name="RunUnitSlave.FB_init">
       <LineId Id="16" Count="6" />

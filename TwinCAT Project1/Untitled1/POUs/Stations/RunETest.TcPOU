@@ -82,12 +82,11 @@ CASE outputState OF
 			END_IF
 		END_IF		
 		//report
-		block.data[0] := TO_WORD(isOK);
-		block.data[1] := TO_WORD(ioBundle^.o3); //et
-		block.data[2] := TO_WORD(tongueExistedA^.debouncedOn);
-		block.data[3] := TO_WORD(tongueExistedB^.debouncedOn);
-		block.data[4] := TO_WORD(tongueGlueA^.debouncedOff);
-		block.data[5] := TO_WORD(tongueGlueB^.debouncedOff);
+		block.data[0] := TO_WORD(ioBundle^.o3); //et
+		block.data[1] := TO_WORD(tongueExistedA^.debouncedOn);
+		block.data[2] := TO_WORD(tongueExistedB^.debouncedOn);
+		block.data[3] := TO_WORD(tongueGlueA^.debouncedOff);
+		block.data[4] := TO_WORD(tongueGlueB^.debouncedOff);
 		SlotBase^.Data := block;
 		SlotBase^.Act := TRUE;
 		
@@ -243,7 +242,6 @@ Initialize:= SUPER^.Initialize(); //do axis return]]></ST>
       <LineId Id="167" Count="0" />
       <LineId Id="155" Count="0" />
       <LineId Id="149" Count="0" />
-      <LineId Id="189" Count="0" />
       <LineId Id="192" Count="5" />
       <LineId Id="150" Count="0" />
       <LineId Id="198" Count="0" />

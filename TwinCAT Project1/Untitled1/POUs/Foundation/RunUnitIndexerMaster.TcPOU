@@ -23,8 +23,10 @@ CASE SUPER^.outputState OF
 		//END_FOR
 		//bSerialTransition := TRUE;
 		
+		//------------------------------------------
 		//check material synchronization to Databse
 		//All slot act must be off
+		//------------------------------------------
 		bSerialTransition := TRUE;
 		FOR nCounter:=0 TO SlotCount-1 BY 1 DO
 			bSerialTransition := bSerialTransition AND NOT SlotBase[nCounter].Act;
@@ -75,7 +77,9 @@ CASE SUPER^.outputState OF
 		//listen to move
 		bSerialTransition :=  (NOT isLastSlotOccupied) OR (syncAcknowledged AND isLastSlotOccupied);
 	3:
+		//---------------------
 		//do shifting movement
+		//---------------------
 END_CASE
 ]]></ST>
     </Implementation>
@@ -112,13 +116,21 @@ SlotCount :=  TO_INT((SlotLast-SlotBase)/SIZEOF(RunMaterial) + 1);]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="RunUnitIndexerMaster">
-      <LineId Id="460" Count="30" />
+      <LineId Id="460" Count="8" />
+      <LineId Id="542" Count="0" />
+      <LineId Id="469" Count="1" />
+      <LineId Id="543" Count="0" />
+      <LineId Id="471" Count="19" />
       <LineId Id="530" Count="0" />
       <LineId Id="491" Count="0" />
       <LineId Id="528" Count="0" />
       <LineId Id="492" Count="1" />
       <LineId Id="497" Count="19" />
-      <LineId Id="518" Count="6" />
+      <LineId Id="518" Count="4" />
+      <LineId Id="544" Count="0" />
+      <LineId Id="523" Count="0" />
+      <LineId Id="545" Count="0" />
+      <LineId Id="524" Count="0" />
       <LineId Id="9" Count="0" />
     </LineIds>
     <LineIds Name="RunUnitIndexerMaster.FB_init">

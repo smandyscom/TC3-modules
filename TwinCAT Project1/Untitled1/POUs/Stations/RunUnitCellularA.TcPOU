@@ -40,7 +40,9 @@ isLastSlotOccupied := TRUE; //always pass carreir even empty material
 
 SUPER^(); //run indexer master
 
-//Buffer modes
+//----------------------
+//Conveyor buffer modes
+//----------------------
 IF NOT fastDone AND fastExecute THEN
 	fastDone := Axis^.ExecuteParameterBuffer(ptCommandFast,
 	bufferIndex:=1);
@@ -55,10 +57,11 @@ IF NOT finalGoalDone AND finalGoalExecute THEN
 END_IF
 
 IF bSerialTransition AND State = 1 THEN
-	triggerRelease:=TRUE;
 	NextState := 16#10; //state override : release lifters
 END_IF
-
+//-----------------------------
+// On-the-fly trigger upstream
+//-----------------------------
 IF State >=3 AND State <=6 AND_THEN Upstream<>0 AND Upstream^.syncEngaged AND NOT Upstream^.syncAcknowledged THEN
 	//receive data
 	SlotBase^.Id := Upstream^.syncMatId;
@@ -150,6 +153,7 @@ CASE outputState OF
 	//------------------------end of running
 	8:
 	IF allReach THEN
+		triggerRelease:=TRUE; //for those already done , able to release
 		bSerialTransition := TRUE;
 	ELSE
 		AlarmCode := eErrorCodes.AC_CONVEYOR_NOT_REACHED;
@@ -157,7 +161,7 @@ CASE outputState OF
 	9:
 	IF Upstream <> 0 AND_THEN NOT Upstream^.syncEngaged THEN
 		Upstream^.syncAcknowledged := FALSE; // received carrier
-		NextState :=1; //since working signal raised by individual lifter? 
+		NextState :=0; //back to check if all MatSync done
 	ELSE
 		// upstream not synchroized			
 	END_IF
@@ -206,11 +210,20 @@ END_IF]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="RunUnitCellularA">
-      <LineId Id="1995" Count="24" />
+      <LineId Id="1995" Count="3" />
+      <LineId Id="2196" Count="0" />
+      <LineId Id="1999" Count="1" />
+      <LineId Id="2197" Count="0" />
+      <LineId Id="2001" Count="13" />
+      <LineId Id="2016" Count="1" />
+      <LineId Id="2199" Count="1" />
+      <LineId Id="2018" Count="1" />
       <LineId Id="2158" Count="0" />
       <LineId Id="2160" Count="2" />
       <LineId Id="2020" Count="0" />
-      <LineId Id="2024" Count="92" />
+      <LineId Id="2024" Count="84" />
+      <LineId Id="2195" Count="0" />
+      <LineId Id="2109" Count="7" />
       <LineId Id="2118" Count="3" />
       <LineId Id="1863" Count="0" />
     </LineIds>
