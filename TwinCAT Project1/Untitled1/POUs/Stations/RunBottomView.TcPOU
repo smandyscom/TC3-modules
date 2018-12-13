@@ -20,14 +20,20 @@ END_VAR]]></Declaration>
 
 CASE outputState OF
 	eSpecialStates.SLAVE_ENTER_PROCEDURE:
-		bSerialTransition := axis1^.ExecuteParameterIndex(indexCommand:= indexCommandPick); //down
-	16#201:
-		bSerialTransition:=connectorHolder^.Execute(argCommand:= eCylinderCommands.COMMAND_B); //hold
+		IF SlotBase^.Valid THEN
+			bSerialTransition := TRUE;
+		ELSE
+			NextState := eSpecialStates.SLAVE_WORK_DONE;
+		END_IF
 	16#202:
-		bSerialTransition:=openClamp^.Execute(argCommand:= eCylinderCommands.COMMAND_B); //release
+		bSerialTransition := axis1^.ExecuteParameterIndex(indexCommand:= indexCommandPick); //down
 	16#203:
-		bSerialTransition:=axis1^.ExecuteParameterIndex(indexCommand:= indexStandByAxis1); //up ( standby position should not interfere with cam
+		bSerialTransition:=connectorHolder^.Execute(argCommand:= eCylinderCommands.COMMAND_B); //hold
 	16#204:
+		bSerialTransition:=openClamp^.Execute(argCommand:= eCylinderCommands.COMMAND_B); //release
+	16#205:
+		bSerialTransition:=axis1^.ExecuteParameterIndex(indexCommand:= indexStandByAxis1); //up ( standby position should not interfere with cam
+	16#206:
 		//go to inspection 1 simulatanously
 		IF NOT transitionByte.0 AND_THEN transporter^.Execute(argCommand:= eCylinderCommands.COMMAND_B) THEN
 			transitionByte.0 := TRUE;
@@ -144,6 +150,12 @@ Initialize := SUPER^.Initialize();]]></ST>
       <LineId Id="21" Count="0" />
       <LineId Id="20" Count="0" />
       <LineId Id="22" Count="0" />
+      <LineId Id="129" Count="0" />
+      <LineId Id="133" Count="0" />
+      <LineId Id="130" Count="0" />
+      <LineId Id="132" Count="0" />
+      <LineId Id="131" Count="0" />
+      <LineId Id="134" Count="0" />
       <LineId Id="95" Count="0" />
       <LineId Id="31" Count="6" />
       <LineId Id="44" Count="0" />

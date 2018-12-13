@@ -11,6 +11,12 @@ END_VAR
 
 CASE outputState OF
 	eSpecialStates.SLAVE_ENTER_PROCEDURE:
+		IF SlotBase^.Valid THEN
+			bSerialTransition := TRUE;
+		ELSE
+			NextState := eSpecialStates.SLAVE_WORK_DONE;
+		END_IF
+	16#201:
 		//align
 		IF sideAligner^.Execute(argCommand:= eCylinderCommands.COMMAND_B) THEN
 			NextState := eSpecialStates.SLAVE_AXIS_INSPECTION_ENTER;
@@ -43,6 +49,11 @@ Initialize := SUPER^.Initialize();]]></ST>
       <LineId Id="12" Count="0" />
       <LineId Id="11" Count="0" />
       <LineId Id="13" Count="0" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="35" Count="1" />
+      <LineId Id="34" Count="0" />
+      <LineId Id="37" Count="0" />
       <LineId Id="25" Count="0" />
       <LineId Id="15" Count="2" />
       <LineId Id="19" Count="0" />
