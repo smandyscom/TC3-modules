@@ -44,18 +44,24 @@ END_IF
 
 CASE outputState OF
 	eSpecialStates.SLAVE_ENTER_PROCEDURE:
-		bSerialTransition := connectorHolder^.Execute(eCylinderCommands.COMMAND_B);
+		IF SlotBase^.Valid THEN
+			bSerialTransition := TRUE;
+		ELSE
+			NextState := eSpecialStates.SLAVE_WORK_DONE;
+		END_IF
 	16#201:
+		bSerialTransition := connectorHolder^.Execute(eCylinderCommands.COMMAND_B);
+	16#202:
 		bSerialTransition := plugin^.Execute(eCylinderCommands.COMMAND_B);
 		IF bSerialTransition THEN
 			//usage count-up
 			etUsageCounter := etUsageCounter+1;
 		END_IF
-	16#202:
-		bSerialTransition := axis1^.ExecuteParameterIndex(indexCommandPick); //down to pick
 	16#203:
-		bSerialTransition := cableHolder^.Execute(eCylinderCommands.COMMAND_B) ;//hold 
+		bSerialTransition := axis1^.ExecuteParameterIndex(indexCommandPick); //down to pick
 	16#204:
+		bSerialTransition := cableHolder^.Execute(eCylinderCommands.COMMAND_B) ;//hold 
+	16#205:
 		IF TRUE THEN
 			//going to swing
 			NextState := eSpecialStates.SLAVE_AXIS_INSPECTION_ENTER;
@@ -214,6 +220,9 @@ Initialize:= SUPER^.Initialize(); //do axis return]]></ST>
       <LineId Id="29" Count="0" />
       <LineId Id="28" Count="0" />
       <LineId Id="30" Count="0" />
+      <LineId Id="232" Count="3" />
+      <LineId Id="231" Count="0" />
+      <LineId Id="236" Count="0" />
       <LineId Id="32" Count="2" />
       <LineId Id="140" Count="0" />
       <LineId Id="144" Count="0" />
