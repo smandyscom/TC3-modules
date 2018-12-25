@@ -36,6 +36,7 @@ VAR PERSISTENT
 	cylinderUpperBound : INT;
 	signalUpperBound : INT;
 	unitUpperBound : INT;
+	slotUpperBound : int;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -141,6 +142,13 @@ CASE currentMode OF
 					END_IF
 				END_FOR	
 				requestInitialize := FALSE; //clear after done
+				//---------------------------------
+				//	Clear all material valid status
+				//---------------------------------
+				FOR nCounter:=1 TO slotUpperBound BY 1 DO
+					gvl.materialSlots[nCounter].Valid := FALSE;
+				END_FOR
+				
 				interfaceControl^.state := TO_WORD(eSpecialStates.MAIN_INITIALIZED); //status reflection
 			END_IF
 		END_IF		
@@ -279,6 +287,11 @@ END_VAR
       <LineId Id="550" Count="0" />
       <LineId Id="998" Count="1" />
       <LineId Id="551" Count="12" />
+      <LineId Id="1087" Count="0" />
+      <LineId Id="1090" Count="1" />
+      <LineId Id="1088" Count="0" />
+      <LineId Id="1093" Count="1" />
+      <LineId Id="1089" Count="0" />
       <LineId Id="1000" Count="0" />
       <LineId Id="564" Count="0" />
       <LineId Id="546" Count="0" />
