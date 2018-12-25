@@ -16,6 +16,7 @@ END_VAR
     <Method Name="ConfigureRead" Id="{8e0df28b-cbcb-4f0b-9e41-e6a240ff5ddf}">
       <Declaration><![CDATA[METHOD ConfigureRead : CellDataBlock
 VAR_INPUT
+	input : CellDataBlock; //would offer sub-index ...etc
 	mode : eModes;
 END_VAR
 ]]></Declaration>

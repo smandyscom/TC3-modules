@@ -118,6 +118,7 @@ LAST_COMMAND := COMMAND_CACHED;
     <Method Name="ConfigureRead" Id="{bc98ac9f-d51a-43ad-b528-a1a54fe67ea0}" FolderPath="CommonBase\">
       <Declaration><![CDATA[METHOD ConfigureRead : CellDataBlock
 VAR_INPUT
+	input : CellDataBlock; //would offer sub-index ...etc
 	mode : eModes;
 END_VAR
 ]]></Declaration>

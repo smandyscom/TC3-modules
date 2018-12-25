@@ -9,9 +9,47 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[]]></ST>
+      <ST><![CDATA[//set command type
+Parameter2CellDataBlock.command.base.commandType := input.command;
+
+CASE input.command OF
+	eCommandTypes.POSITION:
+		//details setup
+		IF input.parameter.position.PositionType = ePositionType.POSITION_ABS THEN
+			//abs
+			Parameter2CellDataBlock.command.position.controlWord.0 := 1;
+		ELSE
+			//rel
+			Parameter2CellDataBlock.command.position.controlWord.0 := 0;
+		END_IF
+		IF input.parameter.position.Velocity <> 0 THEN
+			Parameter2CellDataBlock.command.base.speed := TO_DWORD(input.parameter.position.Velocity / 0.001); //mm/s ->  0.001mm/s 
+		END_IF
+		IF input.parameter.position.Acceleration <> 0 THEN
+			Parameter2CellDataBlock.command.position.accTime := TO_DWORD(( input.parameter.position.Velocity / input.parameter.position.Acceleration ) * 1000);
+		END_IF
+		IF input.parameter.position.Deceleration <> 0 THEN
+			Parameter2CellDataBlock.command.position.decTime := TO_DWORD(( input.parameter.position.Velocity / input.parameter.position.Deceleration ) * 1000);
+		END_IF
+		Parameter2CellDataBlock.command.position.coordinate := TO_DWORD(input.parameter.position.Position * 1000);
+	
+	eCommandTypes.ZRET:
+		//TODO
+END_CASE]]></ST>
     </Implementation>
     <LineIds Name="Parameter2CellDataBlock">
+      <LineId Id="14" Count="7" />
+      <LineId Id="38" Count="0" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="42" Count="0" />
+      <LineId Id="45" Count="0" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="47" Count="2" />
+      <LineId Id="53" Count="2" />
+      <LineId Id="62" Count="1" />
+      <LineId Id="61" Count="0" />
+      <LineId Id="64" Count="0" />
+      <LineId Id="35" Count="2" />
       <LineId Id="7" Count="0" />
     </LineIds>
   </POU>

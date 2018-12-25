@@ -263,11 +263,29 @@ END_IF
     <Method Name="ConfigureRead" Id="{b2d706a8-b020-4343-983c-4c7a56c09ac2}" FolderPath="CommonBase\">
       <Declaration><![CDATA[METHOD ConfigureRead : CellDataBlock
 VAR_INPUT
+	input : CellDataBlock; //would offer sub-index ...etc
 	mode : eModes;
 END_VAR
-]]></Declaration>
+VAR
+	temp : ParameterSet; 
+END_VAR
+VAR CONSTANT
+	indexEnablePosLimit : INT := 0;
+	indexEnableNegLimit : INT := 0;
+END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[CASE mode OF
+	eModes.MODE_EXE_AXIS:
+		//software limit
+		ConfigureRead.axis.limitPlus := TO_DINT(fbWriteLimitPositive.Value / 0.001); 
+		ConfigureRead.axis.limitMinus := TO_DINT(fbWriteLimitNegtive.Value / 0.001);
+		ConfigureRead.axis.boolParameter.indexEnablePosLimit := fbEnableLimitPositive.Value;
+		ConfigureRead.axis.boolParameter.indexEnableNegLimit := fbEnableLimitNegtive.Value  ;
+	eModes.MODE_EXE_COMMAND_BLOCK:
+		temp := ptpCommands[input.command.base.subIndex+1] ; //write-in
+		ConfigureRead := Parameter2CellDataBlock(input:= temp);
+		
+END_CASE]]></ST>
       </Implementation>
     </Method>
     <Method Name="ConfigureWrite" Id="{cde8b8df-cc3c-4ac1-a00a-6c29224f2a1d}" FolderPath="CommonBase\">
@@ -645,6 +663,15 @@ END_VAR
     </LineIds>
     <LineIds Name="RunAxis.ConfigureRead">
       <LineId Id="5" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="16" Count="1" />
+      <LineId Id="32" Count="0" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="29" Count="0" />
+      <LineId Id="27" Count="1" />
+      <LineId Id="12" Count="0" />
     </LineIds>
     <LineIds Name="RunAxis.ConfigureWrite">
       <LineId Id="5" Count="0" />

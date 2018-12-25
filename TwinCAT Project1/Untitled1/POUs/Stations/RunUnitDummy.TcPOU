@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+  <POU Name="RunUnitDummy" Id="{16212f14-bd08-4821-a28c-98ec1bf24c8e}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunUnitDummy EXTENDS RunUnitSlave
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+VAR PERSISTENT
+	var1 : INT := 1;
+	var2 : INT := 2;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="ConfigureRead" Id="{b15ff683-22c9-407a-8a1a-145273f95434}">
+      <Declaration><![CDATA[METHOD ConfigureRead : CellDataBlock
+VAR_INPUT
+	input : CellDataBlock;
+	mode : eModes;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ConfigureRead := input;
+CASE input.unit.config.configId OF
+	0:
+		 ConfigureRead.unit.config.value := TO_WORD(var1);
+	1:
+		ConfigureRead.unit.config.value := TO_WORD(var2);
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ConfigureWrite" Id="{9ea82dfa-8ca4-430d-9b3f-9d91ac6179f9}">
+      <Declaration><![CDATA[METHOD ConfigureWrite : BOOL
+VAR_INPUT
+	input : CellDataBlock;
+	mode : eModes;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE input.unit.config.configId OF
+	0:
+		var1 := TO_INT(input.unit.config.value);
+	1:
+		var2 := TO_INT(input.unit.config.value);
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="RunUnitDummy">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="RunUnitDummy.ConfigureRead">
+      <LineId Id="14" Count="0" />
+      <LineId Id="9" Count="4" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="RunUnitDummy.ConfigureWrite">
+      <LineId Id="5" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="11" Count="1" />
+      <LineId Id="10" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

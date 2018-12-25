@@ -4,17 +4,17 @@
     <Declaration><![CDATA[TYPE commManual :
 STRUCT
 	wordOut  : WORD; //0
-	reserved1 : ARRAY[1..31] OF WORD; //1-31
+		reserved1 : ARRAY[1..31] OF WORD; //1-31
 	wordIn	 : WORD; //32
-	reserved2 : ARRAY[1..7] OF WORD;  //33-39
+		reserved2 : ARRAY[1..7] OF WORD;  //33-39
 	monitorType : eCategrories;//40
 	monitorIndex : WORD;//41 , 0-based index
 	commitMode : eModes;//42
-	reserved3 : WORD; //43
+		reserved3 : WORD; //43
 	commitSelection : eCategrories;//44
-	reserved4 : WORD; //45
+		reserved4 : WORD; //45
 	commitIndex  : WORD;//46 , 0-based index
-	reserved5  : ARRAY[1..17] OF WORD; //47-63
+		reserved5  : ARRAY[1..17] OF WORD; //47-63
 	commitBlock  : CellDataBlock;//64
 	monitorBlock  : CellDataBlock;//128
 END_STRUCT

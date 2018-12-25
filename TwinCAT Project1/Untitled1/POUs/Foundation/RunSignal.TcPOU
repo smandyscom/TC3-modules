@@ -28,6 +28,7 @@ debouncedOffTimer(IN:= NOT input, PT:= , Q=> debouncedoff, ET=> );]]></ST>
     <Method Name="ConfigureRead" Id="{a12d05cb-7391-4f12-9f9c-52f812ce9a7d}" FolderPath="CommonBase\">
       <Declaration><![CDATA[METHOD ConfigureRead : CellDataBlock
 VAR_INPUT
+	input : CellDataBlock; //would offer sub-index ...etc
 	mode : eModes;
 END_VAR
 ]]></Declaration>

@@ -86,7 +86,7 @@ CASE state OF
 				eModes.MODE_EXE_AXIS,eModes.MODE_EXE_COMMAND_BLOCK,eModes.MODE_EXE_CYLINDER,eModes.MODE_EXE_UNIT:
 					comm.wordOut.bDone := controlDevice^.Control(comm.commitBlock,comm.commitMode); //return whether done
 				eModes.MODE_UPLOAD_DATA_BLOCK:
-					comm.commitBlock := controlDevice^.ConfigureRead(TO_WORD(comm.commitSelection));
+					comm.commitBlock := controlDevice^.ConfigureRead(comm.commitBlock,TO_WORD(comm.commitSelection));
 					comm.wordOut.bDone := TRUE; //done on
 				eModes.MODE_DOWNLOAD_DATA_BLOCK:
 					controlDevice^.ConfigureWrite(comm.commitBlock,TO_WORD(comm.commitSelection));
