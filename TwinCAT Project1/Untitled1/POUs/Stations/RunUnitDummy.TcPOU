@@ -23,7 +23,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[ConfigureRead := input;
+        <ST><![CDATA[//ConfigureRead := input;
 CASE input.unit.config.configId OF
 	0:
 		 ConfigureRead.unit.config.value := TO_WORD(var1);

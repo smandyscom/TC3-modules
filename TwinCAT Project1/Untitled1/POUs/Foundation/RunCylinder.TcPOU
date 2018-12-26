@@ -123,7 +123,13 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[
+ConfigureRead.cylinder.sensorAUsedCount := TO_WORD(A_SENSOR_USED_COUNT);
+ConfigureRead.cylinder.sensorBUsedCount := TO_WORD(B_SENSOR_USED_COUNT);
+
+ConfigureRead.cylinder.timerSetValue := TO_WORD(TMR_WATCH_DOG.PT);
+ConfigureRead.cylinder.timerSetValue := TO_WORD(TMR_DELAY_TO_A.PT);
+ConfigureRead.cylinder.timerSetValue := TO_WORD(TMR_DELAY_TO_B.PT);]]></ST>
       </Implementation>
     </Method>
     <Method Name="ConfigureWrite" Id="{f3b24b0b-d22d-4018-b1c9-709a957955d9}" FolderPath="CommonBase\">
@@ -283,7 +289,12 @@ END_VAR
       <LineId Id="9" Count="0" />
     </LineIds>
     <LineIds Name="RunCylinder.ConfigureRead">
+      <LineId Id="17" Count="0" />
       <LineId Id="5" Count="0" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="21" Count="0" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="22" Count="1" />
     </LineIds>
     <LineIds Name="RunCylinder.ConfigureWrite">
       <LineId Id="5" Count="0" />

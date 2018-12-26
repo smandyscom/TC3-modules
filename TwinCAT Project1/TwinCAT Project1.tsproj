@@ -2457,12 +2457,12 @@ External Setpoint Generation:
 				<Axis CreateSymbols="true" AxisType="1" Id="1">
 					<Name>Simu1</Name>
 					<AxisPara>
+						<Dynamic AccelerationMaximum="30000" DecelerationMaximum="30000" Jerk="40000"/>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
 					</AxisPara>
 					<Encoder Name="Enc" EncType="1">
 						<EncPara>
-							<SoftEndMinControl Enable="true" Range="20"/>
-							<SoftEndMaxControl Enable="true"/>
+							<SoftEndMinControl Range="20"/>
 						</EncPara>
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
