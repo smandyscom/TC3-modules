@@ -112,6 +112,33 @@ END_CASE
 //run timer
 runTimer(IN:= , PT:= , Q=> , ET=> );]]></ST>
     </Implementation>
+    <Method Name="ConfigureRead" Id="{05136bdf-c622-49ad-a859-e6a0ec422b6e}">
+      <Declaration><![CDATA[METHOD ConfigureRead : BOOL
+VAR_INPUT
+	mode : eModes;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ConfigureWrite" Id="{94318e9b-dc61-40e3-b66a-8483f769d4c2}">
+      <Declaration><![CDATA[METHOD ConfigureWrite : BOOL
+VAR_INPUT
+	input : CellDataBlock;
+	mode : eModes;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE input.unit.config.configId OF 
+	0:
+		commandTriggerRaise := TO_TIME(input.unit.config.value);
+	1:
+		commandReceivingTime := TO_TIME(input.unit.config.value);
+	
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="FB_init" Id="{94431706-316d-43bf-8737-4bc97fe6d821}">
       <Declaration><![CDATA[METHOD FB_init : BOOL
 VAR_INPUT
@@ -192,6 +219,18 @@ Initialize := SUPER^.Initialize();]]></ST>
       <LineId Id="304" Count="0" />
       <LineId Id="297" Count="3" />
       <LineId Id="158" Count="0" />
+    </LineIds>
+    <LineIds Name="RunUnitCellularAIO.ConfigureRead">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="RunUnitCellularAIO.ConfigureWrite">
+      <LineId Id="5" Count="0" />
+      <LineId Id="8" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="9" Count="0" />
     </LineIds>
     <LineIds Name="RunUnitCellularAIO.FB_init">
       <LineId Id="16" Count="5" />
