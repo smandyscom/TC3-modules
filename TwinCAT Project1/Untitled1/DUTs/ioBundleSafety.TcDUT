@@ -15,8 +15,8 @@ STRUCT
 	eStop1 AT%I* : BIT;
 	eStop2 AT%I* : BIT;
 	
-	lightScreen AT%I* : BIT;
 	//indirect status
+	lightScreen AT%I* : BIT;
 	airChoke AT%I* : BIT;
 	doorAll AT%I* : BIT;
 	eStop AT%I* : BIT;
