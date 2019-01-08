@@ -62,7 +62,7 @@ IF Parent<>0 AND_THEN (NOT Parent^.bPause AND bPause) THEN
 	bPause := FALSE;
 END_IF
 
-bLastParentStatus := Parent^.bPause;
+bLastParentStatus := Parent<>0 AND_THEN Parent^.bPause;
 
 //Serial transition
 IF bSerialTransition AND (State = NextState) THEN
