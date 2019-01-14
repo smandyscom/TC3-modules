@@ -113,7 +113,7 @@ END_CASE
 runTimer(IN:= , PT:= , Q=> , ET=> );]]></ST>
     </Implementation>
     <Method Name="ConfigureRead" Id="{05136bdf-c622-49ad-a859-e6a0ec422b6e}">
-      <Declaration><![CDATA[METHOD ConfigureRead : BOOL
+      <Declaration><![CDATA[METHOD ConfigureRead : CellDataBlock
 VAR_INPUT
 	input : CellDataBlock;
 	mode : eModes;
@@ -122,9 +122,9 @@ END_VAR
       <Implementation>
         <ST><![CDATA[CASE input.unit.config.configId OF 
 	0:
-		input.unit.config.value := TO_DWORD(commandTriggerRaise);
+		ConfigureRead.unit.config.value := TO_DWORD(commandTriggerRaise);
 	1:
-		 input.unit.config.value:= TO_DWORD(commandReceivingTime);
+		 ConfigureRead.unit.config.value:= TO_DWORD(commandReceivingTime);
 	
 END_CASE]]></ST>
       </Implementation>
