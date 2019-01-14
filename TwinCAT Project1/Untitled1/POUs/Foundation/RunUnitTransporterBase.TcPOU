@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.16">
   <POU Name="RunUnitTransporterBase" Id="{05eb4ac2-43a3-44ce-8012-78838d9522d6}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunUnitTransporterBase EXTENDS RunUnitGeneric
 VAR_INPUT	
@@ -61,7 +61,7 @@ pollingTimer(IN:= NOT pollingTimer.Q, PT:= T#50MS, Q=> , ET=> );
 
 //do ADS data exchanging
 fbAdsSyncRead(
-	bRead:= pollingTimer.Q, 
+	bRead:= pollingTimer.Q and not fbAdsSyncRead.bBusy, 
 	sNetId:= netId, 
 	nPort:= port, 
 	sVarName:= varNameSyncEngaged, 
@@ -74,7 +74,7 @@ fbAdsSyncRead(
 	nErrorId=> );
 		
 fbAdsSyncWrite(
-	bWrite:= pollingTimer.Q, 
+	bWrite:= pollingTimer.Q AND NOT fbAdsSyncWrite.bBusy, 
 	sNetId:= netId, 
 	nPort:= port, 
 	sVarName:= varNameSyncAckowledged, 
