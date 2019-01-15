@@ -2728,13 +2728,13 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>GVL.ioSafety.lightScreen</Name>
+							<Comment>
+								<![CDATA[indirect status]]>
+							</Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
 							<Name>GVL.ioSafety.airChoke</Name>
-							<Comment>
-								<![CDATA[indirect status]]>
-							</Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
