@@ -24,7 +24,16 @@ CASE outputState OF
 	//----------------------------------
 	eSpecialStates.SLAVE_AXIS_INSPECTION_EXIT:
 		//release
-		IF sideAligner^.Execute(eCylinderCommands.COMMAND_A) THEN
+		IF NOT transitionByte.0 AND_THEN axis1^.ExecuteParameterIndex(indexStandByAxis1) THEN
+			transitionByte.0 := TRUE;
+		END_IF
+		IF NOT transitionByte.1 AND_THEN (axis2 = 0 OR axis2<>0 AND_THEN axis2^.ExecuteParameterIndex(indexStandByAxis2)) THEN
+			transitionByte.1 := TRUE; //axis 2 is not existed
+		END_IF	
+		IF NOT transitionByte.2 AND_THEN sideAligner^.Execute(eCylinderCommands.COMMAND_A) THEN
+			transitionByte.2 := TRUE;
+		END_IF
+		IF transitionByte = 7 THEN
 			NextState := eSpecialStates.SLAVE_WORK_DONE;
 		END_IF
 END_CASE]]></ST>
@@ -59,7 +68,10 @@ Initialize := SUPER^.Initialize();]]></ST>
       <LineId Id="19" Count="0" />
       <LineId Id="24" Count="0" />
       <LineId Id="26" Count="0" />
+      <LineId Id="43" Count="4" />
+      <LineId Id="42" Count="0" />
       <LineId Id="20" Count="2" />
+      <LineId Id="49" Count="2" />
       <LineId Id="14" Count="0" />
     </LineIds>
     <LineIds Name="RunAxisAoiView.Initialize">

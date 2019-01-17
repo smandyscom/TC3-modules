@@ -30,8 +30,8 @@ VAR
 	
 	isTransit : BOOL ;
 	
-	workingTimerCache : LTIME;
-	workingTimer : LTON;
+	workingTimerCache : TIME;
+	workingTimer : TON;
 	
 	outputState : INT;
 	
@@ -92,7 +92,7 @@ END_IF
 bTrigStep := FALSE;
 
 //Timer
-workingTimer(IN:=,PT:=,Q=>,ET=>);]]></ST>
+workingTimer(IN:=,PT:=TO_TIME(4294967295),Q=>,ET=>);]]></ST>
     </Implementation>
     <Folder Name="CommonBase" Id="{a3eb2459-fb17-4657-a789-38e4b978c786}" />
     <Method Name="ConfigureRead" Id="{5b0d9a0a-5d92-42f2-80d6-58161cf4acad}" FolderPath="CommonBase\">
@@ -269,7 +269,9 @@ END_VAR
     </LineIds>
     <LineIds Name="RunUnitGeneric.Control">
       <LineId Id="5" Count="0" />
-      <LineId Id="13" Count="5" />
+      <LineId Id="13" Count="2" />
+      <LineId Id="27" Count="0" />
+      <LineId Id="17" Count="1" />
     </LineIds>
     <LineIds Name="RunUnitGeneric.ErrorClear">
       <LineId Id="5" Count="0" />

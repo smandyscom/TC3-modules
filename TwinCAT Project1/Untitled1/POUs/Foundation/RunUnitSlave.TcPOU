@@ -12,12 +12,13 @@ END_VAR
 CASE outputState OF 
 	eSpecialStates.SLAVE_WORK_TRIGGER:
 		//working start
-		IF workingSignal^ THEN
-			workingTimer.IN := TRUE;
+		IF workingSignal^ THEN		
 			bWorkingOverride := TRUE; // backup working override signal
 		END_IF
 		IF bWorkingOverride AND NOT bIsBypassed THEN
 			NextState := eSpecialStates.SLAVE_ENTER_PROCEDURE; // enter working procedure
+			workingSignal^ := TRUE;
+			workingTimer.IN := TRUE;
 			//--------------------
 			//	Material override
 			//--------------------
@@ -43,7 +44,7 @@ IF NOT workingSignal^ AND bWorkingOverride THEN
 END_IF
 
 //stop watch
-IF workingTimer.IN AND NOT workingSignal^ THEN
+IF workingTimer.IN AND NOT bWorkingOverride THEN
 	workingTimerCache := workingTimer.ET;
 	workingTimer.IN := FALSE;
 END_IF]]></ST>
@@ -80,11 +81,11 @@ workingSignal := argWorkingSignal; //link]]></ST>
       <LineId Id="10" Count="0" />
       <LineId Id="12" Count="0" />
       <LineId Id="15" Count="0" />
-      <LineId Id="26" Count="0" />
-      <LineId Id="46" Count="0" />
-      <LineId Id="27" Count="1" />
+      <LineId Id="26" Count="2" />
       <LineId Id="23" Count="0" />
       <LineId Id="31" Count="0" />
+      <LineId Id="79" Count="0" />
+      <LineId Id="77" Count="0" />
       <LineId Id="68" Count="4" />
       <LineId Id="66" Count="0" />
       <LineId Id="24" Count="0" />
