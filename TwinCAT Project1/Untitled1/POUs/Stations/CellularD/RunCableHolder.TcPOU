@@ -29,7 +29,7 @@ CASE outputState OF
 		END_IF
 	//---------------Working
 	eSpecialStates.SLAVE_ENTER_PROCEDURE:
-		IF SlotBase^.Valid THEN
+		IF bMaterialOverride THEN
 			bSerialTransition := TRUE;
 		ELSE
 			NextState := eSpecialStates.SLAVE_WORK_DONE;	

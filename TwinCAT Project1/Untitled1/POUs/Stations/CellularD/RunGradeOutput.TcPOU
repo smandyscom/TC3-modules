@@ -40,7 +40,7 @@ CASE outputState OF
 		//---------------
 		//	Material infor exchanging
 		//---------------
-		SlotLast^.Id := SlotBase^.Id;
+		SlotLast^.Id := SlotBase^.Id; //the clamper work station
 		SlotLast^.Valid := SlotLast^.Valid;
 		IF SlotLast^.Valid THEN
 			SlotLast^.Act := isQuery; //query grade
