@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.16">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
   <POU Name="RunInputV1" Id="{68b3e97e-d64b-4e62-becb-dd70186a6197}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunInputV1 EXTENDS RunUnitSlave
 VAR_INPUT
@@ -47,7 +47,7 @@ CASE outputState OF
 		//2. handy on
 		//3. toggle clear
 		//4. material existed with light screen off
-		IF toggleClear OR bIsBypassed OR handy OR NOT (lightScreen AND SlotBase^.Valid) THEN
+		IF toggleClear OR bIsBypassed OR handy OR (Not lightScreen AND SlotBase^.Valid) THEN
 			bSerialTransition := TRUE;
 		END_IF
 		//once material detected , clamper imdiatly
