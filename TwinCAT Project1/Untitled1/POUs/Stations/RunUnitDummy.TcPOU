@@ -13,7 +13,7 @@ VAR PERSISTENT
 	var2 : INT := 2;
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[]]></ST>
+      <ST><![CDATA[SUPER^();]]></ST>
     </Implementation>
     <Method Name="ConfigureRead" Id="{b15ff683-22c9-407a-8a1a-145273f95434}">
       <Declaration><![CDATA[METHOD ConfigureRead : CellDataBlock
@@ -47,6 +47,20 @@ END_VAR]]></Declaration>
 END_CASE]]></ST>
       </Implementation>
     </Method>
+    <Method Name="Initialize" Id="{03936da2-5a49-4be1-9e40-499b3af7b4dd}">
+      <Declaration><![CDATA[METHOD Initialize : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE outputState OF
+	eSpecialStates.INITIAL_BEGIN:		
+			NextState := eSpecialStates.INITIAL_END;
+END_CASE
+
+Initialize := SUPER^.Initialize();]]></ST>
+      </Implementation>
+    </Method>
     <LineIds Name="RunUnitDummy">
       <LineId Id="9" Count="0" />
     </LineIds>
@@ -61,6 +75,12 @@ END_CASE]]></ST>
       <LineId Id="13" Count="0" />
       <LineId Id="11" Count="1" />
       <LineId Id="10" Count="0" />
+    </LineIds>
+    <LineIds Name="RunUnitDummy.Initialize">
+      <LineId Id="6" Count="1" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="12" Count="1" />
+      <LineId Id="5" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
