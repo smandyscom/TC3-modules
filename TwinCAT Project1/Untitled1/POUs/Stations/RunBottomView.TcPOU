@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.16">
   <POU Name="RunBottomView" Id="{6aac86b2-3f9d-4198-8e80-39356a7bda6d}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunBottomView EXTENDS RunAxisInspection
 VAR_INPUT
@@ -139,10 +139,38 @@ CASE outputState OF
 		END_IF
 		IF transitionByte=7 THEN
 			NextState := eSpecialStates.INITIAL_STATE_7; // to return axis
-		END_IF	
+		END_IF
+	eSpecialStates.INITIAL_STATE_1:
+		IF NOT transitionByte.0 AND_THEN axis1^.ExecuteParameterIndex(indexCommand:= indexCommandReadyPick) THEN
+			transitionByte.0 := TRUE;
+		END_IF
+		IF NOT transitionByte.1 AND_THEN axis2^.ExecuteParameterIndex(indexCommand:= indexStandByAxis2)THEN
+			transitionByte.1 := TRUE;
+		END_IF
+		IF transitionByte = 3 THEN
+			NextState := eSpecialStates.INITIAL_END;
+		END_IF
 END_CASE
 
-Initialize := SUPER^.Initialize();]]></ST>
+//once initializing method call , redirect current state to initalizing region
+IF (TO_UINT(State) AND TO_UINT(eSpecialStates.INITIAL_REGION)) =0 THEN
+	NextState := eSpecialStates.INITIAL_BEGIN; //not in intializing region , change
+END_IF
+
+Initialize := (State = eSpecialStates.INITIAL_END);
+
+IF Initialize THEN
+	//clear all remained signal
+	FOR nCounter:=1 TO 32 BY 1 DO
+		slaveWorkingSignal[nCounter] := FALSE;
+	END_FOR
+	//clear all internal status
+	bEnStep := FALSE;
+	bTrigStep := FALSE;
+	bIsBypassed := FALSE;
+	bWorkingOverride := FALSE;
+	bMaterialOverride := FALSE;	
+END_IF]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="RunBottomView">
@@ -189,8 +217,13 @@ Initialize := SUPER^.Initialize();]]></ST>
       <LineId Id="10" Count="0" />
       <LineId Id="14" Count="11" />
       <LineId Id="12" Count="0" />
+      <LineId Id="29" Count="0" />
+      <LineId Id="31" Count="4" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="36" Count="2" />
       <LineId Id="11" Count="0" />
       <LineId Id="7" Count="0" />
+      <LineId Id="39" Count="17" />
       <LineId Id="5" Count="0" />
     </LineIds>
   </POU>
