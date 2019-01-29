@@ -138,7 +138,7 @@ CASE outputState OF
 			transitionByte.2 := TRUE;
 		END_IF
 		IF transitionByte=7 THEN
-			NextState := eSpecialStates.INITIAL_STATE_7; // to return axis
+			NextState := eSpecialStates.INITIAL_STATE_1; // to return axis
 		END_IF
 	eSpecialStates.INITIAL_STATE_1:
 		IF NOT transitionByte.0 AND_THEN axis1^.ExecuteParameterIndex(indexCommand:= indexCommandReadyPick) THEN

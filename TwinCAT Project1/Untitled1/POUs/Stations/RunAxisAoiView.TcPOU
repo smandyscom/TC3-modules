@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.16">
   <POU Name="RunAxisAoiView" Id="{dd3c82d7-e0e7-490b-93f3-e200f9619a5e}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunAxisAoiView EXTENDS RunAxisInspection
 VAR
@@ -38,7 +38,7 @@ CASE outputState OF
 		END_IF
 END_CASE]]></ST>
     </Implementation>
-    <Method Name="Initialize" Id="{bce0c290-06e8-4f8e-9747-fe861d1b9107}">
+    <Method Name="Initialize" Id="{11e8e337-b43d-40e3-880c-ebd377734f78}">
       <Declaration><![CDATA[METHOD Initialize : BOOL
 VAR_INPUT
 END_VAR
@@ -75,12 +75,8 @@ Initialize := SUPER^.Initialize();]]></ST>
       <LineId Id="14" Count="0" />
     </LineIds>
     <LineIds Name="RunAxisAoiView.Initialize">
-      <LineId Id="11" Count="0" />
-      <LineId Id="5" Count="1" />
-      <LineId Id="8" Count="0" />
-      <LineId Id="7" Count="0" />
-      <LineId Id="10" Count="0" />
-      <LineId Id="9" Count="0" />
+      <LineId Id="6" Count="5" />
+      <LineId Id="5" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
