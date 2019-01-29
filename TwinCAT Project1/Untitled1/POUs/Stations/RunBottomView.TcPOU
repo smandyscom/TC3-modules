@@ -25,15 +25,15 @@ CASE outputState OF
 		ELSE
 			NextState := eSpecialStates.SLAVE_WORK_DONE;
 		END_IF
-	16#202:
+	16#201:
 		bSerialTransition := axis1^.ExecuteParameterIndex(indexCommand:= indexCommandPick); //down
-	16#203:
+	16#202:
 		bSerialTransition:=connectorHolder^.Execute(argCommand:= eCylinderCommands.COMMAND_B); //hold
-	16#204:
+	16#203:
 		bSerialTransition:=openClamp^.Execute(argCommand:= eCylinderCommands.COMMAND_B); //release
-	16#205:
+	16#204:
 		bSerialTransition:=axis1^.ExecuteParameterIndex(indexCommand:= indexStandByAxis1); //up ( standby position should not interfere with cam
-	16#206:
+	16#205:
 		//go to inspection 1 simulatanously
 		IF NOT transitionByte.0 AND_THEN transporter^.Execute(argCommand:= eCylinderCommands.COMMAND_B) THEN
 			transitionByte.0 := TRUE;
@@ -61,7 +61,7 @@ CASE outputState OF
 			transitionByte.1 := TRUE;
 		END_IF
 		IF transitionByte=3 THEN
-			NextState := 16#500;
+			NextState := 16#501;
 		END_IF
 	16#501:
 		bSerialTransition:=axis1^.ExecuteParameterIndex(indexCommand:= indexCommandPick);//down
