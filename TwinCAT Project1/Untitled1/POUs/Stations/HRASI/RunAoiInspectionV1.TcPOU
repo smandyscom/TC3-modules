@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <POU Name="RunAoiInspectionV1" Id="{7255faf6-adcd-46ad-a421-c808180e9942}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunAoiInspectionV1 EXTENDS RunUnitSlave
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[SUPER^();
+
+CASE outputState OF
+	eSpecialStates.SLAVE_ENTER_PROCEDURE:
+		// report id to SCADA?
+		
+		//check aoi-done off
+		//set aoi-trigger on
+	16#201:
+		//wait aoi-done on
+		//fetch aoi result
+		//trigger ejector by result
+END_CASE]]></ST>
+    </Implementation>
+    <LineIds Name="RunAoiInspectionV1">
+      <LineId Id="9" Count="0" />
+      <LineId Id="11" Count="1" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="20" Count="1" />
+      <LineId Id="16" Count="1" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="18" Count="1" />
+      <LineId Id="14" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
