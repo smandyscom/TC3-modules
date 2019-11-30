@@ -123,9 +123,6 @@
     <Compile Include="GVLs\GVL.TcGVL">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="PlcTask.TcTTO">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="POUs\Foundation\CommonBase.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -133,6 +130,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Foundation\RunUnitSlave.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Foundation\RunVacuum.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Foundation\SemephoreV1.TcPOU">
@@ -233,7 +233,6 @@
     <Folder Include="POUs\Helper" />
     <Folder Include="POUs\Stations" />
     <Folder Include="POUs\Stations\CellularD" />
-    <Folder Include="VISUs" />
     <Folder Include="POUs" />
   </ItemGroup>
   <ItemGroup>
