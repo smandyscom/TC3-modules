@@ -1,0 +1,263 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <POU Name="RunVacuum" Id="{f228bb52-7ea9-46f3-811e-2b9a8550fbc1}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunVacuum EXTENDS CommonBase
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	COMMAND_CACHED : eCylinderCommands; //1 , HMI->PLC
+	LAST_COMMAND : eCylinderCommands;   //2 , 
+		
+	ACT_GENERATOR AT %Q* : ARRAY[1..2] OF BOOL;
+	ACT_BREAKER AT %Q* : ARRAY[1..2] OF BOOL;
+	
+	SENSOR_VACUUM AT %I* : BOOL; //TODO , numerical in
+
+	nCounter : INT := 0;
+	bMatched : BOOL := false;
+		
+	BIT_WARNING : BIT; //0
+	BIT_A_MATCH : BIT; //1
+	BIT_B_MATCH : BIT; //2
+	BIT_WARN_SUPPRESS : BIT; //3 , (Control)
+	
+	BIT_DONE : BIT; //5
+END_VAR
+VAR PERSISTENT
+//	A_SENSOR_USED_COUNT : INT := 0;
+//	B_SENSOR_USED_COUNT : INT :=0 ;		
+
+	TMR_WATCH_DOG : TON ; //Watch dog timer
+	TMR_DELAY_TO_A : TON;
+	TMR_DELAY_TO_B : TON;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//Command received -> delay -> output , and refresh relative sensor]]></ST>
+    </Implementation>
+    <Folder Name="CommonBase" Id="{119ac4ac-a070-4964-91b6-1098b43d0930}" />
+    <Method Name="ConfigureRead" Id="{e4328d86-5ac7-448e-92b5-6ef30e082ccc}" FolderPath="CommonBase\">
+      <Declaration><![CDATA[METHOD ConfigureRead : CellDataBlock
+VAR_INPUT
+	input : CellDataBlock; //would offer sub-index ...etc
+	mode : eModes;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+ConfigureRead.cylinder.sensorAUsedCount := TO_WORD(A_SENSOR_USED_COUNT);
+ConfigureRead.cylinder.sensorBUsedCount := TO_WORD(B_SENSOR_USED_COUNT);
+
+ConfigureRead.cylinder.timerSetValue := TO_WORD(TMR_WATCH_DOG.PT);
+ConfigureRead.cylinder.timerSetValue := TO_WORD(TMR_DELAY_TO_A.PT);
+ConfigureRead.cylinder.timerSetValue := TO_WORD(TMR_DELAY_TO_B.PT);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ConfigureWrite" Id="{354f81a0-763a-4230-9004-ca0ad8533224}" FolderPath="CommonBase\">
+      <Declaration><![CDATA[METHOD ConfigureWrite : BOOL
+VAR_INPUT
+	input : CellDataBlock;
+	mode : eModes;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[A_SENSOR_USED_COUNT := TO_INT(input.cylinder.sensorAUsedCount);
+B_SENSOR_USED_COUNT := TO_INT(input.cylinder.sensorBUsedCount);
+
+TMR_WATCH_DOG.PT := TO_TIME(input.cylinder.timerSetValue);
+TMR_DELAY_TO_A.PT := TO_TIME(input.cylinder.timerSetValue);
+TMR_DELAY_TO_B.PT := TO_TIME(input.cylinder.timerSetValue);
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Control" Id="{f66b3a39-49c7-4c4e-9e00-75ac6727c428}" FolderPath="CommonBase\">
+      <Declaration><![CDATA[METHOD Control : BOOL
+VAR_INPUT
+	input : CellDataBlock;
+	mode : eModes;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Execute(argCommand:= input.cylinder.command);
+Control:=true;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ErrorClear" Id="{60519a14-506a-44c4-ac1e-0c0bba117d52}" FolderPath="CommonBase\">
+      <Declaration><![CDATA[METHOD ErrorClear : BOOL
+VAR_INPUT
+	input : eErrorClearWays;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE input OF
+	eErrorClearWays.RESET:
+		//Timer reset only
+	eErrorClearWays.IGNORE:
+		//suppress warning
+		BIT_WARN_SUPPRESS := TRUE;
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ErrorDetect" Id="{07bb229a-8ae7-4e82-82c3-5cef497f95a9}" FolderPath="CommonBase\">
+      <Declaration><![CDATA[METHOD ErrorDetect : UDINT
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ErrorDetect := 0;
+IF BIT_WARNING THEN
+	ErrorDetect := COMMAND_CACHED; //distinguish different error 
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Execute" Id="{8dc7b7d8-3f66-4f42-ad1a-2509fef862bd}">
+      <Declaration><![CDATA[METHOD Execute : BOOL
+VAR_INPUT
+	argCommand : eCylinderCommands;
+END_VAR
+VAR
+	outDone : BOOL ;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// store command
+COMMAND_CACHED := argCommand;
+
+outDone := BIT_DONE AND NOT BIT_WARNING AND (COMMAND_CACHED = LAST_COMMAND);
+
+//reset surpress
+IF outDone THEN
+	BIT_WARN_SUPPRESS := FALSE;
+END_IF
+
+Execute:=outDone; //return]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{c4d18cc2-9e70-45b9-a00b-6c3e51d5178e}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	
+	//argASensorUsed : INT := 0;
+	//argBSensorUsed : INT := 0;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//A_SENSOR_USED_COUNT := argASensorUsed;
+//B_SENSOR_USED_COUNT := argBSensorUsed;
+
+//given timer initial value
+//TMR_WATCH_DOG.PT := T#200MS;
+//TMR_DELAY_TO_A.PT := T#200MS;
+//TMR_DELAY_TO_B.PT := T#200MS;
+IF bInitRetains THEN
+	TMR_WATCH_DOG.PT := T#200MS;
+	TMR_DELAY_TO_A.PT := T#200MS;
+	TMR_DELAY_TO_B.PT := T#200MS;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Monitor" Id="{74e0a0e8-ebf6-4c07-860f-3bcbef09e52c}" FolderPath="CommonBase\">
+      <Declaration><![CDATA[METHOD Monitor : CellDataBlock
+VAR_INPUT
+END_VAR
+VAR CONSTANT
+	bit0Warn : INT :=0;
+	bit1MonGroupA : INT :=1;
+	bit2MonGroupB : INT :=2;
+	bit3CtlSuppress : INT :=3;
+	bit4TmrOn : INT :=4;
+	bit5Done : INT := 5;
+	//New
+	bit6TmrAOn : INT :=6;
+	bit7TmrBOn : INT :=7;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Monitor.cylinder.statusWord.bit0Warn := BIT_WARNING;
+Monitor.cylinder.statusWord.bit1MonGroupA := BIT_A_MATCH;
+Monitor.cylinder.statusWord.bit2MonGroupB := BIT_B_MATCH;
+Monitor.cylinder.statusWord.bit3CtlSuppress := BIT_WARN_SUPPRESS;
+Monitor.cylinder.statusWord.bit4TmrOn := TMR_WATCH_DOG.Q;
+Monitor.cylinder.statusWord.bit5Done := BIT_DONE;
+
+Monitor.cylinder.statusWord.bit6TmrAOn := TMR_DELAY_TO_A.Q;
+Monitor.cylinder.statusWord.bit7TmrBOn := TMR_DELAY_TO_B.Q;
+
+Monitor.cylinder.lastCommand := LAST_COMMAND;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TypeCode" Id="{9902b8dd-9d89-448a-8c17-b989a9c65a67}" FolderPath="CommonBase\">
+      <Declaration><![CDATA[METHOD TypeCode : eCategrories
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[TypeCode := eCategrories.SELECTION_CYLINDER;]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="RunVacuum">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="RunVacuum.ConfigureRead">
+      <LineId Id="17" Count="0" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="21" Count="0" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="22" Count="1" />
+    </LineIds>
+    <LineIds Name="RunVacuum.ConfigureWrite">
+      <LineId Id="5" Count="0" />
+      <LineId Id="13" Count="1" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="15" Count="1" />
+      <LineId Id="11" Count="0" />
+    </LineIds>
+    <LineIds Name="RunVacuum.Control">
+      <LineId Id="5" Count="0" />
+      <LineId Id="11" Count="0" />
+    </LineIds>
+    <LineIds Name="RunVacuum.ErrorClear">
+      <LineId Id="5" Count="0" />
+      <LineId Id="12" Count="1" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="11" Count="0" />
+    </LineIds>
+    <LineIds Name="RunVacuum.ErrorDetect">
+      <LineId Id="11" Count="0" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="10" Count="0" />
+    </LineIds>
+    <LineIds Name="RunVacuum.Execute">
+      <LineId Id="9" Count="9" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="RunVacuum.FB_init">
+      <LineId Id="20" Count="1" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="7" Count="0" />
+      <LineId Id="15" Count="2" />
+      <LineId Id="30" Count="1" />
+      <LineId Id="33" Count="1" />
+      <LineId Id="32" Count="0" />
+    </LineIds>
+    <LineIds Name="RunVacuum.Monitor">
+      <LineId Id="5" Count="0" />
+      <LineId Id="17" Count="3" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="41" Count="0" />
+      <LineId Id="40" Count="0" />
+    </LineIds>
+    <LineIds Name="RunVacuum.TypeCode">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

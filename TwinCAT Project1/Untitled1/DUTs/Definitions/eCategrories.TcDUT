@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
   <DUT Name="eCategrories" Id="{cce23375-09dd-4e7a-82d9-89e6899f8e8f}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
 {attribute 'strict'}
@@ -9,7 +9,9 @@ TYPE eCategrories :
     SELECTION_CYLINDER := 1,
     SELECTION_SIGNAL :=2,
     SELECTION_COMMAND_BLOCK := 4,
-    SELECTION_UNIT := 5
+    SELECTION_UNIT := 5,
+	//-----------
+	SELECTION_VACUUM := 6 //add 2019.11.30
 ) WORD;
 END_TYPE
 ]]></Declaration>
