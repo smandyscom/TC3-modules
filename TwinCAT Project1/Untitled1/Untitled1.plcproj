@@ -183,6 +183,18 @@
     <Compile Include="POUs\Stations\CellularD\RunLabelHandler.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Stations\HRASI\ClamperFilterSide.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Stations\HRASI\ClamperSnapSide.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Stations\HRASI\CommonRack.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Stations\HRASI\RunAoiInspectionV1.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Stations\RunAoiHandshaking.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -234,6 +246,7 @@
     <Folder Include="POUs\Stations" />
     <Folder Include="POUs\Stations\CellularD" />
     <Folder Include="POUs" />
+    <Folder Include="POUs\Stations\HRASI" />
   </ItemGroup>
   <ItemGroup>
     <PlaceholderReference Include="Tc2_DataExchange">
