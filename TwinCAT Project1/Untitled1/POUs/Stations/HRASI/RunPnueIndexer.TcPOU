@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <POU Name="RunPnueIndexer" Id="{0282178a-e4a8-43e2-88ce-00a99b488386}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunPnueIndexer EXTENDS RunUnitIndexerMaster
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	//devices
+	lockCylinder : POINTER TO RunCylinder;
+	pistonCylinder : POINTER TO RunCylinder;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[SUPER^(); //run indexer master
+
+CASE outputState OF
+	//------------------start running
+	// 1. unlock
+	// 2. shift out
+	// 3. lock
+	//
+	3:
+	bSerialTransition := lockCylinder^.Execute(eCylinderCommands.COMMAND_A);
+	4:
+	bSerialTransition := pistonCylinder^.Execute(eCylinderCommands.COMMAND_B);
+	5:
+	bSerialTransition := pistonCylinder^.Execute(eCylinderCommands.COMMAND_A);
+	6:
+	IF lockCylinder^.Execute(eCylinderCommands.COMMAND_A) THEN
+		NextState := 0; //rewind
+	END_IF
+END_CASE]]></ST>
+    </Implementation>
+    <LineIds Name="RunPnueIndexer">
+      <LineId Id="9" Count="0" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="22" Count="1" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="26" Count="7" />
+      <LineId Id="18" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

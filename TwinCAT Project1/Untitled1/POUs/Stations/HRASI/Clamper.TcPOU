@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <POU Name="ClamperFilterSide" Id="{4cfbb8e7-dd19-45d2-8e96-6129406da078}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK ClamperFilterSide EXTENDS RunUnitSlave
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	//devices
+	horizon : POINTER TO RunCylinder;
+	clamper : POINTER TO RunCylinder;
+	
+	//
+END_VAR
+VAR CONSTANT
+	bScaraReady : INT := 1;
+END_VAR
+VAR PERSISTENT
+	configSnap : BOOL;
+END_VAR
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[SUPER^();
+
+
+CASE outputState OF
+	eSpecialStates.SLAVE_ENTER_PROCEDURE:
+		//Indexer in position , horizonin
+		bSerialTransition := horizon^.Execute(eCylinderCommands.COMMAND_B);
+	16#201:
+		bSerialTransition := clamper^.Execute(eCylinderCommands.COMMAND_B);
+	16#202:
+		transitionByte.0 := horizon^.Execute(eCylinderCommands.COMMAND_A);
+		//----------------------
+		//	Snapping fit special 
+		//----------------------
+		IF configSnap THEN
+			transitionByte.1 := clamper^.Execute(eCylinderCommands.COMMAND_A);
+		ELSE
+			transitionByte.1 := TRUE;	
+		END_IF
+		
+		IF transitionByte := 16#3 THEN
+			slaveWorkingSignal[bScaraReady]:= TRUE; //trigger SCARA agent
+			bSerialTransition := TRUE;
+		END_IF
+	16#203:
+		//Wait SCARA 
+		bSerialTransition := NOT slaveWorkingSignal[bScaraReady];
+	16#204:
+		//send part back to indexer
+		bSerialTransition := horizon^.Execute(eCylinderCommands.COMMAND_B);
+	16#205:
+		//release part 
+		bSerialTransition := clamper^.Execute(eCylinderCommands.COMMAND_A); //release
+		//TODO , vacuum fixture on
+	16#206:
+		//empty clamper extract
+		IF horizon^.Execute(eCylinderCommands.COMMAND_A) THEN
+			NextState := eSpecialStates.SLAVE_WORK_DONE;
+		END_IF
+END_CASE]]></ST>
+    </Implementation>
+    <LineIds Name="ClamperFilterSide">
+      <LineId Id="24" Count="1" />
+      <LineId Id="27" Count="1" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="35" Count="0" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="36" Count="2" />
+      <LineId Id="62" Count="2" />
+      <LineId Id="56" Count="0" />
+      <LineId Id="60" Count="0" />
+      <LineId Id="57" Count="0" />
+      <LineId Id="59" Count="0" />
+      <LineId Id="58" Count="0" />
+      <LineId Id="65" Count="0" />
+      <LineId Id="39" Count="1" />
+      <LineId Id="61" Count="0" />
+      <LineId Id="41" Count="0" />
+      <LineId Id="32" Count="0" />
+      <LineId Id="43" Count="0" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="42" Count="0" />
+      <LineId Id="66" Count="0" />
+      <LineId Id="44" Count="1" />
+      <LineId Id="68" Count="0" />
+      <LineId Id="46" Count="2" />
+      <LineId Id="69" Count="0" />
+      <LineId Id="49" Count="2" />
+      <LineId Id="29" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

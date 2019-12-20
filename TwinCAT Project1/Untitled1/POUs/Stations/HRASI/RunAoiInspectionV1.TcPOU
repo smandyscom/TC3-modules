@@ -7,6 +7,18 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
+	//devices
+	ngCylinder : POINTER TO RunCylinder;
+	
+	aoiTrigger AT%Q* : BOOL;
+	aoiOut1 : POINTER TO RunSignal ; //done
+	aoiOut2 : POINTER TO RunSignal ; //ok/ng
+	
+	//TODO vacuum fixture 
+	
+	//internal
+	
+	//TODO, light control
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -14,25 +26,52 @@ END_VAR
 
 CASE outputState OF
 	eSpecialStates.SLAVE_ENTER_PROCEDURE:
-		// report id to SCADA?
-		
-		//check aoi-done off
-		//set aoi-trigger on
+		// report id to SCADA?		
+		transitionByte.0 := ngCylinder^.Execute(eCylinderCommands.COMMAND_A); //return the position
+		transitionByte.1 := aoiOut1^.debouncedOff; //check aoi-done off
+		IF transitionByte = 16#3 THEN
+			aoiTrigger := TRUE; //set aoi-trigger on
+		END_IF
 	16#201:
 		//wait aoi-done on
-		//fetch aoi result
-		//trigger ejector by result
+		IF aoiOut1^.debouncedOn AND NOT aoiOut2^.debouncedOn THEN
+			//fetch aoi result
+			//trigger ejector by result
+			//identified as NG
+			
+			//TODO , relese fixture vacuum
+			bSerialTransition:=	ngCylinder^.Execute(eCylinderCommands.COMMAND_B);
+		ELSIF aoiOut1^.debouncedOn AND aoiOut2^.debouncedOn THEN
+			bSerialTransition := TRUE; //transit 
+		ELSE
+			// wait until aoi_done raise
+		END_IF
+	16#202:
+		aoiTrigger := FALSE; //reset
+		NextState := eSpecialStates.SLAVE_WORK_DONE;
 END_CASE]]></ST>
     </Implementation>
     <LineIds Name="RunAoiInspectionV1">
       <LineId Id="9" Count="0" />
       <LineId Id="11" Count="1" />
       <LineId Id="10" Count="0" />
-      <LineId Id="20" Count="1" />
-      <LineId Id="16" Count="1" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="41" Count="0" />
+      <LineId Id="64" Count="0" />
+      <LineId Id="66" Count="2" />
       <LineId Id="13" Count="0" />
       <LineId Id="15" Count="0" />
-      <LineId Id="18" Count="1" />
+      <LineId Id="43" Count="0" />
+      <LineId Id="61" Count="0" />
+      <LineId Id="63" Count="0" />
+      <LineId Id="72" Count="0" />
+      <LineId Id="78" Count="1" />
+      <LineId Id="73" Count="2" />
+      <LineId Id="46" Count="0" />
+      <LineId Id="77" Count="0" />
+      <LineId Id="45" Count="0" />
+      <LineId Id="70" Count="1" />
+      <LineId Id="76" Count="0" />
       <LineId Id="14" Count="0" />
     </LineIds>
   </POU>
