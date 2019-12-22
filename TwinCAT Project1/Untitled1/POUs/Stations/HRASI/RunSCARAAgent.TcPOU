@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <POU Name="RunSCARAAgent" Id="{1f4adf83-c440-4f87-8ce9-122caf9d3620}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunSCARAAgent EXTENDS RunUnitGeneric
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	// Devices on Endeffectors
+	cylinders : ARRAY[0..3] OF POINTER TO RunCylinder;
+	vacuums : ARRAY[0..3] OF POINTER TO RunCylinder;
+	sensors : ARRAY[0..3] OF POINTER TO RunSignal;
+	
+	//Fieldbus I/O
+	cylindersCommandRcv AT%I* : ARRAY[0..3] OF INT;
+	cylindersCommandAck AT%Q* : ARRAY[0..3] OF INT;
+	
+	vacuumsCommandRcv AT%I* : ARRAY[0..3] OF INT;
+	vacuumsCommandAck AT%Q* : ARRAY[0..3] OF INT;
+	
+	sensorStateAck AT%Q* :ARRAY[0..3] OF BOOL;
+	outputs AT%Q* : ARRAY[0..3] OF BOOL; //TODO ,vacuum break
+	//-------------
+	//	Handshaking
+	//-------------
+	clamperReady AT %Q* : BOOL;
+	scaraAck AT%I* : BOOL;
+	//-------------------
+	// Remote control
+	//-------------------
+	start AT %Q* : BOOL;
+	stop AT%Q* :BOOL;
+	//------
+	// Internal
+	//------
+	index : INT;
+//	cylinder1Done AT%Q* : BOOL; TODO , use numeric changing as state reflection
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+//control handshaking signal to slaveworkingSignal
+//mission:
+//1. map fieldbus I/O command to devices
+//2. sequence start/stop
+//3. handshaking with clamper(via slaveworkingSignal)
+//4. handshaking with racks (or directly link to rack?)
+
+//cylinder1CommandAck := cylinder1CommandRcv; //acklodgement
+
+FOR index:=0 TO 3 BY 1 DO
+	//----------------------
+	//	Cylinders
+	//----------------------
+	IF cylinders[index]^.Execute(cylindersCommandRcv[index]) THEN
+		//once sucess, acknowledge received command
+		cylindersCommandAck[index] := cylindersCommandRcv[index];
+	END_IF
+	//----------------------
+	//	Vacuums
+	//----------------------
+	IF vacuums[index]^.Execute(vacuumsCommandRcv[index]) THEN
+		//once sucess, acknowledge received command
+		vacuumsCommandAck[index] := vacuumsCommandRcv[index];
+	END_IF	
+	//----------------
+	//	Sensor
+	//----------------
+	sensorStateAck[index]:=sensors[Index]^.debouncedOn;
+END_FOR
+
+
+CASE outputState OF
+	eSpecialStates.SLAVE_ENTER_PROCEDURE:
+		bSerialTransition:=clamperReady;
+		IF bSerialTransition THEN
+			scaraAck := TRUE;
+		END_IF
+	16#201:
+		IF NOT clamperReady THEN
+			scaraAck := FALSE;
+			NextState := eSpecialStates.SLAVE_WORK_DONE;
+		END_IF
+END_CASE]]></ST>
+    </Implementation>
+    <LineIds Name="RunSCARAAgent">
+      <LineId Id="168" Count="5" />
+      <LineId Id="244" Count="0" />
+      <LineId Id="174" Count="10" />
+      <LineId Id="225" Count="5" />
+      <LineId Id="224" Count="0" />
+      <LineId Id="231" Count="1" />
+      <LineId Id="234" Count="1" />
+      <LineId Id="213" Count="1" />
+      <LineId Id="236" Count="0" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="237" Count="0" />
+      <LineId Id="247" Count="5" />
+      <LineId Id="255" Count="0" />
+      <LineId Id="253" Count="1" />
+      <LineId Id="238" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

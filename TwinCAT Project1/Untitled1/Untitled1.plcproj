@@ -183,10 +183,7 @@
     <Compile Include="POUs\Stations\CellularD\RunLabelHandler.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\Stations\HRASI\ClamperFilterSide.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\Stations\HRASI\ClamperSnapSide.TcPOU">
+    <Compile Include="POUs\Stations\HRASI\Clamper.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Stations\HRASI\CommonRack.TcPOU">
@@ -196,6 +193,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Stations\HRASI\RunPnueIndexer.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Stations\HRASI\RunSCARAAgent.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Stations\RunAoiHandshaking.TcPOU">
