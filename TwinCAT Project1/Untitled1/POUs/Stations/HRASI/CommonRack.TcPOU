@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
   <POU Name="CommonRack" Id="{eac928e2-459d-4027-a156-266e564c65fe}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK CommonRack EXTENDS RunUnitSlave
+    <Declaration><![CDATA[FUNCTION_BLOCK CommonRack EXTENDS RunUnitGeneric
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
@@ -12,6 +12,14 @@ VAR
 	
 	fixer : POINTER TO RunCylinder;
 	approx : POINTER TO RunSignal; // approx then lock
+	
+	//linkage
+	materialCounters AT%I* : ARRAY[0..2] OF INT;
+	materialLimits AT%Q* : ARRAY[0..2] OF INT;
+	
+	//handshaking signals
+	ready AT%Q* : BOOL;
+	engaged AT%I* : BOOL;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -24,16 +32,28 @@ CASE outputState OF
 	eSpecialStates.SLAVE_ENTER_PROCEDURE:
 		//rack is empty
 		bSerialTransition := fixer^.Execute(eCylinderCommands.COMMAND_A); //relase
-		//TODO , set light
+		//TODO , set light flicking
 	16#201:
 		bSerialTransition := approx^.debouncedOn; //wait until rack closed
 	16#202:
 		//confirmed by hanshaking
 		bSerialTransition := button^.debouncedOn;
-		//TODO , set light
+		//TODO , set light constant on
 	16#203:
 		bSerialTransition := fixer^.Execute(eCylinderCommands.COMMAND_B); //lock
-		NextState := eSpecialStates.SLAVE_WORK_DONE; //release flag
+		IF bSerialTransition THEN
+			ready := TRUE;
+		END_IF
+//		NextState := eSpecialStates.SLAVE_WORK_DONE; //release flag
+	16#204:
+		bSerialTransition := engaged;
+		IF bSerialTransition THEN
+			ready := FALSE;
+		END_IF
+	16#205:
+		IF NOT engaged THEN
+			NextState := eSpecialStates.SLAVE_ENTER_PROCEDURE; //rewind
+		END_IF
 END_CASE]]></ST>
     </Implementation>
     <LineIds Name="CommonRack">
@@ -46,7 +66,12 @@ END_CASE]]></ST>
       <LineId Id="23" Count="8" />
       <LineId Id="34" Count="0" />
       <LineId Id="32" Count="1" />
+      <LineId Id="58" Count="2" />
       <LineId Id="35" Count="0" />
+      <LineId Id="56" Count="1" />
+      <LineId Id="63" Count="2" />
+      <LineId Id="61" Count="1" />
+      <LineId Id="66" Count="1" />
       <LineId Id="21" Count="0" />
     </LineIds>
   </POU>

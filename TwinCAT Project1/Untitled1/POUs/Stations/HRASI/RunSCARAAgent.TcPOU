@@ -16,7 +16,7 @@ VAR
 	cylindersCommandRcv AT%I* : ARRAY[0..3] OF INT;
 	cylindersCommandAck AT%Q* : ARRAY[0..3] OF INT;
 	
-	vacuumsCommandRcv AT%I* : ARRAY[0..3] OF INT;
+	vacuumsCommandRcv AT%I* : ARRAY[0..3] OF INT; //TODO , 16devices at maximum
 	vacuumsCommandAck AT%Q* : ARRAY[0..3] OF INT;
 	
 	sensorStateAck AT%Q* :ARRAY[0..3] OF BOOL;
