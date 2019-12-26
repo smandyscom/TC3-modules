@@ -6,24 +6,14 @@ VAR_INPUT
 END_VAR
 VAR_OUTPUT
 END_VAR
-VAR
+VAR	
 	// Devices on Endeffectors
-	cylinders : ARRAY[0..3] OF POINTER TO RunCylinder;
-	vacuums : ARRAY[0..3] OF POINTER TO RunCylinder;
-	sensors : ARRAY[0..3] OF POINTER TO RunSignal;
-	
-	//Fieldbus I/O
-	cylindersCommandRcv AT%I* : ARRAY[0..3] OF INT;
-	cylindersCommandAck AT%Q* : ARRAY[0..3] OF INT;
-	
-	vacuumsCommandRcv AT%I* : ARRAY[0..3] OF INT; //TODO , 16devices at maximum
-	vacuumsCommandAck AT%Q* : ARRAY[0..3] OF INT;
-	
-	sensorStateAck AT%Q* :ARRAY[0..3] OF BOOL;
+	devices : ARRAY[0..15] OF RunDevices;
+	sensors : ARRAY[0..7] OF RunSensor;
 	outputs AT%Q* : ARRAY[0..3] OF BOOL; //TODO ,vacuum break
-	//-------------
-	//	Handshaking
-	//-------------
+	//---------------------------
+	//	Handshaking with clamper
+	//---------------------------
 	clamperReady AT %Q* : BOOL;
 	scaraAck AT%I* : BOOL;
 	//-------------------
@@ -34,8 +24,7 @@ VAR
 	//------
 	// Internal
 	//------
-	index : INT;
-//	cylinder1Done AT%Q* : BOOL; TODO , use numeric changing as state reflection
+	nCounter : INT;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -47,31 +36,21 @@ END_VAR
 //3. handshaking with clamper(via slaveworkingSignal)
 //4. handshaking with racks (or directly link to rack?)
 
-//cylinder1CommandAck := cylinder1CommandRcv; //acklodgement
-
-FOR index:=0 TO 3 BY 1 DO
+FOR nCounter:=0 TO 15 BY 1 DO
 	//----------------------
-	//	Cylinders
+	//	Cylinders,Vacuums
 	//----------------------
-	IF cylinders[index]^.Execute(cylindersCommandRcv[index]) THEN
-		//once sucess, acknowledge received command
-		cylindersCommandAck[index] := cylindersCommandRcv[index];
-	END_IF
-	//----------------------
-	//	Vacuums
-	//----------------------
-	IF vacuums[index]^.Execute(vacuumsCommandRcv[index]) THEN
-		//once sucess, acknowledge received command
-		vacuumsCommandAck[index] := vacuumsCommandRcv[index];
-	END_IF	
-	//----------------
-	//	Sensor
-	//----------------
-	sensorStateAck[index]:=sensors[Index]^.debouncedOn;
+	devices[nCounter]();
+END_FOR
+FOR nCounter:=0 TO 7 BY 1 DO
+	sensors[nCounter]();
 END_FOR
 
-
 CASE outputState OF
+	//------------
+	//	INIT: retract all cylinders and back to home position
+	//------------	
+
 	eSpecialStates.SLAVE_ENTER_PROCEDURE:
 		bSerialTransition:=clamperReady;
 		IF bSerialTransition THEN
@@ -85,20 +64,17 @@ CASE outputState OF
 END_CASE]]></ST>
     </Implementation>
     <LineIds Name="RunSCARAAgent">
-      <LineId Id="168" Count="5" />
-      <LineId Id="244" Count="0" />
-      <LineId Id="174" Count="10" />
-      <LineId Id="225" Count="5" />
-      <LineId Id="224" Count="0" />
-      <LineId Id="231" Count="1" />
-      <LineId Id="234" Count="1" />
-      <LineId Id="213" Count="1" />
-      <LineId Id="236" Count="0" />
-      <LineId Id="22" Count="0" />
-      <LineId Id="237" Count="0" />
-      <LineId Id="247" Count="5" />
-      <LineId Id="255" Count="0" />
-      <LineId Id="253" Count="1" />
+      <LineId Id="335" Count="7" />
+      <LineId Id="385" Count="0" />
+      <LineId Id="392" Count="1" />
+      <LineId Id="391" Count="0" />
+      <LineId Id="389" Count="0" />
+      <LineId Id="387" Count="0" />
+      <LineId Id="394" Count="0" />
+      <LineId Id="398" Count="0" />
+      <LineId Id="396" Count="0" />
+      <LineId Id="399" Count="0" />
+      <LineId Id="367" Count="14" />
       <LineId Id="238" Count="0" />
     </LineIds>
   </POU>

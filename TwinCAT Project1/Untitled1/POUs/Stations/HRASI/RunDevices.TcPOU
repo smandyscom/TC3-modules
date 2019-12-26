@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <POU Name="RunDevices" Id="{8da684a8-fee9-4e71-99ee-14497b4e0900}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunDevices
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	device : POINTER TO ExecuteBase;
+	command AT%I* : BYTE;
+	acknowledge AT%Q* : BYTE;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF device<>0 AND_THEN device^.Execute(command) THEN
+	acknowledge := command;
+END_IF]]></ST>
+    </Implementation>
+    <LineIds Name="RunDevices">
+      <LineId Id="9" Count="0" />
+      <LineId Id="13" Count="1" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <POU Name="ExecuteBase" Id="{31f85d56-6d2b-43f6-82c0-18b487d86a3e}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK ExecuteBase EXTENDS CommonBase
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Execute" Id="{947e425d-0a86-42d4-a40b-e9e1ca16f7ae}">
+      <Declaration><![CDATA[METHOD Execute : BOOL
+VAR_INPUT
+	argCommand : eCylinderCommands;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="ExecuteBase">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="ExecuteBase.Execute">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

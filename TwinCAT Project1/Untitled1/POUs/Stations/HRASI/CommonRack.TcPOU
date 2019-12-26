@@ -12,16 +12,21 @@ VAR
 	
 	fixer : POINTER TO RunCylinder;
 	approx : POINTER TO RunSignal; // approx then lock
-	
-	//linkage
-	materialCounters AT%I* : ARRAY[0..2] OF INT;
-	materialLimits AT%Q* : ARRAY[0..2] OF INT;
-	
-	//handshaking signals
-	ready AT%Q* : BOOL;
-	engaged AT%I* : BOOL;
+	//---------------------------------
+	//	Over Fieldbus linked with SCARA
+	//---------------------------------
+	rackReady AT%Q*: BOOL;
+	rackEngaged AT%I*: BOOL;	
+
+	items : ARRAY[0..3] OF defItem;
+	//---------------------------------
+	//	Internal
+	//---------------------------------
+	nCounter : INT;
 END_VAR
-]]></Declaration>
+VAR PERSISTENT
+	
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[
 //Control the working flow of rack
@@ -42,16 +47,23 @@ CASE outputState OF
 	16#203:
 		bSerialTransition := fixer^.Execute(eCylinderCommands.COMMAND_B); //lock
 		IF bSerialTransition THEN
-			ready := TRUE;
+			rackReady := TRUE;
 		END_IF
 //		NextState := eSpecialStates.SLAVE_WORK_DONE; //release flag
 	16#204:
-		bSerialTransition := engaged;
-		IF bSerialTransition THEN
-			ready := FALSE;
-		END_IF
+		bSerialTransition := rackEngaged;
 	16#205:
-		IF NOT engaged THEN
+		//------------------------------------------------------------------
+		//	Check if any item reached the bound. then set rackReady as false
+		//------------------------------------------------------------------
+		FOR nCounter := 0 TO 3 DO
+			IF items[nCounter].Counter >= items[nCounter].Bound THEN
+				bSerialTransition := TRUE;
+				rackReady := FALSE; //released
+			END_IF
+		END_FOR
+	16#206:
+		IF NOT rackEngaged THEN
 			NextState := eSpecialStates.SLAVE_ENTER_PROCEDURE; //rewind
 		END_IF
 END_CASE]]></ST>
@@ -69,7 +81,14 @@ END_CASE]]></ST>
       <LineId Id="58" Count="2" />
       <LineId Id="35" Count="0" />
       <LineId Id="56" Count="1" />
-      <LineId Id="63" Count="2" />
+      <LineId Id="101" Count="2" />
+      <LineId Id="105" Count="0" />
+      <LineId Id="108" Count="0" />
+      <LineId Id="113" Count="0" />
+      <LineId Id="115" Count="0" />
+      <LineId Id="117" Count="0" />
+      <LineId Id="116" Count="0" />
+      <LineId Id="114" Count="0" />
       <LineId Id="61" Count="1" />
       <LineId Id="66" Count="1" />
       <LineId Id="21" Count="0" />

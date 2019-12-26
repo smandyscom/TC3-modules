@@ -84,6 +84,9 @@
     <Compile Include="DUTs\Definitions\eSpecialStates.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\HRASI\defItem.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\Internal\ParameterGeneric.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -124,6 +127,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Foundation\CommonBase.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Foundation\ExecuteBase.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Foundation\RunMaterial.TcPOU">
@@ -192,10 +198,16 @@
     <Compile Include="POUs\Stations\HRASI\RunAoiInspectionV1.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Stations\HRASI\RunDevices.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Stations\HRASI\RunPnueIndexer.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Stations\HRASI\RunSCARAAgent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Stations\HRASI\RunSensor.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Stations\RunAoiHandshaking.TcPOU">
@@ -243,6 +255,7 @@
     <Folder Include="DUTs\Definitions" />
     <Folder Include="DUTs\Internal" />
     <Folder Include="DUTs\Material" />
+    <Folder Include="DUTs\HRASI" />
     <Folder Include="GVLs" />
     <Folder Include="POUs\Foundation" />
     <Folder Include="POUs\Helper" />
