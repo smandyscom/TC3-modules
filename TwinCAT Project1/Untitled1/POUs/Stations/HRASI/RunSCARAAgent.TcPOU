@@ -9,7 +9,7 @@ END_VAR
 VAR	
 	// Devices on Endeffectors
 	devices : ARRAY[0..15] OF RunDevices;
-	sensors : ARRAY[0..7] OF RunSensor;
+	
 	outputs AT%Q* : ARRAY[0..3] OF BOOL; //TODO ,vacuum break
 	//---------------------------
 	//	Handshaking with clamper
@@ -42,9 +42,6 @@ FOR nCounter:=0 TO 15 BY 1 DO
 	//----------------------
 	devices[nCounter]();
 END_FOR
-FOR nCounter:=0 TO 7 BY 1 DO
-	sensors[nCounter]();
-END_FOR
 
 CASE outputState OF
 	//------------
@@ -70,9 +67,6 @@ END_CASE]]></ST>
       <LineId Id="391" Count="0" />
       <LineId Id="389" Count="0" />
       <LineId Id="387" Count="0" />
-      <LineId Id="394" Count="0" />
-      <LineId Id="398" Count="0" />
-      <LineId Id="396" Count="0" />
       <LineId Id="399" Count="0" />
       <LineId Id="367" Count="14" />
       <LineId Id="238" Count="0" />
