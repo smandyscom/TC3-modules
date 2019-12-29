@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <DUT Name="commVacuum" Id="{46a7634d-227e-4ac1-8296-bff02a599eef}">
+    <Declaration><![CDATA[TYPE commVacuum :
+STRUCT
+	statusWord : WORD; //0
+	command : eCylinderCommands; //1
+	lastCommand : eCylinderCommands; //2
+	timerCountValue : WORD; //3
+	reserved1 : ARRAY[1..4] OF WORD; //4..7
+	//context
+	timerDelayThreshold : WORD; //8
+	reserved2 : WORD; //9
+	reserved3 : ARRAY[1..6] OF WORD; //10-15
+	timerSetValue : WORD; //16
+	reserved4 : WORD; //17
+	//Depre
+	reserved5 : WORD; //18
+	reserved6 : WORD; //19
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

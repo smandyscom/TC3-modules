@@ -33,6 +33,9 @@
     <Compile Include="DUTs\Communication\Command\commCommandPos.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\Communication\commVacuum.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\Communication\commManual.TcDUT">
       <SubType>Code</SubType>
     </Compile>

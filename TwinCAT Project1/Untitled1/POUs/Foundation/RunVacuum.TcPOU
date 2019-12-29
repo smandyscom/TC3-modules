@@ -10,32 +10,84 @@ VAR
 	COMMAND_CACHED : eCylinderCommands; //1 , HMI->PLC
 	LAST_COMMAND : eCylinderCommands;   //2 , 
 		
-	ACT_GENERATOR AT %Q* : ARRAY[1..2] OF BOOL;
-	ACT_BREAKER AT %Q* : ARRAY[1..2] OF BOOL;
+	ACT_GENERATOR AT %Q* : BOOL;
+	ACT_BREAKER AT %Q* : BOOL;
 	
-	SENSOR_VACUUM AT %I* : BOOL; //TODO , numerical in
-
+	sensorVacuum AT %I* : INT;
+	thresholdsMatch: ARRAY[0..15] OF BOOL; //numerical in
+	currentThresholdMatch : BOOL;
+	
 	nCounter : INT := 0;
 	bMatched : BOOL := false;
 		
-	BIT_WARNING : BIT; //0
-	BIT_A_MATCH : BIT; //1
-	BIT_B_MATCH : BIT; //2
-	BIT_WARN_SUPPRESS : BIT; //3 , (Control)
-	
-	BIT_DONE : BIT; //5
+	BIT_WARNING : BOOL; //0	
+	BIT_WARN_SUPPRESS : BOOL; //3 , (Control)
+	BIT_DONE : BOOL; //5
 END_VAR
 VAR PERSISTENT
-//	A_SENSOR_USED_COUNT : INT := 0;
-//	B_SENSOR_USED_COUNT : INT :=0 ;		
-
+	currentSetIndex : INT; //
+	
+	thresholdCount : INT :=0 ;
+	thresholds : ARRAY[0..15] OF INT;
+	
 	TMR_WATCH_DOG : TON ; //Watch dog timer
-	TMR_DELAY_TO_A : TON;
-	TMR_DELAY_TO_B : TON;
+	TMR_DELAY_TO_THRESHOLD : TON;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[//Command received -> delay -> output , and refresh relative sensor]]></ST>
+      <ST><![CDATA[//Command received -> delay -> output , and refresh relative sensor
+
+//------------
+//
+//-------------
+FOR nCounter:= 0 TO thresholdCount BY 1 DO
+	thresholdsMatch[nCounter] := (sensorVacuum >= thresholds[nCounter]);
+END_FOR
+// scan all sensor status
+currentThresholdMatch := thresholdsMatch[currentSetIndex]; // whether match the master set
+//Run timers
+TMR_WATCH_DOG(IN:= , PT:= , Q=> , ET=> );
+TMR_DELAY_TO_THRESHOLD(IN:= , PT:= , Q=> , ET=> );
+
+// once command changes , reset timer counter
+IF COMMAND_CACHED <> LAST_COMMAND THEN
+	TMR_DELAY_TO_THRESHOLD.IN := TRUE; //active A delay timer
+	
+	//reset done/warn
+	BIT_DONE := FALSE;
+	BIT_WARNING := FALSE;
+	
+	//output 
+	ACT_BREAKER := (COMMAND_CACHED = eCylinderCommands.COMMAND_A);
+	ACT_GENERATOR := (COMMAND_CACHED = eCylinderCommands.COMMAND_B);	
+END_IF
+
+
+//reset
+bMatched := FALSE;
+// Check if match
+CASE COMMAND_CACHED OF
+	eCylinderCommands.NO_COMMAND,eCylinderCommands.COMMAND_A:
+	bMatched:= TRUE;
+	
+	eCylinderCommands.COMMAND_B:
+	IF TMR_DELAY_TO_THRESHOLD.Q THEN
+		bMatched:= (currentThresholdMatch OR (thresholdCount=0)) ;
+	END_IF
+		
+END_CASE
+
+//start
+TMR_WATCH_DOG.in := NOT bMatched AND TMR_DELAY_TO_THRESHOLD.Q;
+
+
+// status update
+BIT_DONE := bMatched OR (NOT bMatched AND BIT_WARN_SUPPRESS AND TMR_WATCH_DOG.Q);
+BIT_WARNING := (NOT bMatched) AND (NOT BIT_WARN_SUPPRESS) AND TMR_WATCH_DOG.Q AND TMR_DELAY_TO_THRESHOLD.Q;
+// cache last command
+LAST_COMMAND := COMMAND_CACHED;
+
+//comm.STATUS_WORD.5 := BIT_DONE;]]></ST>
     </Implementation>
     <Folder Name="CommonBase" Id="{119ac4ac-a070-4964-91b6-1098b43d0930}" />
     <Method Name="ConfigureRead" Id="{e4328d86-5ac7-448e-92b5-6ef30e082ccc}" FolderPath="CommonBase\">
@@ -46,13 +98,13 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[
-ConfigureRead.cylinder.sensorAUsedCount := TO_WORD(A_SENSOR_USED_COUNT);
-ConfigureRead.cylinder.sensorBUsedCount := TO_WORD(B_SENSOR_USED_COUNT);
+        <ST><![CDATA[//TODO , reserved
 
-ConfigureRead.cylinder.timerSetValue := TO_WORD(TMR_WATCH_DOG.PT);
-ConfigureRead.cylinder.timerSetValue := TO_WORD(TMR_DELAY_TO_A.PT);
-ConfigureRead.cylinder.timerSetValue := TO_WORD(TMR_DELAY_TO_B.PT);]]></ST>
+//ConfigureRead.vacuum. := TO_WORD(thresholdCount);
+//ConfigureRead.vacuum.sensorBUsedCount := TO_WORD(B_SENSOR_USED_COUNT);
+
+//ConfigureRead.vacuum.timerSetValue := TO_WORD(TMR_WATCH_DOG.PT);
+//ConfigureRead.vacuum.timerSetValue := TO_WORD(TMR_DELAY_TO_THRESHOLD.PT);]]></ST>
       </Implementation>
     </Method>
     <Method Name="ConfigureWrite" Id="{354f81a0-763a-4230-9004-ca0ad8533224}" FolderPath="CommonBase\">
@@ -63,12 +115,13 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[A_SENSOR_USED_COUNT := TO_INT(input.cylinder.sensorAUsedCount);
-B_SENSOR_USED_COUNT := TO_INT(input.cylinder.sensorBUsedCount);
+        <ST><![CDATA[//TODO , reserved
+//A_SENSOR_USED_COUNT := TO_INT(input.cylinder.sensorAUsedCount);
+//B_SENSOR_USED_COUNT := TO_INT(input.cylinder.sensorBUsedCount);
 
-TMR_WATCH_DOG.PT := TO_TIME(input.cylinder.timerSetValue);
-TMR_DELAY_TO_A.PT := TO_TIME(input.cylinder.timerSetValue);
-TMR_DELAY_TO_B.PT := TO_TIME(input.cylinder.timerSetValue);
+//TMR_WATCH_DOG.PT := TO_TIME(input.cylinder.timerSetValue);
+//TMR_DELAY_TO_A.PT := TO_TIME(input.cylinder.timerSetValue);
+//TMR_DELAY_TO_B.PT := TO_TIME(input.cylinder.timerSetValue);
 ]]></ST>
       </Implementation>
     </Method>
@@ -143,6 +196,9 @@ VAR_INPUT
 	//argASensorUsed : INT := 0;
 	//argBSensorUsed : INT := 0;
 END_VAR
+VAR
+	nCounter : int;
+END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[//A_SENSOR_USED_COUNT := argASensorUsed;
@@ -154,8 +210,15 @@ END_VAR
 //TMR_DELAY_TO_B.PT := T#200MS;
 IF bInitRetains THEN
 	TMR_WATCH_DOG.PT := T#200MS;
-	TMR_DELAY_TO_A.PT := T#200MS;
-	TMR_DELAY_TO_B.PT := T#200MS;
+	TMR_DELAY_TO_THRESHOLD.PT := T#200MS;
+	
+	currentSetIndex := 0;
+	
+	FOR nCounter:= 0 TO 15 BY 1 DO
+		thresholds[nCounter] := -1; 
+// default thresholds less than default read-in
+// would always output MATCHED
+	END_FOR
 END_IF]]></ST>
       </Implementation>
     </Method>
@@ -173,19 +236,24 @@ VAR CONSTANT
 	//New
 	bit6TmrAOn : INT :=6;
 	bit7TmrBOn : INT :=7;
+END_VAR
+VAR
+	TMR_DELAY_TO_B: INT;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Monitor.cylinder.statusWord.bit0Warn := BIT_WARNING;
-Monitor.cylinder.statusWord.bit1MonGroupA := BIT_A_MATCH;
-Monitor.cylinder.statusWord.bit2MonGroupB := BIT_B_MATCH;
-Monitor.cylinder.statusWord.bit3CtlSuppress := BIT_WARN_SUPPRESS;
-Monitor.cylinder.statusWord.bit4TmrOn := TMR_WATCH_DOG.Q;
-Monitor.cylinder.statusWord.bit5Done := BIT_DONE;
+        <ST><![CDATA[//TODO , reserved
 
-Monitor.cylinder.statusWord.bit6TmrAOn := TMR_DELAY_TO_A.Q;
-Monitor.cylinder.statusWord.bit7TmrBOn := TMR_DELAY_TO_B.Q;
+Monitor.vacuum.statusWord.bit0Warn := BIT_WARNING;
+//Monitor.vacuum.statusWord.bit1MonGroupA := BIT_A_MATCH;
+//Monitor.vacuum.statusWord.bit2MonGroupB := BIT_B_MATCH;
+Monitor.vacuum.statusWord.bit3CtlSuppress := BIT_WARN_SUPPRESS;
+Monitor.vacuum.statusWord.bit4TmrOn := TMR_WATCH_DOG.Q;
+Monitor.vacuum.statusWord.bit5Done := BIT_DONE;
 
-Monitor.cylinder.lastCommand := LAST_COMMAND;]]></ST>
+//Monitor.vacuum.statusWord.bit6TmrAOn := TMR_DELAY_TO_A.Q;
+//Monitor.vacuum.statusWord.bit7TmrBOn := TMR_DELAY_TO_B.Q;
+
+Monitor.vacuum.lastCommand := LAST_COMMAND;]]></ST>
       </Implementation>
     </Method>
     <Method Name="TypeCode" Id="{9902b8dd-9d89-448a-8c17-b989a9c65a67}" FolderPath="CommonBase\">
@@ -194,21 +262,25 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[TypeCode := eCategrories.SELECTION_CYLINDER;]]></ST>
+        <ST><![CDATA[TypeCode := eCategrories.SELECTION_VACUUM;]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="RunVacuum">
-      <LineId Id="9" Count="0" />
+      <LineId Id="195" Count="33" />
+      <LineId Id="231" Count="17" />
+      <LineId Id="55" Count="0" />
     </LineIds>
     <LineIds Name="RunVacuum.ConfigureRead">
       <LineId Id="17" Count="0" />
+      <LineId Id="29" Count="0" />
       <LineId Id="5" Count="0" />
       <LineId Id="19" Count="0" />
       <LineId Id="21" Count="0" />
       <LineId Id="20" Count="0" />
-      <LineId Id="22" Count="1" />
+      <LineId Id="22" Count="0" />
     </LineIds>
     <LineIds Name="RunVacuum.ConfigureWrite">
+      <LineId Id="22" Count="0" />
       <LineId Id="5" Count="0" />
       <LineId Id="13" Count="1" />
       <LineId Id="12" Count="0" />
@@ -243,10 +315,14 @@ END_VAR
       <LineId Id="7" Count="0" />
       <LineId Id="15" Count="2" />
       <LineId Id="30" Count="1" />
-      <LineId Id="33" Count="1" />
+      <LineId Id="43" Count="4" />
+      <LineId Id="51" Count="0" />
+      <LineId Id="53" Count="1" />
+      <LineId Id="52" Count="0" />
       <LineId Id="32" Count="0" />
     </LineIds>
     <LineIds Name="RunVacuum.Monitor">
+      <LineId Id="58" Count="1" />
       <LineId Id="5" Count="0" />
       <LineId Id="17" Count="3" />
       <LineId Id="16" Count="0" />

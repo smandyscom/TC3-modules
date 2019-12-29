@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
   <DUT Name="CellDataBlock" Id="{45a09079-c4b6-4675-89db-e70c1695c394}">
     <Declaration><![CDATA[TYPE CellDataBlock :
 UNION
@@ -9,6 +9,10 @@ UNION
 	signal : commSignal;
 	command : commCommandGeneric;
 	unit : commUnitGeneric;
+	//----------
+	//	New added , 20191228
+	//----------
+	vacuum : commVacuum;
 END_UNION
 END_TYPE
 ]]></Declaration>

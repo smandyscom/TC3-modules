@@ -195,7 +195,7 @@ VAR_INPUT
 	argCommand : eCylinderCommands;
 END_VAR
 VAR
-	outDone : BOOL ;
+	outDone  : BOOL ;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[// store command
