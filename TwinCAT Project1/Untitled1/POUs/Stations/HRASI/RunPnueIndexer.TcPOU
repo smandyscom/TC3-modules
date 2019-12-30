@@ -10,6 +10,8 @@ VAR
 	//devices
 	lockCylinder : POINTER TO RunCylinder;
 	pistonCylinder : POINTER TO RunCylinder;
+	
+	fixtures : POINTER to helperOutputSelection;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -29,6 +31,7 @@ CASE outputState OF
 	bSerialTransition := pistonCylinder^.Execute(eCylinderCommands.COMMAND_A);
 	6:
 	IF lockCylinder^.Execute(eCylinderCommands.COMMAND_A) THEN
+		fixtures^.ReleaseAll(); //release all fixture
 		NextState := 0; //rewind
 	END_IF
 END_CASE]]></ST>
@@ -43,7 +46,9 @@ END_CASE]]></ST>
       <LineId Id="24" Count="0" />
       <LineId Id="17" Count="0" />
       <LineId Id="20" Count="0" />
-      <LineId Id="26" Count="7" />
+      <LineId Id="26" Count="5" />
+      <LineId Id="46" Count="0" />
+      <LineId Id="32" Count="1" />
       <LineId Id="18" Count="0" />
     </LineIds>
   </POU>

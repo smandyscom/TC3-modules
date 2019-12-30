@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <DUT Name="defSensorPair" Id="{25d01670-efa5-492a-b197-5c8d62d2a0b9}">
+    <Declaration><![CDATA[TYPE defSensorPair :
+STRUCT
+	bit0 AT%I* : BOOL;
+	bit1 AT%I* : BOOL;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

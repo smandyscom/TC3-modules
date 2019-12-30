@@ -90,6 +90,9 @@
     <Compile Include="DUTs\HRASI\defItem.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\HRASI\defSensorPair.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\Internal\ParameterGeneric.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -201,6 +204,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Stations\HRASI\CommonRack.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Stations\HRASI\helperOutputSelection.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Stations\HRASI\RunAoiInspectionV1.TcPOU">

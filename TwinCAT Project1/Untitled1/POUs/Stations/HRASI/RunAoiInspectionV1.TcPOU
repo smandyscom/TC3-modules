@@ -9,6 +9,8 @@ END_VAR
 VAR
 	//devices
 	ngCylinder : POINTER TO RunCylinder;
+	fixture : POINTER TO helperOutputSelection;
+	identification : defSensorPair;
 	
 	aoiTrigger AT%Q* : BOOL;
 	aoiOut1 : POINTER TO RunSignal ; //done
@@ -30,18 +32,27 @@ CASE outputState OF
 		transitionByte.0 := ngCylinder^.Execute(eCylinderCommands.COMMAND_A); //return the position
 		transitionByte.1 := aoiOut1^.debouncedOff; //check aoi-done off
 		IF transitionByte = 16#3 THEN
+			
+			//TODO,  trigger fixture?
+			fixture^.Trigger(identification,TRUE);
+			
 			aoiTrigger := TRUE; //set aoi-trigger on
 		END_IF
 	16#201:
 		//wait aoi-done on
 		IF aoiOut1^.debouncedOn AND NOT aoiOut2^.debouncedOn THEN
+			//-------------
+			//	NG
+			//-------------
 			//fetch aoi result
 			//trigger ejector by result
 			//identified as NG
-			
-			//TODO , relese fixture vacuum
+			fixture^.Trigger(identification,FALSE); //release fixture , ready to reject
 			bSerialTransition:=	ngCylinder^.Execute(eCylinderCommands.COMMAND_B);
 		ELSIF aoiOut1^.debouncedOn AND aoiOut2^.debouncedOn THEN
+			//--------------
+			//	OK 
+			//--------------
 			bSerialTransition := TRUE; //transit 
 		ELSE
 			// wait until aoi_done raise
@@ -58,15 +69,22 @@ END_CASE]]></ST>
       <LineId Id="20" Count="0" />
       <LineId Id="41" Count="0" />
       <LineId Id="64" Count="0" />
-      <LineId Id="66" Count="2" />
+      <LineId Id="66" Count="0" />
+      <LineId Id="111" Count="0" />
+      <LineId Id="113" Count="2" />
+      <LineId Id="67" Count="1" />
       <LineId Id="13" Count="0" />
       <LineId Id="15" Count="0" />
       <LineId Id="43" Count="0" />
+      <LineId Id="99" Count="2" />
       <LineId Id="61" Count="0" />
       <LineId Id="63" Count="0" />
       <LineId Id="72" Count="0" />
-      <LineId Id="78" Count="1" />
-      <LineId Id="73" Count="2" />
+      <LineId Id="78" Count="0" />
+      <LineId Id="73" Count="1" />
+      <LineId Id="102" Count="1" />
+      <LineId Id="110" Count="0" />
+      <LineId Id="75" Count="0" />
       <LineId Id="46" Count="0" />
       <LineId Id="77" Count="0" />
       <LineId Id="45" Count="0" />

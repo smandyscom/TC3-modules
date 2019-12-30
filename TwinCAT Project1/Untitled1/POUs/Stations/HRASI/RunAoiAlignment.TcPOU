@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <POU Name="RunAoiAlignment" Id="{a9456a9b-01e4-41e1-a3f7-9a161bc855bd}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunAoiAlignment EXTENDS RunUnitSlave
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	//---------------------------
+	//	To/From SCARA
+	//---------------------------
+	taskRequest AT%I* : BYTE; //filtr index vice versa
+	xPixelOutput AT%Q* : REAL; //32bits
+	yPixelOutput AT%Q* : REAL;
+	//----------------
+	//	To/From AOI
+	//----------------
+	trigger AT%Q* : BOOL;
+	done AT%I* : BOOL;
+	taskSelection AT%Q* : INT;
+	xPixelResult AT%Q* : REAL; //32bits
+	yPixelResult AT%Q* : REAL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[SUPER^();
+
+CASE outputState OF
+	eSpecialStates.SLAVE_ENTER_PROCEDURE:
+		taskSelection := taskRequest;
+		trigger := TRUE;
+		
+END_CASE
+	]]></ST>
+    </Implementation>
+    <LineIds Name="RunAoiAlignment">
+      <LineId Id="9" Count="0" />
+      <LineId Id="27" Count="1" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="31" Count="2" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="29" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

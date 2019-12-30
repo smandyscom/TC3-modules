@@ -10,7 +10,8 @@ VAR
 	//devices
 	horizon : POINTER TO RunCylinder;
 	clamper : POINTER TO RunCylinder;
-	
+	fixture : POINTER TO helperOutputSelection;
+	identifysensor : defSensorPair;
 	//
 END_VAR
 VAR CONSTANT
@@ -53,7 +54,9 @@ CASE outputState OF
 	16#205:
 		//release part 
 		bSerialTransition := clamper^.Execute(eCylinderCommands.COMMAND_A); //release
-		//TODO , vacuum fixture on
+		IF bSerialTransition THEN
+			fixture^.Trigger(identifysensor,TRUE);//turn vacuum fixture on
+		END_IF
 	16#206:
 		//empty clamper extract
 		IF horizon^.Execute(eCylinderCommands.COMMAND_A) THEN
@@ -86,7 +89,9 @@ END_CASE]]></ST>
       <LineId Id="66" Count="0" />
       <LineId Id="44" Count="1" />
       <LineId Id="68" Count="0" />
-      <LineId Id="46" Count="2" />
+      <LineId Id="46" Count="0" />
+      <LineId Id="89" Count="2" />
+      <LineId Id="48" Count="0" />
       <LineId Id="69" Count="0" />
       <LineId Id="49" Count="2" />
       <LineId Id="29" Count="0" />

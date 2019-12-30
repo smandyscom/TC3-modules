@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <POU Name="helperOutputSelection" Id="{f971eeb7-afdd-4ea0-9e5c-3402194a0dc0}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK helperOutputSelection
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	outputs AT%Q*: ARRAY[0..3] OF BOOL;
+	
+	nCounter : INT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Action Name="ReleaseAll" Id="{72b535c6-d0d2-4d16-8572-ca70d0a5ff1a}">
+      <Implementation>
+        <ST><![CDATA[FOR nCounter:=0 TO 3 BY 1 DO
+	outputs[nCounter] := false;
+END_FOR]]></ST>
+      </Implementation>
+    </Action>
+    <Method Name="Trigger" Id="{2643e95e-1bb4-40d4-aac8-7134c47d1fe2}">
+      <Declaration><![CDATA[METHOD Trigger : BOOL
+VAR_INPUT
+	sensorPair : defSensorPair;
+	state : BOOL; //ON/OFF
+END_VAR
+VAR
+	index : BYTE;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[index.0 := sensorPair.bit0;
+index.1 := sensorPair.bit0;
+
+outputs[index] := state;]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="helperOutputSelection">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="helperOutputSelection.ReleaseAll">
+      <LineId Id="1" Count="2" />
+    </LineIds>
+    <LineIds Name="helperOutputSelection.Trigger">
+      <LineId Id="5" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="11" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
