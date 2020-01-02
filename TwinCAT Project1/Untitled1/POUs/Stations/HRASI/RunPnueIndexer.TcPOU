@@ -11,7 +11,8 @@ VAR
 	lockCylinder : POINTER TO RunCylinder;
 	pistonCylinder : POINTER TO RunCylinder;
 	
-	fixtures : POINTER to helperOutputSelection;
+	sensorPairs : array[0..3] of defSensorPair; //define stations sensor flag signatures
+	fixtures : POINTER TO helperOutputSelection;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -19,21 +20,29 @@ END_VAR
 
 CASE outputState OF
 	//------------------start running
+	// S16#10 - : setup vacuum fixtures
+	// S16#20 - : pnuematic indexer movement
 	// 1. unlock
 	// 2. shift out
 	// 3. lock
-	//
-	3:
-	bSerialTransition := lockCylinder^.Execute(eCylinderCommands.COMMAND_A);
-	4:
-	bSerialTransition := pistonCylinder^.Execute(eCylinderCommands.COMMAND_B);
-	5:
-	bSerialTransition := pistonCylinder^.Execute(eCylinderCommands.COMMAND_A);
-	6:
-	IF lockCylinder^.Execute(eCylinderCommands.COMMAND_A) THEN
-		fixtures^.ReleaseAll(); //release all fixture
-		NextState := 0; //rewind
-	END_IF
+	//------------------
+	16#10:
+		//activate fixture by slot valid status
+		FOR nCounter := 0 TO SlotCount-1 BY 1 DO
+			fixtures^.Trigger(sensorPairs[nCounter],SlotBase[nCounter].Valid);
+		END_FOR
+	//----------
+	16#20:
+		bSerialTransition := lockCylinder^.Execute(eCylinderCommands.COMMAND_A);
+	16#21:
+		bSerialTransition := pistonCylinder^.Execute(eCylinderCommands.COMMAND_B);
+	16#22:
+		bSerialTransition := pistonCylinder^.Execute(eCylinderCommands.COMMAND_A);
+	16#23:
+		IF lockCylinder^.Execute(eCylinderCommands.COMMAND_A) THEN
+			fixtures^.ReleaseAll(); //release all fixture
+			NextState := 16#0F; //join master sequence
+		END_IF
 END_CASE]]></ST>
     </Implementation>
     <LineIds Name="RunPnueIndexer">
@@ -41,9 +50,16 @@ END_CASE]]></ST>
       <LineId Id="16" Count="0" />
       <LineId Id="15" Count="0" />
       <LineId Id="19" Count="0" />
+      <LineId Id="59" Count="1" />
       <LineId Id="22" Count="1" />
       <LineId Id="25" Count="0" />
       <LineId Id="24" Count="0" />
+      <LineId Id="61" Count="0" />
+      <LineId Id="69" Count="0" />
+      <LineId Id="62" Count="0" />
+      <LineId Id="66" Count="0" />
+      <LineId Id="65" Count="0" />
+      <LineId Id="70" Count="0" />
       <LineId Id="17" Count="0" />
       <LineId Id="20" Count="0" />
       <LineId Id="26" Count="5" />

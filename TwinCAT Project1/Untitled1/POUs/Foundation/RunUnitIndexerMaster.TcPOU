@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
   <POU Name="RunUnitIndexerMaster" Id="{2551b589-75e5-432e-8b87-41fecbcdc1e1}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunUnitIndexerMaster EXTENDS RunUnitTransporterBase
 VAR		
@@ -8,7 +8,6 @@ VAR
 	//Working registers
 	nCounter : DINT;
 	
-	isLastSlotOccupied : BOOL; //indicate if last slot occupied
 	
 END_VAR
 VAR PERSISTENT
@@ -16,13 +15,21 @@ END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[SUPER^(); // call base class's execution
 
+//---------------
+//	S16#0-S16#0F : regular state as standard indexer
+//	S16#10 : mechanical control of movement
+//---------------
+
 CASE SUPER^.outputState OF
-	0:
-		//FOR nCounter:=1 TO 3 BY 1 DO
-		//	slaveWorkingSignal[nCounter] := slaveLinkageStatus[nCounter];
-		//END_FOR
-		//bSerialTransition := TRUE;
-		
+	16#0:
+		//-------------------------
+		//	Trigger all slaves
+		//-------------------------
+		FOR nCounter:=1 TO 3 BY 1 DO
+			slaveWorkingSignal[nCounter] := slaveLinkageStatus[nCounter];
+		END_FOR
+		bSerialTransition := TRUE;
+	16#1:	
 		//------------------------------------------
 		//check material synchronization to Databse
 		//All slot act must be off
@@ -31,38 +38,28 @@ CASE SUPER^.outputState OF
 		FOR nCounter:=0 TO SlotCount-1 BY 1 DO
 			bSerialTransition := bSerialTransition AND NOT SlotBase[nCounter].Act;
 		END_FOR
-	1:
-		//if all working status meets , transition
-		//all working signal should be zero
-		//seted by downstream
+	16#2:
+		//--------------------------------
+		// Scanning working signal until all are off
+		//--------------------------------
+		bSerialTransition := TRUE;
+		FOR nCounter:= 1 TO 32 BY 1 DO
+			bSerialTransition := bSerialTransition AND NOT slaveWorkingSignal[nCounter];
+		END_FOR
+	16#3:
+		//-------------------
+		//Sync with down stream
+		//-------------------
 		IF syncEngaged AND syncAcknowledged THEN
 			syncEngaged := FALSE; //reset
 		END_IF
-		//all working signal should be off
-		IF NOT transitionByte.0 THEN
-			transitionByte.0 := TRUE;
-			FOR nCounter:= 1 TO 32 BY 1 DO
-				transitionByte.0 := transitionByte.0 AND NOT slaveWorkingSignal[nCounter];
-			END_FOR
-		END_IF
-		//raise working signals for all linked slave
-		IF transitionByte.0 AND NOT syncAcknowledged THEN
+		bSerialTransition := NOT syncAcknowledged; //make sure signal is resetted
+		IF bSerialTransition THEN
 			//move last slot's information to buffer area
 			syncMatId:= SlotLast^.Id; // for the last slot
 			syncMatValid := SlotLast^.Valid;// ready to sync
-			//Do data shifting (move is valid/id)
-			FOR nCounter:=SlotCount TO 2 BY -1 DO	
-				SlotBase[nCounter].Id := SlotBase[nCounter-1].id;
-				SlotBase[nCounter].Valid := SlotBase[nCounter-1].Valid;
-			END_FOR
-				
-			bSerialTransition := TRUE;
-						
-			isLastSlotOccupied := SlotLast^.Valid; //check out last slot status
-		ELSE
-			//neither some work station working nor acknowledge not off
 		END_IF
-	2:
+	16#4:
 		//2 modes
 		// a. synchronize with downstream only, go with pull upstream if avialable
 		// b. synchronize with down/upstream both
@@ -70,16 +67,28 @@ CASE SUPER^.outputState OF
 		// pull by downstream (set on then check off
 		// pull upstream (check on then reset
 		
-		IF isLastSlotOccupied AND NOT syncEngaged THEN
+		IF syncMatValid AND NOT syncEngaged THEN
 			syncEngaged := TRUE;//ready to synchronizing (communicate with downstream
 		END_IF
 		
 		//listen to move
-		bSerialTransition :=  (NOT isLastSlotOccupied) OR (syncAcknowledged AND isLastSlotOccupied);
-	3:
+		bSerialTransition :=  (NOT syncMatValid) OR (syncAcknowledged AND syncMatValid);
+	
+	16#10:
 		//---------------------
-		//do shifting movement
-		//---------------------
+		//shifting movement mechaincal
+		//---------------------	
+	16#F:
+		//---------------------------------------------------------------
+		//Do data shifting (move is valid/id) , leave first slot as empty
+		//---------------------------------------------------------------
+		FOR nCounter:=SlotCount-1 TO 0 BY -1 DO
+			IF nCounter > 0 THEN
+				SlotBase[nCounter].Id := SlotBase[nCounter-1].id;
+				SlotBase[nCounter].Valid := SlotBase[nCounter-1].Valid;
+			END_IF			
+		END_FOR
+		bSerialTransition := TRUE;	
 END_CASE
 ]]></ST>
     </Implementation>
@@ -116,20 +125,39 @@ SlotCount :=  TO_INT((SlotLast-SlotBase)/SIZEOF(RunMaterial) + 1);]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="RunUnitIndexerMaster">
-      <LineId Id="460" Count="8" />
+      <LineId Id="460" Count="0" />
+      <LineId Id="568" Count="2" />
+      <LineId Id="572" Count="0" />
+      <LineId Id="571" Count="0" />
+      <LineId Id="461" Count="2" />
+      <LineId Id="573" Count="2" />
+      <LineId Id="464" Count="4" />
       <LineId Id="542" Count="0" />
       <LineId Id="469" Count="1" />
       <LineId Id="543" Count="0" />
-      <LineId Id="471" Count="19" />
+      <LineId Id="471" Count="3" />
+      <LineId Id="557" Count="0" />
+      <LineId Id="565" Count="0" />
+      <LineId Id="559" Count="5" />
+      <LineId Id="475" Count="0" />
+      <LineId Id="566" Count="0" />
+      <LineId Id="478" Count="0" />
+      <LineId Id="567" Count="0" />
+      <LineId Id="479" Count="2" />
+      <LineId Id="578" Count="0" />
+      <LineId Id="490" Count="0" />
       <LineId Id="530" Count="0" />
       <LineId Id="491" Count="0" />
       <LineId Id="528" Count="0" />
-      <LineId Id="492" Count="1" />
-      <LineId Id="497" Count="19" />
-      <LineId Id="518" Count="4" />
+      <LineId Id="506" Count="10" />
+      <LineId Id="518" Count="3" />
+      <LineId Id="596" Count="0" />
+      <LineId Id="522" Count="0" />
       <LineId Id="544" Count="0" />
       <LineId Id="523" Count="0" />
       <LineId Id="545" Count="0" />
+      <LineId Id="598" Count="9" />
+      <LineId Id="597" Count="0" />
       <LineId Id="524" Count="0" />
       <LineId Id="9" Count="0" />
     </LineIds>

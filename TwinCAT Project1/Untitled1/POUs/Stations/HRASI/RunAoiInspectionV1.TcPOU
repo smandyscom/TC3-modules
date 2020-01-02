@@ -9,18 +9,11 @@ END_VAR
 VAR
 	//devices
 	ngCylinder : POINTER TO RunCylinder;
-	fixture : POINTER TO helperOutputSelection;
-	identification : defSensorPair;
 	
 	aoiTrigger AT%Q* : BOOL;
 	aoiOut1 : POINTER TO RunSignal ; //done
 	aoiOut2 : POINTER TO RunSignal ; //ok/ng
-	
-	//TODO vacuum fixture 
-	
 	//internal
-	
-	//TODO, light control
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -29,35 +22,38 @@ END_VAR
 CASE outputState OF
 	eSpecialStates.SLAVE_ENTER_PROCEDURE:
 		// report id to SCADA?		
-		transitionByte.0 := ngCylinder^.Execute(eCylinderCommands.COMMAND_A); //return the position
+		transitionByte.0 := ngCylinder^.Execute(eCylinderCommands.COMMAND_B); //alway extend
 		transitionByte.1 := aoiOut1^.debouncedOff; //check aoi-done off
-		IF transitionByte = 16#3 THEN
-			
-			//TODO,  trigger fixture?
-			fixture^.Trigger(identification,TRUE);
-			
-			aoiTrigger := TRUE; //set aoi-trigger on
-		END_IF
+		transitionByte.2 := aoiOut2^.debouncedOff; //check aoi-result as NG (fuse)
+		
+		bSerialTransition:= (transitionByte = 16#7);
 	16#201:
+		IF SlotBase^.Valid THEN
+			aoiTrigger := TRUE; //set aoi-trigger on
+			bSerialTransition := TRUE;
+		ELSE
+			//no material , leave	
+			NextState := 16#203;
+		END_IF
+	16#202:
 		//wait aoi-done on
 		IF aoiOut1^.debouncedOn AND NOT aoiOut2^.debouncedOn THEN
 			//-------------
 			//	NG
 			//-------------
-			//fetch aoi result
-			//trigger ejector by result
-			//identified as NG
-			fixture^.Trigger(identification,FALSE); //release fixture , ready to reject
-			bSerialTransition:=	ngCylinder^.Execute(eCylinderCommands.COMMAND_B);
+			SlotBase^.Valid := FALSE; //set as inexsited
+			bSerialTransition:=	TRUE;
 		ELSIF aoiOut1^.debouncedOn AND aoiOut2^.debouncedOn THEN
 			//--------------
 			//	OK 
 			//--------------
-			bSerialTransition := TRUE; //transit 
+			bSerialTransition := ngCylinder^.Execute(eCylinderCommands.COMMAND_A); //open gate
 		ELSE
+			//--------------------------
 			// wait until aoi_done raise
+			//--------------------------
 		END_IF
-	16#202:
+	16#203:
 		aoiTrigger := FALSE; //reset
 		NextState := eSpecialStates.SLAVE_WORK_DONE;
 END_CASE]]></ST>
@@ -69,24 +65,28 @@ END_CASE]]></ST>
       <LineId Id="20" Count="0" />
       <LineId Id="41" Count="0" />
       <LineId Id="64" Count="0" />
-      <LineId Id="66" Count="0" />
-      <LineId Id="111" Count="0" />
-      <LineId Id="113" Count="2" />
-      <LineId Id="67" Count="1" />
+      <LineId Id="148" Count="1" />
+      <LineId Id="68" Count="0" />
+      <LineId Id="138" Count="1" />
+      <LineId Id="147" Count="0" />
+      <LineId Id="146" Count="0" />
+      <LineId Id="140" Count="0" />
+      <LineId Id="142" Count="0" />
+      <LineId Id="145" Count="0" />
+      <LineId Id="141" Count="0" />
       <LineId Id="13" Count="0" />
       <LineId Id="15" Count="0" />
       <LineId Id="43" Count="0" />
       <LineId Id="99" Count="2" />
-      <LineId Id="61" Count="0" />
-      <LineId Id="63" Count="0" />
-      <LineId Id="72" Count="0" />
-      <LineId Id="78" Count="0" />
+      <LineId Id="137" Count="0" />
       <LineId Id="73" Count="1" />
       <LineId Id="102" Count="1" />
       <LineId Id="110" Count="0" />
       <LineId Id="75" Count="0" />
       <LineId Id="46" Count="0" />
+      <LineId Id="150" Count="0" />
       <LineId Id="77" Count="0" />
+      <LineId Id="151" Count="0" />
       <LineId Id="45" Count="0" />
       <LineId Id="70" Count="1" />
       <LineId Id="76" Count="0" />
