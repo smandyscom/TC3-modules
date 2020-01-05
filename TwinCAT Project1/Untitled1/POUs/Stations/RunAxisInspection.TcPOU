@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.16">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
   <POU Name="RunAxisInspection" Id="{a6e0aedf-0dab-4fac-b5f4-4cfe5e671281}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunAxisInspection EXTENDS RunUnitSlave
 VAR

@@ -33,6 +33,36 @@ CASE outputState OF
 		NextState := eSpecialStates.SLAVE_WORK_DONE;
 END_CASE]]></ST>
     </Implementation>
+    <Method Name="FB_init" Id="{73f2038d-f762-4ac2-a699-acb024b4c517}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	
+	argParent : POINTER TO RunUnitGeneric;
+	argSlotBase : POINTER TO RunMaterial;
+	argSlotLast : POINTER TO RunMaterial;
+	
+	argWorkingSignal : POINTER TO BOOL;
+	
+	argExistence : POINTER TO RunSignal;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//initialize 
+Parent := argParent;
+SlotBase := argSlotBase;
+SlotLast := argSlotLast;
+//
+IF bInitRetains THEN
+	NextState := eSpecialStates.INITIAL_BEGIN;
+END_IF
+
+workingSignal := argWorkingSignal; //link
+
+existence := argExistence;]]></ST>
+      </Implementation>
+    </Method>
     <LineIds Name="RunLoading">
       <LineId Id="9" Count="0" />
       <LineId Id="11" Count="0" />
@@ -49,6 +79,13 @@ END_CASE]]></ST>
       <LineId Id="31" Count="0" />
       <LineId Id="33" Count="1" />
       <LineId Id="19" Count="0" />
+    </LineIds>
+    <LineIds Name="RunLoading.FB_init">
+      <LineId Id="16" Count="6" />
+      <LineId Id="14" Count="1" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="36" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

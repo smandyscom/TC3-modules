@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.16">
-  <POU Name="RunUnitController" Id="{dbefb355-befd-4ccc-b7d8-49a15cbd5d5f}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK RunUnitController EXTENDS RunUnitGeneric
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <POU Name="RunUnitControllerV1" Id="{dbefb355-befd-4ccc-b7d8-49a15cbd5d5f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunUnitControllerV1 EXTENDS RunUnitGeneric
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
@@ -64,10 +64,10 @@ FOR nCounter :=1 TO signalUpperBound BY 1 DO
 END_FOR
 FOR nCounter :=1 TO unitUpperBound BY 1 DO
 	//error detection
-	IF errorDevice=0 AND errorDelayDetect.Q AND gvl.stations[nCounter] <> 0 AND_THEN gvl.stations[nCounter]^.ErrorDetect() <> 0THEN
+	IF errorDevice=0 AND errorDelayDetect.Q AND gvl.units[nCounter] <> 0 AND_THEN gvl.units[nCounter]^.ErrorDetect() <> 0THEN
 		//station
 		interfaceControl^.errorIndex := TO_DWORD(nCounter-1);
-		errorDevice := gvl.stations[nCounter];
+		errorDevice := gvl.units[nCounter];
 	END_IF
 END_FOR
 //routines
@@ -119,8 +119,8 @@ CASE currentMode OF
 		eOperationModes.AUTO,eOperationModes.SEMI_AUTO:
 		//running sequences
 		FOR nCounter :=1 TO unitUpperBound BY 1 DO
-			IF gvl.stations[nCounter] <> 0 THEN
-				gvl.stations[nCounter]^();
+			IF gvl.units[nCounter] <> 0 THEN
+				gvl.units[nCounter]^();
 			END_IF
 		END_FOR
 		
@@ -130,15 +130,15 @@ CASE currentMode OF
 			interfaceControl^.state := TO_WORD(eSpecialStates.MAIN_INITIALIZING); //status reflection
 			
 			FOR nCounter:=1 TO unitUpperBound BY 1 DO
-				IF gvl.stations[nCounter] <> 0 THEN
+				IF gvl.units[nCounter] <> 0 THEN
 					// if every station comes initialized
-					bAllInitialized := bAllInitialized AND gvl.stations[nCounter]^.Initialize();
+					bAllInitialized := bAllInitialized AND gvl.units[nCounter]^.Initialize();
 				END_IF
 			END_FOR
 			IF bAllInitialized THEN
 				FOR nCounter:=1 TO unitUpperBound BY 1 DO
-					IF gvl.stations[nCounter] <> 0 THEN
-						gvl.stations[nCounter]^.NextState := 0; //start working
+					IF gvl.units[nCounter] <> 0 THEN
+						gvl.units[nCounter]^.NextState := 0; //start working
 					END_IF
 				END_FOR	
 				requestInitialize := FALSE; //clear after done
@@ -228,7 +228,7 @@ END_VAR
         <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="RunUnitController">
+    <LineIds Name="RunUnitControllerV1">
       <LineId Id="304" Count="0" />
       <LineId Id="686" Count="1" />
       <LineId Id="713" Count="1" />
@@ -302,7 +302,7 @@ END_VAR
       <LineId Id="1048" Count="0" />
       <LineId Id="1050" Count="0" />
     </LineIds>
-    <LineIds Name="RunUnitController.ErrorHandler">
+    <LineIds Name="RunUnitControllerV1.ErrorHandler">
       <LineId Id="122" Count="0" />
       <LineId Id="124" Count="0" />
       <LineId Id="127" Count="0" />
@@ -315,7 +315,7 @@ END_VAR
       <LineId Id="102" Count="0" />
       <LineId Id="21" Count="0" />
     </LineIds>
-    <LineIds Name="RunUnitController.FB_init">
+    <LineIds Name="RunUnitControllerV1.FB_init">
       <LineId Id="12" Count="7" />
       <LineId Id="28" Count="0" />
       <LineId Id="27" Count="0" />
@@ -324,7 +324,7 @@ END_VAR
       <LineId Id="43" Count="0" />
       <LineId Id="42" Count="0" />
     </LineIds>
-    <LineIds Name="RunUnitController.Initialize">
+    <LineIds Name="RunUnitControllerV1.Initialize">
       <LineId Id="5" Count="0" />
     </LineIds>
   </POU>

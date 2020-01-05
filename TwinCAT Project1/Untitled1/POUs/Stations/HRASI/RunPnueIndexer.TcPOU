@@ -11,7 +11,7 @@ VAR
 	lockCylinder : POINTER TO RunCylinder;
 	pistonCylinder : POINTER TO RunCylinder;
 	
-	sensorPairs : array[0..3] of defSensorPair; //define stations sensor flag signatures
+	sensorPairs : ARRAY[0..3] OF defSensorPair; //define stations sensor flag signatures
 	fixtures : POINTER TO helperOutputSelection;
 END_VAR
 ]]></Declaration>
@@ -45,6 +45,43 @@ CASE outputState OF
 		END_IF
 END_CASE]]></ST>
     </Implementation>
+    <Method Name="FB_init" Id="{8dfee478-70bf-4472-a4ae-21e0c723276a}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	
+	argParent : POINTER TO RunUnitGeneric;
+	argSlotBase : POINTER TO RunMaterial;
+	argSlotLast : POINTER TO RunMaterial;
+	
+	argUpstream : POINTER TO RunUnitTransporterBase;
+	argAxis : POINTER TO RunAxis;
+	
+	argLockCylinder : POINTER TO RunCylinder;
+	argPistonCylinder : POINTER TO RunCylinder;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//initialize 
+Parent := argParent;
+SlotBase := argSlotBase;
+SlotLast := argSlotLast;
+
+Axis := argAxis;
+Upstream := argUpstream;
+
+IF Upstream=0 THEN
+	isProxyMode:=TRUE; //no upstream , i am proxy
+END_IF
+
+//calculate how much slot related
+SlotCount :=  TO_INT((SlotLast-SlotBase)/SIZEOF(RunMaterial) + 1);
+
+lockCylinder := argLockCylinder;
+pistonCylinder := argPistonCylinder;]]></ST>
+      </Implementation>
+    </Method>
     <LineIds Name="RunPnueIndexer">
       <LineId Id="9" Count="0" />
       <LineId Id="16" Count="0" />
@@ -66,6 +103,21 @@ END_CASE]]></ST>
       <LineId Id="46" Count="0" />
       <LineId Id="32" Count="1" />
       <LineId Id="18" Count="0" />
+    </LineIds>
+    <LineIds Name="RunPnueIndexer.FB_init">
+      <LineId Id="34" Count="3" />
+      <LineId Id="43" Count="0" />
+      <LineId Id="42" Count="0" />
+      <LineId Id="41" Count="0" />
+      <LineId Id="59" Count="0" />
+      <LineId Id="38" Count="0" />
+      <LineId Id="60" Count="1" />
+      <LineId Id="76" Count="0" />
+      <LineId Id="75" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="91" Count="0" />
+      <LineId Id="90" Count="0" />
+      <LineId Id="95" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

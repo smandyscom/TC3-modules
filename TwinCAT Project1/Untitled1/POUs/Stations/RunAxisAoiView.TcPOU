@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.16">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
   <POU Name="RunAxisAoiView" Id="{dd3c82d7-e0e7-490b-93f3-e200f9619a5e}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunAxisAoiView EXTENDS RunAxisInspection
 VAR

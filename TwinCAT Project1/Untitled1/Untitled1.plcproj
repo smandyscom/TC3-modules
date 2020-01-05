@@ -181,7 +181,7 @@
     <Compile Include="POUs\Foundation\RunSignal.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\Foundation\RunUnitController.TcPOU">
+    <Compile Include="POUs\Foundation\RunUnitControllerV1.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Foundation\RunUnitGeneric.TcPOU">
@@ -239,30 +239,39 @@
     </Compile>
     <Compile Include="POUs\Stations\RunAoiHandshaking.TcPOU">
       <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
     <Compile Include="POUs\Stations\RunAxisAoiView.TcPOU">
       <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
     <Compile Include="POUs\Stations\RunAxisInspection.TcPOU">
       <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
     <Compile Include="POUs\Stations\RunBottomView.TcPOU">
       <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
     <Compile Include="POUs\Stations\RunETest.TcPOU">
       <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
     <Compile Include="POUs\Stations\RunInputV1.TcPOU">
       <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
     <Compile Include="POUs\Stations\RunUnitCellularAIO.TcPOU">
       <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
     <Compile Include="POUs\Stations\RunUnitCellularC.TcPOU">
       <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
     <Compile Include="POUs\Stations\RunLifterCelluar.TcPOU">
       <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
     <Compile Include="POUs\Stations\RunUnitCellularA.TcPOU">
       <SubType>Code</SubType>
@@ -270,6 +279,7 @@
     </Compile>
     <Compile Include="POUs\Stations\RunUnitDummy.TcPOU">
       <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -288,7 +298,9 @@
     <Folder Include="POUs\Foundation" />
     <Folder Include="POUs\Helper" />
     <Folder Include="POUs\Stations" />
-    <Folder Include="POUs\Stations\CellularD" />
+    <Folder Include="POUs\Stations\CellularD">
+      <ExcludeFromBuild>true</ExcludeFromBuild>
+    </Folder>
     <Folder Include="POUs" />
     <Folder Include="POUs\Stations\HRASI" />
   </ItemGroup>
