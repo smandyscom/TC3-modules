@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
   <POU Name="InterfaceManualV1" Id="{69f8e896-e3c8-4e08-b157-7fa165a49498}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK InterfaceManualV1
 VAR_INPUT
@@ -49,7 +49,7 @@ CASE TO_DWORD(comm.monitorType) OF
 	eCategrories.SELECTION_SIGNAL:
 		monitorDevice := ADR(gvl.signalControls[comm.monitorIndex+1]);
 	eCategrories.SELECTION_UNIT:
-		monitorDevice := ADR(gvl.stations[comm.monitorIndex+1]^);
+		monitorDevice := ADR(gvl.units[comm.monitorIndex+1]^);
 END_CASE
 comm.monitorBlock := monitorDevice^.Monitor();
 //control
@@ -63,9 +63,9 @@ CASE comm.commitSelection OF
 		CASE comm.commitMode OF
 			eModes.MODE_DOWNLOAD_DATA_BLOCK,eModes.MODE_UPLOAD_DATA_BLOCK:
 				//configuration
-				controlDevice := ADR(gvl.stations[comm.commitBlock.unit.config.unitId+1]^);
+				controlDevice := ADR(gvl.units[comm.commitBlock.unit.config.unitId+1]^);
 			ELSE
-				controlDevice := ADR(gvl.stations[comm.commitIndex+1]^);
+				controlDevice := ADR(gvl.units[comm.commitIndex+1]^);
 		END_CASE
 	eCategrories.SELECTION_COMMAND_BLOCK:
 		//axis should be pre-selected

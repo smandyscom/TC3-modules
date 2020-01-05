@@ -8,14 +8,16 @@ VAR_OUTPUT
 END_VAR
 VAR
 	device : POINTER TO ExecuteBase;
-	command AT%I* : BYTE;
-	acknowledge AT%Q* : BYTE;
+	command AT%I* : eCylinderCommands;
+	acknowledge AT%Q* : eCylinderCommands;
+	
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[//------------
 //	Bridger
 //------------
+//internalCommand := command;
 IF device<>0 AND_THEN device^.Execute(command) THEN
 	acknowledge := command;
 END_IF]]></ST>
@@ -35,6 +37,7 @@ END_VAR
     </Method>
     <LineIds Name="RunDevices">
       <LineId Id="25" Count="2" />
+      <LineId Id="38" Count="0" />
       <LineId Id="9" Count="0" />
       <LineId Id="13" Count="1" />
     </LineIds>

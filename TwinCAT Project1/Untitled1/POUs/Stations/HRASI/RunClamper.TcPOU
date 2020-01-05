@@ -32,9 +32,9 @@ CASE outputState OF
 	16#201:
 		//Indexer in position , horizonin
 		bSerialTransition := horizon^.Execute(eCylinderCommands.COMMAND_B);
-	16#201:
-		bSerialTransition := clamper^.Execute(eCylinderCommands.COMMAND_B);
 	16#202:
+		bSerialTransition := clamper^.Execute(eCylinderCommands.COMMAND_B);
+	16#203:
 		transitionByte.0 := horizon^.Execute(eCylinderCommands.COMMAND_A);
 		//----------------------
 		//	Snapping fit special 
@@ -45,20 +45,20 @@ CASE outputState OF
 			transitionByte.1 := TRUE;	
 		END_IF
 		
-		IF transitionByte := 16#3 THEN
+		IF transitionByte = 16#3 THEN
 			slaveWorkingSignal[bScaraReady]:= TRUE; //trigger SCARA agent
 			bSerialTransition := TRUE;
 		END_IF
-	16#203:
+	16#204:
 		//Wait SCARA 
 		bSerialTransition := NOT slaveWorkingSignal[bScaraReady];
-	16#204:
+	16#205:
 		//send part back to indexer
 		bSerialTransition := horizon^.Execute(eCylinderCommands.COMMAND_B);
-	16#205:
+	16#206:
 		//release part 
 		bSerialTransition := clamper^.Execute(eCylinderCommands.COMMAND_A); //release
-	16#206:
+	16#207:
 		//empty clamper extract
 		IF horizon^.Execute(eCylinderCommands.COMMAND_A) THEN
 			NextState := eSpecialStates.SLAVE_WORK_DONE;

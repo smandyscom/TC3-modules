@@ -22,10 +22,10 @@ CASE outputState OF
 		//check if empty
 		bSerialTransition := existence^.debouncedOff;
 		IF bSerialTransition THEN
-			slaveWorkingSignal[0] := TRUE; // trigger scara to put
+			slaveWorkingSignal[1] := TRUE; // trigger scara to put
 		END_IF
 	16#201:
-		bSerialTransition := NOT slaveWorkingSignal[0];
+		bSerialTransition := NOT slaveWorkingSignal[1];
 	16#202:
 		//check if material status matched sensor status
 		bSerialTransition := (SlotBase^.Valid = existence^.debouncedOn);
