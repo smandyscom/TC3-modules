@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <POU Name="ProgrammedOutput" Id="{ba5e5d5f-de4b-4772-ba42-7511c7eb6187}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK ProgrammedOutput
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	output AT%Q* : BOOL;
+	
+	isActivated : BOOL;
+	
+	duty : INT;
+	
+	counter : INT;
+END_VAR
+VAR PERSISTENT
+	//output duty cycle setting
+	dutiesInPercentage : ARRAY[0..3] OF INT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF isActivated THEN
+	counter := counter+1;
+ELSE
+	counter:=0; //off
+END_IF
+
+//output when in on duty cyle
+output := isActivated AND (counter <= duty);
+
+//rewind
+IF counter >= 100 THEN
+	counter := 0;//reset
+END_IF]]></ST>
+    </Implementation>
+    <Method Name="Activate" Id="{0a0fe6dd-3262-4a80-8f95-cda1bc2fe9f0}">
+      <Declaration><![CDATA[METHOD Activate : BOOL
+VAR_INPUT
+	set : int; // parameter set
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[duty := dutiesInPercentage[set];
+isActivated := true;]]></ST>
+      </Implementation>
+    </Method>
+    <Action Name="Deactivate" Id="{02b7f09e-4981-4ba7-b13f-358fe382a735}">
+      <Implementation>
+        <ST><![CDATA[isActivated := false;]]></ST>
+      </Implementation>
+    </Action>
+    <Method Name="FB_init" Id="{f41644d2-e25f-4243-9018-f07309d8edce}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF bInitRetains THEN
+	dutiesInPercentage[0] := 100;//always on
+	dutiesInPercentage[1] := 75;//blink on
+	dutiesInPercentage[2] := 50;//blink on
+	dutiesInPercentage[3] := 25;//blink on
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="ProgrammedOutput">
+      <LineId Id="63" Count="11" />
+      <LineId Id="40" Count="0" />
+    </LineIds>
+    <LineIds Name="ProgrammedOutput.Activate">
+      <LineId Id="5" Count="0" />
+      <LineId Id="7" Count="0" />
+    </LineIds>
+    <LineIds Name="ProgrammedOutput.Deactivate">
+      <LineId Id="1" Count="0" />
+    </LineIds>
+    <LineIds Name="ProgrammedOutput.FB_init">
+      <LineId Id="7" Count="0" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="16" Count="1" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

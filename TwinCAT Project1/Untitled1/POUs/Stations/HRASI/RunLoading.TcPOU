@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <POU Name="RunLoading" Id="{0885f03e-fd54-45c2-8cc3-34c2d157a6e9}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunLoading EXTENDS RunUnitSlave
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	existence : POINTER TO RunSignal;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[SUPER^();
+
+//-------------------------------
+//	Slot-1 to loading bottom part
+//-------------------------------
+
+CASE outputState OF
+	eSpecialStates.SLAVE_ENTER_PROCEDURE:
+		//check if empty
+		bSerialTransition := existence^.debouncedOff;
+		IF bSerialTransition THEN
+			slaveWorkingSignal[0] := TRUE; // trigger scara to put
+		END_IF
+	16#201:
+		bSerialTransition := NOT slaveWorkingSignal[0];
+	16#202:
+		//check if material status matched sensor status
+		bSerialTransition := (SlotBase^.Valid = existence^.debouncedOn);
+	16#203:
+		NextState := eSpecialStates.SLAVE_WORK_DONE;
+END_CASE]]></ST>
+    </Implementation>
+    <LineIds Name="RunLoading">
+      <LineId Id="9" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="12" Count="1" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="20" Count="1" />
+      <LineId Id="24" Count="2" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="29" Count="1" />
+      <LineId Id="32" Count="0" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="33" Count="1" />
+      <LineId Id="19" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

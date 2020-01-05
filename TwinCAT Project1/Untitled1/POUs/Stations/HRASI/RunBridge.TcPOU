@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <POU Name="RunBridge" Id="{8efd5c53-7e74-4af7-97a5-3ec0eb5ea0d4}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunBridge EXTENDS RunUnitSlave
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	bridge : defHandshake;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//----------------------------------------------
+//	Bridge working signal and handshaking signal
+//----------------------------------------------
+SUPER^();
+
+CASE outputState OF 
+	eSpecialStates.SLAVE_ENTER_PROCEDURE:
+		bridge.ready := TRUE;
+		bSerialTransition := TRUE;
+	16#201:
+		bSerialTransition := bridge.ack;
+		IF bSerialTransition THEN
+			bridge.ready := FALSE;
+		END_IF
+	16#202:
+		IF NOT bridge.ack THEN
+			NextState := eSpecialStates.SLAVE_WORK_DONE;
+		END_IF
+END_CASE]]></ST>
+    </Implementation>
+    <LineIds Name="RunBridge">
+      <LineId Id="26" Count="2" />
+      <LineId Id="11" Count="2" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="15" Count="10" />
+      <LineId Id="14" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

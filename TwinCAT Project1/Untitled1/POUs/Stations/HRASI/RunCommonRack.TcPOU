@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
-  <POU Name="CommonRack" Id="{eac928e2-459d-4027-a156-266e564c65fe}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK CommonRack EXTENDS RunUnitGeneric
+  <POU Name="RunCommonRack" Id="{eac928e2-459d-4027-a156-266e564c65fe}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunCommonRack EXTENDS RunUnitGeneric
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
 	button : POINTER TO RunSignal ;
-	//TODO : define a simple output DO or DO - device?
-	
 	fixer : POINTER TO RunCylinder;
 	approx : POINTER TO RunSignal; // approx then lock
+	
+	signal : ProgrammedOutput;
 	//---------------------------------
 	//	Over Fieldbus linked with SCARA
 	//---------------------------------
@@ -19,6 +19,7 @@ VAR
 	rackEngaged AT%I*: BOOL;	
 
 	items : ARRAY[0..3] OF defItem;
+	
 	//---------------------------------
 	//	Internal
 	//---------------------------------
@@ -37,19 +38,18 @@ CASE outputState OF
 	eSpecialStates.SLAVE_ENTER_PROCEDURE:
 		//rack is empty
 		bSerialTransition := fixer^.Execute(eCylinderCommands.COMMAND_A); //relase
-		//TODO , set light flicking
+		signal.Activate(2);//50% set light flicking
 	16#201:
 		bSerialTransition := approx^.debouncedOn; //wait until rack closed
 	16#202:
 		//confirmed by hanshaking
 		bSerialTransition := button^.debouncedOn;
-		//TODO , set light constant on
+		signal.Activate(0);//set light constant on
 	16#203:
 		bSerialTransition := fixer^.Execute(eCylinderCommands.COMMAND_B); //lock
 		IF bSerialTransition THEN
 			rackReady := TRUE;
 		END_IF
-//		NextState := eSpecialStates.SLAVE_WORK_DONE; //release flag
 	16#204:
 		bSerialTransition := rackEngaged;
 	16#205:
@@ -68,18 +68,51 @@ CASE outputState OF
 		END_IF
 END_CASE]]></ST>
     </Implementation>
-    <LineIds Name="CommonRack">
+    <Method Name="FB_init" Id="{cdcb6566-3495-422b-9f0f-68d1a83249c2}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	
+	argParent : POINTER TO RunUnitGeneric;
+	argSlotBase : POINTER TO RunMaterial;
+	argSlotLast : POINTER TO RunMaterial;
+	
+	argButton : POINTER TO RunSignal ;
+	argFixer : POINTER TO RunCylinder;
+	argApprox : POINTER TO RunSignal; 
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//initialize 
+Parent := argParent;
+SlotBase := argSlotBase;
+SlotLast := argSlotLast;
+//
+IF bInitRetains THEN
+	NextState := eSpecialStates.INITIAL_BEGIN;
+END_IF
+
+button :=argButton;
+fixer :=argFixer;
+approx :=argApprox;
+
+]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="RunCommonRack">
       <LineId Id="10" Count="0" />
       <LineId Id="9" Count="0" />
       <LineId Id="17" Count="0" />
       <LineId Id="16" Count="0" />
       <LineId Id="19" Count="0" />
       <LineId Id="18" Count="0" />
-      <LineId Id="23" Count="8" />
+      <LineId Id="23" Count="2" />
+      <LineId Id="173" Count="0" />
+      <LineId Id="27" Count="4" />
       <LineId Id="34" Count="0" />
       <LineId Id="32" Count="1" />
       <LineId Id="58" Count="2" />
-      <LineId Id="35" Count="0" />
       <LineId Id="56" Count="1" />
       <LineId Id="101" Count="2" />
       <LineId Id="105" Count="0" />
@@ -92,6 +125,17 @@ END_CASE]]></ST>
       <LineId Id="61" Count="1" />
       <LineId Id="66" Count="1" />
       <LineId Id="21" Count="0" />
+    </LineIds>
+    <LineIds Name="RunCommonRack.FB_init">
+      <LineId Id="43" Count="0" />
+      <LineId Id="10" Count="1" />
+      <LineId Id="41" Count="0" />
+      <LineId Id="53" Count="3" />
+      <LineId Id="13" Count="1" />
+      <LineId Id="72" Count="0" />
+      <LineId Id="74" Count="0" />
+      <LineId Id="73" Count="0" />
+      <LineId Id="7" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

@@ -87,6 +87,9 @@
     <Compile Include="DUTs\Definitions\eSpecialStates.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\HRASI\defHandshake.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\HRASI\defItem.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -140,6 +143,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Foundation\ExecuteBase.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Foundation\ProgrammedOutput.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Foundation\RunMaterial.TcPOU">
@@ -200,10 +206,10 @@
     <Compile Include="POUs\Stations\CellularD\RunLabelHandler.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\Stations\HRASI\Clamper.TcPOU">
+    <Compile Include="POUs\Stations\HRASI\RunClamper.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\Stations\HRASI\CommonRack.TcPOU">
+    <Compile Include="POUs\Stations\HRASI\RunCommonRack.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Stations\HRASI\helperOutputSelection.TcPOU">
@@ -216,13 +222,19 @@
     <Compile Include="POUs\Stations\HRASI\RunAoiInspectionV1.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Stations\HRASI\RunBridge.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Stations\HRASI\RunDevices.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Stations\HRASI\RunLoading.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Stations\HRASI\RunPnueIndexer.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\Stations\HRASI\RunSCARAAgent.TcPOU">
+    <Compile Include="POUs\Stations\HRASI\RunScaraAgent.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Stations\RunAoiHandshaking.TcPOU">

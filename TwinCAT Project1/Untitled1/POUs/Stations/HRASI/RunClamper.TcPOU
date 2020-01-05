@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
-  <POU Name="Clamper" Id="{4cfbb8e7-dd19-45d2-8e96-6129406da078}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK Clamper EXTENDS RunUnitSlave
+  <POU Name="RunClamper" Id="{4cfbb8e7-dd19-45d2-8e96-6129406da078}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunClamper EXTENDS RunUnitSlave
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
@@ -11,14 +11,13 @@ VAR
 	horizon : POINTER TO RunCylinder;
 	clamper : POINTER TO RunCylinder;
 	//
-	configSnap : BOOL; //TODO , set true for instance of Snap
+	configSnap : BOOL; //set true for instance of Snap
+	
 END_VAR
 VAR CONSTANT
 	bScaraReady : INT := 1;
 END_VAR
-VAR PERSISTENT
-	
-END_VAR]]></Declaration>
+]]></Declaration>
     <Implementation>
       <ST><![CDATA[SUPER^();
 
@@ -66,7 +65,42 @@ CASE outputState OF
 		END_IF
 END_CASE]]></ST>
     </Implementation>
-    <LineIds Name="Clamper">
+    <Method Name="FB_init" Id="{37c62737-651a-4f40-81e3-f79b76fcc99a}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	
+	argParent : POINTER TO RunUnitGeneric;
+	argSlotBase : POINTER TO RunMaterial;
+	argSlotLast : POINTER TO RunMaterial;
+	
+	argWorkingSignal : POINTER TO BOOL;
+	
+	argHorizon : POINTER TO RunCylinder;
+	argClamper : POINTER TO RunCylinder;
+	argConfigSnap : BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//initialize 
+Parent := argParent;
+SlotBase := argSlotBase;
+SlotLast := argSlotLast;
+//
+IF bInitRetains THEN
+	NextState := eSpecialStates.INITIAL_BEGIN;
+END_IF
+
+workingSignal := argWorkingSignal; //link
+
+//device link
+horizon := argHorizon;
+clamper := argClamper;
+configSnap := argConfigSnap;]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="RunClamper">
       <LineId Id="110" Count="4" />
       <LineId Id="170" Count="1" />
       <LineId Id="173" Count="1" />
@@ -76,6 +110,14 @@ END_CASE]]></ST>
       <LineId Id="176" Count="0" />
       <LineId Id="146" Count="4" />
       <LineId Id="29" Count="0" />
+    </LineIds>
+    <LineIds Name="RunClamper.FB_init">
+      <LineId Id="16" Count="6" />
+      <LineId Id="14" Count="1" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="40" Count="1" />
+      <LineId Id="39" Count="0" />
+      <LineId Id="42" Count="1" />
     </LineIds>
   </POU>
 </TcPlcObject>

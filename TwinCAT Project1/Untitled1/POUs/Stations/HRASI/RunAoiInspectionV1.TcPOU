@@ -9,10 +9,10 @@ END_VAR
 VAR
 	//devices
 	ngCylinder : POINTER TO RunCylinder;
-	
-	aoiTrigger AT%Q* : BOOL;
 	aoiOut1 : POINTER TO RunSignal ; //done
 	aoiOut2 : POINTER TO RunSignal ; //ok/ng
+	
+	aoiTrigger AT%Q* : BOOL;
 	//internal
 END_VAR
 ]]></Declaration>
@@ -58,6 +58,40 @@ CASE outputState OF
 		NextState := eSpecialStates.SLAVE_WORK_DONE;
 END_CASE]]></ST>
     </Implementation>
+    <Method Name="FB_init" Id="{0f87af46-5d5f-4c6d-b262-bc2c8522819a}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	
+	argParent : POINTER TO RunUnitGeneric;
+	argSlotBase : POINTER TO RunMaterial;
+	argSlotLast : POINTER TO RunMaterial;
+	
+	argWorkingSignal : POINTER TO BOOL;
+	
+	argNgCylinder : POINTER TO RunCylinder;
+	argAoiOut1 : POINTER TO RunSignal ; //done
+	argAoiOut2 : POINTER TO RunSignal ; //ok/ng
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//initialize 
+Parent := argParent;
+SlotBase := argSlotBase;
+SlotLast := argSlotLast;
+//
+IF bInitRetains THEN
+	NextState := eSpecialStates.INITIAL_BEGIN;
+END_IF
+
+workingSignal := argWorkingSignal; //link
+
+ngCylinder := argNgCylinder;
+aoiOut1 := argAoiOut1;
+aoiOut2 := argAoiOut2;]]></ST>
+      </Implementation>
+    </Method>
     <LineIds Name="RunAoiInspectionV1">
       <LineId Id="9" Count="0" />
       <LineId Id="11" Count="1" />
@@ -91,6 +125,13 @@ END_CASE]]></ST>
       <LineId Id="70" Count="1" />
       <LineId Id="76" Count="0" />
       <LineId Id="14" Count="0" />
+    </LineIds>
+    <LineIds Name="RunAoiInspectionV1.FB_init">
+      <LineId Id="16" Count="6" />
+      <LineId Id="14" Count="1" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="41" Count="0" />
+      <LineId Id="38" Count="2" />
     </LineIds>
   </POU>
 </TcPlcObject>

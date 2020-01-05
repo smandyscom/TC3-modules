@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <DUT Name="defHandshake" Id="{72320160-a06b-41bd-970c-06591a1ea227}">
+    <Declaration><![CDATA[TYPE defHandshake :
+STRUCT
+	ready AT%Q* : BOOL;
+	ack AT%I*: BOOL;
+	
+	valid AT%I*: BOOL; // whether material presented after work done
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

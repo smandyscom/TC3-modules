@@ -1,74 +1,36 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
-  <POU Name="RunSCARAAgent" Id="{1f4adf83-c440-4f87-8ce9-122caf9d3620}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK RunSCARAAgent EXTENDS RunUnitGeneric
+  <POU Name="RunScaraAgent" Id="{1f4adf83-c440-4f87-8ce9-122caf9d3620}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunScaraAgent EXTENDS RunUnitGeneric
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
 END_VAR
 VAR	
-	// Devices on Endeffectors
-	devices : ARRAY[0..15] OF RunDevices;
 	
-	outputs AT%Q* : ARRAY[0..3] OF BOOL; //TODO ,vacuum break
-	//---------------------------
-	//	Handshaking with clamper
-	//---------------------------
-	clamperReady AT %Q* : BOOL;
-	scaraAck AT%I* : BOOL;
+//	outputs AT%Q* : ARRAY[0..3] OF BOOL; //TODO ,vacuum break
 	//-------------------
 	// Remote control
 	//-------------------
 	start AT %Q* : BOOL;
 	stop AT%Q* :BOOL;
-	//------
-	// Internal
-	//------
-	nCounter : INT;
+	
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[
 //control handshaking signal to slaveworkingSignal
 //mission:
-//1. map fieldbus I/O command to devices
 //2. sequence start/stop
-//3. handshaking with clamper(via slaveworkingSignal)
-//4. handshaking with racks (or directly link to rack?)
 
-FOR nCounter:=0 TO 15 BY 1 DO
-	//----------------------
-	//	Cylinders,Vacuums
-	//----------------------
-	devices[nCounter]();
-END_FOR
 
-CASE outputState OF
-	//------------
-	//	INIT: retract all cylinders and back to home position
-	//------------	
-
-	eSpecialStates.SLAVE_ENTER_PROCEDURE:
-		bSerialTransition:=clamperReady;
-		IF bSerialTransition THEN
-			scaraAck := TRUE;
-		END_IF
-	16#201:
-		IF NOT clamperReady THEN
-			scaraAck := FALSE;
-			NextState := eSpecialStates.SLAVE_WORK_DONE;
-		END_IF
-END_CASE]]></ST>
+]]></ST>
     </Implementation>
-    <LineIds Name="RunSCARAAgent">
-      <LineId Id="335" Count="7" />
-      <LineId Id="385" Count="0" />
-      <LineId Id="392" Count="1" />
-      <LineId Id="391" Count="0" />
-      <LineId Id="389" Count="0" />
+    <LineIds Name="RunScaraAgent">
+      <LineId Id="335" Count="2" />
+      <LineId Id="339" Count="0" />
+      <LineId Id="341" Count="0" />
       <LineId Id="387" Count="0" />
-      <LineId Id="399" Count="0" />
-      <LineId Id="367" Count="14" />
       <LineId Id="238" Count="0" />
     </LineIds>
   </POU>
