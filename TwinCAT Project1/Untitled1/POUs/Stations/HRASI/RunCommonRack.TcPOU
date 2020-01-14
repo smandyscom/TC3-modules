@@ -55,6 +55,7 @@ CASE outputState OF
 	16#205:
 		//------------------------------------------------------------------
 		//	Check if any item reached the bound. then set rackReady as false
+		// TODO , or by external signal (manual or job stop)
 		//------------------------------------------------------------------
 		FOR nCounter := 0 TO 3 DO
 			IF items[nCounter].Counter >= items[nCounter].Bound THEN
@@ -63,6 +64,7 @@ CASE outputState OF
 			END_IF
 		END_FOR
 	16#206:
+		//wait until SCARA handshaked
 		IF NOT rackEngaged THEN
 			NextState := eSpecialStates.SLAVE_ENTER_PROCEDURE; //rewind
 		END_IF
@@ -115,6 +117,7 @@ approx :=argApprox;
       <LineId Id="58" Count="2" />
       <LineId Id="56" Count="1" />
       <LineId Id="101" Count="2" />
+      <LineId Id="200" Count="0" />
       <LineId Id="105" Count="0" />
       <LineId Id="108" Count="0" />
       <LineId Id="113" Count="0" />
@@ -122,7 +125,9 @@ approx :=argApprox;
       <LineId Id="117" Count="0" />
       <LineId Id="116" Count="0" />
       <LineId Id="114" Count="0" />
-      <LineId Id="61" Count="1" />
+      <LineId Id="61" Count="0" />
+      <LineId Id="201" Count="0" />
+      <LineId Id="62" Count="0" />
       <LineId Id="66" Count="1" />
       <LineId Id="21" Count="0" />
     </LineIds>
