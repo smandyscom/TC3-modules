@@ -139,6 +139,12 @@
     <Compile Include="PlcTask.TcTTO">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\CheckBounds.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\CheckPointer.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Foundation\CommonBase.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -148,7 +154,13 @@
     <Compile Include="POUs\Foundation\ProgrammedOutput.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Foundation\RunGroupNode.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Foundation\RunMaterial.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Foundation\RunUnitControllerV2.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Foundation\RunUnitSlave.TcPOU">
@@ -223,6 +235,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Stations\HRASI\RunBridge.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Stations\HRASI\RunCoordinator.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Stations\HRASI\RunDevices.TcPOU">

@@ -3,37 +3,47 @@
   <POU Name="ProgrammedOutput" Id="{ba5e5d5f-de4b-4772-ba42-7511c7eb6187}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK ProgrammedOutput
 VAR_INPUT
+	
+	
 END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
 	output AT%Q* : BOOL;
-	
 	isActivated : BOOL;
 	
 	duty : INT;
 	
-	counter : INT;
+	dutyCounter : INT;	
+	cycleCounter : INT;
 END_VAR
 VAR PERSISTENT
 	//output duty cycle setting
-	dutiesInPercentage : ARRAY[0..3] OF INT;
+	dutiesInPercentage : ARRAY[0..3] OF INT; //multiple setting
+	cycleGoal : INT;
+	baseTimer : TON;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[IF isActivated THEN
-	counter := counter+1;
+      <ST><![CDATA[IF baseTimer.Q AND isActivated THEN
+	dutyCounter := dutyCounter+1;
 ELSE
-	counter:=0; //off
+	dutyCounter := 0; //off
 END_IF
 
 //output when in on duty cyle
-output := isActivated AND (counter <= duty);
+output := isActivated AND (dutyCounter <= duty) AND (cycleCounter<=cycleGoal);
+
+IF dutyCounter = duty THEN
+	cycleCounter := cycleCounter +1;
+END_IF
 
 //rewind
-IF counter >= 100 THEN
-	counter := 0;//reset
-END_IF]]></ST>
+IF dutyCounter >= 100 THEN
+	dutyCounter := 0;//reset
+END_IF
+
+baseTimer(IN:= TRUE, PT:= , Q=> , ET=> );]]></ST>
     </Implementation>
     <Method Name="Activate" Id="{0a0fe6dd-3262-4a80-8f95-cda1bc2fe9f0}">
       <Declaration><![CDATA[METHOD Activate : BOOL
@@ -64,12 +74,17 @@ END_VAR
 	dutiesInPercentage[1] := 75;//blink on
 	dutiesInPercentage[2] := 50;//blink on
 	dutiesInPercentage[3] := 25;//blink on
-END_IF]]></ST>
+END_IF
+
+baseTimer.PT := T#100MS; //default base]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="ProgrammedOutput">
-      <LineId Id="63" Count="11" />
-      <LineId Id="40" Count="0" />
+      <LineId Id="130" Count="7" />
+      <LineId Id="148" Count="0" />
+      <LineId Id="145" Count="2" />
+      <LineId Id="138" Count="5" />
+      <LineId Id="95" Count="0" />
     </LineIds>
     <LineIds Name="ProgrammedOutput.Activate">
       <LineId Id="5" Count="0" />
@@ -84,6 +99,8 @@ END_IF]]></ST>
       <LineId Id="16" Count="1" />
       <LineId Id="15" Count="0" />
       <LineId Id="9" Count="0" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="23" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

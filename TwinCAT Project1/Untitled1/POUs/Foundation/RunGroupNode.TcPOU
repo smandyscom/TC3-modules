@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <POU Name="RunGroupNode" Id="{b9fe6715-7af9-4baf-8aa9-637788ac271f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunGroupNode EXTENDS RunUnitGeneric
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR_IN_OUT
+	members : ARRAY[*] OF POINTER TO RunUnitGeneric;
+END_VAR
+VAR
+	nCounter : DINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[SUPER^();
+
+CASE outputState OF 
+	//------------Initialize
+	eSpecialStates.INITIAL_BEGIN:
+		// group node start initializing
+		bSerialTransition := TRUE;
+		
+		//scan if all initialized
+		FOR nCounter := LOWER_BOUND(members,1) TO UPPER_BOUND(members,1) DO
+			IF members[nCounter] <> 0 THEN
+				bSerialTransition := bSerialTransition AND members[nCounter]^.Initialize();
+			END_IF		
+		END_FOR
+		
+		// wait upper to inform starting
+		IF bSerialTransition THEN
+			NextState:=eSpecialStates.INITIAL_END;
+		END_IF
+
+	eSpecialStates.GENERIC_GROUP_START:
+		//then wait command to trigger all station into working state
+		FOR nCounter := LOWER_BOUND(members,1) TO UPPER_BOUND(members,1) DO
+			IF members[nCounter] <> 0 THEN
+				members[nCounter]^.NextState := eSpecialStates.GENERIC_GROUP_START;
+			END_IF
+		END_FOR
+		bSerialTransition := TRUE;
+		
+	eSpecialStates.GENERIC_GROUP_IDLE:
+	
+END_CASE]]></ST>
+    </Implementation>
+    <Method Name="FB_init" Id="{065bd92a-f7f5-4f57-987a-22d42058151c}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	
+	argParent : POINTER TO RunUnitGeneric;
+	argSlotBase : POINTER TO RunMaterial;
+	argSlotLast : POINTER TO RunMaterial;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//initialize 
+Parent := argParent;
+SlotBase := argSlotBase;
+SlotLast := argSlotLast;
+//
+IF bInitRetains THEN
+	NextState := eSpecialStates.INITIAL_BEGIN;
+END_IF
+
+
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Initialize" Id="{eb434dc7-b60c-4ac2-84bb-e6d7d85262c7}">
+      <Declaration><![CDATA[METHOD Initialize : BOOL
+VAR_INPUT
+END_VAR
+VAR
+	nCounter : int;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//once initializing method call , redirect current state to initalizing region
+IF (TO_UINT(State) AND TO_UINT(eSpecialStates.INITIAL_REGION)) =0 THEN
+	NextState := eSpecialStates.INITIAL_BEGIN; //not in intializing region , change
+END_IF
+
+Initialize := (State = eSpecialStates.INITIAL_END);
+
+IF Initialize THEN
+	//clear all remained signal
+	FOR nCounter:=1 TO 32 BY 1 DO
+		slaveWorkingSignal[nCounter] := FALSE;
+	END_FOR
+	//clear all internal status
+	bEnStep := FALSE;
+	bTrigStep := FALSE;
+	bIsBypassed := FALSE;
+	bWorkingOverride := FALSE;
+	bMaterialOverride := FALSE;	
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="RunGroupNode">
+      <LineId Id="61" Count="1" />
+      <LineId Id="11" Count="3" />
+      <LineId Id="26" Count="2" />
+      <LineId Id="21" Count="0" />
+      <LineId Id="32" Count="2" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="59" Count="1" />
+      <LineId Id="56" Count="2" />
+      <LineId Id="29" Count="0" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="46" Count="3" />
+      <LineId Id="44" Count="0" />
+      <LineId Id="50" Count="0" />
+      <LineId Id="65" Count="0" />
+      <LineId Id="63" Count="1" />
+      <LineId Id="16" Count="0" />
+    </LineIds>
+    <LineIds Name="RunGroupNode.FB_init">
+      <LineId Id="43" Count="0" />
+      <LineId Id="10" Count="1" />
+      <LineId Id="41" Count="0" />
+      <LineId Id="53" Count="3" />
+      <LineId Id="13" Count="1" />
+      <LineId Id="7" Count="0" />
+    </LineIds>
+    <LineIds Name="RunGroupNode.Initialize">
+      <LineId Id="18" Count="0" />
+      <LineId Id="20" Count="2" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="7" Count="0" />
+      <LineId Id="36" Count="0" />
+      <LineId Id="27" Count="0" />
+      <LineId Id="39" Count="2" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="43" Count="5" />
+      <LineId Id="38" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

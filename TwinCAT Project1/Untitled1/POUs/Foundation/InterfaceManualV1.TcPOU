@@ -32,12 +32,23 @@ END_VAR
       <ST><![CDATA[IF writePersistance.START And not writePersistance.BUSY THEN
 	writePersistance.START := false;
 END_IF
+//Write-in non-violate memory
+writePersistance(
+		NETID:= , 
+		PORT:= 851, 
+		START:= , 
+		TMOUT:= , 
+		BUSY=> , 
+		ERR=> , 
+		ERRID=> );
+
 //
 CASE currentMode OF
 	eOperationModes.AUTO:
 		comm.wordOut.bEngagedPLC := FALSE;
 		RETURN;
 	ELSE
+		//MANUAL and SEMI-AUTO
 		comm.wordOut.bEngagedPLC := TRUE;
 END_CASE
 //monitor
@@ -116,23 +127,20 @@ CASE state OF
 END_CASE
 
 elapsed(IN:= , PT:= , Q=> , ET=> );
-//Write-in non-violate memory
-writePersistance(
-		NETID:= , 
-		PORT:= 851, 
-		START:= , 
-		TMOUT:= , 
-		BUSY=> , 
-		ERR=> , 
-		ERRID=> );
+
 ]]></ST>
     </Implementation>
     <LineIds Name="InterfaceManualV1">
       <LineId Id="249" Count="2" />
+      <LineId Id="497" Count="7" />
+      <LineId Id="496" Count="0" />
+      <LineId Id="495" Count="0" />
       <LineId Id="395" Count="0" />
       <LineId Id="387" Count="1" />
       <LineId Id="393" Count="1" />
-      <LineId Id="390" Count="1" />
+      <LineId Id="390" Count="0" />
+      <LineId Id="494" Count="0" />
+      <LineId Id="391" Count="0" />
       <LineId Id="389" Count="0" />
       <LineId Id="112" Count="5" />
       <LineId Id="419" Count="1" />
@@ -167,8 +175,6 @@ writePersistance(
       <LineId Id="63" Count="0" />
       <LineId Id="463" Count="0" />
       <LineId Id="247" Count="0" />
-      <LineId Id="237" Count="0" />
-      <LineId Id="239" Count="6" />
       <LineId Id="238" Count="0" />
       <LineId Id="236" Count="0" />
     </LineIds>

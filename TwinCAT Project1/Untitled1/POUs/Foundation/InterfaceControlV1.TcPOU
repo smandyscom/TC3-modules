@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
   <POU Name="InterfaceControlV1" Id="{bd206c09-8ce6-427d-b5d8-5f734ed43bc9}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK InterfaceControlV1
 VAR_INPUT
@@ -47,7 +47,7 @@ CASE currentMode OF
 		IF comm.control.bPause OR pbRed THEN
 			requestMode := eOperationModes.SEMI_AUTO;
 		END_IF
-		comm.controlWord.2 := FALSE;
+		comm.controlWord.2 := FALSE; //pause state
 	eOperationModes.SEMI_AUTO:
 		IF comm.control.bManualMode THEN
 			//higher priority
