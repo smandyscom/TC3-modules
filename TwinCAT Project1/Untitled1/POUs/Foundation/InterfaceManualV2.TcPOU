@@ -1,0 +1,193 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <POU Name="InterfaceManualV2" Id="{0b276758-58d5-4b99-82b7-eaf376e82b25}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK InterfaceManualV2
+VAR_INPUT
+	isPaused : BOOL;
+END_VAR
+VAR_OUTPUT
+	isManualEngaged : BOOL;
+END_VAR
+VAR
+
+	comm AT%MB1024: commManual;
+	
+	monitorDevice : POINTER TO CommonBase;
+	controlDevice : POINTER TO CommonBase;
+	state : INT := 0;
+	
+	//need to explicit call write persistance data , to store into non-violate memory
+	writePersistance : WritePersistentData;
+	
+	elapsed : TON ;
+	m_elapsed :TIME;
+END_VAR
+VAR CONSTANT
+	bEngagedHMI : INT := 0;
+	bRun : INT :=1;
+	bEngagedPLC : INT :=0;
+	bDone : INT :=1;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF writePersistance.START And not writePersistance.BUSY THEN
+	writePersistance.START := false;
+END_IF
+//Write-in non-violate memory
+writePersistance(
+		NETID:= , 
+		PORT:= 851, 
+		START:= , 
+		TMOUT:= , 
+		BUSY=> , 
+		ERR=> , 
+		ERRID=> );
+
+//---------------------------
+// MONITOR
+//---------------------------
+CASE TO_DWORD(comm.monitorType) OF
+	eCategrories.SELECTION_AXIS:
+		monitorDevice := ADR(gvl.axisControls[comm.monitorIndex+1]); // index start from 1
+	eCategrories.SELECTION_CYLINDER:
+		monitorDevice := ADR(gvl.cylinderControls[comm.monitorIndex+1]);
+	eCategrories.SELECTION_SIGNAL:
+		monitorDevice := ADR(gvl.signalControls[comm.monitorIndex+1]);
+	eCategrories.SELECTION_UNIT:
+		monitorDevice := ADR(gvl.units[comm.monitorIndex+1]^);
+END_CASE
+comm.monitorBlock := monitorDevice^.Monitor();
+
+//------------------------------
+//	Control
+//------------------------------
+comm.wordOut.bEngagedPLC := isPaused; //always engaged , wait
+isManualEngaged:= comm.wordIn.bEngagedHMI;
+IF NOT comm.wordIn.bEngagedHMI THEN
+	RETURN; // no longer execute further section
+END_IF
+
+//control
+CASE comm.commitSelection OF
+	eCategrories.SELECTION_AXIS:
+		controlDevice :=  ADR(gvl.axisControls[comm.commitIndex+1]);
+	eCategrories.SELECTION_CYLINDER:
+		controlDevice := ADR(gvl.cylinderControls[comm.commitIndex+1]);
+	eCategrories.SELECTION_UNIT:
+		 
+		CASE comm.commitMode OF
+			eModes.MODE_DOWNLOAD_DATA_BLOCK,eModes.MODE_UPLOAD_DATA_BLOCK:
+				//configuration
+				controlDevice := ADR(gvl.units[comm.commitBlock.unit.config.unitId+1]^);
+			ELSE
+				controlDevice := ADR(gvl.units[comm.commitIndex+1]^);
+		END_CASE
+	eCategrories.SELECTION_COMMAND_BLOCK:
+		//axis should be pre-selected
+		controlDevice := ADR(gvl.axisControls[comm.commitBlock.command.base.axisId+1]);
+	eCategrories.SELECTION_SIGNAL:
+		controlDevice := ADR(gvl.signalControls[comm.commitIndex+1]);
+END_CASE
+
+CASE state OF
+	0:
+		IF comm.wordIn.bEngagedHMI AND comm.wordIn.bRun THEN
+			//ENGAGED_HMI and RUN
+			elapsed.IN := TRUE;		
+			state := 1;
+		END_IF
+	1:
+		CASE comm.commitMode OF
+				//Manual execution
+				eModes.MODE_EXE_AXIS,eModes.MODE_EXE_COMMAND_BLOCK,eModes.MODE_EXE_CYLINDER,eModes.MODE_EXE_UNIT:
+					comm.wordOut.bDone := controlDevice^.Control(comm.commitBlock,comm.commitMode); //return whether done
+				eModes.MODE_UPLOAD_DATA_BLOCK:
+					comm.commitBlock := controlDevice^.ConfigureRead(comm.commitBlock,TO_WORD(comm.commitSelection));
+					comm.wordOut.bDone := TRUE; //done on
+				eModes.MODE_DOWNLOAD_DATA_BLOCK:
+					controlDevice^.ConfigureWrite(comm.commitBlock,TO_WORD(comm.commitSelection));
+					writePersistance.START := TRUE;
+					comm.wordOut.bDone := TRUE ;//done
+				ELSE
+					comm.wordOut.bDone := TRUE ;//done
+		END_CASE
+		//interrupt operation
+		IF NOT comm.wordIn.bEngagedHMI THEN
+			controlDevice^.Stop();
+			comm.wordOut.bDone := TRUE;
+		END_IF
+		IF comm.wordOut.bDone THEN
+			//DONE true or ENGAGED_HMI off
+			m_elapsed := elapsed.ET;
+			elapsed.IN := FALSE;
+			state :=2;
+		END_IF		
+	2:
+		IF NOT comm.wordIn.bRun THEN
+			comm.wordOut.bDone := FALSE;
+			state := 0;
+		ELSE
+			//wait RUN off
+		END_IF
+END_CASE
+
+elapsed(IN:= , PT:= , Q=> , ET=> );
+
+]]></ST>
+    </Implementation>
+    <LineIds Name="InterfaceManualV2">
+      <LineId Id="249" Count="2" />
+      <LineId Id="497" Count="7" />
+      <LineId Id="496" Count="0" />
+      <LineId Id="547" Count="0" />
+      <LineId Id="389" Count="0" />
+      <LineId Id="112" Count="0" />
+      <LineId Id="548" Count="0" />
+      <LineId Id="113" Count="4" />
+      <LineId Id="419" Count="1" />
+      <LineId Id="118" Count="3" />
+      <LineId Id="535" Count="0" />
+      <LineId Id="538" Count="0" />
+      <LineId Id="549" Count="1" />
+      <LineId Id="556" Count="0" />
+      <LineId Id="554" Count="0" />
+      <LineId Id="551" Count="2" />
+      <LineId Id="534" Count="0" />
+      <LineId Id="122" Count="6" />
+      <LineId Id="459" Count="0" />
+      <LineId Id="453" Count="1" />
+      <LineId Id="460" Count="0" />
+      <LineId Id="456" Count="2" />
+      <LineId Id="455" Count="0" />
+      <LineId Id="130" Count="0" />
+      <LineId Id="213" Count="0" />
+      <LineId Id="211" Count="0" />
+      <LineId Id="421" Count="1" />
+      <LineId Id="132" Count="0" />
+      <LineId Id="546" Count="0" />
+      <LineId Id="133" Count="3" />
+      <LineId Id="464" Count="0" />
+      <LineId Id="137" Count="1" />
+      <LineId Id="333" Count="0" />
+      <LineId Id="335" Count="12" />
+      <LineId Id="334" Count="0" />
+      <LineId Id="351" Count="3" />
+      <LineId Id="350" Count="0" />
+      <LineId Id="357" Count="1" />
+      <LineId Id="467" Count="0" />
+      <LineId Id="465" Count="0" />
+      <LineId Id="359" Count="0" />
+      <LineId Id="356" Count="0" />
+      <LineId Id="278" Count="1" />
+      <LineId Id="362" Count="0" />
+      <LineId Id="281" Count="0" />
+      <LineId Id="360" Count="1" />
+      <LineId Id="277" Count="0" />
+      <LineId Id="63" Count="0" />
+      <LineId Id="463" Count="0" />
+      <LineId Id="247" Count="0" />
+      <LineId Id="238" Count="0" />
+      <LineId Id="236" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

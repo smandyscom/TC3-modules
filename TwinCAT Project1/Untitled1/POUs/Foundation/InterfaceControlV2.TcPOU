@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <POU Name="InterfaceControlV2" Id="{5c9a5b58-14bf-4ff5-afb4-63b993847649}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK InterfaceControlV2
+VAR_INPUT
+	pbGreen : BOOL; //start
+	pbRed : BOOL;	//stop
+	pbYellow: BOOL; //error reset
+	
+	commStart AT%I* : BOOL;
+	commStop AT%I* : BOOL;
+	commErrorReset AT%I* : BOOL;
+	commErrorIgnore AT%I* : BOOL;
+	commInit AT%I* : BOOL;
+	commPurge AT%I* : BOOL;
+END_VAR
+VAR_OUTPUT
+	
+	requestPause : BOOL;
+	requestResume: BOOL;
+	
+	requestInit : BOOL;
+	requestErrorClear : eErrorClearWays;
+	
+	requestPurge : BOOL;
+		
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[requestPause := commStop OR pbRed;
+requestResume := commStart OR pbGreen;
+
+IF commErrorReset OR pbYellow THEN
+	requestErrorClear := eErrorClearWays.RESET;
+ELSIF commErrorIgnore THEN
+	requestErrorClear := eErrorClearWays.IGNORE;
+ELSE 
+	//default
+	requestErrorClear := eErrorClearWays.NO_ACTION;	
+END_IF
+
+//Initialization
+requestInit := commInit;
+//Purge request
+requestPurge := commPurge; 
+//one-shot control clear , except bManualMode
+commStart := FALSE;
+commStop := FALSE;
+commErrorReset := FALSE;
+commErrorIgnore:= FALSE;
+commInit:= FALSE;
+commPurge := FALSE;]]></ST>
+    </Implementation>
+    <LineIds Name="InterfaceControlV2">
+      <LineId Id="864" Count="1" />
+      <LineId Id="867" Count="2" />
+      <LineId Id="871" Count="0" />
+      <LineId Id="873" Count="0" />
+      <LineId Id="875" Count="0" />
+      <LineId Id="878" Count="0" />
+      <LineId Id="876" Count="0" />
+      <LineId Id="870" Count="0" />
+      <LineId Id="859" Count="0" />
+      <LineId Id="834" Count="1" />
+      <LineId Id="843" Count="2" />
+      <LineId Id="882" Count="4" />
+      <LineId Id="853" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

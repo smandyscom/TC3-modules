@@ -151,6 +151,12 @@
     <Compile Include="POUs\Foundation\ExecuteBase.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Foundation\InterfaceControlV2.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Foundation\InterfaceManualV2.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Foundation\ProgrammedOutput.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -170,6 +176,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Foundation\SemephoreV1.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Foundation\SemephoreV2.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\Helper\CellDataBlock2Parameter.TcPOU">

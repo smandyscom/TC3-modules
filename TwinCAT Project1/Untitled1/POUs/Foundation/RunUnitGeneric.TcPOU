@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
   <POU Name="RunUnitGeneric" Id="{a108e392-1419-4492-a6fc-c3186312016b}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunUnitGeneric Extends CommonBase
 VAR_INPUT
@@ -13,9 +13,10 @@ VAR_INPUT
 	slaveWorkingSignal : ARRAY[1..32] OF BOOL; // collect slave working signal , possible to access externally?
 END_VAR
 VAR_OUTPUT
-	State : INT := 0;
-	NextState : INT := 0;
-	AlarmCode : UDINT := 0;
+	 //possible TO output on HMI
+	State AT%Q* : INT := 0;
+	NextState AT%Q* : INT := 0;
+	AlarmCode AT%Q* : UDINT := 0;
 END_VAR
 VAR	
 	Parent : POINTER TO RunUnitGeneric;
