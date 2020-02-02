@@ -3,38 +3,37 @@
   <POU Name="RunScaraAgent" Id="{1f4adf83-c440-4f87-8ce9-122caf9d3620}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunScaraAgent EXTENDS RunUnitGeneric
 VAR_INPUT
-	stop at%Q* : BOOL;
-	start : BOOL;
-	programId : UINT;
+	taskEngaged : BOOL;		//triggered by coordinator
+	taskId : UINT;		//assigned by coordinator/internal 
 END_VAR
 VAR_OUTPUT
 END_VAR
-VAR	
-	
-//	outputs AT%Q* : ARRAY[0..3] OF BOOL; //TODO ,vacuum break
-
+VAR		
 	//-------------------
 	// Remote control - Input
 	//-------------------
-	start_0 AT %Q* : BOOL;
-	selProg1_1 AT%Q* : BOOL;
-	selProg2_2 AT%Q* : BOOL;
-	selProg4_3 AT%Q* : BOOL;
-	stop_4 AT%Q* :BOOL;
-	pause_5 AT%Q* : BOOL;
-	continue_6 AT%Q* : BOOL;
-	reset_7 AT%Q* : BOOL; 
+	out_start_0 AT %Q* : BOOL;
+	out_selProg1_1 AT%Q* : BOOL;
+	out_selProg2_2 AT%Q* : BOOL;
+	out_selProg4_3 AT%Q* : BOOL;
+	
+	out_stop_4 AT%Q* :BOOL; //foced stop, not recommend to use
+	
+	out_pause_5 AT%Q* : BOOL;		
+	out_continue_6 AT%Q* : BOOL;
+	
+	out_reset_7 AT%Q* : BOOL; 	//error reset
 	//-------------------
 	// Remote control - Output
 	//-------------------
-	ready_0 AT%I* : BOOL; //Turns ON when the controller startup completes and no task is running. 
-	running_1 AT%I* : BOOL; //Turns ON when task is running. However, turns OFF when “Paused output” is ON. 
-	paused_2 AT%I* : BOOL; //
-	error_3 AT%I* : BOOL;
-	eStop_4 AT%I* : BOOL;
-	safeGuard_5 AT%I* : BOOL;
-	sError_6 AT%I* : BOOL;
-	warning_7 AT%I* : BOOL;
+	in_ready_0 AT%I* : BOOL; //Turns ON when the controller startup completes and no task is running. 
+	in_running_1 AT%I* : BOOL; //Turns ON when task is running. However, turns OFF when “Paused output” is ON. 
+	in_paused_2 AT%I* : BOOL; //
+	in_error_3 AT%I* : BOOL;
+	in_eStop_4 AT%I* : BOOL;		//as EDM
+	in_safeGuard_5 AT%I* : BOOL;	//as EDM to safeguard
+	in_sError_6 AT%I* : BOOL;
+	in_warning_7 AT%I* : BOOL;
 	//------------------
 	//	User - input
 	//------------------
@@ -42,20 +41,23 @@ VAR
 	//------------------
 	//	User - output 
 	//------------------
-	alarmCode_ AT%I* : WORD;
-	alarmAck AT%Q* : WORD;
+	in_alarmCode AT%I* : WORD;
+	out_alarmAck AT%Q* : WORD;
 	
-	stopReq AT%Q* : WORD;
+	out_stopReq AT%Q* : WORD;
 	
-	programState AT%I* : WORD;
+	in_taskState AT%I* : WORD;
+END_VAR
+VAR CONSTANT
+	taskInit : UINT := 1;
+	taskAssembly : UINT :=2;
+	taskDailyCheck : UINT :=3;
+	taskCalibration : UINT :=4;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
-//control handshaking signal to slaveworkingSignal
-//mission:
+      <ST><![CDATA[//mission:
 //2. sequence start/stop as Remote I/O
-
 
 //Select Program first then Start
 //Stop program
@@ -64,84 +66,87 @@ END_VAR
 //Continue when ready on
 
 SUPER^();
+THIS^.atomicOperation := TRUE; // the superior control agant should not be interrupted.
+
+//----------------------
+//	Task running control
+//----------------------
+IF bPause AND in_running_1 THEN
+	out_pause_5 := TRUE;
+ELSIF NOT bPause AND in_paused_2 THEN
+	out_continue_6 := TRUE;
+ELSE
+	out_pause_5 := FALSE;
+	out_continue_6 := FALSE;
+END_IF
 
 CASE outputState OF 
 	eSpecialStates.INITIAL_BEGIN:
 		//reset all signals , await SCARA comes into Ready State
-		start_0 := FALSE;
-		stop_4 := TRUE;
-		pause_5 := FALSE;
-		continue_6 := FALSE;
+		out_start_0 := FALSE;
+		out_stop_4 := TRUE;
+		out_pause_5 := FALSE;
+		out_continue_6 := FALSE;
 		bSerialTransition := TRUE;
 	eSpecialStates.INITIAL_STATE_1:
-		bSerialTransition := ready_0;
-		reset_7 := bSerialTransition; //reset errors
-		stop_4 := NOT bSerialTransition; //release
+		bSerialTransition := in_ready_0;
+		IF bSerialTransition THEN 
+			out_reset_7 := TRUE; //reset errors
+			out_stop_4 := FALSE; //release
+		END_IF
 	eSpecialStates.INITIAL_STATE_2:
 		//no error check
-		IF NOT error_3 THEN
-			reset_7:=FALSE;
-			NextState :=  eSpecialStates.INITIAL_END;
+		IF NOT in_error_3 THEN
+			out_reset_7:=FALSE;
+			
+			//initializing process activated
+			taskId := taskInit;
+			THIS^.ConvertTaskId();
+			out_start_0 := TRUE;
+		END_IF
+	eSpecialStates.INITIAL_STATE_3:
+		bSerialTransition := in_running_1;
+	eSpecialStates.INITIAL_STATE_4:
+		bSerialTransition := NOT in_running_1;
+		IF bSerialTransition THEN
+			out_start_0 := FALSE; //reset
+			NextState := eSpecialStates.INITIAL_END;
 		END_IF
 	//-------------------------------
 	// IDLE/Program selection states.
 	//------------------------------
-	16#200:
+	eSpecialStates.GENERIC_GROUP_START:
 		//--------------
 		// Program selected and triggered
 		//--------------
-		bSerialTransition := start;
+		bSerialTransition := taskEngaged;
 		IF bSerialTransition THEN
-			atomicOperation := TRUE;
-			
-			start := FALSE;
-			selProg1_1 := ((programId AND 16#01) > 0);
-			selProg2_2 := ((programId AND 16#02) > 0);
-			selProg4_3 := ((programId AND 16#04) > 0);
-			
+			THIS^.ConvertTaskId();
+			out_start_0 := TRUE;
 		END_IF
-	16#201:
-		start_0 := TRUE;
-		bSerialTransition := running_1;
-		atomicOperation := NOT bSerialTransition; //lock until running sucessed
-	16#202:
+	16#1:
+		bSerialTransition := in_running_1;
+		IF bSerialTransition THEN
+			NextState := 16#200;
+		END_IF
 		//------------------------------------------------------------------
 		// Operating
 		//accept stop command only when programState in some specific state
 		//------------------------------------------------------------------
-		bSerialTransition := (programState = 16#FF AND stop);
+	16#200:
+		bSerialTransition := NOT in_running_1 OR NOT taskEngaged;
+		IF  bSerialTransition THEN
+			//task finished natually or request stop from coordinator
+			out_stopReq := 1; //send request
+		END_IF
+	16#201:
+		bSerialTransition := NOT in_running_1 AND in_ready_0;
 		IF bSerialTransition THEN
-			stop := FALSE; // reset
-			stop_4 :=TRUE;
-		END_IF
-	16#203:
-		IF ready_0 THEN
-			stop_4:=FALSE;
-			NextState := 200;
-		END_IF
-	
-	//Switch over different program
-	eSpecialStates.FORBIDDEN:
-		IF running_1 THEN
-			//only when program is running
-			pause_5 := TRUE; //pause current program  
-			NextState := 16#300;
+			//succesfully stopped
+			taskEngaged := FALSE;
+			out_start_0 := FALSE;
+			NextState := eSpecialStates.GENERIC_GROUP_START;
 		END_IF	
-	//------------------------------
-	//	Pause state releasing state
-	//------------------------------
-	16#300:
-		bSerialTransition := paused_2;
-		IF bSerialTransition THEN
-			pause_5 := FALSE;
-			continue_6 := TRUE;
-		END_IF
-	16#301:
-		 bSerialTransition := (NOT paused_2);
-		 IF bSerialTransition THEN
-			 continue_6 := FALSE;
-		 END_IF
-		
 END_CASE]]></ST>
     </Implementation>
     <Folder Name="CommonBase" Id="{8c2df53f-cc6d-4e3c-9b33-f2759249f7d5}" />
@@ -185,6 +190,13 @@ bMaterialOverride := input.unit.base.controlWord.bit5MaterialOverride;
 Control:=true;]]></ST>
       </Implementation>
     </Method>
+    <Action Name="ConvertTaskId" Id="{def77aca-ea32-4716-b78e-8af443e3b063}">
+      <Implementation>
+        <ST><![CDATA[out_selProg1_1 := ((taskId AND 16#01) > 0);
+out_selProg2_2 := ((taskId AND 16#02) > 0);
+out_selProg4_3 := ((taskId AND 16#04) > 0);]]></ST>
+      </Implementation>
+    </Action>
     <Method Name="ErrorClear" Id="{f462e33e-113a-4bab-9083-d7f7df268290}" FolderPath="CommonBase\">
       <Declaration><![CDATA[METHOD ErrorClear : BOOL
 VAR_INPUT
@@ -192,7 +204,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[alarmAck := 0; // ack reset]]></ST>
+        <ST><![CDATA[out_alarmAck := 0; // ack reset]]></ST>
       </Implementation>
     </Method>
     <Method Name="ErrorDetect" Id="{0d501c3c-1258-4947-b465-528162d76fdd}" FolderPath="CommonBase\">
@@ -201,10 +213,10 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[ErrorDetect := alarmCode_;
+        <ST><![CDATA[ErrorDetect := in_alarmCode;
 
-IF alarmCode_ <> 0 THEN
-	alarmAck := alarmCode_;
+IF in_alarmCode <> 0 THEN
+	out_alarmAck := in_alarmCode;
 END_IF]]></ST>
       </Implementation>
     </Method>
@@ -224,8 +236,11 @@ Monitor.unit.base.controlWord.bit5MaterialOverride := bMaterialOverride;
 Monitor.unit.base.transitionByte := transitionByte;
 //
 Monitor.unit.base.alarmCode := TO_WORD(AlarmCode);
-Monitor.unit.base.state := TO_WORD(State);
-Monitor.unit.base.nextState := TO_WORD(NextState);
+
+//reflect task state instead
+Monitor.unit.base.state := TO_WORD(THIS^.in_taskState);
+Monitor.unit.base.nextState := TO_WORD(THIS^.in_taskState);
+
 //
 IF workingTimer.IN THEN
 	//timer is running , reflect real value
@@ -248,67 +263,7 @@ END_VAR
       </Implementation>
     </Method>
     <LineIds Name="RunScaraAgent">
-      <LineId Id="335" Count="2" />
-      <LineId Id="339" Count="0" />
-      <LineId Id="428" Count="1" />
-      <LineId Id="341" Count="0" />
-      <LineId Id="430" Count="0" />
-      <LineId Id="432" Count="0" />
-      <LineId Id="431" Count="0" />
-      <LineId Id="433" Count="0" />
-      <LineId Id="439" Count="1" />
-      <LineId Id="387" Count="0" />
-      <LineId Id="436" Count="0" />
-      <LineId Id="497" Count="1" />
-      <LineId Id="516" Count="1" />
-      <LineId Id="519" Count="0" />
-      <LineId Id="518" Count="0" />
-      <LineId Id="533" Count="0" />
-      <LineId Id="520" Count="0" />
-      <LineId Id="530" Count="0" />
-      <LineId Id="532" Count="0" />
-      <LineId Id="534" Count="0" />
-      <LineId Id="524" Count="2" />
-      <LineId Id="529" Count="0" />
-      <LineId Id="527" Count="1" />
-      <LineId Id="513" Count="2" />
-      <LineId Id="238" Count="0" />
-      <LineId Id="466" Count="0" />
-      <LineId Id="468" Count="1" />
-      <LineId Id="496" Count="0" />
-      <LineId Id="467" Count="0" />
-      <LineId Id="499" Count="1" />
-      <LineId Id="490" Count="0" />
-      <LineId Id="492" Count="3" />
-      <LineId Id="491" Count="0" />
-      <LineId Id="502" Count="1" />
-      <LineId Id="506" Count="0" />
-      <LineId Id="510" Count="0" />
-      <LineId Id="488" Count="0" />
-      <LineId Id="535" Count="1" />
-      <LineId Id="472" Count="0" />
-      <LineId Id="537" Count="0" />
-      <LineId Id="512" Count="0" />
-      <LineId Id="474" Count="1" />
-      <LineId Id="482" Count="0" />
-      <LineId Id="476" Count="0" />
-      <LineId Id="483" Count="2" />
-      <LineId Id="487" Count="0" />
-      <LineId Id="486" Count="0" />
-      <LineId Id="473" Count="0" />
-      <LineId Id="438" Count="0" />
-      <LineId Id="441" Count="0" />
-      <LineId Id="461" Count="0" />
-      <LineId Id="465" Count="0" />
-      <LineId Id="462" Count="0" />
-      <LineId Id="464" Count="0" />
-      <LineId Id="463" Count="0" />
-      <LineId Id="445" Count="3" />
-      <LineId Id="451" Count="2" />
-      <LineId Id="457" Count="0" />
-      <LineId Id="454" Count="2" />
-      <LineId Id="458" Count="2" />
-      <LineId Id="450" Count="0" />
+      <LineId Id="3588" Count="90" />
       <LineId Id="437" Count="0" />
     </LineIds>
     <LineIds Name="RunScaraAgent.ConfigureRead">
@@ -323,6 +278,10 @@ END_VAR
       <LineId Id="13" Count="2" />
       <LineId Id="27" Count="0" />
       <LineId Id="17" Count="1" />
+    </LineIds>
+    <LineIds Name="RunScaraAgent.ConvertTaskId">
+      <LineId Id="2" Count="1" />
+      <LineId Id="1" Count="0" />
     </LineIds>
     <LineIds Name="RunScaraAgent.ErrorClear">
       <LineId Id="5" Count="0" />
@@ -340,7 +299,10 @@ END_VAR
       <LineId Id="20" Count="0" />
       <LineId Id="17" Count="0" />
       <LineId Id="15" Count="0" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="36" Count="0" />
       <LineId Id="18" Count="1" />
+      <LineId Id="38" Count="0" />
       <LineId Id="21" Count="0" />
       <LineId Id="26" Count="0" />
       <LineId Id="29" Count="0" />

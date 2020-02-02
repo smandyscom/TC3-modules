@@ -13,12 +13,40 @@ VAR
 	
 	sensorPairs : ARRAY[0..3] OF defSensorPair; //define stations sensor flag signatures
 	fixtures : POINTER TO helperOutputSelection;
+	
+	//----------------
+	//	Initialization
+	//----------------
+	revolveCounter : INT;
+	revolveGoal : INT;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[SUPER^(); //run indexer master
 
 CASE outputState OF
+	//---------------------------
+	//	Initialization : revolve n times
+	//---------------------------	
+	eSpecialStates.INITIAL_BEGIN:
+		revolveCounter:=0;
+		bSerialTransition := TRUE;
+	eSpecialStates.INITIAL_STATE_1:
+		bSerialTransition := lockCylinder^.Execute(eCylinderCommands.COMMAND_A);
+	eSpecialStates.INITIAL_STATE_2:
+		bSerialTransition := pistonCylinder^.Execute(eCylinderCommands.COMMAND_B);
+	eSpecialStates.INITIAL_STATE_3:
+		bSerialTransition := lockCylinder^.Execute(eCylinderCommands.COMMAND_B);
+	eSpecialStates.INITIAL_STATE_4:
+		bSerialTransition := pistonCylinder^.Execute(eCylinderCommands.COMMAND_A);
+		IF bSerialTransition THEN
+			revolveCounter := revolveCounter+1;
+			IF revolveCounter < revolveGoal THEN
+				NextState := eSpecialStates.INITIAL_STATE_1; //repeat
+			ELSE
+				NextState := eSpecialStates.INITIAL_END; //terminated
+			END_IF	
+		END_IF
 	//------------------start running
 	// S16#10 - : setup vacuum fixtures
 	// S16#20 - : pnuematic indexer movement
@@ -37,9 +65,10 @@ CASE outputState OF
 	16#21:
 		bSerialTransition := pistonCylinder^.Execute(eCylinderCommands.COMMAND_B);
 	16#22:
-		bSerialTransition := pistonCylinder^.Execute(eCylinderCommands.COMMAND_A);
+		bSerialTransition := lockCylinder^.Execute(eCylinderCommands.COMMAND_B);
 	16#23:
-		IF lockCylinder^.Execute(eCylinderCommands.COMMAND_A) THEN
+		bSerialTransition := pistonCylinder^.Execute(eCylinderCommands.COMMAND_A);
+		IF bSerialTransition THEN
 			fixtures^.ReleaseAll(); //release all fixture
 			NextState := 16#0F; //join master sequence
 		END_IF
@@ -86,6 +115,24 @@ pistonCylinder := argPistonCylinder;]]></ST>
       <LineId Id="9" Count="0" />
       <LineId Id="16" Count="0" />
       <LineId Id="15" Count="0" />
+      <LineId Id="103" Count="1" />
+      <LineId Id="102" Count="0" />
+      <LineId Id="86" Count="0" />
+      <LineId Id="117" Count="2" />
+      <LineId Id="105" Count="0" />
+      <LineId Id="88" Count="0" />
+      <LineId Id="106" Count="0" />
+      <LineId Id="90" Count="0" />
+      <LineId Id="107" Count="0" />
+      <LineId Id="92" Count="0" />
+      <LineId Id="108" Count="0" />
+      <LineId Id="116" Count="0" />
+      <LineId Id="122" Count="0" />
+      <LineId Id="124" Count="0" />
+      <LineId Id="126" Count="0" />
+      <LineId Id="129" Count="1" />
+      <LineId Id="127" Count="0" />
+      <LineId Id="123" Count="0" />
       <LineId Id="19" Count="0" />
       <LineId Id="59" Count="1" />
       <LineId Id="22" Count="1" />
@@ -99,7 +146,9 @@ pistonCylinder := argPistonCylinder;]]></ST>
       <LineId Id="70" Count="0" />
       <LineId Id="17" Count="0" />
       <LineId Id="20" Count="0" />
-      <LineId Id="26" Count="5" />
+      <LineId Id="26" Count="4" />
+      <LineId Id="109" Count="0" />
+      <LineId Id="31" Count="0" />
       <LineId Id="46" Count="0" />
       <LineId Id="32" Count="1" />
       <LineId Id="18" Count="0" />

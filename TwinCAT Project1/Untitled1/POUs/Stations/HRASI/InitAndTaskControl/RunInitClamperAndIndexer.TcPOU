@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <POU Name="RunInitClamperAndIndexer" Id="{a648d874-3142-40b4-9333-4689f66f71a8}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunInitClamperAndIndexer EXTENDS RunUnitGeneric
+VAR_INPUT
+	indexer : POINTER TO RunPnueIndexer;
+	clampers : ARRAY[0..1] OF POINTER TO RunClamper;
+	aoi : POINTER TO RunAoiInspectionV1;
+	
+	//TODO , bridge initialze
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	nCounter : INT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[SUPER^();
+
+CASE outputState OF 
+	eSpecialStates.INITIAL_BEGIN:
+		bSerialTransition:=TRUE;
+		FOR nCounter:=0 TO 1 BY 1 DO
+			bSerialTransition := bSerialTransition AND clampers[nCounter]^.Initialize();
+		END_FOR
+		bSerialTransition := bSerialTransition AND aoi^.Initialize();
+	eSpecialStates.INITIAL_STATE_1:
+		bSerialTransition := indexer^.Initialize();
+		IF bSerialTransition THEN
+			NextState := eSpecialStates.INITIAL_END;
+		END_IF
+	//-----------------------
+	//	Working
+	//-----------------------
+	eSpecialStates.GENERIC_GROUP_START:
+		FOR nCounter:=0 TO 1 BY 1 DO
+			clampers[nCounter]^.NextState := eSpecialStates.GENERIC_GROUP_START;
+		END_FOR
+		aoi^.NextState := eSpecialStates.GENERIC_GROUP_START;
+		indexer^.NextState := eSpecialStates.GENERIC_GROUP_START;
+		bSerialTransition := TRUE; //into void state
+END_CASE]]></ST>
+    </Implementation>
+    <LineIds Name="RunInitClamperAndIndexer">
+      <LineId Id="13" Count="1" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="18" Count="9" />
+      <LineId Id="29" Count="3" />
+      <LineId Id="34" Count="1" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="36" Count="2" />
+      <LineId Id="16" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4022.16">
+<?xml version="1.0"?>
+<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4023.119">
 	<DataTypes>
 		<DataType>
 			<Name GUID="{18071995-0000-0000-0000-000000000035}" TcBaseType="true" HideType="true">UINTARR2</Name>
@@ -62,12 +62,10 @@
 			<SubItem>
 				<Name>nState4</Name>
 				<Type GUID="{18071995-0000-0000-0000-000000000002}">USINT</Type>
-				<Comment>
-					<![CDATA[Encoder Status 4 (automatically linked):
+				<Comment><![CDATA[Encoder Status 4 (automatically linked):
 0x01 (Bit 0) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (Bit 1) = IO data input toggle (e.g. EtherCAT 'InputToggle')
-]]>
-				</Comment>
+]]></Comment>
 				<BitSize>8</BitSize>
 				<BitOffs>88</BitOffs>
 			</SubItem>
@@ -272,15 +270,13 @@
 			<SubItem>
 				<Name>nState4</Name>
 				<Type GUID="{18071995-0000-0000-0000-000000000002}">USINT</Type>
-				<Comment>
-					<![CDATA[Drive Status 4 (automatically linked):
+				<Comment><![CDATA[Drive Status 4 (automatically linked):
 0x01 (0000 0001) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (0000 0010) = IO data input toggle (e.g. EtherCAT 'InputToggle')
 
 Drive Status 4 (manually linked):
 0x80 (1000 0000) = Fast axis stop (digital IO interrupt)
-]]>
-				</Comment>
+]]></Comment>
 				<BitSize>8</BitSize>
 				<BitOffs>88</BitOffs>
 			</SubItem>
@@ -1031,8 +1027,7 @@ Drive Status 4 (manually linked):
 			<SubItem>
 				<Name>AxisState</Name>
 				<Type GUID="{18071995-0000-0000-0000-000000000008}">UDINT</Type>
-				<Comment>
-					<![CDATA[Present State Of The Axis Movement (continuous axis):
+				<Comment><![CDATA[Present State Of The Axis Movement (continuous axis):
 0  = INACTIVE:		axis has no job
 1  = RUNNING:		axis is executing a motion job
 2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
@@ -1046,8 +1041,7 @@ Slaves only:
 External Setpoint Generation:
 41 = EXTSETGEN_MODE1:	external setpoint generation active
 42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-				</Comment>
+]]></Comment>
 				<BitSize>32</BitSize>
 				<BitOffs>64</BitOffs>
 			</SubItem>
@@ -1060,8 +1054,7 @@ External Setpoint Generation:
 			<SubItem>
 				<Name>HomingState</Name>
 				<Type GUID="{18071995-0000-0000-0000-000000000008}">UDINT</Type>
-				<Comment>
-					<![CDATA[Axis Homing Status:
+				<Comment><![CDATA[Axis Homing Status:
 0: idle
 1: start homing
 2: searching home switch
@@ -1069,22 +1062,19 @@ External Setpoint Generation:
 4: moving off home switch
 5: searching sync pulse
 6: stopping after homing
-]]>
-				</Comment>
+]]></Comment>
 				<BitSize>32</BitSize>
 				<BitOffs>128</BitOffs>
 			</SubItem>
 			<SubItem>
 				<Name>CoupleState</Name>
 				<Type GUID="{18071995-0000-0000-0000-000000000008}">UDINT</Type>
-				<Comment>
-					<![CDATA[Axis Coupling Status:
+				<Comment><![CDATA[Axis Coupling Status:
 0: axis is a single axis (not coupled)
 1: axis is a master axis
 2: axis is master and slave
 3: axis is a slave axis
-]]>
-				</Comment>
+]]></Comment>
 				<BitSize>32</BitSize>
 				<BitOffs>160</BitOffs>
 			</SubItem>
@@ -1310,13 +1300,13 @@ External Setpoint Generation:
 					<Type GUID="{F794B740-82D7-4637-848E-4F74A711D038}">NCAXLESTRUCT_TOPLC4</Type>
 				</Relation>
 				<Relation Priority="100">
-					<Type GUID="{40BD39B0-C3EA-4F74-9F4F-5F1982786F7C}"/>
+					<Type GUID="{40BD39B0-C3EA-4F74-9F4F-5F1982786F7C}"></Type>
 				</Relation>
 				<Relation Priority="100">
-					<Type GUID="{40BD39B2-C3EA-4F74-9F4F-5F1982786F7C}"/>
+					<Type GUID="{40BD39B2-C3EA-4F74-9F4F-5F1982786F7C}"></Type>
 				</Relation>
 				<Relation Priority="100">
-					<Type GUID="{8CDE0C45-AB9D-42DB-BC94-1CF7521AB268}"/>
+					<Type GUID="{8CDE0C45-AB9D-42DB-BC94-1CF7521AB268}"></Type>
 				</Relation>
 			</Relations>
 		</DataType>
@@ -1328,6 +1318,37 @@ External Setpoint Generation:
 				<LBound>1</LBound>
 				<Elements>4</Elements>
 			</ArrayInfo>
+		</DataType>
+		<DataType>
+			<Name GUID="{093D7F69-7F34-4B33-A94E-F0CEC813C01D}" AutoDeleteType="true">eCategrories</Name>
+			<BitSize>16</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000004}">WORD</BaseType>
+			<EnumInfo>
+				<Text><![CDATA[SELECTION_AXIS]]></Text>
+				<Enum>0</Enum>
+			</EnumInfo>
+			<EnumInfo>
+				<Text><![CDATA[SELECTION_CYLINDER]]></Text>
+				<Enum>1</Enum>
+			</EnumInfo>
+			<EnumInfo>
+				<Text><![CDATA[SELECTION_SIGNAL]]></Text>
+				<Enum>2</Enum>
+			</EnumInfo>
+			<EnumInfo>
+				<Text><![CDATA[SELECTION_COMMAND_BLOCK]]></Text>
+				<Enum>4</Enum>
+			</EnumInfo>
+			<EnumInfo>
+				<Text><![CDATA[SELECTION_UNIT]]></Text>
+				<Enum>5</Enum>
+			</EnumInfo>
+			<EnumInfo>
+				<Text><![CDATA[SELECTION_VACUUM]]></Text>
+				<Enum>6</Enum>
+				<Comment><![CDATA[-----------
+add 2019.11.30]]></Comment>
+			</EnumInfo>
 		</DataType>
 		<DataType>
 			<Name GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..2] OF BOOL</Name>
@@ -1365,7 +1386,7 @@ External Setpoint Generation:
 				<SvbTask Priority="8" CycleTime="100000" AmsPort="511">
 					<Name>NC-Task 1 SVB</Name>
 				</SvbTask>
-				<Axis CreateSymbols="true" AxisType="1" Id="2">
+				<Axis Id="2" CreateSymbols="true" AxisType="1">
 					<Name>Simu2</Name>
 					<AxisPara>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
@@ -1385,12 +1406,10 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Encoder Status 4 (automatically linked):
+									<Comment><![CDATA[Encoder Status 4 (automatically linked):
 0x01 (Bit 0) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (Bit 1) = IO data input toggle (e.g. EtherCAT 'InputToggle')
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -1455,15 +1474,13 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Drive Status 4 (automatically linked):
+									<Comment><![CDATA[Drive Status 4 (automatically linked):
 0x01 (0000 0001) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (0000 0010) = IO data input toggle (e.g. EtherCAT 'InputToggle')
 
 Drive Status 4 (manually linked):
 0x80 (1000 0000) = Fast axis stop (digital IO interrupt)
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -1493,23 +1510,19 @@ Drive Status 4 (manually linked):
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl2</Name>
-									<Comment>
-										<![CDATA[Digital Outputs Setpoint Generator:
+									<Comment><![CDATA[Digital Outputs Setpoint Generator:
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl3</Name>
-									<Comment>
-										<![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+									<Comment><![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
@@ -1545,8 +1558,7 @@ Drive Status 4 (manually linked):
 							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 							<SubVar>
 								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
+								<Comment><![CDATA[Present State Of The Axis Movement (continuous axis):
 0  = INACTIVE:		axis has no job
 1  = RUNNING:		axis is executing a motion job
 2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
@@ -1560,13 +1572,11 @@ Slaves only:
 External Setpoint Generation:
 41 = EXTSETGEN_MODE1:	external setpoint generation active
 42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
+								<Comment><![CDATA[Axis Homing Status:
 0: idle
 1: start homing
 2: searching home switch
@@ -1574,24 +1584,21 @@ External Setpoint Generation:
 4: moving off home switch
 5: searching sync pulse
 6: stopping after homing
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
+								<Comment><![CDATA[Axis Coupling Status:
 0: axis is a single axis (not coupled)
 1: axis is a master axis
 2: axis is master and slave
 3: axis is a slave axis
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis CreateSymbols="true" AxisType="1" Id="3">
+				<Axis Id="3" CreateSymbols="true" AxisType="1">
 					<Name>Simu3</Name>
 					<AxisPara>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
@@ -1612,12 +1619,10 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Encoder Status 4 (automatically linked):
+									<Comment><![CDATA[Encoder Status 4 (automatically linked):
 0x01 (Bit 0) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (Bit 1) = IO data input toggle (e.g. EtherCAT 'InputToggle')
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -1682,15 +1687,13 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Drive Status 4 (automatically linked):
+									<Comment><![CDATA[Drive Status 4 (automatically linked):
 0x01 (0000 0001) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (0000 0010) = IO data input toggle (e.g. EtherCAT 'InputToggle')
 
 Drive Status 4 (manually linked):
 0x80 (1000 0000) = Fast axis stop (digital IO interrupt)
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -1720,23 +1723,19 @@ Drive Status 4 (manually linked):
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl2</Name>
-									<Comment>
-										<![CDATA[Digital Outputs Setpoint Generator:
+									<Comment><![CDATA[Digital Outputs Setpoint Generator:
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl3</Name>
-									<Comment>
-										<![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+									<Comment><![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
@@ -1774,8 +1773,7 @@ Drive Status 4 (manually linked):
 							<BitOffs>2688</BitOffs>
 							<SubVar>
 								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
+								<Comment><![CDATA[Present State Of The Axis Movement (continuous axis):
 0  = INACTIVE:		axis has no job
 1  = RUNNING:		axis is executing a motion job
 2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
@@ -1789,13 +1787,11 @@ Slaves only:
 External Setpoint Generation:
 41 = EXTSETGEN_MODE1:	external setpoint generation active
 42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
+								<Comment><![CDATA[Axis Homing Status:
 0: idle
 1: start homing
 2: searching home switch
@@ -1803,24 +1799,21 @@ External Setpoint Generation:
 4: moving off home switch
 5: searching sync pulse
 6: stopping after homing
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
+								<Comment><![CDATA[Axis Coupling Status:
 0: axis is a single axis (not coupled)
 1: axis is a master axis
 2: axis is master and slave
 3: axis is a slave axis
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis CreateSymbols="true" AxisType="1" Id="4">
+				<Axis Id="4" CreateSymbols="true" AxisType="1">
 					<Name>Simu4</Name>
 					<AxisPara>
 						<Dynamic AccelerationMaximum="3500" DecelerationMaximum="3500" Acceleration="3500" Deceleration="3500"/>
@@ -1843,12 +1836,10 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Encoder Status 4 (automatically linked):
+									<Comment><![CDATA[Encoder Status 4 (automatically linked):
 0x01 (Bit 0) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (Bit 1) = IO data input toggle (e.g. EtherCAT 'InputToggle')
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -1913,15 +1904,13 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Drive Status 4 (automatically linked):
+									<Comment><![CDATA[Drive Status 4 (automatically linked):
 0x01 (0000 0001) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (0000 0010) = IO data input toggle (e.g. EtherCAT 'InputToggle')
 
 Drive Status 4 (manually linked):
 0x80 (1000 0000) = Fast axis stop (digital IO interrupt)
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -1951,23 +1940,19 @@ Drive Status 4 (manually linked):
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl2</Name>
-									<Comment>
-										<![CDATA[Digital Outputs Setpoint Generator:
+									<Comment><![CDATA[Digital Outputs Setpoint Generator:
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl3</Name>
-									<Comment>
-										<![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+									<Comment><![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
@@ -2006,8 +1991,7 @@ Drive Status 4 (manually linked):
 							<BitOffs>5376</BitOffs>
 							<SubVar>
 								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
+								<Comment><![CDATA[Present State Of The Axis Movement (continuous axis):
 0  = INACTIVE:		axis has no job
 1  = RUNNING:		axis is executing a motion job
 2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
@@ -2021,13 +2005,11 @@ Slaves only:
 External Setpoint Generation:
 41 = EXTSETGEN_MODE1:	external setpoint generation active
 42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
+								<Comment><![CDATA[Axis Homing Status:
 0: idle
 1: start homing
 2: searching home switch
@@ -2035,24 +2017,21 @@ External Setpoint Generation:
 4: moving off home switch
 5: searching sync pulse
 6: stopping after homing
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
+								<Comment><![CDATA[Axis Coupling Status:
 0: axis is a single axis (not coupled)
 1: axis is a master axis
 2: axis is master and slave
 3: axis is a slave axis
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis CreateSymbols="true" AxisType="1" Id="5">
+				<Axis Id="5" CreateSymbols="true" AxisType="1">
 					<Name>Simu5</Name>
 					<AxisPara>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
@@ -2073,12 +2052,10 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Encoder Status 4 (automatically linked):
+									<Comment><![CDATA[Encoder Status 4 (automatically linked):
 0x01 (Bit 0) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (Bit 1) = IO data input toggle (e.g. EtherCAT 'InputToggle')
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -2143,15 +2120,13 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Drive Status 4 (automatically linked):
+									<Comment><![CDATA[Drive Status 4 (automatically linked):
 0x01 (0000 0001) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (0000 0010) = IO data input toggle (e.g. EtherCAT 'InputToggle')
 
 Drive Status 4 (manually linked):
 0x80 (1000 0000) = Fast axis stop (digital IO interrupt)
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -2181,23 +2156,19 @@ Drive Status 4 (manually linked):
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl2</Name>
-									<Comment>
-										<![CDATA[Digital Outputs Setpoint Generator:
+									<Comment><![CDATA[Digital Outputs Setpoint Generator:
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl3</Name>
-									<Comment>
-										<![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+									<Comment><![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
@@ -2235,8 +2206,7 @@ Drive Status 4 (manually linked):
 							<BitOffs>8064</BitOffs>
 							<SubVar>
 								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
+								<Comment><![CDATA[Present State Of The Axis Movement (continuous axis):
 0  = INACTIVE:		axis has no job
 1  = RUNNING:		axis is executing a motion job
 2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
@@ -2250,13 +2220,11 @@ Slaves only:
 External Setpoint Generation:
 41 = EXTSETGEN_MODE1:	external setpoint generation active
 42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
+								<Comment><![CDATA[Axis Homing Status:
 0: idle
 1: start homing
 2: searching home switch
@@ -2264,24 +2232,21 @@ External Setpoint Generation:
 4: moving off home switch
 5: searching sync pulse
 6: stopping after homing
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
+								<Comment><![CDATA[Axis Coupling Status:
 0: axis is a single axis (not coupled)
 1: axis is a master axis
 2: axis is master and slave
 3: axis is a slave axis
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis CreateSymbols="true" AxisType="1" Id="7">
+				<Axis Id="7" CreateSymbols="true" AxisType="1">
 					<Name>Simu6</Name>
 					<AxisPara>
 						<Dynamic Acceleration="12937.5" Deceleration="12937.5" Jerk="38812.5"/>
@@ -2304,12 +2269,10 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Encoder Status 4 (automatically linked):
+									<Comment><![CDATA[Encoder Status 4 (automatically linked):
 0x01 (Bit 0) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (Bit 1) = IO data input toggle (e.g. EtherCAT 'InputToggle')
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -2374,15 +2337,13 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Drive Status 4 (automatically linked):
+									<Comment><![CDATA[Drive Status 4 (automatically linked):
 0x01 (0000 0001) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (0000 0010) = IO data input toggle (e.g. EtherCAT 'InputToggle')
 
 Drive Status 4 (manually linked):
 0x80 (1000 0000) = Fast axis stop (digital IO interrupt)
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -2412,23 +2373,19 @@ Drive Status 4 (manually linked):
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl2</Name>
-									<Comment>
-										<![CDATA[Digital Outputs Setpoint Generator:
+									<Comment><![CDATA[Digital Outputs Setpoint Generator:
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl3</Name>
-									<Comment>
-										<![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+									<Comment><![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
@@ -2468,8 +2425,7 @@ Drive Status 4 (manually linked):
 							<BitOffs>10752</BitOffs>
 							<SubVar>
 								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
+								<Comment><![CDATA[Present State Of The Axis Movement (continuous axis):
 0  = INACTIVE:		axis has no job
 1  = RUNNING:		axis is executing a motion job
 2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
@@ -2483,13 +2439,11 @@ Slaves only:
 External Setpoint Generation:
 41 = EXTSETGEN_MODE1:	external setpoint generation active
 42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
+								<Comment><![CDATA[Axis Homing Status:
 0: idle
 1: start homing
 2: searching home switch
@@ -2497,24 +2451,21 @@ External Setpoint Generation:
 4: moving off home switch
 5: searching sync pulse
 6: stopping after homing
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
+								<Comment><![CDATA[Axis Coupling Status:
 0: axis is a single axis (not coupled)
 1: axis is a master axis
 2: axis is master and slave
 3: axis is a slave axis
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis CreateSymbols="true" AxisType="1" Id="1">
+				<Axis Id="1" CreateSymbols="true" AxisType="1">
 					<Name>Simu1</Name>
 					<AxisPara>
 						<Dynamic AccelerationMaximum="30000" DecelerationMaximum="30000" Jerk="40000"/>
@@ -2538,12 +2489,10 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Encoder Status 4 (automatically linked):
+									<Comment><![CDATA[Encoder Status 4 (automatically linked):
 0x01 (Bit 0) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (Bit 1) = IO data input toggle (e.g. EtherCAT 'InputToggle')
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -2608,15 +2557,13 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Drive Status 4 (automatically linked):
+									<Comment><![CDATA[Drive Status 4 (automatically linked):
 0x01 (0000 0001) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (0000 0010) = IO data input toggle (e.g. EtherCAT 'InputToggle')
 
 Drive Status 4 (manually linked):
 0x80 (1000 0000) = Fast axis stop (digital IO interrupt)
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -2646,23 +2593,19 @@ Drive Status 4 (manually linked):
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl2</Name>
-									<Comment>
-										<![CDATA[Digital Outputs Setpoint Generator:
+									<Comment><![CDATA[Digital Outputs Setpoint Generator:
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl3</Name>
-									<Comment>
-										<![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+									<Comment><![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
@@ -2700,8 +2643,7 @@ Drive Status 4 (manually linked):
 							<BitOffs>13440</BitOffs>
 							<SubVar>
 								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
+								<Comment><![CDATA[Present State Of The Axis Movement (continuous axis):
 0  = INACTIVE:		axis has no job
 1  = RUNNING:		axis is executing a motion job
 2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
@@ -2715,13 +2657,11 @@ Slaves only:
 External Setpoint Generation:
 41 = EXTSETGEN_MODE1:	external setpoint generation active
 42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
+								<Comment><![CDATA[Axis Homing Status:
 0: idle
 1: start homing
 2: searching home switch
@@ -2729,24 +2669,21 @@ External Setpoint Generation:
 4: moving off home switch
 5: searching sync pulse
 6: stopping after homing
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
+								<Comment><![CDATA[Axis Coupling Status:
 0: axis is a single axis (not coupled)
 1: axis is a master axis
 2: axis is master and slave
 3: axis is a slave axis
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis CreateSymbols="true" AxisType="1" Id="6">
+				<Axis Id="6" CreateSymbols="true" AxisType="1">
 					<Name>Simu7</Name>
 					<AxisPara>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
@@ -2766,12 +2703,10 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Encoder Status 4 (automatically linked):
+									<Comment><![CDATA[Encoder Status 4 (automatically linked):
 0x01 (Bit 0) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (Bit 1) = IO data input toggle (e.g. EtherCAT 'InputToggle')
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -2820,6 +2755,7 @@ External Setpoint Generation:
 					<Drive Name="Drive" DrvType="5">
 						<DrvPara>
 							<Analog ScaleFactorActTorque="0.1"/>
+							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
@@ -2835,15 +2771,13 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Drive Status 4 (automatically linked):
+									<Comment><![CDATA[Drive Status 4 (automatically linked):
 0x01 (0000 0001) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (0000 0010) = IO data input toggle (e.g. EtherCAT 'InputToggle')
 
 Drive Status 4 (manually linked):
 0x80 (1000 0000) = Fast axis stop (digital IO interrupt)
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -2873,23 +2807,19 @@ Drive Status 4 (manually linked):
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl2</Name>
-									<Comment>
-										<![CDATA[Digital Outputs Setpoint Generator:
+									<Comment><![CDATA[Digital Outputs Setpoint Generator:
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl3</Name>
-									<Comment>
-										<![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+									<Comment><![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
@@ -2927,8 +2857,7 @@ Drive Status 4 (manually linked):
 							<BitOffs>16128</BitOffs>
 							<SubVar>
 								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
+								<Comment><![CDATA[Present State Of The Axis Movement (continuous axis):
 0  = INACTIVE:		axis has no job
 1  = RUNNING:		axis is executing a motion job
 2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
@@ -2942,13 +2871,11 @@ Slaves only:
 External Setpoint Generation:
 41 = EXTSETGEN_MODE1:	external setpoint generation active
 42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
+								<Comment><![CDATA[Axis Homing Status:
 0: idle
 1: start homing
 2: searching home switch
@@ -2956,24 +2883,21 @@ External Setpoint Generation:
 4: moving off home switch
 5: searching sync pulse
 6: stopping after homing
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
+								<Comment><![CDATA[Axis Coupling Status:
 0: axis is a single axis (not coupled)
 1: axis is a master axis
 2: axis is master and slave
 3: axis is a slave axis
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis CreateSymbols="true" AxisType="1" Id="8">
+				<Axis Id="8" CreateSymbols="true" AxisType="1">
 					<Name>Simu8</Name>
 					<AxisPara>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
@@ -2993,12 +2917,10 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Encoder Status 4 (automatically linked):
+									<Comment><![CDATA[Encoder Status 4 (automatically linked):
 0x01 (Bit 0) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (Bit 1) = IO data input toggle (e.g. EtherCAT 'InputToggle')
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -3047,6 +2969,7 @@ External Setpoint Generation:
 					<Drive Name="Drive" DrvType="5">
 						<DrvPara>
 							<Analog ScaleFactorActTorque="0.1"/>
+							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
@@ -3062,15 +2985,13 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Drive Status 4 (automatically linked):
+									<Comment><![CDATA[Drive Status 4 (automatically linked):
 0x01 (0000 0001) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (0000 0010) = IO data input toggle (e.g. EtherCAT 'InputToggle')
 
 Drive Status 4 (manually linked):
 0x80 (1000 0000) = Fast axis stop (digital IO interrupt)
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -3100,23 +3021,19 @@ Drive Status 4 (manually linked):
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl2</Name>
-									<Comment>
-										<![CDATA[Digital Outputs Setpoint Generator:
+									<Comment><![CDATA[Digital Outputs Setpoint Generator:
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl3</Name>
-									<Comment>
-										<![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+									<Comment><![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
@@ -3154,8 +3071,7 @@ Drive Status 4 (manually linked):
 							<BitOffs>18816</BitOffs>
 							<SubVar>
 								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
+								<Comment><![CDATA[Present State Of The Axis Movement (continuous axis):
 0  = INACTIVE:		axis has no job
 1  = RUNNING:		axis is executing a motion job
 2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
@@ -3169,13 +3085,11 @@ Slaves only:
 External Setpoint Generation:
 41 = EXTSETGEN_MODE1:	external setpoint generation active
 42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
+								<Comment><![CDATA[Axis Homing Status:
 0: idle
 1: start homing
 2: searching home switch
@@ -3183,24 +3097,21 @@ External Setpoint Generation:
 4: moving off home switch
 5: searching sync pulse
 6: stopping after homing
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
+								<Comment><![CDATA[Axis Coupling Status:
 0: axis is a single axis (not coupled)
 1: axis is a master axis
 2: axis is master and slave
 3: axis is a slave axis
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis CreateSymbols="true" AxisType="1" Id="9">
+				<Axis Id="9" CreateSymbols="true" AxisType="1">
 					<Name>Simu9</Name>
 					<AxisPara>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
@@ -3220,12 +3131,10 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Encoder Status 4 (automatically linked):
+									<Comment><![CDATA[Encoder Status 4 (automatically linked):
 0x01 (Bit 0) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (Bit 1) = IO data input toggle (e.g. EtherCAT 'InputToggle')
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -3274,6 +3183,7 @@ External Setpoint Generation:
 					<Drive Name="Drive" DrvType="5">
 						<DrvPara>
 							<Analog ScaleFactorActTorque="0.1"/>
+							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
@@ -3289,15 +3199,13 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Drive Status 4 (automatically linked):
+									<Comment><![CDATA[Drive Status 4 (automatically linked):
 0x01 (0000 0001) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (0000 0010) = IO data input toggle (e.g. EtherCAT 'InputToggle')
 
 Drive Status 4 (manually linked):
 0x80 (1000 0000) = Fast axis stop (digital IO interrupt)
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -3327,23 +3235,19 @@ Drive Status 4 (manually linked):
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl2</Name>
-									<Comment>
-										<![CDATA[Digital Outputs Setpoint Generator:
+									<Comment><![CDATA[Digital Outputs Setpoint Generator:
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl3</Name>
-									<Comment>
-										<![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+									<Comment><![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
@@ -3381,8 +3285,7 @@ Drive Status 4 (manually linked):
 							<BitOffs>21504</BitOffs>
 							<SubVar>
 								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
+								<Comment><![CDATA[Present State Of The Axis Movement (continuous axis):
 0  = INACTIVE:		axis has no job
 1  = RUNNING:		axis is executing a motion job
 2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
@@ -3396,13 +3299,11 @@ Slaves only:
 External Setpoint Generation:
 41 = EXTSETGEN_MODE1:	external setpoint generation active
 42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
+								<Comment><![CDATA[Axis Homing Status:
 0: idle
 1: start homing
 2: searching home switch
@@ -3410,24 +3311,21 @@ External Setpoint Generation:
 4: moving off home switch
 5: searching sync pulse
 6: stopping after homing
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
+								<Comment><![CDATA[Axis Coupling Status:
 0: axis is a single axis (not coupled)
 1: axis is a master axis
 2: axis is master and slave
 3: axis is a slave axis
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis CreateSymbols="true" AxisType="1" Id="10">
+				<Axis Id="10" CreateSymbols="true" AxisType="1">
 					<Name>Simu10</Name>
 					<AxisPara>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
@@ -3447,12 +3345,10 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Encoder Status 4 (automatically linked):
+									<Comment><![CDATA[Encoder Status 4 (automatically linked):
 0x01 (Bit 0) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (Bit 1) = IO data input toggle (e.g. EtherCAT 'InputToggle')
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -3501,6 +3397,7 @@ External Setpoint Generation:
 					<Drive Name="Drive" DrvType="5">
 						<DrvPara>
 							<Analog ScaleFactorActTorque="0.1"/>
+							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
@@ -3516,15 +3413,13 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Drive Status 4 (automatically linked):
+									<Comment><![CDATA[Drive Status 4 (automatically linked):
 0x01 (0000 0001) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (0000 0010) = IO data input toggle (e.g. EtherCAT 'InputToggle')
 
 Drive Status 4 (manually linked):
 0x80 (1000 0000) = Fast axis stop (digital IO interrupt)
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -3554,23 +3449,19 @@ Drive Status 4 (manually linked):
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl2</Name>
-									<Comment>
-										<![CDATA[Digital Outputs Setpoint Generator:
+									<Comment><![CDATA[Digital Outputs Setpoint Generator:
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl3</Name>
-									<Comment>
-										<![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+									<Comment><![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
@@ -3608,8 +3499,7 @@ Drive Status 4 (manually linked):
 							<BitOffs>24192</BitOffs>
 							<SubVar>
 								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
+								<Comment><![CDATA[Present State Of The Axis Movement (continuous axis):
 0  = INACTIVE:		axis has no job
 1  = RUNNING:		axis is executing a motion job
 2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
@@ -3623,13 +3513,11 @@ Slaves only:
 External Setpoint Generation:
 41 = EXTSETGEN_MODE1:	external setpoint generation active
 42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
+								<Comment><![CDATA[Axis Homing Status:
 0: idle
 1: start homing
 2: searching home switch
@@ -3637,24 +3525,21 @@ External Setpoint Generation:
 4: moving off home switch
 5: searching sync pulse
 6: stopping after homing
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
+								<Comment><![CDATA[Axis Coupling Status:
 0: axis is a single axis (not coupled)
 1: axis is a master axis
 2: axis is master and slave
 3: axis is a slave axis
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis CreateSymbols="true" AxisType="1" Id="11">
+				<Axis Id="11" CreateSymbols="true" AxisType="1">
 					<Name>Simu11</Name>
 					<AxisPara>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
@@ -3674,12 +3559,10 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Encoder Status 4 (automatically linked):
+									<Comment><![CDATA[Encoder Status 4 (automatically linked):
 0x01 (Bit 0) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (Bit 1) = IO data input toggle (e.g. EtherCAT 'InputToggle')
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -3728,6 +3611,7 @@ External Setpoint Generation:
 					<Drive Name="Drive" DrvType="5">
 						<DrvPara>
 							<Analog ScaleFactorActTorque="0.1"/>
+							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
@@ -3743,15 +3627,13 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Drive Status 4 (automatically linked):
+									<Comment><![CDATA[Drive Status 4 (automatically linked):
 0x01 (0000 0001) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (0000 0010) = IO data input toggle (e.g. EtherCAT 'InputToggle')
 
 Drive Status 4 (manually linked):
 0x80 (1000 0000) = Fast axis stop (digital IO interrupt)
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -3781,23 +3663,19 @@ Drive Status 4 (manually linked):
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl2</Name>
-									<Comment>
-										<![CDATA[Digital Outputs Setpoint Generator:
+									<Comment><![CDATA[Digital Outputs Setpoint Generator:
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl3</Name>
-									<Comment>
-										<![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+									<Comment><![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
@@ -3835,8 +3713,7 @@ Drive Status 4 (manually linked):
 							<BitOffs>26880</BitOffs>
 							<SubVar>
 								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
+								<Comment><![CDATA[Present State Of The Axis Movement (continuous axis):
 0  = INACTIVE:		axis has no job
 1  = RUNNING:		axis is executing a motion job
 2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
@@ -3850,13 +3727,11 @@ Slaves only:
 External Setpoint Generation:
 41 = EXTSETGEN_MODE1:	external setpoint generation active
 42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
+								<Comment><![CDATA[Axis Homing Status:
 0: idle
 1: start homing
 2: searching home switch
@@ -3864,24 +3739,21 @@ External Setpoint Generation:
 4: moving off home switch
 5: searching sync pulse
 6: stopping after homing
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
+								<Comment><![CDATA[Axis Coupling Status:
 0: axis is a single axis (not coupled)
 1: axis is a master axis
 2: axis is master and slave
 3: axis is a slave axis
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis CreateSymbols="true" AxisType="1" Id="12">
+				<Axis Id="12" CreateSymbols="true" AxisType="1">
 					<Name>Simu12</Name>
 					<AxisPara>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
@@ -3901,12 +3773,10 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Encoder Status 4 (automatically linked):
+									<Comment><![CDATA[Encoder Status 4 (automatically linked):
 0x01 (Bit 0) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (Bit 1) = IO data input toggle (e.g. EtherCAT 'InputToggle')
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -3955,6 +3825,7 @@ External Setpoint Generation:
 					<Drive Name="Drive" DrvType="5">
 						<DrvPara>
 							<Analog ScaleFactorActTorque="0.1"/>
+							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
@@ -3970,15 +3841,13 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Drive Status 4 (automatically linked):
+									<Comment><![CDATA[Drive Status 4 (automatically linked):
 0x01 (0000 0001) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (0000 0010) = IO data input toggle (e.g. EtherCAT 'InputToggle')
 
 Drive Status 4 (manually linked):
 0x80 (1000 0000) = Fast axis stop (digital IO interrupt)
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -4008,23 +3877,19 @@ Drive Status 4 (manually linked):
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl2</Name>
-									<Comment>
-										<![CDATA[Digital Outputs Setpoint Generator:
+									<Comment><![CDATA[Digital Outputs Setpoint Generator:
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl3</Name>
-									<Comment>
-										<![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+									<Comment><![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
@@ -4062,8 +3927,7 @@ Drive Status 4 (manually linked):
 							<BitOffs>29568</BitOffs>
 							<SubVar>
 								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
+								<Comment><![CDATA[Present State Of The Axis Movement (continuous axis):
 0  = INACTIVE:		axis has no job
 1  = RUNNING:		axis is executing a motion job
 2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
@@ -4077,13 +3941,11 @@ Slaves only:
 External Setpoint Generation:
 41 = EXTSETGEN_MODE1:	external setpoint generation active
 42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
+								<Comment><![CDATA[Axis Homing Status:
 0: idle
 1: start homing
 2: searching home switch
@@ -4091,24 +3953,21 @@ External Setpoint Generation:
 4: moving off home switch
 5: searching sync pulse
 6: stopping after homing
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
+								<Comment><![CDATA[Axis Coupling Status:
 0: axis is a single axis (not coupled)
 1: axis is a master axis
 2: axis is master and slave
 3: axis is a slave axis
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis CreateSymbols="true" AxisType="1" Id="13">
+				<Axis Id="13" CreateSymbols="true" AxisType="1">
 					<Name>Simu13</Name>
 					<AxisPara>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
@@ -4128,12 +3987,10 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Encoder Status 4 (automatically linked):
+									<Comment><![CDATA[Encoder Status 4 (automatically linked):
 0x01 (Bit 0) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (Bit 1) = IO data input toggle (e.g. EtherCAT 'InputToggle')
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -4182,6 +4039,7 @@ External Setpoint Generation:
 					<Drive Name="Drive" DrvType="5">
 						<DrvPara>
 							<Analog ScaleFactorActTorque="0.1"/>
+							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
@@ -4197,15 +4055,13 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Drive Status 4 (automatically linked):
+									<Comment><![CDATA[Drive Status 4 (automatically linked):
 0x01 (0000 0001) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (0000 0010) = IO data input toggle (e.g. EtherCAT 'InputToggle')
 
 Drive Status 4 (manually linked):
 0x80 (1000 0000) = Fast axis stop (digital IO interrupt)
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -4235,23 +4091,19 @@ Drive Status 4 (manually linked):
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl2</Name>
-									<Comment>
-										<![CDATA[Digital Outputs Setpoint Generator:
+									<Comment><![CDATA[Digital Outputs Setpoint Generator:
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl3</Name>
-									<Comment>
-										<![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+									<Comment><![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
@@ -4289,8 +4141,7 @@ Drive Status 4 (manually linked):
 							<BitOffs>32256</BitOffs>
 							<SubVar>
 								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
+								<Comment><![CDATA[Present State Of The Axis Movement (continuous axis):
 0  = INACTIVE:		axis has no job
 1  = RUNNING:		axis is executing a motion job
 2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
@@ -4304,13 +4155,11 @@ Slaves only:
 External Setpoint Generation:
 41 = EXTSETGEN_MODE1:	external setpoint generation active
 42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
+								<Comment><![CDATA[Axis Homing Status:
 0: idle
 1: start homing
 2: searching home switch
@@ -4318,24 +4167,21 @@ External Setpoint Generation:
 4: moving off home switch
 5: searching sync pulse
 6: stopping after homing
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
+								<Comment><![CDATA[Axis Coupling Status:
 0: axis is a single axis (not coupled)
 1: axis is a master axis
 2: axis is master and slave
 3: axis is a slave axis
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis CreateSymbols="true" AxisType="1" Id="14">
+				<Axis Id="14" CreateSymbols="true" AxisType="1">
 					<Name>Simu14</Name>
 					<AxisPara>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
@@ -4355,12 +4201,10 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Encoder Status 4 (automatically linked):
+									<Comment><![CDATA[Encoder Status 4 (automatically linked):
 0x01 (Bit 0) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (Bit 1) = IO data input toggle (e.g. EtherCAT 'InputToggle')
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -4409,6 +4253,7 @@ External Setpoint Generation:
 					<Drive Name="Drive" DrvType="5">
 						<DrvPara>
 							<Analog ScaleFactorActTorque="0.1"/>
+							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
@@ -4424,15 +4269,13 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Drive Status 4 (automatically linked):
+									<Comment><![CDATA[Drive Status 4 (automatically linked):
 0x01 (0000 0001) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (0000 0010) = IO data input toggle (e.g. EtherCAT 'InputToggle')
 
 Drive Status 4 (manually linked):
 0x80 (1000 0000) = Fast axis stop (digital IO interrupt)
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -4462,23 +4305,19 @@ Drive Status 4 (manually linked):
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl2</Name>
-									<Comment>
-										<![CDATA[Digital Outputs Setpoint Generator:
+									<Comment><![CDATA[Digital Outputs Setpoint Generator:
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl3</Name>
-									<Comment>
-										<![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+									<Comment><![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
@@ -4516,8 +4355,7 @@ Drive Status 4 (manually linked):
 							<BitOffs>34944</BitOffs>
 							<SubVar>
 								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
+								<Comment><![CDATA[Present State Of The Axis Movement (continuous axis):
 0  = INACTIVE:		axis has no job
 1  = RUNNING:		axis is executing a motion job
 2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
@@ -4531,13 +4369,11 @@ Slaves only:
 External Setpoint Generation:
 41 = EXTSETGEN_MODE1:	external setpoint generation active
 42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
+								<Comment><![CDATA[Axis Homing Status:
 0: idle
 1: start homing
 2: searching home switch
@@ -4545,24 +4381,21 @@ External Setpoint Generation:
 4: moving off home switch
 5: searching sync pulse
 6: stopping after homing
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
+								<Comment><![CDATA[Axis Coupling Status:
 0: axis is a single axis (not coupled)
 1: axis is a master axis
 2: axis is master and slave
 3: axis is a slave axis
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis CreateSymbols="true" AxisType="1" Id="15">
+				<Axis Id="15" CreateSymbols="true" AxisType="1">
 					<Name>Simu15</Name>
 					<AxisPara>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
@@ -4582,12 +4415,10 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Encoder Status 4 (automatically linked):
+									<Comment><![CDATA[Encoder Status 4 (automatically linked):
 0x01 (Bit 0) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (Bit 1) = IO data input toggle (e.g. EtherCAT 'InputToggle')
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -4636,6 +4467,7 @@ External Setpoint Generation:
 					<Drive Name="Drive" DrvType="5">
 						<DrvPara>
 							<Analog ScaleFactorActTorque="0.1"/>
+							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
@@ -4651,15 +4483,13 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Drive Status 4 (automatically linked):
+									<Comment><![CDATA[Drive Status 4 (automatically linked):
 0x01 (0000 0001) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (0000 0010) = IO data input toggle (e.g. EtherCAT 'InputToggle')
 
 Drive Status 4 (manually linked):
 0x80 (1000 0000) = Fast axis stop (digital IO interrupt)
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -4689,23 +4519,19 @@ Drive Status 4 (manually linked):
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl2</Name>
-									<Comment>
-										<![CDATA[Digital Outputs Setpoint Generator:
+									<Comment><![CDATA[Digital Outputs Setpoint Generator:
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl3</Name>
-									<Comment>
-										<![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+									<Comment><![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
@@ -4743,8 +4569,7 @@ Drive Status 4 (manually linked):
 							<BitOffs>37632</BitOffs>
 							<SubVar>
 								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
+								<Comment><![CDATA[Present State Of The Axis Movement (continuous axis):
 0  = INACTIVE:		axis has no job
 1  = RUNNING:		axis is executing a motion job
 2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
@@ -4758,13 +4583,11 @@ Slaves only:
 External Setpoint Generation:
 41 = EXTSETGEN_MODE1:	external setpoint generation active
 42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
+								<Comment><![CDATA[Axis Homing Status:
 0: idle
 1: start homing
 2: searching home switch
@@ -4772,24 +4595,21 @@ External Setpoint Generation:
 4: moving off home switch
 5: searching sync pulse
 6: stopping after homing
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
+								<Comment><![CDATA[Axis Coupling Status:
 0: axis is a single axis (not coupled)
 1: axis is a master axis
 2: axis is master and slave
 3: axis is a slave axis
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis CreateSymbols="true" AxisType="1" Id="16">
+				<Axis Id="16" CreateSymbols="true" AxisType="1">
 					<Name>Simu16</Name>
 					<AxisPara>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
@@ -4809,12 +4629,10 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Encoder Status 4 (automatically linked):
+									<Comment><![CDATA[Encoder Status 4 (automatically linked):
 0x01 (Bit 0) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (Bit 1) = IO data input toggle (e.g. EtherCAT 'InputToggle')
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -4863,6 +4681,7 @@ External Setpoint Generation:
 					<Drive Name="Drive" DrvType="5">
 						<DrvPara>
 							<Analog ScaleFactorActTorque="0.1"/>
+							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
@@ -4878,15 +4697,13 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Drive Status 4 (automatically linked):
+									<Comment><![CDATA[Drive Status 4 (automatically linked):
 0x01 (0000 0001) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (0000 0010) = IO data input toggle (e.g. EtherCAT 'InputToggle')
 
 Drive Status 4 (manually linked):
 0x80 (1000 0000) = Fast axis stop (digital IO interrupt)
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -4916,23 +4733,19 @@ Drive Status 4 (manually linked):
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl2</Name>
-									<Comment>
-										<![CDATA[Digital Outputs Setpoint Generator:
+									<Comment><![CDATA[Digital Outputs Setpoint Generator:
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl3</Name>
-									<Comment>
-										<![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+									<Comment><![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
@@ -4970,8 +4783,7 @@ Drive Status 4 (manually linked):
 							<BitOffs>40320</BitOffs>
 							<SubVar>
 								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
+								<Comment><![CDATA[Present State Of The Axis Movement (continuous axis):
 0  = INACTIVE:		axis has no job
 1  = RUNNING:		axis is executing a motion job
 2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
@@ -4985,13 +4797,11 @@ Slaves only:
 External Setpoint Generation:
 41 = EXTSETGEN_MODE1:	external setpoint generation active
 42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
+								<Comment><![CDATA[Axis Homing Status:
 0: idle
 1: start homing
 2: searching home switch
@@ -4999,24 +4809,21 @@ External Setpoint Generation:
 4: moving off home switch
 5: searching sync pulse
 6: stopping after homing
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
+								<Comment><![CDATA[Axis Coupling Status:
 0: axis is a single axis (not coupled)
 1: axis is a master axis
 2: axis is master and slave
 3: axis is a slave axis
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis CreateSymbols="true" AxisType="1" Id="17">
+				<Axis Id="17" CreateSymbols="true" AxisType="1">
 					<Name>Simu17</Name>
 					<AxisPara>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
@@ -5036,12 +4843,10 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Encoder Status 4 (automatically linked):
+									<Comment><![CDATA[Encoder Status 4 (automatically linked):
 0x01 (Bit 0) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (Bit 1) = IO data input toggle (e.g. EtherCAT 'InputToggle')
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -5090,6 +4895,7 @@ External Setpoint Generation:
 					<Drive Name="Drive" DrvType="5">
 						<DrvPara>
 							<Analog ScaleFactorActTorque="0.1"/>
+							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
@@ -5105,15 +4911,13 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Drive Status 4 (automatically linked):
+									<Comment><![CDATA[Drive Status 4 (automatically linked):
 0x01 (0000 0001) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (0000 0010) = IO data input toggle (e.g. EtherCAT 'InputToggle')
 
 Drive Status 4 (manually linked):
 0x80 (1000 0000) = Fast axis stop (digital IO interrupt)
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -5143,23 +4947,19 @@ Drive Status 4 (manually linked):
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl2</Name>
-									<Comment>
-										<![CDATA[Digital Outputs Setpoint Generator:
+									<Comment><![CDATA[Digital Outputs Setpoint Generator:
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl3</Name>
-									<Comment>
-										<![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+									<Comment><![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
@@ -5197,8 +4997,7 @@ Drive Status 4 (manually linked):
 							<BitOffs>43008</BitOffs>
 							<SubVar>
 								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
+								<Comment><![CDATA[Present State Of The Axis Movement (continuous axis):
 0  = INACTIVE:		axis has no job
 1  = RUNNING:		axis is executing a motion job
 2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
@@ -5212,13 +5011,11 @@ Slaves only:
 External Setpoint Generation:
 41 = EXTSETGEN_MODE1:	external setpoint generation active
 42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
+								<Comment><![CDATA[Axis Homing Status:
 0: idle
 1: start homing
 2: searching home switch
@@ -5226,24 +5023,21 @@ External Setpoint Generation:
 4: moving off home switch
 5: searching sync pulse
 6: stopping after homing
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
+								<Comment><![CDATA[Axis Coupling Status:
 0: axis is a single axis (not coupled)
 1: axis is a master axis
 2: axis is master and slave
 3: axis is a slave axis
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis CreateSymbols="true" AxisType="1" Id="18">
+				<Axis Id="18" CreateSymbols="true" AxisType="1">
 					<Name>Simu18</Name>
 					<AxisPara>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
@@ -5263,12 +5057,10 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Encoder Status 4 (automatically linked):
+									<Comment><![CDATA[Encoder Status 4 (automatically linked):
 0x01 (Bit 0) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (Bit 1) = IO data input toggle (e.g. EtherCAT 'InputToggle')
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -5317,6 +5109,7 @@ External Setpoint Generation:
 					<Drive Name="Drive" DrvType="5">
 						<DrvPara>
 							<Analog ScaleFactorActTorque="0.1"/>
+							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
@@ -5332,15 +5125,13 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Drive Status 4 (automatically linked):
+									<Comment><![CDATA[Drive Status 4 (automatically linked):
 0x01 (0000 0001) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (0000 0010) = IO data input toggle (e.g. EtherCAT 'InputToggle')
 
 Drive Status 4 (manually linked):
 0x80 (1000 0000) = Fast axis stop (digital IO interrupt)
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -5370,23 +5161,19 @@ Drive Status 4 (manually linked):
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl2</Name>
-									<Comment>
-										<![CDATA[Digital Outputs Setpoint Generator:
+									<Comment><![CDATA[Digital Outputs Setpoint Generator:
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl3</Name>
-									<Comment>
-										<![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+									<Comment><![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
@@ -5424,8 +5211,7 @@ Drive Status 4 (manually linked):
 							<BitOffs>45696</BitOffs>
 							<SubVar>
 								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
+								<Comment><![CDATA[Present State Of The Axis Movement (continuous axis):
 0  = INACTIVE:		axis has no job
 1  = RUNNING:		axis is executing a motion job
 2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
@@ -5439,13 +5225,11 @@ Slaves only:
 External Setpoint Generation:
 41 = EXTSETGEN_MODE1:	external setpoint generation active
 42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
+								<Comment><![CDATA[Axis Homing Status:
 0: idle
 1: start homing
 2: searching home switch
@@ -5453,24 +5237,21 @@ External Setpoint Generation:
 4: moving off home switch
 5: searching sync pulse
 6: stopping after homing
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
+								<Comment><![CDATA[Axis Coupling Status:
 0: axis is a single axis (not coupled)
 1: axis is a master axis
 2: axis is master and slave
 3: axis is a slave axis
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis CreateSymbols="true" AxisType="1" Id="19">
+				<Axis Id="19" CreateSymbols="true" AxisType="1">
 					<Name>Simu19</Name>
 					<AxisPara>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
@@ -5490,12 +5271,10 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Encoder Status 4 (automatically linked):
+									<Comment><![CDATA[Encoder Status 4 (automatically linked):
 0x01 (Bit 0) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (Bit 1) = IO data input toggle (e.g. EtherCAT 'InputToggle')
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -5544,6 +5323,7 @@ External Setpoint Generation:
 					<Drive Name="Drive" DrvType="5">
 						<DrvPara>
 							<Analog ScaleFactorActTorque="0.1"/>
+							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
@@ -5559,15 +5339,13 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Drive Status 4 (automatically linked):
+									<Comment><![CDATA[Drive Status 4 (automatically linked):
 0x01 (0000 0001) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (0000 0010) = IO data input toggle (e.g. EtherCAT 'InputToggle')
 
 Drive Status 4 (manually linked):
 0x80 (1000 0000) = Fast axis stop (digital IO interrupt)
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -5597,23 +5375,19 @@ Drive Status 4 (manually linked):
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl2</Name>
-									<Comment>
-										<![CDATA[Digital Outputs Setpoint Generator:
+									<Comment><![CDATA[Digital Outputs Setpoint Generator:
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl3</Name>
-									<Comment>
-										<![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+									<Comment><![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
@@ -5651,8 +5425,7 @@ Drive Status 4 (manually linked):
 							<BitOffs>48384</BitOffs>
 							<SubVar>
 								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
+								<Comment><![CDATA[Present State Of The Axis Movement (continuous axis):
 0  = INACTIVE:		axis has no job
 1  = RUNNING:		axis is executing a motion job
 2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
@@ -5666,13 +5439,11 @@ Slaves only:
 External Setpoint Generation:
 41 = EXTSETGEN_MODE1:	external setpoint generation active
 42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
+								<Comment><![CDATA[Axis Homing Status:
 0: idle
 1: start homing
 2: searching home switch
@@ -5680,24 +5451,21 @@ External Setpoint Generation:
 4: moving off home switch
 5: searching sync pulse
 6: stopping after homing
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
+								<Comment><![CDATA[Axis Coupling Status:
 0: axis is a single axis (not coupled)
 1: axis is a master axis
 2: axis is master and slave
 3: axis is a slave axis
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis CreateSymbols="true" AxisType="1" Id="20">
+				<Axis Id="20" CreateSymbols="true" AxisType="1">
 					<Name>Simu20</Name>
 					<AxisPara>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
@@ -5717,12 +5485,10 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Encoder Status 4 (automatically linked):
+									<Comment><![CDATA[Encoder Status 4 (automatically linked):
 0x01 (Bit 0) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (Bit 1) = IO data input toggle (e.g. EtherCAT 'InputToggle')
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -5771,6 +5537,7 @@ External Setpoint Generation:
 					<Drive Name="Drive" DrvType="5">
 						<DrvPara>
 							<Analog ScaleFactorActTorque="0.1"/>
+							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
@@ -5786,15 +5553,13 @@ External Setpoint Generation:
 								</SubVar>
 								<SubVar>
 									<Name>nState4</Name>
-									<Comment>
-										<![CDATA[Drive Status 4 (automatically linked):
+									<Comment><![CDATA[Drive Status 4 (automatically linked):
 0x01 (0000 0001) = IO data invalid (e.g. EtherCAT 'WcState')
 0x02 (0000 0010) = IO data input toggle (e.g. EtherCAT 'InputToggle')
 
 Drive Status 4 (manually linked):
 0x80 (1000 0000) = Fast axis stop (digital IO interrupt)
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataIn3</Name>
@@ -5824,23 +5589,19 @@ Drive Status 4 (manually linked):
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl2</Name>
-									<Comment>
-										<![CDATA[Digital Outputs Setpoint Generator:
+									<Comment><![CDATA[Digital Outputs Setpoint Generator:
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar>
 									<Name>nCtrl3</Name>
-									<Comment>
-										<![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+									<Comment><![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
 0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
 0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
 0x80 (1000 0000) = Stop
-]]>
-									</Comment>
+]]></Comment>
 								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
@@ -5878,8 +5639,7 @@ Drive Status 4 (manually linked):
 							<BitOffs>51072</BitOffs>
 							<SubVar>
 								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
+								<Comment><![CDATA[Present State Of The Axis Movement (continuous axis):
 0  = INACTIVE:		axis has no job
 1  = RUNNING:		axis is executing a motion job
 2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
@@ -5893,13 +5653,11 @@ Slaves only:
 External Setpoint Generation:
 41 = EXTSETGEN_MODE1:	external setpoint generation active
 42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
+								<Comment><![CDATA[Axis Homing Status:
 0: idle
 1: start homing
 2: searching home switch
@@ -5907,19 +5665,16 @@ External Setpoint Generation:
 4: moving off home switch
 5: searching sync pulse
 6: stopping after homing
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
+								<Comment><![CDATA[Axis Coupling Status:
 0: axis is a single axis (not coupled)
 1: axis is a master axis
 2: axis is master and slave
 3: axis is a slave axis
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 						</Var>
 					</Vars>
@@ -5934,187 +5689,233 @@ External Setpoint Generation:
 					<Vars VarGrpType="1">
 						<Name>PlcTask Inputs</Name>
 						<Var>
-							<Name>GVL.ioSafety.safeComErr</Name>
+							<Name>MAIN.interfaceControl.commStart</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.interfaceControl.commStop</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.interfaceControl.commErrorReset</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.interfaceControl.commErrorIgnore</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.interfaceControl.commInit</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.interfaceControl.commPurge</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.safetyController.safeComErr</Name>
+							<Comment><![CDATA[ should trigger pause]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.ioSafety.door1</Name>
-							<Comment>
-								<![CDATA[direct status]]>
-							</Comment>
+							<Name>MAIN.safetyController.door1</Name>
+							<Comment><![CDATA[direct status]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.ioSafety.door2</Name>
+							<Name>MAIN.safetyController.door2</Name>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.ioSafety.door3</Name>
+							<Name>MAIN.safetyController.door3</Name>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.ioSafety.door4</Name>
+							<Name>MAIN.safetyController.door4</Name>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.ioSafety.eStop1</Name>
+							<Name>MAIN.safetyController.eStop1</Name>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.ioSafety.eStop2</Name>
+							<Name>MAIN.safetyController.eStop2</Name>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.ioSafety.lightScreen</Name>
-							<Comment>
-								<![CDATA[indirect status]]>
-							</Comment>
+							<Name>MAIN.safetyController.servoSto</Name>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.ioSafety.airChoke</Name>
+							<Name>MAIN.safetyController.lightScreen</Name>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.ioSafety.doorAll</Name>
+							<Name>MAIN.safetyController.airChoke</Name>
+							<Comment><![CDATA[ soft-stop valve whether activated]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.ioSafety.eStop</Name>
+							<Name>MAIN.safetyController.safeGuardSatus</Name>
+							<Comment><![CDATA[ should trigger pause]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.ioSafety.servoSto</Name>
+							<Name>MAIN.safetyController.eStop</Name>
+							<Comment><![CDATA[ should trigger initialization]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.ioET.o1</Name>
+							<Name>MAIN.safetyController.requestSafeGuardRelease</Name>
+							<Comment><![CDATA[linked to HMI]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.safetyController.airValue1Status</Name>
+							<Comment><![CDATA[Air valve status]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.ioET.o2</Name>
+							<Name>MAIN.safetyController.airValue2Status</Name>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.ioET.o3</Name>
-							<Comment>
-								<![CDATA[pin7, attached]]>
-							</Comment>
-							<Type>BIT</Type>
-						</Var>
-						<Var>
-							<Name>GVL.ioET.o4</Name>
-							<Comment>
-								<![CDATA[pin8, OK/NG]]>
-							</Comment>
-							<Type>BIT</Type>
-						</Var>
-						<Var>
-							<Name>GVL.ioET.o5</Name>
-							<Type>BIT</Type>
-						</Var>
-						<Var>
-							<Name>GVL.ioET.o6</Name>
-							<Type>BIT</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[1].input</Name>
+							<Name>MAIN.MainIndexer.sensorPairs[0].bit0</Name>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.signalControls[2].input</Name>
+							<Name>MAIN.MainIndexer.sensorPairs[0].bit1</Name>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.signalControls[3].input</Name>
+							<Name>MAIN.MainIndexer.sensorPairs[1].bit0</Name>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.signalControls[4].input</Name>
+							<Name>MAIN.MainIndexer.sensorPairs[1].bit1</Name>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.signalControls[5].input</Name>
+							<Name>MAIN.MainIndexer.sensorPairs[2].bit0</Name>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.signalControls[6].input</Name>
+							<Name>MAIN.MainIndexer.sensorPairs[2].bit1</Name>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.signalControls[7].input</Name>
+							<Name>MAIN.MainIndexer.sensorPairs[3].bit0</Name>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.signalControls[8].input</Name>
+							<Name>MAIN.MainIndexer.sensorPairs[3].bit1</Name>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.signalControls[9].input</Name>
+							<Name>MAIN.Rack1.rackEngaged</Name>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.signalControls[10].input</Name>
+							<Name>MAIN.Rack1.items[0].Counter</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack1.items[1].Counter</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack1.items[2].Counter</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack1.items[3].Counter</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack2.rackEngaged</Name>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.signalControls[11].input</Name>
+							<Name>MAIN.Rack2.items[0].Counter</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack2.items[1].Counter</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack2.items[2].Counter</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack2.items[3].Counter</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack3.rackEngaged</Name>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.signalControls[12].input</Name>
+							<Name>MAIN.Rack3.items[0].Counter</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack3.items[1].Counter</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack3.items[2].Counter</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack3.items[3].Counter</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack4.rackEngaged</Name>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.signalControls[13].input</Name>
+							<Name>MAIN.Rack4.items[0].Counter</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack4.items[1].Counter</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack4.items[2].Counter</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack4.items[3].Counter</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.BridgeScara1toClamper.bridge.ack</Name>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.signalControls[14].input</Name>
+							<Name>MAIN.BridgeScara1toClamper.bridge.valid</Name>
+							<Comment><![CDATA[ whether material presented after work done]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.signalControls[15].input</Name>
+							<Name>MAIN.BridgeScara2toClamper.bridge.ack</Name>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.signalControls[16].input</Name>
+							<Name>MAIN.BridgeScara2toClamper.bridge.valid</Name>
+							<Comment><![CDATA[ whether material presented after work done]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.signalControls[17].input</Name>
+							<Name>MAIN.BridgeScara2toLoading.bridge.ack</Name>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.signalControls[18].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[19].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[20].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[21].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[22].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[23].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[24].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[25].input</Name>
+							<Name>MAIN.BridgeScara2toLoading.bridge.valid</Name>
+							<Comment><![CDATA[ whether material presented after work done]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
@@ -6206,84 +6007,127 @@ External Setpoint Generation:
 							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[12].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+							<Name>GVL.vacuumControls[1].sensorVacuum</Name>
+							<Type>INT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[12].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+							<Name>GVL.vacuumControls[2].sensorVacuum</Name>
+							<Type>INT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[13].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+							<Name>GVL.vacuumControls[3].sensorVacuum</Name>
+							<Type>INT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[13].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+							<Name>GVL.vacuumControls[4].sensorVacuum</Name>
+							<Type>INT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[14].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+							<Name>GVL.vacuumControls[5].sensorVacuum</Name>
+							<Type>INT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[14].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+							<Name>GVL.vacuumControls[6].sensorVacuum</Name>
+							<Type>INT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[15].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+							<Name>GVL.vacuumControls[7].sensorVacuum</Name>
+							<Type>INT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[15].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+							<Name>GVL.vacuumControls[8].sensorVacuum</Name>
+							<Type>INT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[16].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+							<Name>GVL.vacuumControls[9].sensorVacuum</Name>
+							<Type>INT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[16].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+							<Name>GVL.vacuumControls[10].sensorVacuum</Name>
+							<Type>INT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[17].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+							<Name>GVL.vacuumControls[11].sensorVacuum</Name>
+							<Type>INT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[17].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+							<Name>GVL.vacuumControls[12].sensorVacuum</Name>
+							<Type>INT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[18].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+							<Name>GVL.vacuumControls[13].sensorVacuum</Name>
+							<Type>INT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[18].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+							<Name>GVL.vacuumControls[14].sensorVacuum</Name>
+							<Type>INT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[19].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+							<Name>GVL.vacuumControls[15].sensorVacuum</Name>
+							<Type>INT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[19].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+							<Name>GVL.vacuumControls[16].sensorVacuum</Name>
+							<Type>INT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[20].SENSOR_A</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+							<Name>GVL.signalControls[1].input</Name>
+							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[20].SENSOR_B</Name>
-							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+							<Name>GVL.signalControls[2].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[3].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[4].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[5].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[6].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[7].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[8].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[9].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[10].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[11].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[12].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[13].input</Name>
+							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>GVL.axisControls[1].Axis.NcToPlc</Name>
 							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 							<SubVar>
 								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
+								<Comment><![CDATA[Present State Of The Axis Movement (continuous axis):
 0  = INACTIVE:		axis has no job
 1  = RUNNING:		axis is executing a motion job
 2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
@@ -6297,13 +6141,11 @@ Slaves only:
 External Setpoint Generation:
 41 = EXTSETGEN_MODE1:	external setpoint generation active
 42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
+								<Comment><![CDATA[Axis Homing Status:
 0: idle
 1: start homing
 2: searching home switch
@@ -6311,19 +6153,16 @@ External Setpoint Generation:
 4: moving off home switch
 5: searching sync pulse
 6: stopping after homing
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
+								<Comment><![CDATA[Axis Coupling Status:
 0: axis is a single axis (not coupled)
 1: axis is a master axis
 2: axis is master and slave
 3: axis is a slave axis
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 						</Var>
 						<Var>
@@ -6331,8 +6170,7 @@ External Setpoint Generation:
 							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 							<SubVar>
 								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
+								<Comment><![CDATA[Present State Of The Axis Movement (continuous axis):
 0  = INACTIVE:		axis has no job
 1  = RUNNING:		axis is executing a motion job
 2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
@@ -6346,13 +6184,11 @@ Slaves only:
 External Setpoint Generation:
 41 = EXTSETGEN_MODE1:	external setpoint generation active
 42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
+								<Comment><![CDATA[Axis Homing Status:
 0: idle
 1: start homing
 2: searching home switch
@@ -6360,19 +6196,16 @@ External Setpoint Generation:
 4: moving off home switch
 5: searching sync pulse
 6: stopping after homing
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
+								<Comment><![CDATA[Axis Coupling Status:
 0: axis is a single axis (not coupled)
 1: axis is a master axis
 2: axis is master and slave
 3: axis is a slave axis
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 						</Var>
 						<Var>
@@ -6380,8 +6213,7 @@ External Setpoint Generation:
 							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 							<SubVar>
 								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
+								<Comment><![CDATA[Present State Of The Axis Movement (continuous axis):
 0  = INACTIVE:		axis has no job
 1  = RUNNING:		axis is executing a motion job
 2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
@@ -6395,13 +6227,11 @@ Slaves only:
 External Setpoint Generation:
 41 = EXTSETGEN_MODE1:	external setpoint generation active
 42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
+								<Comment><![CDATA[Axis Homing Status:
 0: idle
 1: start homing
 2: searching home switch
@@ -6409,19 +6239,16 @@ External Setpoint Generation:
 4: moving off home switch
 5: searching sync pulse
 6: stopping after homing
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
+								<Comment><![CDATA[Axis Coupling Status:
 0: axis is a single axis (not coupled)
 1: axis is a master axis
 2: axis is master and slave
 3: axis is a slave axis
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 						</Var>
 						<Var>
@@ -6429,8 +6256,7 @@ External Setpoint Generation:
 							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 							<SubVar>
 								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
+								<Comment><![CDATA[Present State Of The Axis Movement (continuous axis):
 0  = INACTIVE:		axis has no job
 1  = RUNNING:		axis is executing a motion job
 2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
@@ -6444,13 +6270,11 @@ Slaves only:
 External Setpoint Generation:
 41 = EXTSETGEN_MODE1:	external setpoint generation active
 42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
+								<Comment><![CDATA[Axis Homing Status:
 0: idle
 1: start homing
 2: searching home switch
@@ -6458,878 +6282,690 @@ External Setpoint Generation:
 4: moving off home switch
 5: searching sync pulse
 6: stopping after homing
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 							<SubVar>
 								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
+								<Comment><![CDATA[Axis Coupling Status:
 0: axis is a single axis (not coupled)
 1: axis is a master axis
 2: axis is master and slave
 3: axis is a slave axis
-]]>
-								</Comment>
+]]></Comment>
 							</SubVar>
 						</Var>
 						<Var>
-							<Name>GVL.axisControls[5].Axis.NcToPlc</Name>
-							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
-							<SubVar>
-								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
-0  = INACTIVE:		axis has no job
-1  = RUNNING:		axis is executing a motion job
-2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
-3  = PHASE_VELOCONST:	axis is moving at constant velocity
-4  = PHASE_ACCPOS:	axis is accelerating
-5  = PHASE_ACCNEG:	axis is decelerating
-Slaves only:
-11 = PREPHASE:		slave axis is in a motion pre-phase
-12 = SYNCHRONIZING:	slave axis is synchronizing
-13 = SYNCHRONOUS:	slave axis is moving synchronously
-External Setpoint Generation:
-41 = EXTSETGEN_MODE1:	external setpoint generation active
-42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
-0: idle
-1: start homing
-2: searching home switch
-3: stopping on home switch
-4: moving off home switch
-5: searching sync pulse
-6: stopping after homing
-]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
-0: axis is a single axis (not coupled)
-1: axis is a master axis
-2: axis is master and slave
-3: axis is a slave axis
-]]>
-								</Comment>
-							</SubVar>
+							<Name>GVL.deviceBridger[1].command</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>GVL.axisControls[6].Axis.NcToPlc</Name>
-							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
-							<SubVar>
-								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
-0  = INACTIVE:		axis has no job
-1  = RUNNING:		axis is executing a motion job
-2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
-3  = PHASE_VELOCONST:	axis is moving at constant velocity
-4  = PHASE_ACCPOS:	axis is accelerating
-5  = PHASE_ACCNEG:	axis is decelerating
-Slaves only:
-11 = PREPHASE:		slave axis is in a motion pre-phase
-12 = SYNCHRONIZING:	slave axis is synchronizing
-13 = SYNCHRONOUS:	slave axis is moving synchronously
-External Setpoint Generation:
-41 = EXTSETGEN_MODE1:	external setpoint generation active
-42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
-0: idle
-1: start homing
-2: searching home switch
-3: stopping on home switch
-4: moving off home switch
-5: searching sync pulse
-6: stopping after homing
-]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
-0: axis is a single axis (not coupled)
-1: axis is a master axis
-2: axis is master and slave
-3: axis is a slave axis
-]]>
-								</Comment>
-							</SubVar>
+							<Name>GVL.deviceBridger[2].command</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>GVL.axisControls[7].Axis.NcToPlc</Name>
-							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
-							<SubVar>
-								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
-0  = INACTIVE:		axis has no job
-1  = RUNNING:		axis is executing a motion job
-2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
-3  = PHASE_VELOCONST:	axis is moving at constant velocity
-4  = PHASE_ACCPOS:	axis is accelerating
-5  = PHASE_ACCNEG:	axis is decelerating
-Slaves only:
-11 = PREPHASE:		slave axis is in a motion pre-phase
-12 = SYNCHRONIZING:	slave axis is synchronizing
-13 = SYNCHRONOUS:	slave axis is moving synchronously
-External Setpoint Generation:
-41 = EXTSETGEN_MODE1:	external setpoint generation active
-42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
-0: idle
-1: start homing
-2: searching home switch
-3: stopping on home switch
-4: moving off home switch
-5: searching sync pulse
-6: stopping after homing
-]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
-0: axis is a single axis (not coupled)
-1: axis is a master axis
-2: axis is master and slave
-3: axis is a slave axis
-]]>
-								</Comment>
-							</SubVar>
+							<Name>GVL.deviceBridger[3].command</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>GVL.axisControls[8].Axis.NcToPlc</Name>
-							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
-							<SubVar>
-								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
-0  = INACTIVE:		axis has no job
-1  = RUNNING:		axis is executing a motion job
-2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
-3  = PHASE_VELOCONST:	axis is moving at constant velocity
-4  = PHASE_ACCPOS:	axis is accelerating
-5  = PHASE_ACCNEG:	axis is decelerating
-Slaves only:
-11 = PREPHASE:		slave axis is in a motion pre-phase
-12 = SYNCHRONIZING:	slave axis is synchronizing
-13 = SYNCHRONOUS:	slave axis is moving synchronously
-External Setpoint Generation:
-41 = EXTSETGEN_MODE1:	external setpoint generation active
-42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
-0: idle
-1: start homing
-2: searching home switch
-3: stopping on home switch
-4: moving off home switch
-5: searching sync pulse
-6: stopping after homing
-]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
-0: axis is a single axis (not coupled)
-1: axis is a master axis
-2: axis is master and slave
-3: axis is a slave axis
-]]>
-								</Comment>
-							</SubVar>
+							<Name>GVL.deviceBridger[4].command</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>GVL.axisControls[9].Axis.NcToPlc</Name>
-							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
-							<SubVar>
-								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
-0  = INACTIVE:		axis has no job
-1  = RUNNING:		axis is executing a motion job
-2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
-3  = PHASE_VELOCONST:	axis is moving at constant velocity
-4  = PHASE_ACCPOS:	axis is accelerating
-5  = PHASE_ACCNEG:	axis is decelerating
-Slaves only:
-11 = PREPHASE:		slave axis is in a motion pre-phase
-12 = SYNCHRONIZING:	slave axis is synchronizing
-13 = SYNCHRONOUS:	slave axis is moving synchronously
-External Setpoint Generation:
-41 = EXTSETGEN_MODE1:	external setpoint generation active
-42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
-0: idle
-1: start homing
-2: searching home switch
-3: stopping on home switch
-4: moving off home switch
-5: searching sync pulse
-6: stopping after homing
-]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
-0: axis is a single axis (not coupled)
-1: axis is a master axis
-2: axis is master and slave
-3: axis is a slave axis
-]]>
-								</Comment>
-							</SubVar>
+							<Name>GVL.deviceBridger[5].command</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>GVL.axisControls[10].Axis.NcToPlc</Name>
-							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
-							<SubVar>
-								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
-0  = INACTIVE:		axis has no job
-1  = RUNNING:		axis is executing a motion job
-2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
-3  = PHASE_VELOCONST:	axis is moving at constant velocity
-4  = PHASE_ACCPOS:	axis is accelerating
-5  = PHASE_ACCNEG:	axis is decelerating
-Slaves only:
-11 = PREPHASE:		slave axis is in a motion pre-phase
-12 = SYNCHRONIZING:	slave axis is synchronizing
-13 = SYNCHRONOUS:	slave axis is moving synchronously
-External Setpoint Generation:
-41 = EXTSETGEN_MODE1:	external setpoint generation active
-42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
-0: idle
-1: start homing
-2: searching home switch
-3: stopping on home switch
-4: moving off home switch
-5: searching sync pulse
-6: stopping after homing
-]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
-0: axis is a single axis (not coupled)
-1: axis is a master axis
-2: axis is master and slave
-3: axis is a slave axis
-]]>
-								</Comment>
-							</SubVar>
+							<Name>GVL.deviceBridger[6].command</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>GVL.axisControls[11].Axis.NcToPlc</Name>
-							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
-							<SubVar>
-								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
-0  = INACTIVE:		axis has no job
-1  = RUNNING:		axis is executing a motion job
-2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
-3  = PHASE_VELOCONST:	axis is moving at constant velocity
-4  = PHASE_ACCPOS:	axis is accelerating
-5  = PHASE_ACCNEG:	axis is decelerating
-Slaves only:
-11 = PREPHASE:		slave axis is in a motion pre-phase
-12 = SYNCHRONIZING:	slave axis is synchronizing
-13 = SYNCHRONOUS:	slave axis is moving synchronously
-External Setpoint Generation:
-41 = EXTSETGEN_MODE1:	external setpoint generation active
-42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
-0: idle
-1: start homing
-2: searching home switch
-3: stopping on home switch
-4: moving off home switch
-5: searching sync pulse
-6: stopping after homing
-]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
-0: axis is a single axis (not coupled)
-1: axis is a master axis
-2: axis is master and slave
-3: axis is a slave axis
-]]>
-								</Comment>
-							</SubVar>
+							<Name>GVL.deviceBridger[7].command</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>GVL.axisControls[12].Axis.NcToPlc</Name>
-							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
-							<SubVar>
-								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
-0  = INACTIVE:		axis has no job
-1  = RUNNING:		axis is executing a motion job
-2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
-3  = PHASE_VELOCONST:	axis is moving at constant velocity
-4  = PHASE_ACCPOS:	axis is accelerating
-5  = PHASE_ACCNEG:	axis is decelerating
-Slaves only:
-11 = PREPHASE:		slave axis is in a motion pre-phase
-12 = SYNCHRONIZING:	slave axis is synchronizing
-13 = SYNCHRONOUS:	slave axis is moving synchronously
-External Setpoint Generation:
-41 = EXTSETGEN_MODE1:	external setpoint generation active
-42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
-0: idle
-1: start homing
-2: searching home switch
-3: stopping on home switch
-4: moving off home switch
-5: searching sync pulse
-6: stopping after homing
-]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
-0: axis is a single axis (not coupled)
-1: axis is a master axis
-2: axis is master and slave
-3: axis is a slave axis
-]]>
-								</Comment>
-							</SubVar>
+							<Name>GVL.deviceBridger[8].command</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>GVL.axisControls[13].Axis.NcToPlc</Name>
-							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
-							<SubVar>
-								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
-0  = INACTIVE:		axis has no job
-1  = RUNNING:		axis is executing a motion job
-2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
-3  = PHASE_VELOCONST:	axis is moving at constant velocity
-4  = PHASE_ACCPOS:	axis is accelerating
-5  = PHASE_ACCNEG:	axis is decelerating
-Slaves only:
-11 = PREPHASE:		slave axis is in a motion pre-phase
-12 = SYNCHRONIZING:	slave axis is synchronizing
-13 = SYNCHRONOUS:	slave axis is moving synchronously
-External Setpoint Generation:
-41 = EXTSETGEN_MODE1:	external setpoint generation active
-42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
-0: idle
-1: start homing
-2: searching home switch
-3: stopping on home switch
-4: moving off home switch
-5: searching sync pulse
-6: stopping after homing
-]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
-0: axis is a single axis (not coupled)
-1: axis is a master axis
-2: axis is master and slave
-3: axis is a slave axis
-]]>
-								</Comment>
-							</SubVar>
+							<Name>GVL.deviceBridger[9].command</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>GVL.axisControls[14].Axis.NcToPlc</Name>
-							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
-							<SubVar>
-								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
-0  = INACTIVE:		axis has no job
-1  = RUNNING:		axis is executing a motion job
-2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
-3  = PHASE_VELOCONST:	axis is moving at constant velocity
-4  = PHASE_ACCPOS:	axis is accelerating
-5  = PHASE_ACCNEG:	axis is decelerating
-Slaves only:
-11 = PREPHASE:		slave axis is in a motion pre-phase
-12 = SYNCHRONIZING:	slave axis is synchronizing
-13 = SYNCHRONOUS:	slave axis is moving synchronously
-External Setpoint Generation:
-41 = EXTSETGEN_MODE1:	external setpoint generation active
-42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
-0: idle
-1: start homing
-2: searching home switch
-3: stopping on home switch
-4: moving off home switch
-5: searching sync pulse
-6: stopping after homing
-]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
-0: axis is a single axis (not coupled)
-1: axis is a master axis
-2: axis is master and slave
-3: axis is a slave axis
-]]>
-								</Comment>
-							</SubVar>
+							<Name>GVL.deviceBridger[10].command</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>GVL.axisControls[15].Axis.NcToPlc</Name>
-							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
-							<SubVar>
-								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
-0  = INACTIVE:		axis has no job
-1  = RUNNING:		axis is executing a motion job
-2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
-3  = PHASE_VELOCONST:	axis is moving at constant velocity
-4  = PHASE_ACCPOS:	axis is accelerating
-5  = PHASE_ACCNEG:	axis is decelerating
-Slaves only:
-11 = PREPHASE:		slave axis is in a motion pre-phase
-12 = SYNCHRONIZING:	slave axis is synchronizing
-13 = SYNCHRONOUS:	slave axis is moving synchronously
-External Setpoint Generation:
-41 = EXTSETGEN_MODE1:	external setpoint generation active
-42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
-0: idle
-1: start homing
-2: searching home switch
-3: stopping on home switch
-4: moving off home switch
-5: searching sync pulse
-6: stopping after homing
-]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
-0: axis is a single axis (not coupled)
-1: axis is a master axis
-2: axis is master and slave
-3: axis is a slave axis
-]]>
-								</Comment>
-							</SubVar>
+							<Name>GVL.deviceBridger[11].command</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>GVL.axisControls[16].Axis.NcToPlc</Name>
-							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
-							<SubVar>
-								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
-0  = INACTIVE:		axis has no job
-1  = RUNNING:		axis is executing a motion job
-2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
-3  = PHASE_VELOCONST:	axis is moving at constant velocity
-4  = PHASE_ACCPOS:	axis is accelerating
-5  = PHASE_ACCNEG:	axis is decelerating
-Slaves only:
-11 = PREPHASE:		slave axis is in a motion pre-phase
-12 = SYNCHRONIZING:	slave axis is synchronizing
-13 = SYNCHRONOUS:	slave axis is moving synchronously
-External Setpoint Generation:
-41 = EXTSETGEN_MODE1:	external setpoint generation active
-42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
-0: idle
-1: start homing
-2: searching home switch
-3: stopping on home switch
-4: moving off home switch
-5: searching sync pulse
-6: stopping after homing
-]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
-0: axis is a single axis (not coupled)
-1: axis is a master axis
-2: axis is master and slave
-3: axis is a slave axis
-]]>
-								</Comment>
-							</SubVar>
+							<Name>GVL.deviceBridger[12].command</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>GVL.axisControls[17].Axis.NcToPlc</Name>
-							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
-							<SubVar>
-								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
-0  = INACTIVE:		axis has no job
-1  = RUNNING:		axis is executing a motion job
-2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
-3  = PHASE_VELOCONST:	axis is moving at constant velocity
-4  = PHASE_ACCPOS:	axis is accelerating
-5  = PHASE_ACCNEG:	axis is decelerating
-Slaves only:
-11 = PREPHASE:		slave axis is in a motion pre-phase
-12 = SYNCHRONIZING:	slave axis is synchronizing
-13 = SYNCHRONOUS:	slave axis is moving synchronously
-External Setpoint Generation:
-41 = EXTSETGEN_MODE1:	external setpoint generation active
-42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
-0: idle
-1: start homing
-2: searching home switch
-3: stopping on home switch
-4: moving off home switch
-5: searching sync pulse
-6: stopping after homing
-]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
-0: axis is a single axis (not coupled)
-1: axis is a master axis
-2: axis is master and slave
-3: axis is a slave axis
-]]>
-								</Comment>
-							</SubVar>
+							<Name>GVL.deviceBridger[13].command</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>GVL.axisControls[18].Axis.NcToPlc</Name>
-							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
-							<SubVar>
-								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
-0  = INACTIVE:		axis has no job
-1  = RUNNING:		axis is executing a motion job
-2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
-3  = PHASE_VELOCONST:	axis is moving at constant velocity
-4  = PHASE_ACCPOS:	axis is accelerating
-5  = PHASE_ACCNEG:	axis is decelerating
-Slaves only:
-11 = PREPHASE:		slave axis is in a motion pre-phase
-12 = SYNCHRONIZING:	slave axis is synchronizing
-13 = SYNCHRONOUS:	slave axis is moving synchronously
-External Setpoint Generation:
-41 = EXTSETGEN_MODE1:	external setpoint generation active
-42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
-0: idle
-1: start homing
-2: searching home switch
-3: stopping on home switch
-4: moving off home switch
-5: searching sync pulse
-6: stopping after homing
-]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
-0: axis is a single axis (not coupled)
-1: axis is a master axis
-2: axis is master and slave
-3: axis is a slave axis
-]]>
-								</Comment>
-							</SubVar>
+							<Name>GVL.deviceBridger[14].command</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>GVL.axisControls[19].Axis.NcToPlc</Name>
-							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
-							<SubVar>
-								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
-0  = INACTIVE:		axis has no job
-1  = RUNNING:		axis is executing a motion job
-2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
-3  = PHASE_VELOCONST:	axis is moving at constant velocity
-4  = PHASE_ACCPOS:	axis is accelerating
-5  = PHASE_ACCNEG:	axis is decelerating
-Slaves only:
-11 = PREPHASE:		slave axis is in a motion pre-phase
-12 = SYNCHRONIZING:	slave axis is synchronizing
-13 = SYNCHRONOUS:	slave axis is moving synchronously
-External Setpoint Generation:
-41 = EXTSETGEN_MODE1:	external setpoint generation active
-42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
-0: idle
-1: start homing
-2: searching home switch
-3: stopping on home switch
-4: moving off home switch
-5: searching sync pulse
-6: stopping after homing
-]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
-0: axis is a single axis (not coupled)
-1: axis is a master axis
-2: axis is master and slave
-3: axis is a slave axis
-]]>
-								</Comment>
-							</SubVar>
+							<Name>GVL.deviceBridger[15].command</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>GVL.axisControls[20].Axis.NcToPlc</Name>
-							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
-							<SubVar>
-								<Name>AxisState</Name>
-								<Comment>
-									<![CDATA[Present State Of The Axis Movement (continuous axis):
-0  = INACTIVE:		axis has no job
-1  = RUNNING:		axis is executing a motion job
-2  = OVERRIDE_ZERO:	axis is executing a job but override is zero
-3  = PHASE_VELOCONST:	axis is moving at constant velocity
-4  = PHASE_ACCPOS:	axis is accelerating
-5  = PHASE_ACCNEG:	axis is decelerating
-Slaves only:
-11 = PREPHASE:		slave axis is in a motion pre-phase
-12 = SYNCHRONIZING:	slave axis is synchronizing
-13 = SYNCHRONOUS:	slave axis is moving synchronously
-External Setpoint Generation:
-41 = EXTSETGEN_MODE1:	external setpoint generation active
-42 = EXTSETGEN_MODE2:	internal and external setpoint gen. active
-]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>HomingState</Name>
-								<Comment>
-									<![CDATA[Axis Homing Status:
-0: idle
-1: start homing
-2: searching home switch
-3: stopping on home switch
-4: moving off home switch
-5: searching sync pulse
-6: stopping after homing
-]]>
-								</Comment>
-							</SubVar>
-							<SubVar>
-								<Name>CoupleState</Name>
-								<Comment>
-									<![CDATA[Axis Coupling Status:
-0: axis is a single axis (not coupled)
-1: axis is a master axis
-2: axis is master and slave
-3: axis is a slave axis
-]]>
-								</Comment>
-							</SubVar>
+							<Name>GVL.deviceBridger[16].command</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.in_ready_0</Name>
+							<Comment><![CDATA[Turns ON when the controller startup completes and no task is running. ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.in_running_1</Name>
+							<Comment><![CDATA[Turns ON when task is running. However, turns OFF when Paused output is ON. ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.in_paused_2</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.in_error_3</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.in_eStop_4</Name>
+							<Comment><![CDATA[as EDM]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.in_safeGuard_5</Name>
+							<Comment><![CDATA[as EDM to safeguard]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.in_sError_6</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.in_warning_7</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.in_alarmCode</Name>
+							<Comment><![CDATA[------------------
+	User - input
+------------------
+------------------
+	User - output 
+------------------]]></Comment>
+							<Type>WORD</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.in_taskState</Name>
+							<Type>WORD</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.in_ready_0</Name>
+							<Comment><![CDATA[Turns ON when the controller startup completes and no task is running. ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.in_running_1</Name>
+							<Comment><![CDATA[Turns ON when task is running. However, turns OFF when Paused output is ON. ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.in_paused_2</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.in_error_3</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.in_eStop_4</Name>
+							<Comment><![CDATA[as EDM]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.in_safeGuard_5</Name>
+							<Comment><![CDATA[as EDM to safeguard]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.in_sError_6</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.in_warning_7</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.in_alarmCode</Name>
+							<Comment><![CDATA[------------------
+	User - input
+------------------
+------------------
+	User - output 
+------------------]]></Comment>
+							<Type>WORD</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.in_taskState</Name>
+							<Type>WORD</Type>
 						</Var>
 					</Vars>
 					<Vars VarGrpType="2">
 						<Name>PlcTask Outputs</Name>
 						<Var>
-							<Name>GVL.ioControl.lightRed</Name>
+							<Name>MAIN.semephore.lightRed</Name>
+							<Comment><![CDATA[----------------
+	OUTPUTS
+----------------]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.ioControl.lightGreen</Name>
+							<Name>MAIN.semephore.lightGreen</Name>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.ioControl.lightYellow</Name>
+							<Name>MAIN.semephore.lightYellow</Name>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.ioControl.lightWhite</Name>
+							<Name>MAIN.semephore.lightWhite</Name>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.ioControl.towerRed</Name>
+							<Name>MAIN.semephore.towerRed</Name>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.ioControl.towerGreen</Name>
+							<Name>MAIN.semephore.towerGreen</Name>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.ioControl.towerYellow</Name>
+							<Name>MAIN.semephore.towerYellow</Name>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.ioControl.towerBuzzer</Name>
+							<Name>MAIN.semephore.towerBuzzer</Name>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.ioSafety.safeAck</Name>
+							<Name>MAIN.safetyController.safeAck</Name>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.ioSafety.safeRun</Name>
+							<Name>MAIN.safetyController.safeRun</Name>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.ioSafety.airOff</Name>
-							<Comment>
-								<![CDATA[bypass]]>
-							</Comment>
+							<Name>MAIN.safetyController.airOff</Name>
+							<Comment><![CDATA[bypass]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.ioSafety.stoBypass</Name>
+							<Name>MAIN.safetyController.eStopBypass</Name>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.ioSafety.doorUnlockAll</Name>
+							<Name>MAIN.safetyController.safeGuardBypass</Name>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.ioET.external</Name>
+							<Name>MAIN.safetyController.safeGuardRelease</Name>
+							<Comment><![CDATA[should trigger pause before, process then activate]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.ioET.hipot</Name>
-							<Type>BIT</Type>
+							<Name>MAIN.safetyController.outPauseBypass</Name>
+							<Comment><![CDATA[mega Bypass]]></Comment>
+							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.ioET.i1</Name>
-							<Type>BIT</Type>
+							<Name>MAIN.safetyController.outEmergencyBypass</Name>
+							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.ioET.i2</Name>
-							<Type>BIT</Type>
+							<Name>MAIN.rootController.State</Name>
+							<Comment><![CDATA[possible TO output on HMI]]></Comment>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.rootController.NextState</Name>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.rootController.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.rootController.errorType</Name>
+							<Comment><![CDATA[------------------------
+	Error handling channel
+------------------------]]></Comment>
+							<Type GUID="{093D7F69-7F34-4B33-A94E-F0CEC813C01D}">eCategrories</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.rootController.errorIndex</Name>
+							<Type>DINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.rootController.errorCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.MainIndexer.State</Name>
+							<Comment><![CDATA[possible TO output on HMI]]></Comment>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.MainIndexer.NextState</Name>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.MainIndexer.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.S1BottomLoader.State</Name>
+							<Comment><![CDATA[possible TO output on HMI]]></Comment>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.S1BottomLoader.NextState</Name>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.S1BottomLoader.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.S2Clamper.State</Name>
+							<Comment><![CDATA[possible TO output on HMI]]></Comment>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.S2Clamper.NextState</Name>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.S2Clamper.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.S3AoiInspection.State</Name>
+							<Comment><![CDATA[possible TO output on HMI]]></Comment>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.S3AoiInspection.NextState</Name>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.S3AoiInspection.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.S3AoiInspection.aoiTrigger</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.S4Clamper.State</Name>
+							<Comment><![CDATA[possible TO output on HMI]]></Comment>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.S4Clamper.NextState</Name>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.S4Clamper.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack1.State</Name>
+							<Comment><![CDATA[possible TO output on HMI]]></Comment>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack1.NextState</Name>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack1.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack1.signal.output</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack1.rackReady</Name>
+							<Comment><![CDATA[---------------------------------
+	Over Fieldbus linked with SCARA
+---------------------------------]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack1.items[0].Bound</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack1.items[0].PitchX</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack1.items[0].PitchY</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack1.items[1].Bound</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack1.items[1].PitchX</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack1.items[1].PitchY</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack1.items[2].Bound</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack1.items[2].PitchX</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack1.items[2].PitchY</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack1.items[3].Bound</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack1.items[3].PitchX</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack1.items[3].PitchY</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack2.State</Name>
+							<Comment><![CDATA[possible TO output on HMI]]></Comment>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack2.NextState</Name>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack2.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack2.signal.output</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack2.rackReady</Name>
+							<Comment><![CDATA[---------------------------------
+	Over Fieldbus linked with SCARA
+---------------------------------]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack2.items[0].Bound</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack2.items[0].PitchX</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack2.items[0].PitchY</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack2.items[1].Bound</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack2.items[1].PitchX</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack2.items[1].PitchY</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack2.items[2].Bound</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack2.items[2].PitchX</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack2.items[2].PitchY</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack2.items[3].Bound</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack2.items[3].PitchX</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack2.items[3].PitchY</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack3.State</Name>
+							<Comment><![CDATA[possible TO output on HMI]]></Comment>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack3.NextState</Name>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack3.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack3.signal.output</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack3.rackReady</Name>
+							<Comment><![CDATA[---------------------------------
+	Over Fieldbus linked with SCARA
+---------------------------------]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack3.items[0].Bound</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack3.items[0].PitchX</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack3.items[0].PitchY</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack3.items[1].Bound</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack3.items[1].PitchX</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack3.items[1].PitchY</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack3.items[2].Bound</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack3.items[2].PitchX</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack3.items[2].PitchY</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack3.items[3].Bound</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack3.items[3].PitchX</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack3.items[3].PitchY</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack4.State</Name>
+							<Comment><![CDATA[possible TO output on HMI]]></Comment>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack4.NextState</Name>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack4.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack4.signal.output</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack4.rackReady</Name>
+							<Comment><![CDATA[---------------------------------
+	Over Fieldbus linked with SCARA
+---------------------------------]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack4.items[0].Bound</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack4.items[0].PitchX</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack4.items[0].PitchY</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack4.items[1].Bound</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack4.items[1].PitchX</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack4.items[1].PitchY</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack4.items[2].Bound</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack4.items[2].PitchX</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack4.items[2].PitchY</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack4.items[3].Bound</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack4.items[3].PitchX</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack4.items[3].PitchY</Name>
+							<Type>REAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.BridgeScara1toClamper.State</Name>
+							<Comment><![CDATA[possible TO output on HMI]]></Comment>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.BridgeScara1toClamper.NextState</Name>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.BridgeScara1toClamper.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.BridgeScara1toClamper.bridge.ready</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.BridgeScara2toClamper.State</Name>
+							<Comment><![CDATA[possible TO output on HMI]]></Comment>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.BridgeScara2toClamper.NextState</Name>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.BridgeScara2toClamper.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.BridgeScara2toClamper.bridge.ready</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.BridgeScara2toLoading.State</Name>
+							<Comment><![CDATA[possible TO output on HMI]]></Comment>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.BridgeScara2toLoading.NextState</Name>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.BridgeScara2toLoading.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.BridgeScara2toLoading.bridge.ready</Name>
+							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>GVL.cylinderControls[1].ACT_A</Name>
@@ -7420,76 +7056,236 @@ External Setpoint Generation:
 							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[12].ACT_A</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+							<Name>GVL.vacuumControls[1].ACT_GENERATOR</Name>
+							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[12].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+							<Name>GVL.vacuumControls[1].ACT_BREAKER</Name>
+							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[13].ACT_A</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+							<Name>GVL.vacuumControls[2].ACT_GENERATOR</Name>
+							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[13].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+							<Name>GVL.vacuumControls[2].ACT_BREAKER</Name>
+							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[14].ACT_A</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+							<Name>GVL.vacuumControls[3].ACT_GENERATOR</Name>
+							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[14].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+							<Name>GVL.vacuumControls[3].ACT_BREAKER</Name>
+							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[15].ACT_A</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+							<Name>GVL.vacuumControls[4].ACT_GENERATOR</Name>
+							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[15].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+							<Name>GVL.vacuumControls[4].ACT_BREAKER</Name>
+							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[16].ACT_A</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+							<Name>GVL.vacuumControls[5].ACT_GENERATOR</Name>
+							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[16].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+							<Name>GVL.vacuumControls[5].ACT_BREAKER</Name>
+							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[17].ACT_A</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+							<Name>GVL.vacuumControls[6].ACT_GENERATOR</Name>
+							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[17].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+							<Name>GVL.vacuumControls[6].ACT_BREAKER</Name>
+							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[18].ACT_A</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+							<Name>GVL.vacuumControls[7].ACT_GENERATOR</Name>
+							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[18].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+							<Name>GVL.vacuumControls[7].ACT_BREAKER</Name>
+							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[19].ACT_A</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+							<Name>GVL.vacuumControls[8].ACT_GENERATOR</Name>
+							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[19].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+							<Name>GVL.vacuumControls[8].ACT_BREAKER</Name>
+							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[20].ACT_A</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+							<Name>GVL.vacuumControls[9].ACT_GENERATOR</Name>
+							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.cylinderControls[20].ACT_B</Name>
-							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+							<Name>GVL.vacuumControls[9].ACT_BREAKER</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[10].ACT_GENERATOR</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[10].ACT_BREAKER</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[11].ACT_GENERATOR</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[11].ACT_BREAKER</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[12].ACT_GENERATOR</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[12].ACT_BREAKER</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[13].ACT_GENERATOR</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[13].ACT_BREAKER</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[14].ACT_GENERATOR</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[14].ACT_BREAKER</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[15].ACT_GENERATOR</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[15].ACT_BREAKER</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[16].ACT_GENERATOR</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[16].ACT_BREAKER</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[1].debouncedOn</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[1].debouncedOff</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[2].debouncedOn</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[2].debouncedOff</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[3].debouncedOn</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[3].debouncedOff</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[4].debouncedOn</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[4].debouncedOff</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[5].debouncedOn</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[5].debouncedOff</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[6].debouncedOn</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[6].debouncedOff</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[7].debouncedOn</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[7].debouncedOff</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[8].debouncedOn</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[8].debouncedOff</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[9].debouncedOn</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[9].debouncedOff</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[10].debouncedOn</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[10].debouncedOff</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[11].debouncedOn</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[11].debouncedOff</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[12].debouncedOn</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[12].debouncedOff</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[13].debouncedOn</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[13].debouncedOff</Name>
+							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>GVL.axisControls[1].Axis.PlcToNc</Name>
@@ -7508,72 +7304,188 @@ External Setpoint Generation:
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 						<Var>
-							<Name>GVL.axisControls[5].Axis.PlcToNc</Name>
-							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
+							<Name>GVL.deviceBridger[1].acknowledge</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>GVL.axisControls[6].Axis.PlcToNc</Name>
-							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
+							<Name>GVL.deviceBridger[2].acknowledge</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>GVL.axisControls[7].Axis.PlcToNc</Name>
-							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
+							<Name>GVL.deviceBridger[3].acknowledge</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>GVL.axisControls[8].Axis.PlcToNc</Name>
-							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
+							<Name>GVL.deviceBridger[4].acknowledge</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>GVL.axisControls[9].Axis.PlcToNc</Name>
-							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
+							<Name>GVL.deviceBridger[5].acknowledge</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>GVL.axisControls[10].Axis.PlcToNc</Name>
-							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
+							<Name>GVL.deviceBridger[6].acknowledge</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>GVL.axisControls[11].Axis.PlcToNc</Name>
-							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
+							<Name>GVL.deviceBridger[7].acknowledge</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>GVL.axisControls[12].Axis.PlcToNc</Name>
-							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
+							<Name>GVL.deviceBridger[8].acknowledge</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>GVL.axisControls[13].Axis.PlcToNc</Name>
-							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
+							<Name>GVL.deviceBridger[9].acknowledge</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>GVL.axisControls[14].Axis.PlcToNc</Name>
-							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
+							<Name>GVL.deviceBridger[10].acknowledge</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>GVL.axisControls[15].Axis.PlcToNc</Name>
-							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
+							<Name>GVL.deviceBridger[11].acknowledge</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>GVL.axisControls[16].Axis.PlcToNc</Name>
-							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
+							<Name>GVL.deviceBridger[12].acknowledge</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>GVL.axisControls[17].Axis.PlcToNc</Name>
-							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
+							<Name>GVL.deviceBridger[13].acknowledge</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>GVL.axisControls[18].Axis.PlcToNc</Name>
-							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
+							<Name>GVL.deviceBridger[14].acknowledge</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>GVL.axisControls[19].Axis.PlcToNc</Name>
-							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
+							<Name>GVL.deviceBridger[15].acknowledge</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>GVL.axisControls[20].Axis.PlcToNc</Name>
-							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
+							<Name>GVL.deviceBridger[16].acknowledge</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.State</Name>
+							<Comment><![CDATA[possible TO output on HMI]]></Comment>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.NextState</Name>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.out_start_0</Name>
+							<Comment><![CDATA[-------------------
+ Remote control - Input
+-------------------]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.out_selProg1_1</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.out_selProg2_2</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.out_selProg4_3</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.out_stop_4</Name>
+							<Comment><![CDATA[foced stop, not recommend to use]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.out_pause_5</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.out_continue_6</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.out_reset_7</Name>
+							<Comment><![CDATA[error reset]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.out_alarmAck</Name>
+							<Type>WORD</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.out_stopReq</Name>
+							<Type>WORD</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.State</Name>
+							<Comment><![CDATA[possible TO output on HMI]]></Comment>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.NextState</Name>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.out_start_0</Name>
+							<Comment><![CDATA[-------------------
+ Remote control - Input
+-------------------]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.out_selProg1_1</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.out_selProg2_2</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.out_selProg4_3</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.out_stop_4</Name>
+							<Comment><![CDATA[foced stop, not recommend to use]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.out_pause_5</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.out_continue_6</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.out_reset_7</Name>
+							<Comment><![CDATA[error reset]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.out_alarmAck</Name>
+							<Type>WORD</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.out_stopReq</Name>
+							<Type>WORD</Type>
 						</Var>
 					</Vars>
 					<TaskPouOids>
-						<TaskPouOid Prio="20" OTCID="#x08502001"/>
+						<TaskPouOid Prio="20" OTCID="#x08502002"/>
 					</TaskPouOids>
 				</Instance>
 			</Project>
@@ -7581,59 +7493,15 @@ External Setpoint Generation:
 		<Io/>
 	</Project>
 	<Mappings>
-		<MappingInfo Identifier="{05000010-2001-0850-1000-040300205008}" Id="#x02030010" Watchdog="14000000040000000400000004000000"/>
+		<MappingInfo Identifier="{05000010-2002-0850-1000-040300205008}" Id="#x02030010" Watchdog="14000000040000000400000004000000"/>
 		<OwnerA Name="TIPC^Untitled1^Untitled1 Instance">
 			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Simu1">
 				<Link VarA="PlcTask Inputs^GVL.axisControls[1].Axis.NcToPlc" VarB="Outputs^ToPlc"/>
 				<Link VarA="PlcTask Outputs^GVL.axisControls[1].Axis.PlcToNc" VarB="Inputs^FromPlc"/>
 			</OwnerB>
-			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Simu10">
-				<Link VarA="PlcTask Inputs^GVL.axisControls[10].Axis.NcToPlc" VarB="Outputs^ToPlc"/>
-				<Link VarA="PlcTask Outputs^GVL.axisControls[10].Axis.PlcToNc" VarB="Inputs^FromPlc"/>
-			</OwnerB>
-			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Simu11">
-				<Link VarA="PlcTask Inputs^GVL.axisControls[11].Axis.NcToPlc" VarB="Outputs^ToPlc"/>
-				<Link VarA="PlcTask Outputs^GVL.axisControls[11].Axis.PlcToNc" VarB="Inputs^FromPlc"/>
-			</OwnerB>
-			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Simu12">
-				<Link VarA="PlcTask Inputs^GVL.axisControls[12].Axis.NcToPlc" VarB="Outputs^ToPlc"/>
-				<Link VarA="PlcTask Outputs^GVL.axisControls[12].Axis.PlcToNc" VarB="Inputs^FromPlc"/>
-			</OwnerB>
-			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Simu13">
-				<Link VarA="PlcTask Inputs^GVL.axisControls[13].Axis.NcToPlc" VarB="Outputs^ToPlc"/>
-				<Link VarA="PlcTask Outputs^GVL.axisControls[13].Axis.PlcToNc" VarB="Inputs^FromPlc"/>
-			</OwnerB>
-			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Simu14">
-				<Link VarA="PlcTask Inputs^GVL.axisControls[14].Axis.NcToPlc" VarB="Outputs^ToPlc"/>
-				<Link VarA="PlcTask Outputs^GVL.axisControls[14].Axis.PlcToNc" VarB="Inputs^FromPlc"/>
-			</OwnerB>
-			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Simu15">
-				<Link VarA="PlcTask Inputs^GVL.axisControls[15].Axis.NcToPlc" VarB="Outputs^ToPlc"/>
-				<Link VarA="PlcTask Outputs^GVL.axisControls[15].Axis.PlcToNc" VarB="Inputs^FromPlc"/>
-			</OwnerB>
-			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Simu16">
-				<Link VarA="PlcTask Inputs^GVL.axisControls[16].Axis.NcToPlc" VarB="Outputs^ToPlc"/>
-				<Link VarA="PlcTask Outputs^GVL.axisControls[16].Axis.PlcToNc" VarB="Inputs^FromPlc"/>
-			</OwnerB>
-			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Simu17">
-				<Link VarA="PlcTask Inputs^GVL.axisControls[17].Axis.NcToPlc" VarB="Outputs^ToPlc"/>
-				<Link VarA="PlcTask Outputs^GVL.axisControls[17].Axis.PlcToNc" VarB="Inputs^FromPlc"/>
-			</OwnerB>
-			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Simu18">
-				<Link VarA="PlcTask Inputs^GVL.axisControls[18].Axis.NcToPlc" VarB="Outputs^ToPlc"/>
-				<Link VarA="PlcTask Outputs^GVL.axisControls[18].Axis.PlcToNc" VarB="Inputs^FromPlc"/>
-			</OwnerB>
-			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Simu19">
-				<Link VarA="PlcTask Inputs^GVL.axisControls[19].Axis.NcToPlc" VarB="Outputs^ToPlc"/>
-				<Link VarA="PlcTask Outputs^GVL.axisControls[19].Axis.PlcToNc" VarB="Inputs^FromPlc"/>
-			</OwnerB>
 			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Simu2">
 				<Link VarA="PlcTask Inputs^GVL.axisControls[2].Axis.NcToPlc" VarB="Outputs^ToPlc"/>
 				<Link VarA="PlcTask Outputs^GVL.axisControls[2].Axis.PlcToNc" VarB="Inputs^FromPlc"/>
-			</OwnerB>
-			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Simu20">
-				<Link VarA="PlcTask Inputs^GVL.axisControls[20].Axis.NcToPlc" VarB="Outputs^ToPlc"/>
-				<Link VarA="PlcTask Outputs^GVL.axisControls[20].Axis.PlcToNc" VarB="Inputs^FromPlc"/>
 			</OwnerB>
 			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Simu3">
 				<Link VarA="PlcTask Inputs^GVL.axisControls[3].Axis.NcToPlc" VarB="Outputs^ToPlc"/>
@@ -7642,26 +7510,6 @@ External Setpoint Generation:
 			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Simu4">
 				<Link VarA="PlcTask Inputs^GVL.axisControls[4].Axis.NcToPlc" VarB="Outputs^ToPlc"/>
 				<Link VarA="PlcTask Outputs^GVL.axisControls[4].Axis.PlcToNc" VarB="Inputs^FromPlc"/>
-			</OwnerB>
-			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Simu5">
-				<Link VarA="PlcTask Inputs^GVL.axisControls[5].Axis.NcToPlc" VarB="Outputs^ToPlc"/>
-				<Link VarA="PlcTask Outputs^GVL.axisControls[5].Axis.PlcToNc" VarB="Inputs^FromPlc"/>
-			</OwnerB>
-			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Simu6">
-				<Link VarA="PlcTask Inputs^GVL.axisControls[6].Axis.NcToPlc" VarB="Outputs^ToPlc"/>
-				<Link VarA="PlcTask Outputs^GVL.axisControls[6].Axis.PlcToNc" VarB="Inputs^FromPlc"/>
-			</OwnerB>
-			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Simu7">
-				<Link VarA="PlcTask Inputs^GVL.axisControls[7].Axis.NcToPlc" VarB="Outputs^ToPlc"/>
-				<Link VarA="PlcTask Outputs^GVL.axisControls[7].Axis.PlcToNc" VarB="Inputs^FromPlc"/>
-			</OwnerB>
-			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Simu8">
-				<Link VarA="PlcTask Inputs^GVL.axisControls[8].Axis.NcToPlc" VarB="Outputs^ToPlc"/>
-				<Link VarA="PlcTask Outputs^GVL.axisControls[8].Axis.PlcToNc" VarB="Inputs^FromPlc"/>
-			</OwnerB>
-			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Simu9">
-				<Link VarA="PlcTask Inputs^GVL.axisControls[9].Axis.NcToPlc" VarB="Outputs^ToPlc"/>
-				<Link VarA="PlcTask Outputs^GVL.axisControls[9].Axis.PlcToNc" VarB="Inputs^FromPlc"/>
 			</OwnerB>
 		</OwnerA>
 	</Mappings>

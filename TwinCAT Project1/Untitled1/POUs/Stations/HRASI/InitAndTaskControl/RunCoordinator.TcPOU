@@ -3,6 +3,11 @@
   <POU Name="RunCoordinator" Id="{93db79ea-7610-40ae-89e3-5adae225f547}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunCoordinator EXTENDS RunGroupNode
 VAR_INPUT
+	startProductionMode AT%I* : BOOL;
+	startDailyCheckMode AT%I* : BOOL;
+	startEnginnerMode AT%I* : BOOL;
+
+	purge AT%I* : BOOL ; // link to HMI
 END_VAR
 VAR_OUTPUT
 END_VAR
@@ -10,10 +15,17 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[SUPER^();
+      <ST><![CDATA[//Initialization sequences:
+// 1. Group1 - two clamper and indexer (two clamper hold/unhold , the indexer turing 4 runs)
+// 2. Group2 - SCARA1 and rack1,2 (pick to drop zone then homing and release rackes)
+// 3. Group3 - SCARA2 and rack3,4
+
+SUPER^();
 
 CASE outputState OF 
-	//------------Initialize
+	//------------------------------------------
+	// Initialize - Group start (base procedure)
+	//------------------------------------------
 	eSpecialStates.GENERIC_GROUP_IDLE:
 		//-----------------
 		//	IDLE: wait command
@@ -35,15 +47,18 @@ CASE outputState OF
 		//	Production mode
 		//  1. Execute SCARA ASSEMBLE
 		//---------------------------
-	16#FF:
-		//--------------------------------
-		//Emergency stop
-		// 1. No way out except initialize
-		//--------------------------------
+	
 END_CASE]]></ST>
     </Implementation>
     <LineIds Name="RunCoordinator">
-      <LineId Id="13" Count="4" />
+      <LineId Id="118" Count="0" />
+      <LineId Id="120" Count="2" />
+      <LineId Id="119" Count="0" />
+      <LineId Id="13" Count="2" />
+      <LineId Id="127" Count="0" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="123" Count="0" />
+      <LineId Id="17" Count="0" />
       <LineId Id="104" Count="1" />
       <LineId Id="103" Count="0" />
       <LineId Id="27" Count="0" />
@@ -57,8 +72,6 @@ END_CASE]]></ST>
       <LineId Id="93" Count="1" />
       <LineId Id="108" Count="0" />
       <LineId Id="77" Count="0" />
-      <LineId Id="98" Count="2" />
-      <LineId Id="110" Count="0" />
       <LineId Id="101" Count="0" />
       <LineId Id="9" Count="0" />
     </LineIds>

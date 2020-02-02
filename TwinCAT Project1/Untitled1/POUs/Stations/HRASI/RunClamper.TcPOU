@@ -21,8 +21,32 @@ END_VAR
     <Implementation>
       <ST><![CDATA[SUPER^();
 
+//Link to :
+// 1. Indexer - working signal
+// 2. Bridge - working signal dispatch  to SCARA
 
 CASE outputState OF
+	//---------------------------
+	//	Initialization : hold and push
+	//---------------------------	
+	eSpecialStates.INITIAL_BEGIN:
+		bSerialTransition := clamper^.Execute(eCylinderCommands.COMMAND_A);
+	eSpecialStates.INITIAL_STATE_1:
+		bSerialTransition := horizon^.Execute(eCylinderCommands.COMMAND_A);
+	eSpecialStates.INITIAL_STATE_2:
+		bSerialTransition := clamper^.Execute(eCylinderCommands.COMMAND_B); //hold
+	eSpecialStates.INITIAL_STATE_3:
+		bSerialTransition := horizon^.Execute(eCylinderCommands.COMMAND_B); //push
+	eSpecialStates.INITIAL_STATE_5:
+		bSerialTransition := clamper^.Execute(eCylinderCommands.COMMAND_A);	//release 
+	eSpecialStates.INITIAL_STATE_6:
+		bSerialTransition := horizon^.Execute(eCylinderCommands.COMMAND_A);	//back 
+		IF bSerialTransition THEN
+			NextState := eSpecialStates.INITIAL_END;
+		END_IF
+	//----------------------------
+	//	Working
+	//----------------------------
 	eSpecialStates.SLAVE_ENTER_PROCEDURE:
 		IF SlotBase^.Valid THEN
 			bSerialTransition := TRUE;
@@ -101,7 +125,16 @@ configSnap := argConfigSnap;]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="RunClamper">
-      <LineId Id="110" Count="4" />
+      <LineId Id="110" Count="0" />
+      <LineId Id="201" Count="0" />
+      <LineId Id="111" Count="0" />
+      <LineId Id="202" Count="1" />
+      <LineId Id="112" Count="1" />
+      <LineId Id="195" Count="2" />
+      <LineId Id="194" Count="0" />
+      <LineId Id="204" Count="13" />
+      <LineId Id="198" Count="2" />
+      <LineId Id="114" Count="0" />
       <LineId Id="170" Count="1" />
       <LineId Id="173" Count="1" />
       <LineId Id="172" Count="0" />

@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <POU Name="RunInitScaraAndRack" Id="{152d0302-1d9a-4db0-acac-27fa8a45876a}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunInitScaraAndRack EXTENDS RunUnitGeneric
+VAR_INPUT
+	scara : POINTER TO RunScaraAgent;
+	racks : ARRAY[0..1] OF POINTER TO RunCommonRack;
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	nCounter : INT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[SUPER^();
+
+CASE outputState OF 
+	eSpecialStates.INITIAL_BEGIN:
+		bSerialTransition := scara^.Initialize();
+	eSpecialStates.INITIAL_STATE_1:
+		bSerialTransition := TRUE;
+		FOR nCounter:=0 TO 1 BY 1 DO
+			bSerialTransition := bSerialTransition AND racks[nCounter]^.Initialize();
+		END_FOR
+		IF bSerialTransition THEN
+			NextState := eSpecialStates.INITIAL_END; //ready for action
+		END_IF
+	//---------------------
+	//	Then start working
+	//---------------------
+	eSpecialStates.GENERIC_GROUP_START:
+		scara^.NextState := eSpecialStates.GENERIC_GROUP_START; //start working
+		FOR nCounter:=0 TO 1 BY 1 DO
+			racks[nCounter]^.NextState := eSpecialStates.GENERIC_GROUP_START;
+		END_FOR
+		bSerialTransition := TRUE; // to void state
+END_CASE]]></ST>
+    </Implementation>
+    <LineIds Name="RunInitScaraAndRack">
+      <LineId Id="9" Count="0" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="16" Count="1" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="20" Count="1" />
+      <LineId Id="23" Count="2" />
+      <LineId Id="32" Count="2" />
+      <LineId Id="26" Count="1" />
+      <LineId Id="29" Count="1" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="15" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
