@@ -6,12 +6,23 @@ VAR_INPUT
 	isStop : BOOL;
 	isError : BOOL;
 	isInitializing : BOOL;
-	
-	io : POINTER TO ioBundleControl;
-
 END_VAR
 VAR
 	buzzerCounter : INT;
+	
+	//----------------
+	//	OUTPUTS
+	//----------------
+	lightRed AT%Q* : BIT;
+	lightGreen AT%Q* : BIT;
+	lightYellow AT%Q* : BIT;
+	lightWhite AT%Q* : BIT;
+	
+	towerRed AT%Q* : BIT;
+	towerGreen AT%Q* : BIT;
+	towerYellow AT%Q* : BIT;
+	towerBuzzer AT%Q* : BIT;
+	
 END_VAR
 VAR PERSISTENT
 	buzzerTimerOn : TON;
@@ -22,17 +33,17 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[//reset all
-io^.lightGreen := FALSE;
-io^.lightRed := FALSE;
-io^.lightYellow := FALSE;
-io^.lightWhite := FALSE;
-io^.towerGreen := FALSE;
-io^.towerRed := FALSE;
-io^.towerYellow := FALSE;
+lightGreen := FALSE;
+lightRed := FALSE;
+lightYellow := FALSE;
+lightWhite := FALSE;
+towerGreen := FALSE;
+towerRed := FALSE;
+towerYellow := FALSE;
 
-io^.towerRed := isError;
-io^.towerYellow := isStop OR isInitializing;
-io^.towerGreen := NOT io^.towerRed AND NOT io^.towerYellow;
+towerRed := isError;
+towerYellow := isStop OR isInitializing;
+towerGreen := NOT towerRed AND NOT towerYellow;
 
 //buzser (fliper
 buzzerTimerOn(IN:= , PT:= , Q=>, ET=> );
@@ -55,7 +66,7 @@ IF  NOT isError THEN
 	buzzerCounter := 0;
 END_IF
 // error comes and timeron and counter not reached
-io^.towerBuzzer := isError AND buzzerTimerOn.Q AND (buzzerCounter < buzzerGoal) and buzzerEnable;]]></ST>
+towerBuzzer := isError AND buzzerTimerOn.Q AND (buzzerCounter < buzzerGoal) AND buzzerEnable;]]></ST>
     </Implementation>
     <LineIds Name="SemephoreV2">
       <LineId Id="148" Count="7" />

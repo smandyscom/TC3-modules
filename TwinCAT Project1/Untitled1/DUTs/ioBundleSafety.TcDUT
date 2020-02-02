@@ -30,7 +30,11 @@ STRUCT
 	safeGuardBypass AT%Q* : BIT;
 	
 	//door solenoid release request
-	safeGuardRelease AT%Q* : BIT; //should trigger pause, process then activate
+	safeGuardRelease AT%Q* : BIT; //should trigger pause before, process then activate
+	
+	//Air valve status
+	airValue1Status AT%I* : BIT;
+	airValue2Status AT%I* : BIT;
 END_STRUCT
 END_TYPE
 ]]></Declaration>

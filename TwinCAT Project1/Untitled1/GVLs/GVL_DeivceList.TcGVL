@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <GVL Name="GVL_DeivceList" Id="{0a2d8f0c-5120-4169-84c0-3d70cdcbf0df}">
+    <Declaration><![CDATA[//{attribute 'qualified_only'}
+VAR_GLOBAL
+	//-------
+	//Signals
+	//-------
+	H1Red : INT := 1; //start
+	H2Green : INT := 2; //stop
+	H3Orange : INT := 3;  //door release
+	H4White : INT := 4; //reset
+	Air : INT := 5;
+	
+	B01 : INT := 6;
+	//--------------
+	//Cylinders
+	//--------------
+	Cy01 : INT := 1;
+	Cy02 : INT := 2;
+	Cy03 : INT := 3;
+	Cy04 : INT := 4;
+	Cy05 : INT := 5;
+	Cy06 : INT := 6;
+	//--------------
+	//Vacuums
+	//--------------
+	//--------------
+	//Material slots
+	//--------------
+	materialA1 : INT :=1;
+	materialA2 : INT :=2;
+	materialA3 : INT :=3;
+	materialA4 : INT :=4;
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

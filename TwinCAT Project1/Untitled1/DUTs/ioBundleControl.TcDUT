@@ -1,17 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
   <DUT Name="ioBundleControl" Id="{45aca38f-7357-436a-a68f-baff3d088c5e}">
     <Declaration><![CDATA[TYPE ioBundleControl :
 STRUCT
-	lightRed AT%Q* : BIT;
-	lightGreen AT%Q* : BIT;
-	lightYellow AT%Q* : BIT;
-	lightWhite AT%Q* : BIT;
 	
-	towerRed AT%Q* : BIT;
-	towerGreen AT%Q* : BIT;
-	towerYellow AT%Q* : BIT;
-	towerBuzzer AT%Q* : BIT;
 	
 END_STRUCT
 END_TYPE

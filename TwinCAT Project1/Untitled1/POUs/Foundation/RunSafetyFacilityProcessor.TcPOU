@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <POU Name="RunSafetyFacilityProcessor" Id="{112d65e6-5fe0-473d-8fd0-00eada0223d2}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunSafetyFacilityProcessor
+VAR_INPUT
+	
+	isPaused : BOOL; // whether auto-mode controller stopped
+END_VAR
+VAR_OUTPUT
+	outPause : BOOL; //require auto-mode controller to stop
+	outEmergency : BOOL; // require auto-mode controller to initialize
+END_VAR
+VAR
+	safeAck AT%Q* : BIT;
+	safeRun AT%Q* : BIT;
+	safeComErr AT%I* : BIT; // should trigger pause
+	
+	//direct status
+	door1 AT%I* : BIT;
+	door2 AT%I* : BIT;
+	door3 AT%I* : BIT;
+	door4 AT%I* : BIT;
+	
+	eStop1 AT%I* : BIT;
+	eStop2 AT%I* : BIT;
+	
+	servoSto AT%I* : BIT;
+	lightScreen AT%I* : BIT;
+	
+	//indirect status
+	airChoke AT%I* : BIT;  // soft-stop valve whether activated
+	safeGuardSatus AT%I* : BIT;   // should trigger pause
+	eStop AT%I* : BIT;	   // should trigger initialization
+	  
+	//bypass
+	airOff AT%Q* : BIT;
+	eStopBypass AT%Q* : BIT;
+	safeGuardBypass AT%Q* : BIT;
+	
+	//door solenoid release request
+	requestSafeGuardRelease AT%I* : BOOL; //linked to HMI
+	safeGuardRelease AT%Q* : BIT; //should trigger pause before, process then activate
+	
+	//Air valve status
+	airValue1Status AT%I* : BIT;
+	airValue2Status AT%I* : BIT;
+	
+	//mega Bypass
+	outPauseBypass AT%Q* : BOOL;
+	outEmergencyBypass AT%Q*: BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//----------------------
+//	Auto resume TwinSAFE
+//-----------------------
+IF safeAck AND NOT safeComErr THEN
+	safeAck := FALSE;
+	safeRun := TRUE;
+ELSIF NOT safeAck AND safeComErr THEN
+	safeAck := TRUE;
+	safeRun := FALSE;
+END_IF
+
+safeGuardRelease := requestSafeGuardRelease AND isPaused; //should pause firstly
+
+outPause := safeComErr OR NOT airChoke OR  safeGuardSatus OR  eStop OR NOT airValue1Status OR NOT airValue2Status AND NOT outPauseBypass;
+outEmergency := eStop AND NOT outEmergencyBypass;]]></ST>
+    </Implementation>
+    <LineIds Name="RunSafetyFacilityProcessor">
+      <LineId Id="52" Count="2" />
+      <LineId Id="46" Count="5" />
+      <LineId Id="44" Count="1" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="42" Count="0" />
+      <LineId Id="41" Count="0" />
+      <LineId Id="64" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
