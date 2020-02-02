@@ -3,11 +3,7 @@
   <POU Name="RunGroupNode" Id="{b9fe6715-7af9-4baf-8aa9-637788ac271f}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunGroupNode EXTENDS RunUnitGeneric
 VAR_INPUT
-END_VAR
-VAR_OUTPUT
-END_VAR
-VAR_IN_OUT
-	members : ARRAY[*] OF POINTER TO RunUnitGeneric;
+	members : ARRAY[0..7] OF POINTER TO RunUnitGeneric;
 END_VAR
 VAR
 	nCounter : DINT;
@@ -23,7 +19,7 @@ CASE outputState OF
 		bSerialTransition := TRUE;
 		
 		//scan if all initialized
-		FOR nCounter := LOWER_BOUND(members,1) TO UPPER_BOUND(members,1) DO
+		FOR nCounter := 0 TO 7 DO
 			IF members[nCounter] <> 0 THEN
 				bSerialTransition := bSerialTransition AND members[nCounter]^.Initialize();
 			END_IF		
@@ -36,7 +32,7 @@ CASE outputState OF
 
 	eSpecialStates.GENERIC_GROUP_START:
 		//then wait command to trigger all station into working state
-		FOR nCounter := LOWER_BOUND(members,1) TO UPPER_BOUND(members,1) DO
+		FOR nCounter := 0 TO 7 DO
 			IF members[nCounter] <> 0 THEN
 				members[nCounter]^.NextState := eSpecialStates.GENERIC_GROUP_START;
 			END_IF

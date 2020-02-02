@@ -3,17 +3,17 @@
   <POU Name="RunUnitControllerV2" Id="{b8ed3dbb-ffb0-4792-8cf6-5dee6569b3ad}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunUnitControllerV2 EXTENDS RunGroupNode
 VAR_INPUT
-	isEmergency : BOOL;
+	isEmergency : BOOL; //would trigger initialize
 	isManual : BOOL;
 	
-	interfaceControl : POINTER TO InterfaceControlV2;//HMI Control interface
-
+	requestInit : bool;
+	requestErrorClear AT%M* : eErrorClearWays := eErrorClearWays.NO_ACTION;
 END_VAR
 VAR_OUTPUT
 	//------------------------
 	//	Error handling channel
 	//------------------------
-	requestErrorClear AT%M* : eErrorClearWays := eErrorClearWays.NO_ACTION;
+	
 	errorType AT%Q* : eCategrories;
 	errorIndex AT%Q* : DINT;
 	errorCode AT%Q* : UDINT;
@@ -91,7 +91,7 @@ IF errorDevice <>0 THEN
 	errorCode := errorDevice^.ErrorDetect();
 	
 	//reset error handling
-	IF interfaceControl^.requestErrorClear <> eErrorClearWays.NO_ACTION THEN
+	IF requestErrorClear <> eErrorClearWays.NO_ACTION THEN
 		errorDevice^.ErrorClear(requestErrorClear); //call error clear function
 		errorDevice := 0 ;// cut link
 	END_IF
@@ -103,17 +103,17 @@ ELSE
 	errorCode := 0;
 END_IF
 
-//----------------------
-// START/STOP
-//-----------------------
-IF interfaceControl^.requestPause OR errorDevice <>0 THEN
-	bPause := TRUE; //start
-ELSIF bPause AND errorDevice = 0 AND interfaceControl^.requestResume AND NOT isEmergency THEN
-	bPause := FALSE; // stop
-ELSE 
-	//remain last status
+//-------------------------------------------------
+// START/STOP (internal pause due to process error
+//-------------------------------------------------
+IF errorDevice <>0 THEN
+	bPause := TRUE; //forced stop
+ELSE
+	//leave current status
 END_IF
-
+//------------------------------------------------------------
+//	IN MANUAL MODE, FORBIDEEN TO DRIVE SEQUENCES
+//------------------------------------------------------------
 IF NOT isManual THEN
 	// sequences driven
 	FOR nCounter :=1 TO unitUpperBound BY 1 DO
@@ -126,7 +126,7 @@ END_IF
 SUPER^(); //state machine driven
 CASE outputState OF
 	eSpecialStates.MAIN_WAIT_INITIALIZING:
-		bSerialTransition := interfaceControl^.requestInit AND NOT isEmergency;
+		bSerialTransition := requestInit AND NOT isEmergency;
 	eSpecialStates.MAIN_INITIALIZING:
 		bSerialTransition := Initialize();
 	eSpecialStates.MAIN_INITIALIZED:
@@ -178,11 +178,11 @@ NextState:=state;]]></ST>
       <LineId Id="1758" Count="0" />
       <LineId Id="1739" Count="0" />
       <LineId Id="1743" Count="0" />
-      <LineId Id="1740" Count="0" />
-      <LineId Id="1742" Count="0" />
       <LineId Id="1759" Count="1" />
       <LineId Id="1741" Count="0" />
-      <LineId Id="1693" Count="1" />
+      <LineId Id="1693" Count="0" />
+      <LineId Id="1800" Count="1" />
+      <LineId Id="1694" Count="0" />
       <LineId Id="1753" Count="4" />
       <LineId Id="1747" Count="1" />
       <LineId Id="1702" Count="0" />
