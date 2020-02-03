@@ -5,7 +5,6 @@
 VAR_INPUT
 	startProductionMode AT%I* : BOOL;
 	startDailyCheckMode AT%I* : BOOL;
-	startEnginnerMode AT%I* : BOOL;
 
 	purge AT%I* : BOOL ; // link to HMI
 END_VAR
@@ -27,27 +26,24 @@ CASE outputState OF
 	// Initialize - Group start (base procedure)
 	//------------------------------------------
 	eSpecialStates.GENERIC_GROUP_IDLE:
-		//-----------------
-		//	IDLE: wait command
-		//-----------------
+		//---------------------
+		//	IDLE (Engineering mode): wait command / able to trigger individual process
+		//---------------------
 	//------------------------Working
-	16#20:
-		//------------------
-		//	Engineering mode
-		//------------------
-	16#30:
-		//------------------
+	16#300:
+		//----------------------------------
 		//	Daily check mode
 		//	1. Bypass some stations
 		//  2. Prompt meesage/door interlock
 		//  3. Execute SCARA DAILY CHECK
-		//------------------
-	16#50:
+		//----------------------------------
+	16#500:
 		//---------------------------
 		//	Production mode
 		//  1. Execute SCARA ASSEMBLE
+		//	2. When purge command raise , coordinate stations to stop
 		//---------------------------
-	
+		
 END_CASE]]></ST>
     </Implementation>
     <LineIds Name="RunCoordinator">
@@ -62,7 +58,6 @@ END_CASE]]></ST>
       <LineId Id="104" Count="1" />
       <LineId Id="103" Count="0" />
       <LineId Id="27" Count="0" />
-      <LineId Id="82" Count="3" />
       <LineId Id="40" Count="0" />
       <LineId Id="96" Count="1" />
       <LineId Id="106" Count="1" />
@@ -71,8 +66,9 @@ END_CASE]]></ST>
       <LineId Id="42" Count="0" />
       <LineId Id="93" Count="1" />
       <LineId Id="108" Count="0" />
+      <LineId Id="140" Count="0" />
       <LineId Id="77" Count="0" />
-      <LineId Id="101" Count="0" />
+      <LineId Id="141" Count="0" />
       <LineId Id="9" Count="0" />
     </LineIds>
   </POU>

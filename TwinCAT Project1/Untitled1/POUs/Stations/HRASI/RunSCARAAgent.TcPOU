@@ -52,7 +52,9 @@ VAR CONSTANT
 	taskInit : UINT := 1;
 	taskAssembly : UINT :=2;
 	taskDailyCheck : UINT :=3;
-	taskCalibration : UINT :=4;
+	
+	taskEngCalibration : UINT :=4;
+	taskEngPickAndDrip : UINT:=5;
 END_VAR
 ]]></Declaration>
     <Implementation>
