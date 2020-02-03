@@ -8,9 +8,10 @@ VAR_OUTPUT
 END_VAR
 VAR
 	//devices
-	ngCylinder : POINTER TO RunCylinder;
-	aoiOut1 : POINTER TO RunSignal ; //done
-	aoiOut2 : POINTER TO RunSignal ; //ok/ng
+	ngCylinder : POINTER TO RunCylinder; // normal close cylinder
+	
+	aoiOut1Done AT%I* : BOOL ; //done
+	aoiOut2Grade AT%I* : BOOL ; //ok/ng
 	
 	aoiTrigger AT%Q* : BOOL;
 	//internal
@@ -20,11 +21,27 @@ END_VAR
       <ST><![CDATA[SUPER^();
 
 CASE outputState OF
+	//--------------------------------
+	//	Initialization TODO, (Light on?)
+	//--------------------------------	
+	eSpecialStates.INITIAL_BEGIN:	
+		bSerialTransition := ngCylinder^.Execute(eCylinderCommands.COMMAND_A);
+		IF bSerialTransition THEN
+			aoiTrigger := FALSE;
+		END_IF
+	eSpecialStates.INITIAL_STATE_1:
+		bSerialTransition := NOT aoiOut1Done;
+		IF bSerialTransition THEN
+			NextState := eSpecialStates.INITIAL_END;
+		END_IF
+	//---------------------------------
+	//	Working
+	//---------------------------------
 	eSpecialStates.SLAVE_ENTER_PROCEDURE:
 		// report id to SCADA?		
-		transitionByte.0 := ngCylinder^.Execute(eCylinderCommands.COMMAND_B); //alway extend
-		transitionByte.1 := aoiOut1^.debouncedOff; //check aoi-done off
-		transitionByte.2 := aoiOut2^.debouncedOff; //check aoi-result as NG (fuse)
+		transitionByte.0 := ngCylinder^.Execute(eCylinderCommands.COMMAND_A); //alway extend
+		transitionByte.1 := NOT aoiOut1Done; //check aoi-done off
+		transitionByte.2 := NOT aoiOut2Grade; //check aoi-result as NG (fuse)
 		
 		bSerialTransition:= (transitionByte = 16#7);
 	16#201:
@@ -37,17 +54,17 @@ CASE outputState OF
 		END_IF
 	16#202:
 		//wait aoi-done on
-		IF aoiOut1^.debouncedOn AND NOT aoiOut2^.debouncedOn THEN
+		IF aoiOut1Done AND NOT aoiOut2Grade THEN
 			//-------------
 			//	NG
 			//-------------
 			SlotBase^.Valid := FALSE; //set as inexsited
 			bSerialTransition:=	TRUE;
-		ELSIF aoiOut1^.debouncedOn AND aoiOut2^.debouncedOn THEN
+		ELSIF aoiOut1Done AND aoiOut2Grade THEN
 			//--------------
 			//	OK 
 			//--------------
-			bSerialTransition := ngCylinder^.Execute(eCylinderCommands.COMMAND_A); //open gate
+			bSerialTransition := ngCylinder^.Execute(eCylinderCommands.COMMAND_B); //open gate
 		ELSE
 			//--------------------------
 			// wait until aoi_done raise
@@ -71,8 +88,7 @@ VAR_INPUT
 	argWorkingSignal : POINTER TO BOOL;
 	
 	argNgCylinder : POINTER TO RunCylinder;
-	argAoiOut1 : POINTER TO RunSignal ; //done
-	argAoiOut2 : POINTER TO RunSignal ; //ok/ng
+	
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -88,42 +104,11 @@ END_IF
 workingSignal := argWorkingSignal; //link
 
 ngCylinder := argNgCylinder;
-aoiOut1 := argAoiOut1;
-aoiOut2 := argAoiOut2;]]></ST>
+]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="RunAoiInspectionV1">
-      <LineId Id="9" Count="0" />
-      <LineId Id="11" Count="1" />
-      <LineId Id="10" Count="0" />
-      <LineId Id="20" Count="0" />
-      <LineId Id="41" Count="0" />
-      <LineId Id="64" Count="0" />
-      <LineId Id="148" Count="1" />
-      <LineId Id="68" Count="0" />
-      <LineId Id="138" Count="1" />
-      <LineId Id="147" Count="0" />
-      <LineId Id="146" Count="0" />
-      <LineId Id="140" Count="0" />
-      <LineId Id="142" Count="0" />
-      <LineId Id="145" Count="0" />
-      <LineId Id="141" Count="0" />
-      <LineId Id="13" Count="0" />
-      <LineId Id="15" Count="0" />
-      <LineId Id="43" Count="0" />
-      <LineId Id="99" Count="2" />
-      <LineId Id="137" Count="0" />
-      <LineId Id="73" Count="1" />
-      <LineId Id="102" Count="1" />
-      <LineId Id="110" Count="0" />
-      <LineId Id="75" Count="0" />
-      <LineId Id="46" Count="0" />
-      <LineId Id="150" Count="0" />
-      <LineId Id="77" Count="0" />
-      <LineId Id="151" Count="0" />
-      <LineId Id="45" Count="0" />
-      <LineId Id="70" Count="1" />
-      <LineId Id="76" Count="0" />
+      <LineId Id="271" Count="54" />
       <LineId Id="14" Count="0" />
     </LineIds>
     <LineIds Name="RunAoiInspectionV1.FB_init">
@@ -131,7 +116,8 @@ aoiOut2 := argAoiOut2;]]></ST>
       <LineId Id="14" Count="1" />
       <LineId Id="11" Count="0" />
       <LineId Id="41" Count="0" />
-      <LineId Id="38" Count="2" />
+      <LineId Id="38" Count="0" />
+      <LineId Id="40" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

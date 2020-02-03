@@ -37,10 +37,7 @@ CASE outputState OF
 				members[nCounter]^.NextState := eSpecialStates.GENERIC_GROUP_START;
 			END_IF
 		END_FOR
-		bSerialTransition := TRUE;
-		
-	eSpecialStates.GENERIC_GROUP_IDLE:
-	
+		bSerialTransition := TRUE; //group idle
 END_CASE]]></ST>
     </Implementation>
     <Method Name="FB_init" Id="{065bd92a-f7f5-4f57-987a-22d42058151c}">
@@ -112,8 +109,6 @@ END_IF]]></ST>
       <LineId Id="46" Count="3" />
       <LineId Id="44" Count="0" />
       <LineId Id="50" Count="0" />
-      <LineId Id="65" Count="0" />
-      <LineId Id="63" Count="1" />
       <LineId Id="16" Count="0" />
     </LineIds>
     <LineIds Name="RunGroupNode.FB_init">

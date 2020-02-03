@@ -5,6 +5,7 @@
 VAR_INPUT
 	scara : POINTER TO RunScaraAgent;
 	racks : ARRAY[0..1] OF POINTER TO RunCommonRack;
+	bridges : ARRAY[0..3] OF POINTER TO RunBridge;
 END_VAR
 VAR_OUTPUT
 END_VAR
@@ -15,6 +16,8 @@ END_VAR
     <Implementation>
       <ST><![CDATA[SUPER^();
 
+
+
 CASE outputState OF 
 	eSpecialStates.INITIAL_BEGIN:
 		bSerialTransition := scara^.Initialize();
@@ -22,6 +25,13 @@ CASE outputState OF
 		bSerialTransition := TRUE;
 		FOR nCounter:=0 TO 1 BY 1 DO
 			bSerialTransition := bSerialTransition AND racks[nCounter]^.Initialize();
+		END_FOR
+	eSpecialStates.INITIAL_STATE_2:
+		bSerialTransition := TRUE;
+		FOR nCounter:=0 TO 3 BY 1 DO
+			IF bridges[nCounter]<>0 THEN
+				bSerialTransition := bSerialTransition AND bridges[nCounter]^.Initialize();
+			END_IF	
 		END_FOR
 		IF bSerialTransition THEN
 			NextState := eSpecialStates.INITIAL_END; //ready for action
@@ -34,11 +44,17 @@ CASE outputState OF
 		FOR nCounter:=0 TO 1 BY 1 DO
 			racks[nCounter]^.NextState := eSpecialStates.GENERIC_GROUP_START;
 		END_FOR
+		FOR nCounter:=0 TO 3 BY 1 DO
+			IF bridges[nCounter]<>0 THEN
+				bridges[nCounter]^.NextState := eSpecialStates.GENERIC_GROUP_START;
+			END_IF	
+		END_FOR
 		bSerialTransition := TRUE; // to void state
 END_CASE]]></ST>
     </Implementation>
     <LineIds Name="RunInitScaraAndRack">
       <LineId Id="9" Count="0" />
+      <LineId Id="62" Count="1" />
       <LineId Id="13" Count="0" />
       <LineId Id="12" Count="0" />
       <LineId Id="14" Count="0" />
@@ -46,11 +62,17 @@ END_CASE]]></ST>
       <LineId Id="22" Count="0" />
       <LineId Id="18" Count="0" />
       <LineId Id="20" Count="1" />
-      <LineId Id="23" Count="2" />
+      <LineId Id="46" Count="0" />
+      <LineId Id="48" Count="1" />
+      <LineId Id="54" Count="2" />
+      <LineId Id="51" Count="2" />
+      <LineId Id="47" Count="0" />
       <LineId Id="32" Count="2" />
       <LineId Id="26" Count="1" />
       <LineId Id="29" Count="1" />
       <LineId Id="28" Count="0" />
+      <LineId Id="58" Count="3" />
+      <LineId Id="57" Count="0" />
       <LineId Id="31" Count="0" />
       <LineId Id="15" Count="0" />
     </LineIds>

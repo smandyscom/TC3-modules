@@ -17,6 +17,18 @@ END_VAR
 SUPER^();
 
 CASE outputState OF 
+	//--------------------------------
+	//	Initialization
+	//--------------------------------	
+	eSpecialStates.INITIAL_BEGIN:
+		bridge.ready := FALSE;
+		bSerialTransition := NOT bridge.ack AND NOT bridge.valid;
+		IF bSerialTransition THEN
+			NextState := eSpecialStates.INITIAL_END;
+		END_IF
+	//---------------------------------
+	//	Working
+	//---------------------------------
 	eSpecialStates.SLAVE_ENTER_PROCEDURE:
 		bridge.ready := TRUE;
 		bSerialTransition := TRUE;
@@ -34,6 +46,13 @@ END_CASE]]></ST>
     <LineIds Name="RunBridge">
       <LineId Id="26" Count="2" />
       <LineId Id="11" Count="2" />
+      <LineId Id="39" Count="2" />
+      <LineId Id="43" Count="1" />
+      <LineId Id="50" Count="0" />
+      <LineId Id="52" Count="1" />
+      <LineId Id="55" Count="0" />
+      <LineId Id="38" Count="0" />
+      <LineId Id="46" Count="1" />
       <LineId Id="9" Count="0" />
       <LineId Id="15" Count="10" />
       <LineId Id="14" Count="0" />

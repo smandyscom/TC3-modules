@@ -6,25 +6,62 @@ VAR_GLOBAL
 	//-------
 	//Signals
 	//-------
-	H1Red : INT := 1; //start
-	H2Green : INT := 2; //stop
-	H3Orange : INT := 3;  //door release
-	H4White : INT := 4; //reset
-	Air : INT := 5;
-	
-	B01 : INT := 6;
+	A19: INT :=1; //Bottom upside-down check
+	A23: INT :=2; //Product bin
+	A24: INT :=3; //NG bin
+	A25: INT :=4; //FQC bin
+	B18: INT :=5; //Empty nest
+	B19: INT :=6; //S/V Check#1
+	B20: INT :=7; //S/V Check#2
+	B21: INT :=8; //Rack1 Approach
+	B22: INT :=9; //Rack3 Approach
+	B25: INT :=10; //Rack2 Approach
+	B26: INT :=11; //Rack4 Approach
+
+	S2: INT :=12; //START
+	S3: INT :=13; //STOP
+	S4: INT :=14; //RESET
+	S5: INT :=15; //DOOR UNLOCK
+	S6: INT :=16; //RACK1
+	S7: INT :=17; //RACK2
+	S8: INT :=18; //RACK3
+	S9: INT :=19; //RACK4
 	//--------------
 	//Cylinders
 	//--------------
-	Cy01 : INT := 1;
-	Cy02 : INT := 2;
-	Cy03 : INT := 3;
-	Cy04 : INT := 4;
-	Cy05 : INT := 5;
-	Cy06 : INT := 6;
+	Cy1: INT :=1; //Filter#1 vertical cylinder
+	Cy10: INT :=2; //Rack3
+	Cy11: INT :=3; //Rack4
+	Cy12: INT :=4; //Clamper axial#A
+	Cy13: INT :=5; //Clamper hold#A
+	Cy14: INT :=6; //Clamper axial#B
+	Cy15: INT :=7; //Clamper hold#B
+	Cy16: INT :=8; //AOI NG ejector
+	Cy17: INT :=9; //Index piston
+	Cy18: INT :=10; //Index locker
+	Cy2: INT :=11; //Filter#2 vertical cylinder
+	Cy3: INT :=12; //Filter#3 vertical cylinder
+	Cy6: INT :=13; //Top part holder
+	Cy7: INT :=14; //Bottom part vertical
+	Cy8: INT :=15; //Rack1
+	Cy9: INT :=16; //Rack2
 	//--------------
 	//Vacuums
 	//--------------
+	A10: INT :=1; //Filter#2 vacuum sensor
+	A11: INT :=2; //Filter#3-1 vacuum sensor
+	A12: INT :=3; //Filter#3-2 vacuum sensor
+	A13: INT :=4; //Back secure#1
+	A14: INT :=5; //Back secure#2
+	A20: INT :=6; //Bottom vacuum check
+	A9: INT :=7; //Filter#1 vacuum sensor
+	VG1: INT :=8; //Filter#1 rib secure#A
+	VG2: INT :=9; //Filter#2 rib secure#A
+	VG3: INT :=10; //Filter#3 rib secure#A
+	VG4: INT :=11; //Filter#1 rib secure#B
+	VG5: INT :=12; //Filter#2 rib secure#B
+	VG6: INT :=13; //Filter#3 rib secure#B
+
 	//--------------
 	//Material slots
 	//--------------

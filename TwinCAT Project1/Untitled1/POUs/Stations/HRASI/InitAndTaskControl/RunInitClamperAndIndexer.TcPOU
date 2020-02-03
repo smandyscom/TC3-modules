@@ -7,7 +7,6 @@ VAR_INPUT
 	clampers : ARRAY[0..1] OF POINTER TO RunClamper;
 	aoi : POINTER TO RunAoiInspectionV1;
 	
-	//TODO , bridge initialze
 END_VAR
 VAR_OUTPUT
 END_VAR
