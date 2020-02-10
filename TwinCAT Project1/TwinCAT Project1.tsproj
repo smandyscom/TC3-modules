@@ -5780,6 +5780,19 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
+							<Name>MAIN.marshal.startProductionMode</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.marshal.startDailyCheckMode</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.marshal.purge</Name>
+							<Comment><![CDATA[ link to HMI]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
 							<Name>MAIN.MainIndexer.sensorPairs[0].bit0</Name>
 							<Type>BOOL</Type>
 						</Var>
@@ -5810,6 +5823,116 @@ External Setpoint Generation:
 						<Var>
 							<Name>MAIN.MainIndexer.sensorPairs[3].bit1</Name>
 							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.S3AoiInspection.aoiOut1Done</Name>
+							<Comment><![CDATA[done]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.S3AoiInspection.aoiOut2Grade</Name>
+							<Comment><![CDATA[ok/ng]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.in_ready_0</Name>
+							<Comment><![CDATA[Turns ON when the controller startup completes and no task is running. ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.in_running_1</Name>
+							<Comment><![CDATA[Turns ON when task is running. However, turns OFF when Paused output is ON. ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.in_paused_2</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.in_error_3</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.in_eStop_4</Name>
+							<Comment><![CDATA[as EDM]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.in_safeGuard_5</Name>
+							<Comment><![CDATA[as EDM to safeguard]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.in_sError_6</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.in_warning_7</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.in_alarmCode</Name>
+							<Comment><![CDATA[------------------
+	User - input
+------------------
+------------------
+	User - output 
+------------------]]></Comment>
+							<Type>WORD</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.in_taskState</Name>
+							<Type>WORD</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.in_ready_0</Name>
+							<Comment><![CDATA[Turns ON when the controller startup completes and no task is running. ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.in_running_1</Name>
+							<Comment><![CDATA[Turns ON when task is running. However, turns OFF when Paused output is ON. ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.in_paused_2</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.in_error_3</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.in_eStop_4</Name>
+							<Comment><![CDATA[as EDM]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.in_safeGuard_5</Name>
+							<Comment><![CDATA[as EDM to safeguard]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.in_sError_6</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.in_warning_7</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.in_alarmCode</Name>
+							<Comment><![CDATA[------------------
+	User - input
+------------------
+------------------
+	User - output 
+------------------]]></Comment>
+							<Type>WORD</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.in_taskState</Name>
+							<Type>WORD</Type>
 						</Var>
 						<Var>
 							<Name>MAIN.Rack1.rackEngaged</Name>
@@ -6007,6 +6130,110 @@ External Setpoint Generation:
 							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
 						</Var>
 						<Var>
+							<Name>GVL.cylinderControls[12].SENSOR_A</Name>
+							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[12].SENSOR_B</Name>
+							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[13].SENSOR_A</Name>
+							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[13].SENSOR_B</Name>
+							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[14].SENSOR_A</Name>
+							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[14].SENSOR_B</Name>
+							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[15].SENSOR_A</Name>
+							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[15].SENSOR_B</Name>
+							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[16].SENSOR_A</Name>
+							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[16].SENSOR_B</Name>
+							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[17].SENSOR_A</Name>
+							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[17].SENSOR_B</Name>
+							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[18].SENSOR_A</Name>
+							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[18].SENSOR_B</Name>
+							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[19].SENSOR_A</Name>
+							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[19].SENSOR_B</Name>
+							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[20].SENSOR_A</Name>
+							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[20].SENSOR_B</Name>
+							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[21].SENSOR_A</Name>
+							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[21].SENSOR_B</Name>
+							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[22].SENSOR_A</Name>
+							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[22].SENSOR_B</Name>
+							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[23].SENSOR_A</Name>
+							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[23].SENSOR_B</Name>
+							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[24].SENSOR_A</Name>
+							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[24].SENSOR_B</Name>
+							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
+						</Var>
+						<Var>
 							<Name>GVL.vacuumControls[1].sensorVacuum</Name>
 							<Type>INT</Type>
 						</Var>
@@ -6120,6 +6347,50 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>GVL.signalControls[13].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[14].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[15].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[16].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[17].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[18].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[19].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[20].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[21].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[22].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[23].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[24].input</Name>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
@@ -6359,108 +6630,48 @@ External Setpoint Generation:
 							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>MAIN.Scara1.in_ready_0</Name>
-							<Comment><![CDATA[Turns ON when the controller startup completes and no task is running. ]]></Comment>
-							<Type>BOOL</Type>
+							<Name>GVL.deviceBridger[17].command</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>MAIN.Scara1.in_running_1</Name>
-							<Comment><![CDATA[Turns ON when task is running. However, turns OFF when Paused output is ON. ]]></Comment>
-							<Type>BOOL</Type>
+							<Name>GVL.deviceBridger[18].command</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>MAIN.Scara1.in_paused_2</Name>
-							<Type>BOOL</Type>
+							<Name>GVL.deviceBridger[19].command</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>MAIN.Scara1.in_error_3</Name>
-							<Type>BOOL</Type>
+							<Name>GVL.deviceBridger[20].command</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>MAIN.Scara1.in_eStop_4</Name>
-							<Comment><![CDATA[as EDM]]></Comment>
-							<Type>BOOL</Type>
+							<Name>GVL.deviceBridger[21].command</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>MAIN.Scara1.in_safeGuard_5</Name>
-							<Comment><![CDATA[as EDM to safeguard]]></Comment>
-							<Type>BOOL</Type>
+							<Name>GVL.deviceBridger[22].command</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>MAIN.Scara1.in_sError_6</Name>
-							<Type>BOOL</Type>
+							<Name>GVL.deviceBridger[23].command</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>MAIN.Scara1.in_warning_7</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.Scara1.in_alarmCode</Name>
-							<Comment><![CDATA[------------------
-	User - input
-------------------
-------------------
-	User - output 
-------------------]]></Comment>
-							<Type>WORD</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.Scara1.in_taskState</Name>
-							<Type>WORD</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.Scara2.in_ready_0</Name>
-							<Comment><![CDATA[Turns ON when the controller startup completes and no task is running. ]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.Scara2.in_running_1</Name>
-							<Comment><![CDATA[Turns ON when task is running. However, turns OFF when Paused output is ON. ]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.Scara2.in_paused_2</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.Scara2.in_error_3</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.Scara2.in_eStop_4</Name>
-							<Comment><![CDATA[as EDM]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.Scara2.in_safeGuard_5</Name>
-							<Comment><![CDATA[as EDM to safeguard]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.Scara2.in_sError_6</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.Scara2.in_warning_7</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.Scara2.in_alarmCode</Name>
-							<Comment><![CDATA[------------------
-	User - input
-------------------
-------------------
-	User - output 
-------------------]]></Comment>
-							<Type>WORD</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.Scara2.in_taskState</Name>
-							<Type>WORD</Type>
+							<Name>GVL.deviceBridger[24].command</Name>
+							<Type>BYTE</Type>
 						</Var>
 					</Vars>
 					<Vars VarGrpType="2">
 						<Name>PlcTask Outputs</Name>
+						<Var>
+							<Name>MAIN.safetyEdmFake1</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.safetyEdmFake2</Name>
+							<Type>BOOL</Type>
+						</Var>
 						<Var>
 							<Name>MAIN.semephore.lightRed</Name>
 							<Comment><![CDATA[----------------
@@ -6560,6 +6771,58 @@ External Setpoint Generation:
 							<Type>UDINT</Type>
 						</Var>
 						<Var>
+							<Name>MAIN.marshal.State</Name>
+							<Comment><![CDATA[possible TO output on HMI]]></Comment>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.marshal.NextState</Name>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.marshal.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.groupScara1.State</Name>
+							<Comment><![CDATA[possible TO output on HMI]]></Comment>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.groupScara1.NextState</Name>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.groupScara1.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.groupScara2.State</Name>
+							<Comment><![CDATA[possible TO output on HMI]]></Comment>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.groupScara2.NextState</Name>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.groupScara2.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.groupCentral.State</Name>
+							<Comment><![CDATA[possible TO output on HMI]]></Comment>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.groupCentral.NextState</Name>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.groupCentral.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
 							<Name>MAIN.MainIndexer.State</Name>
 							<Comment><![CDATA[possible TO output on HMI]]></Comment>
 							<Type>INT</Type>
@@ -6627,6 +6890,122 @@ External Setpoint Generation:
 						<Var>
 							<Name>MAIN.S4Clamper.AlarmCode</Name>
 							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.State</Name>
+							<Comment><![CDATA[possible TO output on HMI]]></Comment>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.NextState</Name>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.out_start_0</Name>
+							<Comment><![CDATA[-------------------
+ Remote control - Input
+-------------------]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.out_selProg1_1</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.out_selProg2_2</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.out_selProg4_3</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.out_stop_4</Name>
+							<Comment><![CDATA[foced stop, not recommend to use]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.out_pause_5</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.out_continue_6</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.out_reset_7</Name>
+							<Comment><![CDATA[error reset]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.out_alarmAck</Name>
+							<Type>WORD</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.out_stopReq</Name>
+							<Type>WORD</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.State</Name>
+							<Comment><![CDATA[possible TO output on HMI]]></Comment>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.NextState</Name>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.out_start_0</Name>
+							<Comment><![CDATA[-------------------
+ Remote control - Input
+-------------------]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.out_selProg1_1</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.out_selProg2_2</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.out_selProg4_3</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.out_stop_4</Name>
+							<Comment><![CDATA[foced stop, not recommend to use]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.out_pause_5</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.out_continue_6</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.out_reset_7</Name>
+							<Comment><![CDATA[error reset]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.out_alarmAck</Name>
+							<Type>WORD</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.out_stopReq</Name>
+							<Type>WORD</Type>
 						</Var>
 						<Var>
 							<Name>MAIN.Rack1.State</Name>
@@ -7056,6 +7435,110 @@ External Setpoint Generation:
 							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
 						</Var>
 						<Var>
+							<Name>GVL.cylinderControls[12].ACT_A</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[12].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[13].ACT_A</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[13].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[14].ACT_A</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[14].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[15].ACT_A</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[15].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[16].ACT_A</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[16].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[17].ACT_A</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[17].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[18].ACT_A</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[18].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[19].ACT_A</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[19].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[20].ACT_A</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[20].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[21].ACT_A</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[21].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[22].ACT_A</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[22].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[23].ACT_A</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[23].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[24].ACT_A</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.cylinderControls[24].ACT_B</Name>
+							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
+						</Var>
+						<Var>
 							<Name>GVL.vacuumControls[1].ACT_GENERATOR</Name>
 							<Type>BOOL</Type>
 						</Var>
@@ -7288,6 +7771,94 @@ External Setpoint Generation:
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
+							<Name>GVL.signalControls[14].debouncedOn</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[14].debouncedOff</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[15].debouncedOn</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[15].debouncedOff</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[16].debouncedOn</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[16].debouncedOff</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[17].debouncedOn</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[17].debouncedOff</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[18].debouncedOn</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[18].debouncedOff</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[19].debouncedOn</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[19].debouncedOff</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[20].debouncedOn</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[20].debouncedOff</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[21].debouncedOn</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[21].debouncedOff</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[22].debouncedOn</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[22].debouncedOff</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[23].debouncedOn</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[23].debouncedOff</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[24].debouncedOn</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[24].debouncedOff</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
 							<Name>GVL.axisControls[1].Axis.PlcToNc</Name>
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
@@ -7368,124 +7939,40 @@ External Setpoint Generation:
 							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>MAIN.Scara1.State</Name>
-							<Comment><![CDATA[possible TO output on HMI]]></Comment>
-							<Type>INT</Type>
+							<Name>GVL.deviceBridger[17].acknowledge</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>MAIN.Scara1.NextState</Name>
-							<Type>INT</Type>
+							<Name>GVL.deviceBridger[18].acknowledge</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>MAIN.Scara1.AlarmCode</Name>
-							<Type>UDINT</Type>
+							<Name>GVL.deviceBridger[19].acknowledge</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>MAIN.Scara1.out_start_0</Name>
-							<Comment><![CDATA[-------------------
- Remote control - Input
--------------------]]></Comment>
-							<Type>BOOL</Type>
+							<Name>GVL.deviceBridger[20].acknowledge</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>MAIN.Scara1.out_selProg1_1</Name>
-							<Type>BOOL</Type>
+							<Name>GVL.deviceBridger[21].acknowledge</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>MAIN.Scara1.out_selProg2_2</Name>
-							<Type>BOOL</Type>
+							<Name>GVL.deviceBridger[22].acknowledge</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>MAIN.Scara1.out_selProg4_3</Name>
-							<Type>BOOL</Type>
+							<Name>GVL.deviceBridger[23].acknowledge</Name>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>MAIN.Scara1.out_stop_4</Name>
-							<Comment><![CDATA[foced stop, not recommend to use]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.Scara1.out_pause_5</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.Scara1.out_continue_6</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.Scara1.out_reset_7</Name>
-							<Comment><![CDATA[error reset]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.Scara1.out_alarmAck</Name>
-							<Type>WORD</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.Scara1.out_stopReq</Name>
-							<Type>WORD</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.Scara2.State</Name>
-							<Comment><![CDATA[possible TO output on HMI]]></Comment>
-							<Type>INT</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.Scara2.NextState</Name>
-							<Type>INT</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.Scara2.AlarmCode</Name>
-							<Type>UDINT</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.Scara2.out_start_0</Name>
-							<Comment><![CDATA[-------------------
- Remote control - Input
--------------------]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.Scara2.out_selProg1_1</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.Scara2.out_selProg2_2</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.Scara2.out_selProg4_3</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.Scara2.out_stop_4</Name>
-							<Comment><![CDATA[foced stop, not recommend to use]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.Scara2.out_pause_5</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.Scara2.out_continue_6</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.Scara2.out_reset_7</Name>
-							<Comment><![CDATA[error reset]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.Scara2.out_alarmAck</Name>
-							<Type>WORD</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.Scara2.out_stopReq</Name>
-							<Type>WORD</Type>
+							<Name>GVL.deviceBridger[24].acknowledge</Name>
+							<Type>BYTE</Type>
 						</Var>
 					</Vars>
 					<TaskPouOids>
-						<TaskPouOid Prio="20" OTCID="#x08502002"/>
+						<TaskPouOid Prio="20" OTCID="#x08502001"/>
 					</TaskPouOids>
 				</Instance>
 			</Project>
@@ -7493,7 +7980,7 @@ External Setpoint Generation:
 		<Io/>
 	</Project>
 	<Mappings>
-		<MappingInfo Identifier="{05000010-2002-0850-1000-040300205008}" Id="#x02030010" Watchdog="14000000040000000400000004000000"/>
+		<MappingInfo Identifier="{05000010-2001-0850-1000-040300205008}" Id="#x02030010" Watchdog="14000000040000000400000004000000"/>
 		<OwnerA Name="TIPC^Untitled1^Untitled1 Instance">
 			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Simu1">
 				<Link VarA="PlcTask Inputs^GVL.axisControls[1].Axis.NcToPlc" VarB="Outputs^ToPlc"/>

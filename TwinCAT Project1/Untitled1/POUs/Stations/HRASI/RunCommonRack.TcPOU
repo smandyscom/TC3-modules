@@ -65,8 +65,6 @@ CASE outputState OF
 			rackReady := TRUE;
 		END_IF
 	16#4:
-		bSerialTransition := rackEngaged;
-	16#5:
 		//------------------------------------------------------------------
 		//	Check if any item reached the bound. then set rackReady as false
 		// or by external signal (manual or job stop)
@@ -82,8 +80,8 @@ CASE outputState OF
 		IF bSerialTransition THEN
 			rackReady := FALSE; //released
 		END_IF
-	16#6:
-		//wait until SCARA handshaked
+	16#5:
+		//wait until SCARA disengaged
 		IF NOT rackEngaged THEN
 			NextState := eSpecialStates.GENERIC_GROUP_START; //rewind
 		END_IF
@@ -141,7 +139,6 @@ approx :=argApprox;
       <LineId Id="34" Count="0" />
       <LineId Id="32" Count="1" />
       <LineId Id="58" Count="2" />
-      <LineId Id="56" Count="1" />
       <LineId Id="101" Count="2" />
       <LineId Id="200" Count="0" />
       <LineId Id="105" Count="0" />

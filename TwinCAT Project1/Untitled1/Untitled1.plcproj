@@ -33,10 +33,13 @@
     <Compile Include="DUTs\Communication\Command\commCommandPos.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\Communication\commVacuum.TcDUT">
+    <Compile Include="DUTs\Communication\commManual.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\Communication\commManual.TcDUT">
+    <Compile Include="DUTs\Communication\contextVacuum.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Communication\contextManual.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\Communication\Cylinder\commCylinder.TcDUT">

@@ -12,7 +12,7 @@ UNION
 	//----------
 	//	New added , 20191228
 	//----------
-	vacuum : commVacuum;
+	vacuum : contextVacuum;
 END_UNION
 END_TYPE
 ]]></Declaration>
