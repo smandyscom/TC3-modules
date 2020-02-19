@@ -34,7 +34,9 @@ VAR PERSISTENT
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[//Run timers
+      <ST><![CDATA[SUPER^();
+
+//Run timers
 TMR_WATCH_DOG(IN:= , PT:= , Q=> , ET=> );
 TMR_DELAY_TO_A(IN:= , PT:= , Q=> , ET=> );
 TMR_DELAY_TO_B(IN:= , PT:= , Q=> , ET=> );
@@ -279,6 +281,7 @@ END_VAR
       </Implementation>
     </Method>
     <LineIds Name="RunCylinder">
+      <LineId Id="347" Count="1" />
       <LineId Id="144" Count="22" />
       <LineId Id="169" Count="24" />
       <LineId Id="270" Count="1" />

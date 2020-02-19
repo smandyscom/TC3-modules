@@ -51,7 +51,8 @@ END_VAR
 VAR CONSTANT
 	taskInit : UINT := 1;
 	taskAssembly : UINT :=2;
-	taskDailyCheck : UINT :=3;
+	taskSnipFit : UINT :=3;
+	taskRegularCheck : UINT :=3;
 	
 	taskEngCalibration : UINT :=4;
 	taskEngPickAndDrip : UINT:=5;

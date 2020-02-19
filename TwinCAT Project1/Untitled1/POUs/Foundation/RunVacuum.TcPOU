@@ -37,7 +37,9 @@ VAR PERSISTENT
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[//Command received -> delay -> output , and refresh relative sensor
+      <ST><![CDATA[SUPER^();
+
+//Command received -> delay -> output , and refresh relative sensor
 
 //------------
 //
@@ -268,6 +270,7 @@ END_VAR
       </Implementation>
     </Method>
     <LineIds Name="RunVacuum">
+      <LineId Id="320" Count="1" />
       <LineId Id="195" Count="33" />
       <LineId Id="231" Count="17" />
       <LineId Id="283" Count="2" />
