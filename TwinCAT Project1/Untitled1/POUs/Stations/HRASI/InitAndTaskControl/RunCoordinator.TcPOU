@@ -4,9 +4,12 @@
     <Declaration><![CDATA[FUNCTION_BLOCK RunCoordinator EXTENDS RunGroupNode
 VAR_INPUT
 	startProductionMode AT%I* : BOOL;
-	startDailyCheckMode AT%I* : BOOL;
-
-	purge AT%I* : BOOL ; // link to HMI
+	startRegularCheckMode AT%I* : BOOL;
+	//------------
+	// link to HMI
+	//------------
+	purge AT%I* : BOOL ; 
+	regularCheckAck AT%I* : BOOL;
 END_VAR
 VAR_OUTPUT
 END_VAR
@@ -32,10 +35,10 @@ CASE outputState OF
 	//------------------------Working
 	16#300:
 		//----------------------------------
-		//	Daily check mode
-		//	1. Bypass some stations
+		//	Regular check mode
+		//	1. Stand-along check SCARA1/SCARA2
+		//	1. Bypass some stations then feed-in parts in Slot1 , then transit to AOI
 		//  2. Prompt meesage/door interlock
-		//  3. Execute SCARA DAILY CHECK
 		//----------------------------------
 	16#500:
 		//---------------------------
@@ -60,8 +63,8 @@ END_CASE]]></ST>
       <LineId Id="27" Count="0" />
       <LineId Id="40" Count="0" />
       <LineId Id="96" Count="1" />
+      <LineId Id="173" Count="0" />
       <LineId Id="106" Count="1" />
-      <LineId Id="109" Count="0" />
       <LineId Id="95" Count="0" />
       <LineId Id="42" Count="0" />
       <LineId Id="93" Count="1" />

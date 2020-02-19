@@ -3,14 +3,19 @@
   <POU Name="ExecuteBase" Id="{31f85d56-6d2b-43f6-82c0-18b487d86a3e}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK ExecuteBase EXTENDS CommonBase
 VAR_INPUT
+	isRemoteControl : BOOL;
 END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
+	remoteCommand AT%I* : BYTE;
+	remoteAcknowledge AT%Q*: BYTE;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[]]></ST>
+      <ST><![CDATA[IF isRemoteControl THEN
+	Execute(argCommand := remoteCommand);
+END_IF]]></ST>
     </Implementation>
     <Method Name="Execute" Id="{947e425d-0a86-42d4-a40b-e9e1ca16f7ae}">
       <Declaration><![CDATA[METHOD Execute : BOOL
@@ -24,6 +29,7 @@ END_VAR
     </Method>
     <LineIds Name="ExecuteBase">
       <LineId Id="9" Count="0" />
+      <LineId Id="20" Count="1" />
     </LineIds>
     <LineIds Name="ExecuteBase.Execute">
       <LineId Id="5" Count="0" />

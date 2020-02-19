@@ -3,6 +3,8 @@
   <POU Name="RunVacuum" Id="{f228bb52-7ea9-46f3-811e-2b9a8550fbc1}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunVacuum EXTENDS ExecuteBase
 VAR_INPUT
+	isErrorDetectEnabled : BOOL;
+	isActiveAutoBreakStroke : BOOL;	//TODO , start breaker stroke then stop
 END_VAR
 VAR_OUTPUT
 END_VAR
@@ -87,7 +89,10 @@ BIT_WARNING := (NOT bMatched) AND (NOT BIT_WARN_SUPPRESS) AND TMR_WATCH_DOG.Q AN
 // cache last command
 LAST_COMMAND := COMMAND_CACHED;
 
-//comm.STATUS_WORD.5 := BIT_DONE;]]></ST>
+//reflect current status
+IF BIT_DONE THEN
+	remoteAcknowledge := COMMAND_CACHED;
+END_IF]]></ST>
     </Implementation>
     <Folder Name="CommonBase" Id="{119ac4ac-a070-4964-91b6-1098b43d0930}" />
     <Method Name="ConfigureRead" Id="{e4328d86-5ac7-448e-92b5-6ef30e082ccc}" FolderPath="CommonBase\">
@@ -144,13 +149,8 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[CASE input OF
-	eErrorClearWays.RESET:
-		//Timer reset only
-	eErrorClearWays.IGNORE:
-		//suppress warning
-		BIT_WARN_SUPPRESS := TRUE;
-END_CASE]]></ST>
+        <ST><![CDATA[//suppress is the only way
+BIT_WARN_SUPPRESS := TRUE;]]></ST>
       </Implementation>
     </Method>
     <Method Name="ErrorDetect" Id="{07bb229a-8ae7-4e82-82c3-5cef497f95a9}" FolderPath="CommonBase\">
@@ -159,10 +159,12 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[ErrorDetect := 0;
-IF BIT_WARNING THEN
+        <ST><![CDATA[IF NOT isErrorDetectEnabled THEN
+	ErrorDetect := 0;
+ELSIF BIT_WARNING THEN
 	ErrorDetect := COMMAND_CACHED; //distinguish different error 
-END_IF]]></ST>
+END_IF
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="Execute" Id="{8dc7b7d8-3f66-4f42-ad1a-2509fef862bd}">
@@ -268,6 +270,7 @@ END_VAR
     <LineIds Name="RunVacuum">
       <LineId Id="195" Count="33" />
       <LineId Id="231" Count="17" />
+      <LineId Id="283" Count="2" />
       <LineId Id="55" Count="0" />
     </LineIds>
     <LineIds Name="RunVacuum.ConfigureRead">
@@ -292,17 +295,14 @@ END_VAR
       <LineId Id="11" Count="0" />
     </LineIds>
     <LineIds Name="RunVacuum.ErrorClear">
-      <LineId Id="5" Count="0" />
-      <LineId Id="12" Count="1" />
-      <LineId Id="10" Count="0" />
-      <LineId Id="15" Count="0" />
-      <LineId Id="14" Count="0" />
-      <LineId Id="11" Count="0" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="20" Count="0" />
     </LineIds>
     <LineIds Name="RunVacuum.ErrorDetect">
-      <LineId Id="11" Count="0" />
-      <LineId Id="5" Count="0" />
-      <LineId Id="22" Count="0" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="30" Count="1" />
+      <LineId Id="29" Count="0" />
       <LineId Id="10" Count="0" />
     </LineIds>
     <LineIds Name="RunVacuum.Execute">
