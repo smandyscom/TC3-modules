@@ -90,11 +90,7 @@ BIT_DONE := bMatched OR (NOT bMatched AND BIT_WARN_SUPPRESS AND TMR_WATCH_DOG.Q)
 BIT_WARNING := (NOT bMatched) AND (NOT BIT_WARN_SUPPRESS) AND TMR_WATCH_DOG.Q AND TMR_DELAY_TO_THRESHOLD.Q;
 // cache last command
 LAST_COMMAND := COMMAND_CACHED;
-
-//reflect current status
-IF BIT_DONE THEN
-	remoteAcknowledge := COMMAND_CACHED;
-END_IF]]></ST>
+]]></ST>
     </Implementation>
     <Folder Name="CommonBase" Id="{119ac4ac-a070-4964-91b6-1098b43d0930}" />
     <Method Name="ConfigureRead" Id="{e4328d86-5ac7-448e-92b5-6ef30e082ccc}" FolderPath="CommonBase\">
@@ -272,8 +268,7 @@ END_VAR
     <LineIds Name="RunVacuum">
       <LineId Id="320" Count="1" />
       <LineId Id="195" Count="33" />
-      <LineId Id="231" Count="17" />
-      <LineId Id="283" Count="2" />
+      <LineId Id="231" Count="16" />
       <LineId Id="55" Count="0" />
     </LineIds>
     <LineIds Name="RunVacuum.ConfigureRead">

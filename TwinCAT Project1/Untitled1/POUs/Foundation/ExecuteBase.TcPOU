@@ -10,11 +10,15 @@ END_VAR
 VAR
 	remoteCommand AT%I* : BYTE;
 	remoteAcknowledge AT%Q*: BYTE;
+	
+	internalCommand : eCylinderCommands;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF isRemoteControl THEN
-	Execute(argCommand := remoteCommand);
+	IF Execute(argCommand := BYTE_TO_WORD(remoteCommand)) THEN
+		remoteAcknowledge := remoteCommand;
+	END_IF
 END_IF]]></ST>
     </Implementation>
     <Method Name="Execute" Id="{947e425d-0a86-42d4-a40b-e9e1ca16f7ae}">
@@ -29,7 +33,9 @@ END_VAR
     </Method>
     <LineIds Name="ExecuteBase">
       <LineId Id="9" Count="0" />
-      <LineId Id="20" Count="1" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="32" Count="1" />
+      <LineId Id="21" Count="0" />
     </LineIds>
     <LineIds Name="ExecuteBase.Execute">
       <LineId Id="5" Count="0" />

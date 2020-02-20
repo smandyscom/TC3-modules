@@ -109,11 +109,6 @@ BIT_WARNING := (NOT bMatched) AND (NOT BIT_WARN_SUPPRESS) AND TMR_WATCH_DOG.Q AN
 // cache last command
 LAST_COMMAND := COMMAND_CACHED;
 
-//reflect current status
-IF BIT_DONE THEN
-	remoteAcknowledge := COMMAND_CACHED;
-END_IF
-
 //scan-out status
 //comm.STATUS_WORD.0 := BIT_WARNING;
 //comm.STATUS_WORD.1 := BIT_A_MATCH;
@@ -292,10 +287,6 @@ END_VAR
       <LineId Id="280" Count="0" />
       <LineId Id="275" Count="0" />
       <LineId Id="203" Count="7" />
-      <LineId Id="315" Count="0" />
-      <LineId Id="312" Count="0" />
-      <LineId Id="233" Count="0" />
-      <LineId Id="313" Count="1" />
       <LineId Id="234" Count="4" />
       <LineId Id="9" Count="0" />
     </LineIds>
