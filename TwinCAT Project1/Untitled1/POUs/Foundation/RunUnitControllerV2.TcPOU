@@ -62,12 +62,12 @@ FOR nCounter :=1 TO axisUpperBound BY 1 DO
 	END_IF
 END_FOR
 FOR nCounter :=1 TO cylinderUpperBound BY 1 DO
-	gvl.cylinderControls[nCounter]();
+	gvl.pnuematicControls[nCounter]^();
 	//error detection
-	IF errorDevice=0 AND errorDelayDetect.Q AND gvl.cylinderControls[nCounter].ErrorDetect() <> 0 THEN
+	IF errorDevice=0 AND errorDelayDetect.Q AND gvl.pnuematicControls[nCounter]^.ErrorDetect() <> 0 THEN
 		//error scaned
 		errorIndex := nCounter-1;
-		errorDevice := ADR(gvl.cylinderControls[nCounter]);
+		errorDevice := gvl.pnuematicControls[nCounter];
 	END_IF
 END_FOR
 FOR nCounter :=1 TO signalUpperBound BY 1 DO

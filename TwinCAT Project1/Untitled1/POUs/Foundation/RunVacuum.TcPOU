@@ -7,6 +7,7 @@ VAR_INPUT
 	isActiveAutoBreakStroke : BOOL;	//TODO , start breaker stroke then stop
 END_VAR
 VAR_OUTPUT
+	vacuumSensorValue AT %I* : INT;
 END_VAR
 VAR
 	COMMAND_CACHED : eCylinderCommands; //1 , HMI->PLC
@@ -14,23 +15,20 @@ VAR
 		
 	ACT_GENERATOR AT %Q* : BOOL;
 	ACT_BREAKER AT %Q* : BOOL;
-	
-	sensorVacuum AT %I* : INT;
-	thresholdsMatch: ARRAY[0..15] OF BOOL; //numerical in
-	currentThresholdMatch : BOOL;
+		
+	thresholdsMatches: ARRAY[0..3] OF BOOL; //numerical in
+	thresholdMatched : BOOL;
 	
 	nCounter : INT := 0;
 	bMatched : BOOL := false;
 		
 	BIT_WARNING : BOOL; //0	
 	BIT_WARN_SUPPRESS : BOOL; //3 , (Control)
-	BIT_DONE : BOOL; //5
+	BIT_DONE : BOOL; //5 (Threshold matched)
 END_VAR
 VAR PERSISTENT
-	currentSetIndex : INT; //
-	
-	thresholdCount : INT :=0 ;
-	thresholds : ARRAY[0..15] OF INT;
+	thresholdCurrentSet : INT; //
+	thresholdValues : ARRAY[0..3] OF INT;
 	
 	TMR_WATCH_DOG : TON ; //Watch dog timer
 	TMR_DELAY_TO_THRESHOLD : TON;
@@ -44,11 +42,11 @@ END_VAR
 //------------
 //
 //-------------
-FOR nCounter:= 0 TO thresholdCount BY 1 DO
-	thresholdsMatch[nCounter] := (sensorVacuum >= thresholds[nCounter]);
+FOR nCounter:= 0 TO 3 BY 1 DO
+	thresholdsMatches[nCounter] := (vacuumSensorValue >= thresholdValues[nCounter]);
 END_FOR
 // scan all sensor status
-currentThresholdMatch := thresholdsMatch[currentSetIndex]; // whether match the master set
+thresholdMatched := thresholdsMatches[thresholdCurrentSet]; // whether match the master set
 //Run timers
 TMR_WATCH_DOG(IN:= , PT:= , Q=> , ET=> );
 TMR_DELAY_TO_THRESHOLD(IN:= , PT:= , Q=> , ET=> );
@@ -76,7 +74,7 @@ CASE COMMAND_CACHED OF
 	
 	eCylinderCommands.COMMAND_B:
 	IF TMR_DELAY_TO_THRESHOLD.Q THEN
-		bMatched:= (currentThresholdMatch OR (thresholdCount=0)) ;
+		bMatched:= (thresholdMatched OR (thresholdCount=0)) ;
 	END_IF
 		
 END_CASE
@@ -212,10 +210,10 @@ IF bInitRetains THEN
 	TMR_WATCH_DOG.PT := T#200MS;
 	TMR_DELAY_TO_THRESHOLD.PT := T#200MS;
 	
-	currentSetIndex := 0;
+	thresholdCurrentSet := 0;
 	
 	FOR nCounter:= 0 TO 15 BY 1 DO
-		thresholds[nCounter] := -1; 
+		thresholdValues[nCounter] := -1; 
 // default thresholds less than default read-in
 // would always output MATCHED
 	END_FOR
@@ -266,9 +264,7 @@ END_VAR
       </Implementation>
     </Method>
     <LineIds Name="RunVacuum">
-      <LineId Id="320" Count="1" />
-      <LineId Id="195" Count="33" />
-      <LineId Id="231" Count="16" />
+      <LineId Id="742" Count="52" />
       <LineId Id="55" Count="0" />
     </LineIds>
     <LineIds Name="RunVacuum.ConfigureRead">
