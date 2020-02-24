@@ -5,48 +5,48 @@
 VAR_INPUT
 	taskEngaged : BOOL;		//triggered by coordinator
 	taskId : UINT;		//assigned by coordinator/internal 
-END_VAR
-VAR_OUTPUT
-END_VAR
-VAR		
+	
 	//-------------------
 	// Remote control - Input
 	//-------------------
-	out_start_0 AT %Q* : BOOL;
-	out_selProg1_1 AT%Q* : BOOL;
-	out_selProg2_2 AT%Q* : BOOL;
-	out_selProg4_3 AT%Q* : BOOL;
+	out_start_0 AT %Q* : BIT;
+	out_selProg1_1 AT%Q* : BIT;
+	out_selProg2_2 AT%Q* : BIT;
+	out_selProg4_3 AT%Q* : BIT;
 	
-	out_stop_4 AT%Q* :BOOL; //foced stop, not recommend to use
+	out_stop_4 AT%Q* :BIT; //foced stop, not recommend to use
 	
-	out_pause_5 AT%Q* : BOOL;		
-	out_continue_6 AT%Q* : BOOL;
+	out_pause_5 AT%Q* : BIT;		
+	out_continue_6 AT%Q* : BIT;
 	
-	out_reset_7 AT%Q* : BOOL; 	//error reset
+	out_reset_7 AT%Q* : BIT; 	//error reset
+	//------------------
+	//	CONTEXT 
+	//------------------
+	context_out_alarmAck AT%Q* : WORD;
+	context_out_stopReq AT%Q* : BYTE;
+	context_out_productType AT%Q* : BYTE;
+	context_out_slotValid AT%Q* : BYTE;
+	context_out_preNodePurged AT%Q* : BYTE;
+END_VAR
+VAR_OUTPUT
 	//-------------------
 	// Remote control - Output
 	//-------------------
-	in_ready_0 AT%I* : BOOL; //Turns ON when the controller startup completes and no task is running. 
-	in_running_1 AT%I* : BOOL; //Turns ON when task is running. However, turns OFF when “Paused output” is ON. 
-	in_paused_2 AT%I* : BOOL; //
-	in_error_3 AT%I* : BOOL;
-	in_eStop_4 AT%I* : BOOL;		//as EDM
-	in_safeGuard_5 AT%I* : BOOL;	//as EDM to safeguard
-	in_sError_6 AT%I* : BOOL;
-	in_warning_7 AT%I* : BOOL;
+	in_ready_0 AT%I* : BIT; //Turns ON when the controller startup completes and no task is running. 
+	in_running_1 AT%I* : BIT; //Turns ON when task is running. However, turns OFF when “Paused output” is ON. 
+	in_paused_2 AT%I* : BIT; //
+	in_error_3 AT%I* : BIT;
+	in_eStop_4 AT%I* : BIT;		//as EDM
+	in_safeGuard_5 AT%I* : BIT;	//as EDM to safeguard
+	in_sError_6 AT%I* : BIT;
+	in_warning_7 AT%I* : BIT;
 	//------------------
-	//	User - input
+	//	CONTEXT 
 	//------------------
-	
-	//------------------
-	//	User - output 
-	//------------------
-	in_alarmCode AT%I* : WORD;
-	out_alarmAck AT%Q* : WORD;
-	
-	out_stopReq AT%Q* : WORD;
-	
-	in_taskState AT%I* : WORD;
+	context_in_alarmCode AT%I* : WORD;
+	context_in_stopack AT%I* : BYTE;
+	context_in_taskState AT%I* : BYTE;
 END_VAR
 VAR CONSTANT
 	taskInit : UINT := 1;
@@ -140,7 +140,7 @@ CASE outputState OF
 		bSerialTransition := NOT in_running_1 OR NOT taskEngaged;
 		IF  bSerialTransition THEN
 			//task finished natually or request stop from coordinator
-			out_stopReq := 1; //send request
+			context_out_stopReq := 1; //send request
 		END_IF
 	16#201:
 		bSerialTransition := NOT in_running_1 AND in_ready_0;
@@ -207,7 +207,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[out_alarmAck := 0; // ack reset]]></ST>
+        <ST><![CDATA[context_out_alarmAck := 0; // ack reset]]></ST>
       </Implementation>
     </Method>
     <Method Name="ErrorDetect" Id="{0d501c3c-1258-4947-b465-528162d76fdd}" FolderPath="CommonBase\">
@@ -216,10 +216,10 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[ErrorDetect := in_alarmCode;
+        <ST><![CDATA[ErrorDetect := context_in_alarmCode;
 
-IF in_alarmCode <> 0 THEN
-	out_alarmAck := in_alarmCode;
+IF context_in_alarmCode <> 0 THEN
+	context_out_alarmAck := context_in_alarmCode;
 END_IF]]></ST>
       </Implementation>
     </Method>
@@ -241,8 +241,8 @@ Monitor.unit.base.transitionByte := transitionByte;
 Monitor.unit.base.alarmCode := TO_WORD(AlarmCode);
 
 //reflect task state instead
-Monitor.unit.base.state := TO_WORD(THIS^.in_taskState);
-Monitor.unit.base.nextState := TO_WORD(THIS^.in_taskState);
+Monitor.unit.base.state := TO_WORD(THIS^.context_in_taskState);
+Monitor.unit.base.nextState := TO_WORD(THIS^.context_in_taskState);
 
 //
 IF workingTimer.IN THEN
@@ -266,7 +266,7 @@ END_VAR
       </Implementation>
     </Method>
     <LineIds Name="RunScaraAgent">
-      <LineId Id="3588" Count="90" />
+      <LineId Id="3974" Count="90" />
       <LineId Id="437" Count="0" />
     </LineIds>
     <LineIds Name="RunScaraAgent.ConfigureRead">

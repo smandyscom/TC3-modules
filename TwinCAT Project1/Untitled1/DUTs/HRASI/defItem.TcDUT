@@ -3,10 +3,8 @@
   <DUT Name="defItem" Id="{40371373-15e9-464c-9148-8d025db7018a}">
     <Declaration><![CDATA[TYPE defItem :
 STRUCT
-	Counter AT%I* : BYTE;
-	Bound AT%Q* : BYTE;
-	PitchX AT%Q* : REAL;
-	PitchY AT%Q* : REAL;
+	CurrerntIndex AT%I* : BYTE; //curent working index
+	Counter AT%I* : BYTE;  //successful picked item amount	
 END_STRUCT
 END_TYPE
 ]]></Declaration>

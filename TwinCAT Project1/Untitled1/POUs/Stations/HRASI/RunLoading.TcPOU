@@ -3,7 +3,6 @@
   <POU Name="RunLoading" Id="{0885f03e-fd54-45c2-8cc3-34c2d157a6e9}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunLoading EXTENDS RunUnitSlave
 VAR_INPUT
-	scaraAck  AT%Q* : BOOL; //scara acknowledged feed-in , On: ready Off:done
 END_VAR
 VAR_OUTPUT
 END_VAR

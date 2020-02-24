@@ -8,6 +8,9 @@ VAR_OUTPUT
 	raw : BOOL;
 	debouncedOn AT%Q* : BOOL;
 	debouncedOff AT%Q* : BOOL;
+	
+	onTimeElapsed : TIME;
+	offTimeElapsed : TIME;
 END_VAR
 VAR
 	input AT%I* : BOOL;
@@ -22,7 +25,10 @@ END_VAR
 raw := input;
 
 debouncedOnTimer(IN:= input, PT:= , Q=> debouncedOn, ET=> );
-debouncedOffTimer(IN:= NOT input, PT:= , Q=> debouncedoff, ET=> );]]></ST>
+debouncedOffTimer(IN:= NOT input, PT:= , Q=> debouncedoff, ET=> );
+
+onTimeElapsed := debouncedOnTimer.ET;
+offTimeElapsed := debouncedOffTimer.ET;]]></ST>
     </Implementation>
     <Folder Name="CommonBase" Id="{ffc1ce20-d0f1-44f8-8792-2f966b14be1c}" />
     <Method Name="ConfigureRead" Id="{a12d05cb-7391-4f12-9f9c-52f812ce9a7d}" FolderPath="CommonBase\">
@@ -87,6 +93,9 @@ Monitor.signal.outputWord.indexRaw := raw;]]></ST>
       <LineId Id="30" Count="0" />
       <LineId Id="29" Count="0" />
       <LineId Id="31" Count="0" />
+      <LineId Id="51" Count="0" />
+      <LineId Id="50" Count="0" />
+      <LineId Id="52" Count="0" />
     </LineIds>
     <LineIds Name="RunSignal.ConfigureRead">
       <LineId Id="10" Count="0" />

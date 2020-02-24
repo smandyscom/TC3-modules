@@ -5,10 +5,14 @@
 VAR_INPUT
 	
 	isPaused : BOOL; // whether auto-mode controller stopped
+	
+	pbReleaseSafeGuard : BOOL;
+	pbEngagedSafeGuard : BOOL;
 END_VAR
 VAR_OUTPUT
 	outPause : BOOL; //require auto-mode controller to stop
 	outEmergency : BOOL; // require auto-mode controller to initialize
+	outSafeGuard : BOOL; //light : safegurad  not working
 END_VAR
 VAR
 	safeAck AT%Q* : BIT;
@@ -62,19 +66,33 @@ ELSIF NOT safeAck AND safeComErr THEN
 	safeRun := FALSE;
 END_IF
 
+IF NOT safeGuardRelease AND pbReleaseSafeGuard THEN
+	requestSafeGuardRelease := TRUE;
+ELSIF safeGuardRelease AND pbEngagedSafeGuard THEN
+	requestSafeGuardRelease := FALSE;
+ELSE
+	//hold current status
+END_IF
 safeGuardRelease := requestSafeGuardRelease AND isPaused; //should pause firstly
 
 outPause := safeComErr OR NOT airChoke OR  safeGuardSatus OR  eStop OR NOT airValue1Status OR NOT airValue2Status AND NOT outPauseBypass;
-outEmergency := eStop AND NOT outEmergencyBypass;]]></ST>
+outEmergency := eStop AND NOT outEmergencyBypass;
+outSafeGuard := NOT safeGuardRelease;]]></ST>
     </Implementation>
     <LineIds Name="RunSafetyFacilityProcessor">
       <LineId Id="52" Count="2" />
       <LineId Id="46" Count="5" />
-      <LineId Id="44" Count="1" />
+      <LineId Id="44" Count="0" />
+      <LineId Id="116" Count="0" />
+      <LineId Id="45" Count="0" />
+      <LineId Id="117" Count="0" />
+      <LineId Id="119" Count="3" />
+      <LineId Id="118" Count="0" />
       <LineId Id="9" Count="0" />
       <LineId Id="42" Count="0" />
       <LineId Id="41" Count="0" />
       <LineId Id="64" Count="0" />
+      <LineId Id="124" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

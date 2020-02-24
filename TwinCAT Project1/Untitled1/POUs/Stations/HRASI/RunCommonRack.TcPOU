@@ -3,11 +3,13 @@
   <POU Name="RunCommonRack" Id="{eac928e2-459d-4027-a156-266e564c65fe}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunCommonRack EXTENDS RunUnitGeneric
 VAR_INPUT
-	isEject at%I* : bool; //able link to HMI
+	isEject : BOOL; //link to coordinator
 END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
+	commEject AT%M* : BOOL; // link to HMI, one shot commnad	
+
 	button : POINTER TO RunSignal ;
 	fixer : POINTER TO RunCylinder;
 	approx : POINTER TO RunSignal; // approx then lock
@@ -19,7 +21,7 @@ VAR
 	rackReady AT%Q*: BOOL;
 	rackEngaged AT%I*: BOOL;	
 
-	items : ARRAY[0..3] OF defItem;
+	items : ARRAY[0..4] OF defItem;
 	
 	//---------------------------------
 	//	Internal
@@ -72,12 +74,12 @@ CASE outputState OF
 		// or by external signal (manual or job stop)
 		//------------------------------------------------------------------
 		FOR nCounter := 0 TO 3 DO
-			IF items[nCounter].Counter >= items[nCounter].Bound THEN
+			IF items[nCounter].Counter >= items[nCounter].CurrerntIndex THEN
 				bSerialTransition := TRUE;
 				
 			END_IF
 		END_FOR
-		bSerialTransition := bSerialTransition OR isEject;
+		bSerialTransition := bSerialTransition OR isEject OR commEject OR button^.onTimeElapsed > T#2S;
 		
 		IF bSerialTransition THEN
 			rackReady := FALSE; //released
@@ -87,7 +89,9 @@ CASE outputState OF
 		IF NOT rackEngaged THEN
 			NextState := eSpecialStates.GENERIC_GROUP_START; //rewind
 		END_IF
-END_CASE]]></ST>
+END_CASE
+
+commEject := FALSE;]]></ST>
     </Implementation>
     <Method Name="FB_init" Id="{cdcb6566-3495-422b-9f0f-68d1a83249c2}">
       <Declaration><![CDATA[METHOD FB_init : BOOL
@@ -126,6 +130,8 @@ approx :=argApprox;
       <LineId Id="357" Count="1" />
       <LineId Id="335" Count="21" />
       <LineId Id="21" Count="0" />
+      <LineId Id="387" Count="0" />
+      <LineId Id="386" Count="0" />
     </LineIds>
     <LineIds Name="RunCommonRack.FB_init">
       <LineId Id="43" Count="0" />

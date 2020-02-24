@@ -6,18 +6,20 @@ VAR_INPUT
 	isStop : BOOL;
 	isError : BOOL;
 	isInitializing : BOOL;
+	//------------------
+	//	Pushbutton lighter
+	//------------------
+	lightRed AT%Q* : BIT;
+	lightGreen AT%Q* : BIT;
+	lightYellow AT%Q* : BIT;
+	lightWhite AT%Q* : BIT;
 END_VAR
 VAR
 	buzzerCounter : INT;
 	
 	//----------------
-	//	OUTPUTS
+	//	Towers
 	//----------------
-	lightRed AT%Q* : BIT;
-	lightGreen AT%Q* : BIT;
-	lightYellow AT%Q* : BIT;
-	lightWhite AT%Q* : BIT;
-	
 	towerRed AT%Q* : BIT;
 	towerGreen AT%Q* : BIT;
 	towerYellow AT%Q* : BIT;
@@ -44,6 +46,10 @@ towerYellow := FALSE;
 towerRed := isError;
 towerYellow := isStop OR isInitializing;
 towerGreen := NOT towerRed AND NOT towerYellow;
+
+lightGreen := NOT isStop;
+lightRed := NOT lightGreen;
+lightYellow := isError;
 
 //buzser (fliper
 buzzerTimerOn(IN:= , PT:= , Q=>, ET=> );
@@ -73,6 +79,7 @@ towerBuzzer := isError AND buzzerTimerOn.Q AND (buzzerCounter < buzzerGoal) AND 
       <LineId Id="165" Count="0" />
       <LineId Id="167" Count="1" />
       <LineId Id="189" Count="0" />
+      <LineId Id="254" Count="3" />
       <LineId Id="169" Count="3" />
       <LineId Id="211" Count="0" />
       <LineId Id="173" Count="5" />

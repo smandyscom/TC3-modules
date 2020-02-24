@@ -60,8 +60,8 @@ comm^.monitorBlock := monitorDevice^.Monitor();
 //	Control
 //------------------------------
 comm^.wordOut.bEngagedPLC := isPaused; //always engaged , wait
-isManualEngaged:= comm^.wordIn.bEngagedHMI;
-IF NOT isPaused OR NOT comm^.wordIn.bEngagedHMI THEN
+isManualEngaged:= comm^.wordIn.bEngagedHMI AND isPaused;
+IF NOT  isManualEngaged THEN
 	RETURN; // no longer execute further section
 END_IF
 

@@ -3,7 +3,6 @@
   <POU Name="RunClamper" Id="{4cfbb8e7-dd19-45d2-8e96-6129406da078}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunClamper EXTENDS RunUnitSlave
 VAR_INPUT
-	scaraAck at%Q* : bool; //SCARA acknowledge feed-in part
 END_VAR
 VAR_OUTPUT
 END_VAR
