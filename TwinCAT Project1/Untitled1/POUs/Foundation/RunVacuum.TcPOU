@@ -74,7 +74,7 @@ CASE COMMAND_CACHED OF
 	
 	eCylinderCommands.COMMAND_B:
 	IF TMR_DELAY_TO_THRESHOLD.Q THEN
-		bMatched:= (thresholdMatched OR (thresholdCount=0)) ;
+		bMatched:= (thresholdMatched ) ;
 	END_IF
 		
 END_CASE
