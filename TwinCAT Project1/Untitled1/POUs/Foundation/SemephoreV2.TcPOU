@@ -3,13 +3,13 @@
   <POU Name="SemephoreV2" Id="{d09ae912-bc10-44c7-b0d2-fbcb6fb4e657}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK SemephoreV2
 VAR_INPUT
-	isStop : BOOL;
+	isPaused : BOOL;
 	isError : BOOL;
 	isInitializing : BOOL;
 	//------------------
 	//	Pushbutton lighter
 	//------------------
-	lightRed AT%Q* : BIT;
+	lightRed AT%Q* : BIT; //being paused
 	lightGreen AT%Q* : BIT;
 	lightYellow AT%Q* : BIT;
 	lightWhite AT%Q* : BIT;
@@ -34,20 +34,11 @@ VAR PERSISTENT
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[//reset all
-lightGreen := FALSE;
-lightRed := FALSE;
-lightYellow := FALSE;
-lightWhite := FALSE;
-towerGreen := FALSE;
-towerRed := FALSE;
-towerYellow := FALSE;
-
-towerRed := isError;
-towerYellow := isStop OR isInitializing;
+      <ST><![CDATA[towerRed := isError;
+towerYellow := isPaused OR isInitializing;
 towerGreen := NOT towerRed AND NOT towerYellow;
 
-lightGreen := NOT isStop;
+lightGreen := NOT isPaused;
 lightRed := NOT lightGreen;
 lightYellow := isError;
 
@@ -75,16 +66,7 @@ END_IF
 towerBuzzer := isError AND buzzerTimerOn.Q AND (buzzerCounter < buzzerGoal) AND buzzerEnable;]]></ST>
     </Implementation>
     <LineIds Name="SemephoreV2">
-      <LineId Id="148" Count="7" />
-      <LineId Id="165" Count="0" />
-      <LineId Id="167" Count="1" />
-      <LineId Id="189" Count="0" />
-      <LineId Id="254" Count="3" />
-      <LineId Id="169" Count="3" />
-      <LineId Id="211" Count="0" />
-      <LineId Id="173" Count="5" />
-      <LineId Id="208" Count="2" />
-      <LineId Id="179" Count="7" />
+      <LineId Id="320" Count="28" />
       <LineId Id="127" Count="0" />
     </LineIds>
   </POU>

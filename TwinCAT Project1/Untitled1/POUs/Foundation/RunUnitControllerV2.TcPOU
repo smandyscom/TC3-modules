@@ -12,20 +12,15 @@ END_VAR
 VAR_OUTPUT
 	//------------------------
 	//	Error handling channel
-	//------------------------
-	
+	//------------------------	
 	errorType AT%Q* : eCategrories;
 	errorIndex AT%Q* : DINT;
 	errorCode AT%Q* : UDINT;
 END_VAR
 VAR		
 	//error
-	errorDevice : POINTER TO CommonBase := 0; //null reference
-	
-	
+	errorDevice : POINTER TO CommonBase := 0; //null reference	
 	errorDelayDetect : TON;	
-	
-	
 END_VAR
 VAR PERSISTENT
 	axisUpperBound : INT;

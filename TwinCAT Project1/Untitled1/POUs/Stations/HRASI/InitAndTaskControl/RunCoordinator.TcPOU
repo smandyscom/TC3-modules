@@ -24,7 +24,13 @@ END_VAR
 
 SUPER^();
 
-CASE outputState OF 
+CASE outputState OF
+	//----------------------------
+	//	Initializing :
+	// 2. Off all I/O 
+	// 1. SCARA & Clamper & Indexer
+	//----------------------------	
+
 	//------------------------------------------
 	// Initialize - Group start (base procedure)
 	//------------------------------------------
@@ -54,6 +60,12 @@ END_CASE]]></ST>
       <LineId Id="120" Count="2" />
       <LineId Id="119" Count="0" />
       <LineId Id="13" Count="2" />
+      <LineId Id="188" Count="0" />
+      <LineId Id="191" Count="0" />
+      <LineId Id="194" Count="0" />
+      <LineId Id="193" Count="0" />
+      <LineId Id="192" Count="0" />
+      <LineId Id="189" Count="0" />
       <LineId Id="127" Count="0" />
       <LineId Id="16" Count="0" />
       <LineId Id="123" Count="0" />
