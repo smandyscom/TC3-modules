@@ -18,6 +18,7 @@ END_VAR
 VAR PERSISTENT
 	debouncedOnTimer : TON;
 	debouncedOffTimer : TOn;
+	
 END_VAR
 ]]></Declaration>
     <Implementation>

@@ -20,7 +20,7 @@ END_VAR]]></Declaration>
 //	S16#10 : mechanical control of movement
 //---------------
 
-CASE SUPER^.outputState OF
+CASE outputState OF
 	16#0:
 		//-------------------------
 		//	Trigger all slaves
@@ -73,7 +73,9 @@ CASE SUPER^.outputState OF
 		
 		//listen to move
 		bSerialTransition :=  (NOT syncMatValid) OR (syncAcknowledged AND syncMatValid);
-	
+		IF bSerialTransition THEN
+			NextState := 16#10;
+		END_IF
 	16#10:
 		//---------------------
 		//shifting movement mechaincal
@@ -151,7 +153,7 @@ SlotCount :=  TO_INT((SlotLast-SlotBase)/SIZEOF(RunMaterial) + 1);]]></ST>
       <LineId Id="528" Count="0" />
       <LineId Id="506" Count="10" />
       <LineId Id="518" Count="3" />
-      <LineId Id="596" Count="0" />
+      <LineId Id="618" Count="2" />
       <LineId Id="522" Count="0" />
       <LineId Id="544" Count="0" />
       <LineId Id="523" Count="0" />

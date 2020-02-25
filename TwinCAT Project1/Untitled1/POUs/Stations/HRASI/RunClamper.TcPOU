@@ -37,9 +37,9 @@ CASE outputState OF
 		bSerialTransition := clamper^.Execute(eCylinderCommands.COMMAND_B); //hold
 	eSpecialStates.INITIAL_STATE_3:
 		bSerialTransition := horizon^.Execute(eCylinderCommands.COMMAND_B); //push
-	eSpecialStates.INITIAL_STATE_5:
+	eSpecialStates.INITIAL_STATE_4:
 		bSerialTransition := clamper^.Execute(eCylinderCommands.COMMAND_A);	//release 
-	eSpecialStates.INITIAL_STATE_6:
+	eSpecialStates.INITIAL_STATE_5:
 		bSerialTransition := horizon^.Execute(eCylinderCommands.COMMAND_A);	//back 
 		IF bSerialTransition THEN
 			NextState := eSpecialStates.INITIAL_END;
@@ -48,10 +48,10 @@ CASE outputState OF
 	//	Working
 	//----------------------------
 	eSpecialStates.SLAVE_ENTER_PROCEDURE:
-		IF SlotBase^.Valid THEN
+		IF bMaterialOverride THEN
 			bSerialTransition := TRUE;
 		ELSE
-			NextState := 16#205; //bypass
+			NextState := 16#207; //bypass
 		END_IF
 	16#201:
 		//Indexer in position , horizonin

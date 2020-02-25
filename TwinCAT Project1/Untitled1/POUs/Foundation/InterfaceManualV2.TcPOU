@@ -28,10 +28,7 @@ VAR CONSTANT
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[IF writePersistance.START And not writePersistance.BUSY THEN
-	writePersistance.START := false;
-END_IF
-//Write-in non-violate memory
+      <ST><![CDATA[//Write-in non-violate memory
 writePersistance(
 		NETID:= , 
 		PORT:= 851, 
@@ -40,7 +37,9 @@ writePersistance(
 		BUSY=> , 
 		ERR=> , 
 		ERRID=> );
-
+//IF writePersistance.START AND NOT writePersistance.BUSY THEN
+//	writePersistance.START := false;
+//END_IF
 //---------------------------
 // MONITOR
 //---------------------------
@@ -134,9 +133,9 @@ elapsed(IN:= , PT:= , Q=> , ET=> );
 ]]></ST>
     </Implementation>
     <LineIds Name="InterfaceManualV2">
-      <LineId Id="249" Count="2" />
       <LineId Id="497" Count="7" />
       <LineId Id="496" Count="0" />
+      <LineId Id="582" Count="1" />
       <LineId Id="547" Count="0" />
       <LineId Id="389" Count="0" />
       <LineId Id="112" Count="0" />

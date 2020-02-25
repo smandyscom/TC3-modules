@@ -39,7 +39,7 @@ CASE outputState OF
 	//	Initialization
 	//----------------
 	eSpecialStates.INITIAL_BEGIN:	
-		bSerialTransition := fixer^.Execute(eCylinderCommands.COMMAND_A); //release
+		bSerialTransition := fixer^.Execute(eCylinderCommands.COMMAND_A) ; //release
 		IF bSerialTransition THEN
 			rackReady := FALSE; //signal clearing
 		END_IF
@@ -53,28 +53,27 @@ CASE outputState OF
 	//-----------------
 	eSpecialStates.GENERIC_GROUP_START:
 		//rack is empty
-		bSerialTransition := fixer^.Execute(eCylinderCommands.COMMAND_A); //relase
+		bSerialTransition := fixer^.Execute(eCylinderCommands.COMMAND_A)AND button^.debouncedOff; //relase
 		signal.Activate(2);//50% set light flicking
 	16#1:
-		bSerialTransition := approx^.debouncedOn; //wait until rack closed
+		bSerialTransition := approx^.debouncedOn AND button^.onTimeElapsed > T#100MS; //wait until rack closed
+		IF approx^.debouncedOn THEN
+			signal.Activate(0);//set light constant on
+		END_IF
 	16#2:
-		//confirmed by hanshaking
-		bSerialTransition := button^.debouncedOn;
-		signal.Activate(0);//set light constant on
-	16#3:
 		bSerialTransition := fixer^.Execute(eCylinderCommands.COMMAND_B); //lock
 		IF bSerialTransition THEN
 			rackReady := TRUE;
 			
 			isEject := FALSE; //reset
 		END_IF
-	16#4:
+	16#3:
 		//------------------------------------------------------------------
 		//	Check if any item reached the bound. then set rackReady as false
 		// or by external signal (manual or job stop)
 		//------------------------------------------------------------------
-		FOR nCounter := 0 TO 3 DO
-			IF items[nCounter].Counter >= items[nCounter].CurrerntIndex THEN
+		FOR nCounter := 0 TO 4 DO
+			IF items[nCounter].CurrerntIndex >= items[nCounter].Bound THEN
 				bSerialTransition := TRUE;
 				
 			END_IF
@@ -84,7 +83,7 @@ CASE outputState OF
 		IF bSerialTransition THEN
 			rackReady := FALSE; //released
 		END_IF
-	16#5:
+	16#4:
 		//wait until SCARA disengaged
 		IF NOT rackEngaged THEN
 			NextState := eSpecialStates.GENERIC_GROUP_START; //rewind
@@ -126,7 +125,9 @@ approx :=argApprox;
       </Implementation>
     </Method>
     <LineIds Name="RunCommonRack">
-      <LineId Id="299" Count="35" />
+      <LineId Id="299" Count="27" />
+      <LineId Id="415" Count="2" />
+      <LineId Id="331" Count="3" />
       <LineId Id="357" Count="1" />
       <LineId Id="335" Count="21" />
       <LineId Id="21" Count="0" />

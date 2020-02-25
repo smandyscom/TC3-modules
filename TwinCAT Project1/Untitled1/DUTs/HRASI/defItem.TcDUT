@@ -5,6 +5,7 @@
 STRUCT
 	CurrerntIndex AT%I* : BYTE; //curent working index
 	Counter AT%I* : BYTE;  //successful picked item amount	
+	Bound : BYTE;
 END_STRUCT
 END_TYPE
 ]]></Declaration>

@@ -66,10 +66,10 @@ ELSIF NOT safeAck AND safeComErr THEN
 	safeRun := FALSE;
 END_IF
 
-IF NOT safeGuardRelease AND pbReleaseSafeGuard THEN
-	requestSafeGuardRelease := TRUE;
-ELSIF safeGuardRelease AND pbEngagedSafeGuard THEN
+IF  safeGuardRelease AND pbEngagedSafeGuard THEN
 	requestSafeGuardRelease := FALSE;
+ELSIF NOT safeGuardRelease AND pbReleaseSafeGuard  AND NOT pbEngagedSafeGuard THEN
+	requestSafeGuardRelease := TRUE;
 ELSE
 	//hold current status
 END_IF
@@ -83,10 +83,12 @@ outSafeGuard := NOT safeGuardRelease;]]></ST>
       <LineId Id="52" Count="2" />
       <LineId Id="46" Count="5" />
       <LineId Id="44" Count="0" />
+      <LineId Id="177" Count="0" />
       <LineId Id="116" Count="0" />
+      <LineId Id="178" Count="0" />
       <LineId Id="45" Count="0" />
       <LineId Id="117" Count="0" />
-      <LineId Id="119" Count="3" />
+      <LineId Id="121" Count="1" />
       <LineId Id="118" Count="0" />
       <LineId Id="9" Count="0" />
       <LineId Id="42" Count="0" />

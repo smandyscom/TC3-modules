@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
   <POU Name="RunUnitSlave" Id="{f294cd3d-3335-490a-8099-05ea45ee1c2b}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunUnitSlave EXTENDS RunUnitGeneric
 VAR
@@ -12,7 +12,7 @@ END_VAR
 CASE outputState OF 
 	eSpecialStates.SLAVE_WORK_TRIGGER:
 		//working start
-		IF workingSignal^ THEN		
+		IF workingSignal<>0 AND_THEN workingSignal^ THEN		
 			bWorkingOverride := TRUE; // backup working override signal
 		END_IF
 		IF bWorkingOverride AND NOT bIsBypassed THEN
@@ -22,7 +22,7 @@ CASE outputState OF
 			//--------------------
 			//	Material override
 			//--------------------
-			IF SlotBase^.Valid THEN
+			IF SlotBase<>0 AND_THEN SlotBase^.Valid THEN
 				bMaterialOverride := TRUE;
 			END_IF			
 		ELSIF bWorkingOverride AND bIsBypassed THEN

@@ -12,20 +12,19 @@ VAR_GLOBAL
 	A25: INT :=4; //FQC bin
 	B18: INT :=5; //Empty nest
 	B19: INT :=6; //S/V Check#1
-	B20: INT :=7; //S/V Check#2
-	B21: INT :=8; //Rack1 Approach
-	B22: INT :=9; //Rack3 Approach
-	B25: INT :=10; //Rack2 Approach
-	B26: INT :=11; //Rack4 Approach
+	B21: INT :=7; //Rack1 Approach
+	B22: INT :=8; //Rack3 Approach
+	B25: INT :=9; //Rack2 Approach
+	B26: INT :=10; //Rack4 Approach
 
-	S2: INT :=12; //START
-	S3: INT :=13; //STOP
-	S4: INT :=14; //RESET
-	S5: INT :=15; //DOOR UNLOCK
-	S6: INT :=16; //RACK1
-	S7: INT :=17; //RACK2
-	S8: INT :=18; //RACK3
-	S9: INT :=19; //RACK4
+	S2: INT :=11; //STOP
+	S3: INT :=12; //START
+	S4: INT :=13; //RESET
+	S5: INT :=14; //DOOR UNLOCK
+	S6: INT :=15; //RACK1
+	S7: INT :=16; //RACK2
+	S8: INT :=17; //RACK3
+	S9: INT :=18; //RACK4
 	//--------------
 	//Cylinders
 	//--------------

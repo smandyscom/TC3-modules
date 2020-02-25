@@ -32,11 +32,11 @@ CASE outputState OF
 		revolveCounter:=0;
 		bSerialTransition := TRUE;
 	eSpecialStates.INITIAL_STATE_1:
-		bSerialTransition := lockCylinder^.Execute(eCylinderCommands.COMMAND_A);
+		bSerialTransition := lockCylinder^.Execute(eCylinderCommands.COMMAND_B);
 	eSpecialStates.INITIAL_STATE_2:
 		bSerialTransition := pistonCylinder^.Execute(eCylinderCommands.COMMAND_B);
 	eSpecialStates.INITIAL_STATE_3:
-		bSerialTransition := lockCylinder^.Execute(eCylinderCommands.COMMAND_B);
+		bSerialTransition := lockCylinder^.Execute(eCylinderCommands.COMMAND_A);
 	eSpecialStates.INITIAL_STATE_4:
 		bSerialTransition := pistonCylinder^.Execute(eCylinderCommands.COMMAND_A);
 		IF bSerialTransition THEN
@@ -44,8 +44,13 @@ CASE outputState OF
 			IF revolveCounter < revolveGoal THEN
 				NextState := eSpecialStates.INITIAL_STATE_1; //repeat
 			ELSE
-				NextState := eSpecialStates.INITIAL_END; //terminated
+				NextState := eSpecialStates.INITIAL_STATE_5; //to lock
 			END_IF	
+		END_IF
+	eSpecialStates.INITIAL_STATE_5:
+		bSerialTransition := lockCylinder^.Execute(eCylinderCommands.COMMAND_B);
+		IF bSerialTransition THEN
+			NextState := eSpecialStates.INITIAL_END; //terminated
 		END_IF
 	//------------------start running
 	// S16#10 - : setup vacuum fixtures
@@ -57,17 +62,18 @@ CASE outputState OF
 	16#10:
 		//activate fixture by slot valid status
 		FOR nCounter := 0 TO SlotCount-1 BY 1 DO
-			fixtures^.Trigger(sensorPairs[nCounter],SlotBase[nCounter].Valid);
+			fixtures^.Trigger(sensorPairs[nCounter],SlotBase[nCounter].Valid); //TODO , not linked
 		END_FOR
+		NextState := 16#20;
 	//----------
 	16#20:
-		bSerialTransition := lockCylinder^.Execute(eCylinderCommands.COMMAND_A);
-	16#21:
 		bSerialTransition := pistonCylinder^.Execute(eCylinderCommands.COMMAND_B);
+	16#21:
+		bSerialTransition := lockCylinder^.Execute(eCylinderCommands.COMMAND_A);
 	16#22:
-		bSerialTransition := lockCylinder^.Execute(eCylinderCommands.COMMAND_B);
-	16#23:
 		bSerialTransition := pistonCylinder^.Execute(eCylinderCommands.COMMAND_A);
+	16#23:
+		bSerialTransition := lockCylinder^.Execute(eCylinderCommands.COMMAND_B);
 		IF bSerialTransition THEN
 			fixtures^.ReleaseAll(); //release all fixture
 			NextState := 16#0F; //join master sequence
@@ -100,9 +106,8 @@ SlotLast := argSlotLast;
 Axis := argAxis;
 Upstream := argUpstream;
 
-IF Upstream=0 THEN
-	isProxyMode:=TRUE; //no upstream , i am proxy
-END_IF
+isProxyMode:=FALSE; //no proxy
+
 
 //calculate how much slot related
 SlotCount :=  TO_INT((SlotLast-SlotBase)/SIZEOF(RunMaterial) + 1);
@@ -133,6 +138,7 @@ pistonCylinder := argPistonCylinder;]]></ST>
       <LineId Id="129" Count="1" />
       <LineId Id="127" Count="0" />
       <LineId Id="123" Count="0" />
+      <LineId Id="150" Count="4" />
       <LineId Id="19" Count="0" />
       <LineId Id="59" Count="1" />
       <LineId Id="22" Count="1" />
@@ -143,11 +149,11 @@ pistonCylinder := argPistonCylinder;]]></ST>
       <LineId Id="62" Count="0" />
       <LineId Id="66" Count="0" />
       <LineId Id="65" Count="0" />
+      <LineId Id="157" Count="0" />
       <LineId Id="70" Count="0" />
-      <LineId Id="17" Count="0" />
-      <LineId Id="20" Count="0" />
       <LineId Id="26" Count="4" />
       <LineId Id="109" Count="0" />
+      <LineId Id="155" Count="1" />
       <LineId Id="31" Count="0" />
       <LineId Id="46" Count="0" />
       <LineId Id="32" Count="1" />
@@ -158,7 +164,6 @@ pistonCylinder := argPistonCylinder;]]></ST>
       <LineId Id="43" Count="0" />
       <LineId Id="42" Count="0" />
       <LineId Id="41" Count="0" />
-      <LineId Id="59" Count="0" />
       <LineId Id="38" Count="0" />
       <LineId Id="60" Count="1" />
       <LineId Id="76" Count="0" />
