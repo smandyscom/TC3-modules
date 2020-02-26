@@ -25,6 +25,11 @@ END_VAR
 // 1. Indexer - working signal
 // 2. Bridge - working signal dispatch  to SCARA
 
+// auto reset last slot
+IF configSnap AND bIsBypassed AND SlotBase^.Valid  THEN
+	SlotBase^.Valid := FALSE;
+END_IF
+
 CASE outputState OF
 	//---------------------------
 	//	Initialization : hold and push
@@ -129,6 +134,8 @@ configSnap := argConfigSnap;]]></ST>
       <LineId Id="201" Count="0" />
       <LineId Id="111" Count="0" />
       <LineId Id="202" Count="1" />
+      <LineId Id="238" Count="0" />
+      <LineId Id="234" Count="3" />
       <LineId Id="112" Count="1" />
       <LineId Id="195" Count="2" />
       <LineId Id="194" Count="0" />

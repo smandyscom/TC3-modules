@@ -33,7 +33,7 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[index.0 := sensorPair.bit0;
-index.1 := sensorPair.bit0;
+index.1 := sensorPair.bit1;
 
 outputs[index] := state;]]></ST>
       </Implementation>

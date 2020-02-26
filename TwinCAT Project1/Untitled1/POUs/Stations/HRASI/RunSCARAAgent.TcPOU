@@ -3,7 +3,7 @@
   <POU Name="RunScaraAgent" Id="{1f4adf83-c440-4f87-8ce9-122caf9d3620}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunScaraAgent EXTENDS RunUnitGeneric
 VAR_INPUT
-	taskEngaged : BOOL;		//triggered by coordinator
+	isTaskEngaged : BOOL;		//triggered by coordinator
 	taskId : UINT;		//assigned by coordinator/internal 
 	
 	//-------------------
@@ -69,7 +69,6 @@ END_VAR
 //Continue when ready on
 
 SUPER^();
-THIS^.atomicOperation := TRUE; // the superior control agant should not be interrupted.
 
 //----------------------
 //	Task running control
@@ -122,7 +121,7 @@ CASE outputState OF
 		//--------------
 		// Program selected and triggered
 		//--------------
-		bSerialTransition := taskEngaged;
+		bSerialTransition := isTaskEngaged;
 		IF bSerialTransition THEN
 			THIS^.ConvertTaskId();
 			out_start_0 := TRUE;
@@ -137,7 +136,7 @@ CASE outputState OF
 		//accept stop command only when programState in some specific state
 		//------------------------------------------------------------------
 	16#200:
-		bSerialTransition := NOT in_running_1 OR NOT taskEngaged;
+		bSerialTransition := NOT in_running_1 OR NOT isTaskEngaged;
 		IF  bSerialTransition THEN
 			//task finished natually or request stop from coordinator
 			context_out_stopReq := 1; //send request
@@ -146,7 +145,7 @@ CASE outputState OF
 		bSerialTransition := NOT in_running_1 AND in_ready_0;
 		IF bSerialTransition THEN
 			//succesfully stopped
-			taskEngaged := FALSE;
+			isTaskEngaged := FALSE;
 			out_start_0 := FALSE;
 			NextState := eSpecialStates.GENERIC_GROUP_START;
 		END_IF	
@@ -266,7 +265,8 @@ END_VAR
       </Implementation>
     </Method>
     <LineIds Name="RunScaraAgent">
-      <LineId Id="3974" Count="90" />
+      <LineId Id="4177" Count="9" />
+      <LineId Id="4188" Count="79" />
       <LineId Id="437" Count="0" />
     </LineIds>
     <LineIds Name="RunScaraAgent.ConfigureRead">

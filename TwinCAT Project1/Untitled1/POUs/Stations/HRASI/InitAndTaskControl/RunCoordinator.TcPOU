@@ -3,15 +3,26 @@
   <POU Name="RunCoordinator" Id="{93db79ea-7610-40ae-89e3-5adae225f547}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunCoordinator EXTENDS RunGroupNode
 VAR_INPUT
-	startProductionMode AT%I* : BOOL;
-	startRegularCheckMode AT%I* : BOOL;
+	startProductionMode AT%M* : BOOL;
+	startRegularCheckMode AT%M* : BOOL;
 	//------------
 	// link to HMI
 	//------------
 	purge AT%I* : BOOL ; 
 	regularCheckAck AT%I* : BOOL;
+	//------------
+	//	Control
+	//------------
+	scara1 : POINTER TO RunScaraAgent;
+	scara2 : POINTER TO RunScaraAgent;
+	
+	clamper1 : POINTER TO RunClamper;
+	clamper2 : POINTER TO RunClamper;
+	
+	loading : POINTER TO RunLoading;
 END_VAR
 VAR_OUTPUT
+	isInitialized : BOOL;
 END_VAR
 VAR
 END_VAR
@@ -24,13 +35,21 @@ END_VAR
 
 SUPER^();
 
+isInitialized := ((outputState AND eSpecialStates.INITIAL_REGION) = 0);
+isInitialized := true;
 CASE outputState OF
 	//----------------------------
 	//	Initializing :
 	// 2. Off all I/O 
 	// 1. SCARA & Clamper & Indexer
 	//----------------------------	
-
+	eSpecialStates.INITIAL_BEGIN:
+		FOR nCounter :=0 TO 23 BY 1 DO
+			bSerialTransition := bSerialTransition AND gvl.remoteControls[nCounter]^.Execute(eCylinderCommands.COMMAND_A);
+		END_FOR
+		IF bSerialTransition THEN
+			NextState := eSpecialStates.INITIAL_STATE_1;
+		END_IF
 	//------------------------------------------
 	// Initialize - Group start (base procedure)
 	//------------------------------------------
@@ -46,26 +65,87 @@ CASE outputState OF
 		//	1. Bypass some stations then feed-in parts in Slot1 , then transit to AOI
 		//  2. Prompt meesage/door interlock
 		//----------------------------------
+		scara1^.isTaskEngaged := TRUE;
+		
+		clamper1^.bIsBypassed := TRUE;
+		clamper2^.bIsBypassed := TRUE;
+		
+		bSerialTransition := TRUE;
+	16#301:
+		bSerialTransition := NOT scara1^.isTaskEngaged;
+		IF bSerialTransition THEN
+			scara2^.isTaskEngaged := TRUE;
+		END_IF
+	16#302:
+		bSerialTransition := NOT scara2^.isTaskEngaged;
+		//then AOI shuffing test
+		
 	16#500:
 		//---------------------------
 		//	Production mode
 		//  1. Execute SCARA ASSEMBLE
 		//	2. When purge command raise , coordinate stations to stop
 		//---------------------------
+		clamper1^.bIsBypassed := FALSE;
+		clamper2^.bIsBypassed := FALSE;
+		scara1^.isTaskEngaged := TRUE;
+		scara2^.isTaskEngaged := TRUE;
+		NextState := 16#1000;
+	
+	16#600:	
+		//---------------------------
+		//	Trial-assemble mode
+		//---------------------------
+		clamper1^.bIsBypassed := FALSE;
+		clamper2^.bIsBypassed := TRUE;
+		scara1^.isTaskEngaged := TRUE;
+		scara2^.isTaskEngaged := FALSE;
+		NextState := 16#1000;
+	16#700:	
+		//---------------------------
+		//	Trial-snap mode
+		//---------------------------
+		clamper1^.bIsBypassed := TRUE;
+		clamper2^.bIsBypassed := FALSE;
+		scara1^.isTaskEngaged := FALSE;
+		scara2^.isTaskEngaged := TRUE;
+		NextState := 16#1000;
 		
-END_CASE]]></ST>
+		//---------------------------
+		//	Purging chain
+		//---------------------------
+	16#1000:
+		bSerialTransition := purge; //would transimit to loading
+		IF bSerialTransition THEN
+			THIS^.isPurged := TRUE;
+		END_IF
+	16#1001:
+		bSerialTransition := previousNode <>0 AND_THEN previousNode^.isPurged;
+		IF bSerialTransition THEN
+			THIS^.isPurged := FALSE; //going to reset
+		END_IF
+	16#1002:
+		bSerialTransition := previousNode <>0 AND_THEN NOT previousNode^.isPurged;
+		NextState := eSpecialStates.GENERIC_GROUP_IDLE;
+END_CASE
+//one shot command clear
+startProductionMode := FALSE;
+startRegularCheckMode := FALSE;]]></ST>
     </Implementation>
     <LineIds Name="RunCoordinator">
       <LineId Id="118" Count="0" />
       <LineId Id="120" Count="2" />
       <LineId Id="119" Count="0" />
-      <LineId Id="13" Count="2" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="221" Count="1" />
+      <LineId Id="14" Count="1" />
       <LineId Id="188" Count="0" />
       <LineId Id="191" Count="0" />
       <LineId Id="194" Count="0" />
       <LineId Id="193" Count="0" />
       <LineId Id="192" Count="0" />
-      <LineId Id="189" Count="0" />
+      <LineId Id="209" Count="3" />
+      <LineId Id="217" Count="2" />
       <LineId Id="127" Count="0" />
       <LineId Id="16" Count="0" />
       <LineId Id="123" Count="0" />
@@ -78,13 +158,48 @@ END_CASE]]></ST>
       <LineId Id="173" Count="0" />
       <LineId Id="106" Count="1" />
       <LineId Id="95" Count="0" />
+      <LineId Id="299" Count="0" />
+      <LineId Id="312" Count="0" />
+      <LineId Id="314" Count="1" />
+      <LineId Id="313" Count="0" />
+      <LineId Id="301" Count="2" />
+      <LineId Id="300" Count="0" />
+      <LineId Id="304" Count="2" />
+      <LineId Id="308" Count="0" />
+      <LineId Id="310" Count="1" />
       <LineId Id="42" Count="0" />
       <LineId Id="93" Count="1" />
       <LineId Id="108" Count="0" />
       <LineId Id="140" Count="0" />
       <LineId Id="77" Count="0" />
+      <LineId Id="235" Count="0" />
+      <LineId Id="246" Count="0" />
+      <LineId Id="245" Count="0" />
+      <LineId Id="248" Count="0" />
+      <LineId Id="250" Count="0" />
+      <LineId Id="263" Count="0" />
       <LineId Id="141" Count="0" />
+      <LineId Id="224" Count="1" />
+      <LineId Id="223" Count="0" />
+      <LineId Id="285" Count="2" />
+      <LineId Id="284" Count="0" />
+      <LineId Id="288" Count="0" />
+      <LineId Id="229" Count="2" />
+      <LineId Id="228" Count="0" />
+      <LineId Id="295" Count="3" />
+      <LineId Id="293" Count="1" />
+      <LineId Id="268" Count="2" />
+      <LineId Id="265" Count="0" />
+      <LineId Id="274" Count="0" />
+      <LineId Id="280" Count="0" />
+      <LineId Id="291" Count="1" />
+      <LineId Id="276" Count="3" />
+      <LineId Id="266" Count="0" />
+      <LineId Id="281" Count="2" />
       <LineId Id="9" Count="0" />
+      <LineId Id="233" Count="0" />
+      <LineId Id="232" Count="0" />
+      <LineId Id="234" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

@@ -11,6 +11,12 @@ VAR_INPUT
 	bMaterialOverride : BOOL;
 	
 	slaveWorkingSignal : ARRAY[1..32] OF BOOL; // collect slave working signal , possible to access externally?
+	
+	//-------------
+	//	Purge Chain
+	//-------------
+	isPurged : BOOL;
+	previousNode : POINTER TO RunUnitGeneric;
 END_VAR
 VAR_OUTPUT
 	 //possible TO output on HMI

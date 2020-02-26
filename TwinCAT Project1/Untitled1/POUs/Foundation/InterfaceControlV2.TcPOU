@@ -7,12 +7,12 @@ VAR_INPUT
 	pbRed : BOOL;	//stop
 	pbYellow: BOOL; //error reset
 	
-	commStart AT%I* : BOOL;
-	commStop AT%I* : BOOL;
-	commErrorReset AT%I* : BOOL;
-	commErrorIgnore AT%I* : BOOL;
-	commInit AT%I* : BOOL;
-	commPurge AT%I* : BOOL;
+	commStart AT%M* : BOOL;
+	commStop AT%M* : BOOL;
+	commErrorReset AT%M* : BOOL;
+	commErrorIgnore AT%M* : BOOL;
+	commInit AT%M* : BOOL;
+	commPurge AT%M* : BOOL;
 END_VAR
 VAR_OUTPUT
 	
@@ -43,7 +43,7 @@ END_IF
 requestInit := commInit;
 //Purge request
 requestPurge := commPurge; 
-//one-shot control clear , except bManualMode
+//one-shot control clear 
 commStart := FALSE;
 commStop := FALSE;
 commErrorReset := FALSE;

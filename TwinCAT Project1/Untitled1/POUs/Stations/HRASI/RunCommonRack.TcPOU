@@ -27,6 +27,9 @@ VAR
 	//	Internal
 	//---------------------------------
 	nCounter : INT;
+END_VAR
+VAR_STAT PERSISTENT
+	Bounds : ARRAY[0..4] OF BYTE;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[
@@ -73,7 +76,7 @@ CASE outputState OF
 		// or by external signal (manual or job stop)
 		//------------------------------------------------------------------
 		FOR nCounter := 0 TO 4 DO
-			IF items[nCounter].CurrerntIndex >= items[nCounter].Bound THEN
+			IF items[nCounter].CurrerntIndex >= Bounds[nCounter] THEN
 				bSerialTransition := TRUE;
 				
 			END_IF
@@ -90,7 +93,8 @@ CASE outputState OF
 		END_IF
 END_CASE
 
-commEject := FALSE;]]></ST>
+commEject := FALSE;
+isEject:=false;]]></ST>
     </Implementation>
     <Method Name="FB_init" Id="{cdcb6566-3495-422b-9f0f-68d1a83249c2}">
       <Declaration><![CDATA[METHOD FB_init : BOOL
@@ -117,6 +121,15 @@ IF bInitRetains THEN
 	NextState := eSpecialStates.INITIAL_BEGIN;
 END_IF
 
+IF Bounds[0] = 0 THEN
+	//initialize bounds
+	Bounds[0] := 84;
+	Bounds[1] := 84;
+	Bounds[2] := 72;
+	Bounds[3] := 40;
+	Bounds[4] := 40;
+END_IF
+
 button :=argButton;
 fixer :=argFixer;
 approx :=argApprox;
@@ -133,12 +146,16 @@ approx :=argApprox;
       <LineId Id="21" Count="0" />
       <LineId Id="387" Count="0" />
       <LineId Id="386" Count="0" />
+      <LineId Id="447" Count="0" />
     </LineIds>
     <LineIds Name="RunCommonRack.FB_init">
       <LineId Id="43" Count="0" />
       <LineId Id="10" Count="1" />
       <LineId Id="41" Count="0" />
       <LineId Id="53" Count="3" />
+      <LineId Id="88" Count="2" />
+      <LineId Id="92" Count="4" />
+      <LineId Id="91" Count="0" />
       <LineId Id="13" Count="1" />
       <LineId Id="72" Count="0" />
       <LineId Id="74" Count="0" />

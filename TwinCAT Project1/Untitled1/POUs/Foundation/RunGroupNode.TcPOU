@@ -14,7 +14,7 @@ END_VAR
 
 CASE outputState OF 
 	//------------Initialize
-	eSpecialStates.INITIAL_BEGIN:
+	eSpecialStates.INITIAL_STATE_1:
 		// group node start initializing
 		bSerialTransition := TRUE;
 		

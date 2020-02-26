@@ -12,12 +12,16 @@ VAR
 	pistonCylinder : POINTER TO RunCylinder;
 	
 	sensorPairs : ARRAY[0..3] OF defSensorPair; //define stations sensor flag signatures
-	fixtures : POINTER TO helperOutputSelection;
+	fixtures : helperOutputSelection;
 	
 	//----------------
 	//	Initialization
 	//----------------
 	revolveCounter : INT;
+	
+	temp : bool;
+END_VAR
+VAR PERSISTENT
 	revolveGoal : INT;
 END_VAR
 ]]></Declaration>
@@ -62,12 +66,12 @@ CASE outputState OF
 	16#10:
 		//activate fixture by slot valid status
 		FOR nCounter := 0 TO SlotCount-1 BY 1 DO
-			fixtures^.Trigger(sensorPairs[nCounter],SlotBase[nCounter].Valid); //TODO , not linked
+			fixtures.Trigger(sensorPairs[nCounter],SlotBase[nCounter].Valid); 
 		END_FOR
 		NextState := 16#20;
 	//----------
 	16#20:
-		bSerialTransition := pistonCylinder^.Execute(eCylinderCommands.COMMAND_B);
+		bSerialTransition := pistonCylinder^.Execute(eCylinderCommands.COMMAND_B) ;
 	16#21:
 		bSerialTransition := lockCylinder^.Execute(eCylinderCommands.COMMAND_A);
 	16#22:
@@ -75,7 +79,7 @@ CASE outputState OF
 	16#23:
 		bSerialTransition := lockCylinder^.Execute(eCylinderCommands.COMMAND_B);
 		IF bSerialTransition THEN
-			fixtures^.ReleaseAll(); //release all fixture
+			fixtures.ReleaseAll(); //release all fixture
 			NextState := 16#0F; //join master sequence
 		END_IF
 END_CASE]]></ST>

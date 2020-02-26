@@ -90,7 +90,7 @@ CASE outputState OF
 				SlotBase[nCounter].Valid := SlotBase[nCounter-1].Valid;
 			END_IF			
 		END_FOR
-		bSerialTransition := TRUE;	
+		NextState := 16#0;
 END_CASE
 ]]></ST>
     </Implementation>

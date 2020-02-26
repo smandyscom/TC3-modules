@@ -8,6 +8,8 @@ VAR_INPUT
 	
 	requestInit : bool;
 	requestErrorClear AT%M* : eErrorClearWays := eErrorClearWays.NO_ACTION;
+	
+	marshal : POINTER TO RunUnitGeneric;
 END_VAR
 VAR_OUTPUT
 	//------------------------
@@ -123,7 +125,7 @@ CASE outputState OF
 	eSpecialStates.MAIN_WAIT_INITIALIZING:
 		bSerialTransition := requestInit AND NOT isEmergency;
 	eSpecialStates.MAIN_INITIALIZING:
-		bSerialTransition := Initialize();
+		bSerialTransition := marshal<>0 AND_THEN marshal^.Initialize();
 	eSpecialStates.MAIN_INITIALIZED:
 		//wait emergency situation 
 		IF isEmergency THEN
