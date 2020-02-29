@@ -96,7 +96,7 @@
     <Compile Include="DUTs\HRASI\defItem.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\HRASI\defSCARATasks.TcDUT">
+    <Compile Include="DUTs\HRASI\eSCARATask.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\HRASI\defSensorPair.TcDUT">

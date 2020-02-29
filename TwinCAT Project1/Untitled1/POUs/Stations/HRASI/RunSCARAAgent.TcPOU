@@ -3,9 +3,7 @@
   <POU Name="RunScaraAgent" Id="{1f4adf83-c440-4f87-8ce9-122caf9d3620}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunScaraAgent EXTENDS RunUnitGeneric
 VAR_INPUT
-	isTaskEngaged : BOOL;		//triggered by coordinator
-	taskId : UINT;		//assigned by coordinator/internal 
-	
+	isTaskEngaged : BOOL;		//triggered by coordinator , reset by myself
 	//-------------------
 	// Remote control - Input
 	//-------------------
@@ -24,10 +22,12 @@ VAR_INPUT
 	//	CONTEXT 
 	//------------------
 	context_out_alarmAck AT%Q* : WORD;
-	context_out_stopReq AT%Q* : BYTE;
+	context_out_purgeReq AT%Q* : BYTE;	// the purge request
 	context_out_productType AT%Q* : BYTE;
-	context_out_slotValid AT%Q* : BYTE;
-	context_out_preNodePurged AT%Q* : BYTE;
+	context_out_isSlotValid AT%Q* : BYTE;
+	context_out_perNodePurged AT%Q* : BYTE;
+	
+	
 END_VAR
 VAR_OUTPUT
 	//-------------------
@@ -47,6 +47,8 @@ VAR_OUTPUT
 	context_in_alarmCode AT%I* : WORD;
 	context_in_stopack AT%I* : BYTE;
 	context_in_taskState AT%I* : BYTE;
+	
+	context_in_setSlotValid AT%I* : BYTE;
 END_VAR
 VAR CONSTANT
 	taskInit : UINT := 1;
@@ -70,10 +72,21 @@ END_VAR
 
 SUPER^();
 
+
+//transmit purged status
+context_out_perNodePurged.0 := previousNode<>0 AND_THEN previousNode^.isPurged;
+context_out_isSlotValid.0 := SlotLast<>0 AND_THEN SlotLast^.Valid;
+IF SlotBase<>0 THEN
+	SlotBase^.Valid := context_in_setSlotValid.0;
+END_IF
+IF NOT isTaskEngaged AND previousNode<>0 AND_THEN previousNode^.isPurged THEN
+	isPurged := TRUE;
+END_IF
+
 //----------------------
 //	Task running control
 //----------------------
-IF bPause AND in_running_1 THEN
+IF bPause AND NOT in_paused_2 THEN
 	out_pause_5 := TRUE;
 ELSIF NOT bPause AND in_paused_2 THEN
 	out_continue_6 := TRUE;
@@ -82,36 +95,48 @@ ELSE
 	out_continue_6 := FALSE;
 END_IF
 
-CASE outputState OF 
-	eSpecialStates.INITIAL_BEGIN:
-		//reset all signals , await SCARA comes into Ready State
+IF out_reset_7 AND NOT in_error_3 THEN
+	out_reset_7 := FALSE;
+END_IF
+
+CASE outputState OF 	
+	eSpecialStates.INITIAL_BEGIN:		
 		out_start_0 := FALSE;
 		out_stop_4 := TRUE;
 		out_pause_5 := FALSE;
 		out_continue_6 := FALSE;
 		bSerialTransition := TRUE;
+	//----------------
+	//Check no running
+	//----------------
 	eSpecialStates.INITIAL_STATE_1:
-		bSerialTransition := in_ready_0;
-		IF bSerialTransition THEN 
-			out_reset_7 := TRUE; //reset errors
-			out_stop_4 := FALSE; //release
-		END_IF
-	eSpecialStates.INITIAL_STATE_2:
-		//no error check
-		IF NOT in_error_3 THEN
-			out_reset_7:=FALSE;
-			
-			//initializing process activated
-			taskId := taskInit;
-			THIS^.ConvertTaskId();
-			out_start_0 := TRUE;
-		END_IF
-	eSpecialStates.INITIAL_STATE_3:
-		bSerialTransition := in_running_1;
-	eSpecialStates.INITIAL_STATE_4:
 		bSerialTransition := NOT in_running_1;
 		IF bSerialTransition THEN
-			out_start_0 := FALSE; //reset
+			out_stop_4 := FALSE; //release
+		END_IF
+	//--------------
+	//Check no error and ready
+	//--------------
+	eSpecialStates.INITIAL_STATE_2:
+		bSerialTransition := (NOT in_error_3) AND in_ready_0;
+		IF bSerialTransition THEN
+			//initializing process activated
+			PropTask := eSCARATask.task_init;
+			out_start_0 := TRUE;
+		END_IF
+	//Start initializing , Check running
+	eSpecialStates.INITIAL_STATE_3:
+		bSerialTransition := in_running_1;
+		IF bSerialTransition THEN
+			//initializing process activated
+			PropTask := eSCARATask.task_init;
+			out_start_0 := FALSE;
+		END_IF
+	//Start initializing, Check ran
+	eSpecialStates.INITIAL_STATE_4:
+		bSerialTransition := in_ready_0;
+		IF bSerialTransition THEN
+			out_start_0 := FALSE;
 			NextState := eSpecialStates.INITIAL_END;
 		END_IF
 	//-------------------------------
@@ -123,30 +148,23 @@ CASE outputState OF
 		//--------------
 		bSerialTransition := isTaskEngaged;
 		IF bSerialTransition THEN
-			THIS^.ConvertTaskId();
 			out_start_0 := TRUE;
 		END_IF
 	16#1:
 		bSerialTransition := in_running_1;
 		IF bSerialTransition THEN
+			out_start_0 := FALSE;
 			NextState := 16#200;
 		END_IF
 		//------------------------------------------------------------------
 		// Operating
-		//accept stop command only when programState in some specific state
 		//------------------------------------------------------------------
 	16#200:
-		bSerialTransition := NOT in_running_1 OR NOT isTaskEngaged;
-		IF  bSerialTransition THEN
-			//task finished natually or request stop from coordinator
-			context_out_stopReq := 1; //send request
-		END_IF
-	16#201:
+		//task finished natually or request purge from previous node
 		bSerialTransition := NOT in_running_1 AND in_ready_0;
 		IF bSerialTransition THEN
 			//succesfully stopped
 			isTaskEngaged := FALSE;
-			out_start_0 := FALSE;
 			NextState := eSpecialStates.GENERIC_GROUP_START;
 		END_IF	
 END_CASE]]></ST>
@@ -192,13 +210,6 @@ bMaterialOverride := input.unit.base.controlWord.bit5MaterialOverride;
 Control:=true;]]></ST>
       </Implementation>
     </Method>
-    <Action Name="ConvertTaskId" Id="{def77aca-ea32-4716-b78e-8af443e3b063}">
-      <Implementation>
-        <ST><![CDATA[out_selProg1_1 := ((taskId AND 16#01) > 0);
-out_selProg2_2 := ((taskId AND 16#02) > 0);
-out_selProg4_3 := ((taskId AND 16#04) > 0);]]></ST>
-      </Implementation>
-    </Action>
     <Method Name="ErrorClear" Id="{f462e33e-113a-4bab-9083-d7f7df268290}" FolderPath="CommonBase\">
       <Declaration><![CDATA[METHOD ErrorClear : BOOL
 VAR_INPUT
@@ -206,7 +217,8 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[context_out_alarmAck := 0; // ack reset]]></ST>
+        <ST><![CDATA[//context_out_alarmAck := 0; // ack reset
+out_reset_7 := true;]]></ST>
       </Implementation>
     </Method>
     <Method Name="ErrorDetect" Id="{0d501c3c-1258-4947-b465-528162d76fdd}" FolderPath="CommonBase\">
@@ -215,10 +227,14 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[ErrorDetect := context_in_alarmCode;
+        <ST><![CDATA[//ErrorDetect := context_in_alarmCode;
 
-IF context_in_alarmCode <> 0 THEN
-	context_out_alarmAck := context_in_alarmCode;
+//IF context_in_alarmCode <> 0 THEN
+//	context_out_alarmAck := context_in_alarmCode;
+//END_IF
+
+IF in_error_3 OR in_error_3 THEN
+	ErrorDetect := context_in_alarmCode;
 END_IF]]></ST>
       </Implementation>
     </Method>
@@ -255,6 +271,30 @@ END_IF
 ]]></ST>
       </Implementation>
     </Method>
+    <Property Name="PropTask" Id="{7faedeae-5728-4277-9efc-190d87695f5c}">
+      <Declaration><![CDATA[PROPERTY PUBLIC PropTask : eSCARATask]]></Declaration>
+      <Get Name="Get" Id="{79035dc7-b9d3-4ed1-a28c-0a67822bb203}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[
+PropTask.0 := out_selProg1_1;
+PropTask.1 := out_selProg2_2;
+PropTask.2 := out_selProg4_3;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{15f14b1d-23d8-4a5f-8f4b-150b21744701}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[out_selProg1_1 := ((PropTask AND 16#01) > 0);
+out_selProg2_2 := ((PropTask AND 16#02) > 0);
+out_selProg4_3 := ((PropTask AND 16#04) > 0);]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
     <Method Name="TypeCode" Id="{64dae203-ab2b-41a6-88c7-848614dc4389}" FolderPath="CommonBase\">
       <Declaration><![CDATA[METHOD TypeCode : eCategrories
 VAR_INPUT
@@ -265,8 +305,16 @@ END_VAR
       </Implementation>
     </Method>
     <LineIds Name="RunScaraAgent">
-      <LineId Id="4177" Count="9" />
-      <LineId Id="4188" Count="79" />
+      <LineId Id="4644" Count="13" />
+      <LineId Id="4809" Count="1" />
+      <LineId Id="4812" Count="1" />
+      <LineId Id="4811" Count="0" />
+      <LineId Id="4814" Count="1" />
+      <LineId Id="4658" Count="75" />
+      <LineId Id="4735" Count="0" />
+      <LineId Id="4742" Count="0" />
+      <LineId Id="4816" Count="0" />
+      <LineId Id="4743" Count="5" />
       <LineId Id="437" Count="0" />
     </LineIds>
     <LineIds Name="RunScaraAgent.ConfigureRead">
@@ -282,18 +330,18 @@ END_VAR
       <LineId Id="27" Count="0" />
       <LineId Id="17" Count="1" />
     </LineIds>
-    <LineIds Name="RunScaraAgent.ConvertTaskId">
-      <LineId Id="2" Count="1" />
-      <LineId Id="1" Count="0" />
-    </LineIds>
     <LineIds Name="RunScaraAgent.ErrorClear">
       <LineId Id="5" Count="0" />
+      <LineId Id="10" Count="0" />
     </LineIds>
     <LineIds Name="RunScaraAgent.ErrorDetect">
       <LineId Id="5" Count="0" />
       <LineId Id="10" Count="0" />
       <LineId Id="9" Count="0" />
       <LineId Id="11" Count="1" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="18" Count="1" />
     </LineIds>
     <LineIds Name="RunScaraAgent.Monitor">
       <LineId Id="9" Count="4" />
@@ -314,6 +362,15 @@ END_VAR
       <LineId Id="28" Count="0" />
       <LineId Id="22" Count="0" />
       <LineId Id="16" Count="0" />
+    </LineIds>
+    <LineIds Name="RunScaraAgent.PropTask.Get">
+      <LineId Id="8" Count="0" />
+      <LineId Id="7" Count="0" />
+      <LineId Id="9" Count="1" />
+    </LineIds>
+    <LineIds Name="RunScaraAgent.PropTask.Set">
+      <LineId Id="5" Count="1" />
+      <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="RunScaraAgent.TypeCode">
       <LineId Id="5" Count="0" />

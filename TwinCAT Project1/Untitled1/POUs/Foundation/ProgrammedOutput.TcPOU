@@ -27,8 +27,6 @@ END_VAR
     <Implementation>
       <ST><![CDATA[IF baseTimer.Q AND isActivated THEN
 	dutyCounter := dutyCounter+1;
-ELSE
-	dutyCounter := 0; //off
 END_IF
 
 //output when in on duty cyle
@@ -39,11 +37,15 @@ IF dutyCounter = duty THEN
 END_IF
 
 //rewind
-IF dutyCounter >= 100 THEN
+IF dutyCounter >= 100 OR NOT isActivated THEN
 	dutyCounter := 0;//reset
 END_IF
+IF cycleCounter > cycleGoal OR NOT isActivated THEN
+	cycleCounter := 0;//reset
+END_IF
 
-baseTimer(IN:= TRUE, PT:= , Q=> , ET=> );]]></ST>
+baseTimer(IN:= NOT baseTimer.Q, PT:= , Q=> , ET=> );
+]]></ST>
     </Implementation>
     <Method Name="Activate" Id="{0a0fe6dd-3262-4a80-8f95-cda1bc2fe9f0}">
       <Declaration><![CDATA[METHOD Activate : BOOL
@@ -80,11 +82,15 @@ baseTimer.PT := T#100MS; //default base]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="ProgrammedOutput">
-      <LineId Id="130" Count="7" />
+      <LineId Id="130" Count="1" />
+      <LineId Id="134" Count="3" />
       <LineId Id="148" Count="0" />
       <LineId Id="145" Count="2" />
-      <LineId Id="138" Count="5" />
+      <LineId Id="138" Count="4" />
+      <LineId Id="179" Count="2" />
+      <LineId Id="143" Count="0" />
       <LineId Id="95" Count="0" />
+      <LineId Id="176" Count="0" />
     </LineIds>
     <LineIds Name="ProgrammedOutput.Activate">
       <LineId Id="5" Count="0" />

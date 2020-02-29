@@ -48,6 +48,8 @@ CASE TO_DWORD(comm^.monitorType) OF
 		monitorDevice := ADR(gvl.axisControls[comm^.monitorIndex+1]); // index start from 1
 	eCategrories.SELECTION_CYLINDER:
 		monitorDevice := ADR(gvl.cylinderControls[comm^.monitorIndex+1]);
+	eCategrories.SELECTION_VACUUM:
+		monitorDevice := ADR(gvl.vacuumControls[comm^.monitorIndex+1]); //new type 20200228
 	eCategrories.SELECTION_SIGNAL:
 		monitorDevice := ADR(gvl.signalControls[comm^.monitorIndex+1]);
 	eCategrories.SELECTION_UNIT:
@@ -70,6 +72,8 @@ CASE comm^.commitSelection OF
 		controlDevice :=  ADR(gvl.axisControls[comm^.commitIndex+1]);
 	eCategrories.SELECTION_CYLINDER:
 		controlDevice := ADR(gvl.cylinderControls[comm^.commitIndex+1]);
+	eCategrories.SELECTION_VACUUM:
+		controlDevice := ADR(gvl.vacuumControls[comm^.commitIndex+1]); //new type 20200228
 	eCategrories.SELECTION_UNIT:
 		 
 		CASE comm^.commitMode OF
@@ -96,7 +100,7 @@ CASE state OF
 	1:
 		CASE comm^.commitMode OF
 				//Manual execution
-				eModes.MODE_EXE_AXIS,eModes.MODE_EXE_COMMAND_BLOCK,eModes.MODE_EXE_CYLINDER,eModes.MODE_EXE_UNIT:
+				eModes.MODE_EXE_AXIS,eModes.MODE_EXE_COMMAND_BLOCK,eModes.MODE_EXE_CYLINDER,eModes.MODE_EXE_UNIT,eModes.MODE_EXE_VACUUM:
 					comm^.wordOut.bDone := controlDevice^.Control(comm^.commitBlock,comm^.commitMode); //return whether done
 				eModes.MODE_UPLOAD_DATA_BLOCK:
 					comm^.commitBlock := controlDevice^.ConfigureRead(comm^.commitBlock,TO_WORD(comm^.commitSelection));
@@ -141,6 +145,7 @@ elapsed(IN:= , PT:= , Q=> , ET=> );
       <LineId Id="112" Count="0" />
       <LineId Id="548" Count="0" />
       <LineId Id="113" Count="4" />
+      <LineId Id="611" Count="1" />
       <LineId Id="419" Count="1" />
       <LineId Id="118" Count="3" />
       <LineId Id="535" Count="0" />
@@ -150,7 +155,9 @@ elapsed(IN:= , PT:= , Q=> , ET=> );
       <LineId Id="554" Count="0" />
       <LineId Id="551" Count="2" />
       <LineId Id="534" Count="0" />
-      <LineId Id="122" Count="6" />
+      <LineId Id="122" Count="5" />
+      <LineId Id="609" Count="1" />
+      <LineId Id="128" Count="0" />
       <LineId Id="459" Count="0" />
       <LineId Id="453" Count="1" />
       <LineId Id="460" Count="0" />

@@ -72,6 +72,11 @@ CASE outputState OF
 		END_IF
 	16#203:
 		aoiTrigger := FALSE; //reset
+		
+		IF NOT SlotBase^.Valid AND previousNode <>0 AND_THEN previousNode^.isPurged THEN
+			isPurged := true; // i am purged
+		END_IF
+		
 		NextState := eSpecialStates.SLAVE_WORK_DONE;
 END_CASE]]></ST>
     </Implementation>
@@ -108,7 +113,11 @@ ngCylinder := argNgCylinder;
       </Implementation>
     </Method>
     <LineIds Name="RunAoiInspectionV1">
-      <LineId Id="271" Count="54" />
+      <LineId Id="271" Count="53" />
+      <LineId Id="341" Count="1" />
+      <LineId Id="344" Count="1" />
+      <LineId Id="343" Count="0" />
+      <LineId Id="325" Count="0" />
       <LineId Id="14" Count="0" />
     </LineIds>
     <LineIds Name="RunAoiInspectionV1.FB_init">

@@ -8,6 +8,8 @@ VAR_OUTPUT
 END_VAR
 VAR
 	existence : POINTER TO RunSignal;
+	
+	purgeRequest AT%Q* : BOOL; //link to SCARA2
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -18,10 +20,20 @@ END_VAR
 //-------------------------------
 
 CASE outputState OF
+	eSpecialStates.INITIAL_BEGIN:
+		NextState := eSpecialStates.INITIAL_END;
+	//---------------------
+	//	Working
+	//---------------------
 	eSpecialStates.SLAVE_ENTER_PROCEDURE:
 		//check if empty
 		bSerialTransition := existence^.debouncedOff;
 		IF bSerialTransition THEN
+			
+			IF previousNode<>0 AND_THEN previousNode^.isPurged THEN
+				purgeRequest :=TRUE;
+			END_IF
+		
 			slaveWorkingSignal[1] := TRUE; // trigger scara to put
 		END_IF
 	16#201:
@@ -29,6 +41,10 @@ CASE outputState OF
 	16#202:
 		//check if material status matched sensor status
 		bSerialTransition := (SlotBase^.Valid = existence^.debouncedOn);
+		IF bSerialTransition AND purgeRequest AND NOT SlotBase^.Valid THEN
+			//SCARA2 had received purge request and no longer loading the parts
+			isPurged := TRUE; 
+		END_IF
 	16#203:
 		NextState := eSpecialStates.SLAVE_WORK_DONE;
 END_CASE]]></ST>
@@ -70,13 +86,21 @@ existence := argExistence;]]></ST>
       <LineId Id="12" Count="1" />
       <LineId Id="17" Count="0" />
       <LineId Id="16" Count="0" />
+      <LineId Id="43" Count="4" />
       <LineId Id="18" Count="0" />
       <LineId Id="20" Count="1" />
-      <LineId Id="24" Count="2" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="61" Count="1" />
+      <LineId Id="64" Count="1" />
+      <LineId Id="63" Count="0" />
+      <LineId Id="25" Count="1" />
       <LineId Id="22" Count="0" />
       <LineId Id="29" Count="1" />
       <LineId Id="32" Count="0" />
       <LineId Id="31" Count="0" />
+      <LineId Id="56" Count="1" />
+      <LineId Id="66" Count="0" />
+      <LineId Id="58" Count="0" />
       <LineId Id="33" Count="1" />
       <LineId Id="19" Count="0" />
     </LineIds>

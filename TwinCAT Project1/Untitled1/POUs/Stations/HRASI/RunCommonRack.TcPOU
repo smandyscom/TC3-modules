@@ -36,28 +36,21 @@ END_VAR]]></Declaration>
 //Control the working flow of rack
 
 SUPER^();
-
+signal();
 CASE outputState OF
 	//----------------
 	//	Initialization
 	//----------------
-	eSpecialStates.INITIAL_BEGIN:	
-		bSerialTransition := fixer^.Execute(eCylinderCommands.COMMAND_A) ; //release
-		IF bSerialTransition THEN
-			rackReady := FALSE; //signal clearing
-		END_IF
-	eSpecialStates.INITIAL_STATE_1:
-		//wait until synchronized with SCARA
-		IF NOT rackEngaged THEN
-			NextState:=eSpecialStates.INITIAL_END;
-		END_IF
+	eSpecialStates.INITIAL_BEGIN:
+		NextState:=eSpecialStates.INITIAL_END;
 	//-----------------
 	//	Working
 	//-----------------
 	eSpecialStates.GENERIC_GROUP_START:
 		//rack is empty
+		rackReady := FALSE; //released
 		bSerialTransition := fixer^.Execute(eCylinderCommands.COMMAND_A)AND button^.debouncedOff; //relase
-		signal.Activate(2);//50% set light flicking
+		signal.Activate(100);//50% set light flicking
 	16#1:
 		bSerialTransition := approx^.debouncedOn AND button^.onTimeElapsed > T#100MS; //wait until rack closed
 		IF approx^.debouncedOn THEN
@@ -138,7 +131,11 @@ approx :=argApprox;
       </Implementation>
     </Method>
     <LineIds Name="RunCommonRack">
-      <LineId Id="299" Count="27" />
+      <LineId Id="299" Count="9" />
+      <LineId Id="478" Count="0" />
+      <LineId Id="318" Count="4" />
+      <LineId Id="477" Count="0" />
+      <LineId Id="323" Count="3" />
       <LineId Id="415" Count="2" />
       <LineId Id="331" Count="3" />
       <LineId Id="357" Count="1" />

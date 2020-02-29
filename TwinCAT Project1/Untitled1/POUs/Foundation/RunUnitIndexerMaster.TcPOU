@@ -25,7 +25,7 @@ CASE outputState OF
 		//-------------------------
 		//	Trigger all slaves
 		//-------------------------
-		FOR nCounter:=1 TO 3 BY 1 DO
+		FOR nCounter:=1 TO 4 BY 1 DO
 			slaveWorkingSignal[nCounter] := slaveLinkageStatus[nCounter];
 		END_FOR
 		bSerialTransition := TRUE;

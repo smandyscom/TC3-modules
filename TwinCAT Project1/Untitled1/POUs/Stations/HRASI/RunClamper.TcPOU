@@ -25,11 +25,6 @@ END_VAR
 // 1. Indexer - working signal
 // 2. Bridge - working signal dispatch  to SCARA
 
-// auto reset last slot
-IF configSnap AND bIsBypassed AND SlotBase^.Valid  THEN
-	SlotBase^.Valid := FALSE;
-END_IF
-
 CASE outputState OF
 	//---------------------------
 	//	Initialization : hold and push
@@ -81,6 +76,9 @@ CASE outputState OF
 	16#204:
 		//Wait SCARA 
 		bSerialTransition := NOT slaveWorkingSignal[bScaraReady];
+		IF bSerialTransition AND previousNode<>0 AND_THEN previousNode^.isPurged  THEN
+			isPurged := TRUE; //no further part would coming
+		END_IF
 	16#205:
 		//send part back to indexer
 		bSerialTransition := horizon^.Execute(eCylinderCommands.COMMAND_B);
@@ -91,6 +89,20 @@ CASE outputState OF
 		//empty clamper extract
 		IF horizon^.Execute(eCylinderCommands.COMMAND_A) THEN
 			NextState := eSpecialStates.SLAVE_WORK_DONE;
+		END_IF
+	
+	//-------------
+	//	Last station should treated as empty
+	//-------------
+	eSpecialStates.SLAVE_WORK_DONE:
+		// auto reset last slot
+		IF configSnap THEN
+			SlotBase^.Valid := FALSE;
+		END_IF
+		
+		//bypass purge status
+		IF NOT SlotBase^.Valid AND previousNode<>0 AND_THEN previousNode^.isPurged THEN
+			isPurged := TRUE;
 		END_IF
 END_CASE]]></ST>
     </Implementation>
@@ -134,8 +146,6 @@ configSnap := argConfigSnap;]]></ST>
       <LineId Id="201" Count="0" />
       <LineId Id="111" Count="0" />
       <LineId Id="202" Count="1" />
-      <LineId Id="238" Count="0" />
-      <LineId Id="234" Count="3" />
       <LineId Id="112" Count="1" />
       <LineId Id="195" Count="2" />
       <LineId Id="194" Count="0" />
@@ -146,9 +156,15 @@ configSnap := argConfigSnap;]]></ST>
       <LineId Id="173" Count="1" />
       <LineId Id="172" Count="0" />
       <LineId Id="169" Count="0" />
-      <LineId Id="115" Count="26" />
+      <LineId Id="115" Count="21" />
+      <LineId Id="280" Count="2" />
+      <LineId Id="137" Count="4" />
       <LineId Id="176" Count="0" />
       <LineId Id="146" Count="4" />
+      <LineId Id="255" Count="4" />
+      <LineId Id="261" Count="2" />
+      <LineId Id="260" Count="0" />
+      <LineId Id="299" Count="4" />
       <LineId Id="29" Count="0" />
     </LineIds>
     <LineIds Name="RunClamper.FB_init">

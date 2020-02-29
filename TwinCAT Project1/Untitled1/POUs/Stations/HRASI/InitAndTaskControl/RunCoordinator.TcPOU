@@ -8,8 +8,8 @@ VAR_INPUT
 	//------------
 	// link to HMI
 	//------------
-	purge AT%I* : BOOL ; 
-	regularCheckAck AT%I* : BOOL;
+	commPurge AT%I* : BOOL ; 
+	commRegularCheckAck AT%I* : BOOL;
 	//------------
 	//	Control
 	//------------
@@ -19,7 +19,6 @@ VAR_INPUT
 	clamper1 : POINTER TO RunClamper;
 	clamper2 : POINTER TO RunClamper;
 	
-	loading : POINTER TO RunLoading;
 END_VAR
 VAR_OUTPUT
 	isInitialized : BOOL;
@@ -36,7 +35,8 @@ END_VAR
 SUPER^();
 
 isInitialized := ((outputState AND eSpecialStates.INITIAL_REGION) = 0);
-isInitialized := true;
+isInitialized := TRUE;
+
 CASE outputState OF
 	//----------------------------
 	//	Initializing :
@@ -45,7 +45,9 @@ CASE outputState OF
 	//----------------------------	
 	eSpecialStates.INITIAL_BEGIN:
 		FOR nCounter :=0 TO 23 BY 1 DO
-			bSerialTransition := bSerialTransition AND gvl.remoteControls[nCounter]^.Execute(eCylinderCommands.COMMAND_A);
+			IF gvl.remoteControls[nCounter] <> 0 THEN
+				bSerialTransition := bSerialTransition AND gvl.remoteControls[nCounter]^.Execute(eCylinderCommands.COMMAND_A);
+			END_IF
 		END_FOR
 		IF bSerialTransition THEN
 			NextState := eSpecialStates.INITIAL_STATE_1;
@@ -115,7 +117,7 @@ CASE outputState OF
 		//	Purging chain
 		//---------------------------
 	16#1000:
-		bSerialTransition := purge; //would transimit to loading
+		bSerialTransition := commPurge; //would transimit to loading
 		IF bSerialTransition THEN
 			THIS^.isPurged := TRUE;
 		END_IF
@@ -133,72 +135,7 @@ startProductionMode := FALSE;
 startRegularCheckMode := FALSE;]]></ST>
     </Implementation>
     <LineIds Name="RunCoordinator">
-      <LineId Id="118" Count="0" />
-      <LineId Id="120" Count="2" />
-      <LineId Id="119" Count="0" />
-      <LineId Id="13" Count="0" />
-      <LineId Id="221" Count="1" />
-      <LineId Id="14" Count="1" />
-      <LineId Id="188" Count="0" />
-      <LineId Id="191" Count="0" />
-      <LineId Id="194" Count="0" />
-      <LineId Id="193" Count="0" />
-      <LineId Id="192" Count="0" />
-      <LineId Id="209" Count="3" />
-      <LineId Id="217" Count="2" />
-      <LineId Id="127" Count="0" />
-      <LineId Id="16" Count="0" />
-      <LineId Id="123" Count="0" />
-      <LineId Id="17" Count="0" />
-      <LineId Id="104" Count="1" />
-      <LineId Id="103" Count="0" />
-      <LineId Id="27" Count="0" />
-      <LineId Id="40" Count="0" />
-      <LineId Id="96" Count="1" />
-      <LineId Id="173" Count="0" />
-      <LineId Id="106" Count="1" />
-      <LineId Id="95" Count="0" />
-      <LineId Id="299" Count="0" />
-      <LineId Id="312" Count="0" />
-      <LineId Id="314" Count="1" />
-      <LineId Id="313" Count="0" />
-      <LineId Id="301" Count="2" />
-      <LineId Id="300" Count="0" />
-      <LineId Id="304" Count="2" />
-      <LineId Id="308" Count="0" />
-      <LineId Id="310" Count="1" />
-      <LineId Id="42" Count="0" />
-      <LineId Id="93" Count="1" />
-      <LineId Id="108" Count="0" />
-      <LineId Id="140" Count="0" />
-      <LineId Id="77" Count="0" />
-      <LineId Id="235" Count="0" />
-      <LineId Id="246" Count="0" />
-      <LineId Id="245" Count="0" />
-      <LineId Id="248" Count="0" />
-      <LineId Id="250" Count="0" />
-      <LineId Id="263" Count="0" />
-      <LineId Id="141" Count="0" />
-      <LineId Id="224" Count="1" />
-      <LineId Id="223" Count="0" />
-      <LineId Id="285" Count="2" />
-      <LineId Id="284" Count="0" />
-      <LineId Id="288" Count="0" />
-      <LineId Id="229" Count="2" />
-      <LineId Id="228" Count="0" />
-      <LineId Id="295" Count="3" />
-      <LineId Id="293" Count="1" />
-      <LineId Id="268" Count="2" />
-      <LineId Id="265" Count="0" />
-      <LineId Id="274" Count="0" />
-      <LineId Id="280" Count="0" />
-      <LineId Id="291" Count="1" />
-      <LineId Id="276" Count="3" />
-      <LineId Id="266" Count="0" />
-      <LineId Id="281" Count="2" />
-      <LineId Id="9" Count="0" />
-      <LineId Id="233" Count="0" />
-      <LineId Id="232" Count="0" />
+      <LineId Id="395" Count="104" />
       <LineId Id="234" Count="0" />
     </LineIds>
   </POU>

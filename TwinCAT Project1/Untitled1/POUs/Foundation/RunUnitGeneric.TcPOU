@@ -15,8 +15,8 @@ VAR_INPUT
 	//-------------
 	//	Purge Chain
 	//-------------
-	isPurged : BOOL;
-	previousNode : POINTER TO RunUnitGeneric;
+	isPurged : BOOL; //this station already in the purged state , would keep bypass working signals
+	previousNode : POINTER TO RunUnitGeneric; // used to check previous node whether purged
 END_VAR
 VAR_OUTPUT
 	 //possible TO output on HMI
@@ -99,7 +99,14 @@ END_IF
 bTrigStep := FALSE;
 
 //Timer
-workingTimer(IN:=,PT:=TO_TIME(4294967295),Q=>,ET=>);]]></ST>
+workingTimer(IN:=,PT:=TO_TIME(4294967295),Q=>,ET=>);
+
+//-------------------
+//purge status reset
+//-------------------
+IF isPurged AND previousNode<>0 AND_THEN NOT previousNode^.isPurged THEN
+	isPurged := FALSE;
+END_IF]]></ST>
     </Implementation>
     <Folder Name="CommonBase" Id="{a3eb2459-fb17-4657-a789-38e4b978c786}" />
     <Method Name="ConfigureRead" Id="{5b0d9a0a-5d92-42f2-80d6-58161cf4acad}" FolderPath="CommonBase\">
@@ -266,6 +273,10 @@ END_VAR
       <LineId Id="272" Count="2" />
       <LineId Id="278" Count="1" />
       <LineId Id="9" Count="0" />
+      <LineId Id="392" Count="2" />
+      <LineId Id="397" Count="0" />
+      <LineId Id="395" Count="1" />
+      <LineId Id="391" Count="0" />
     </LineIds>
     <LineIds Name="RunUnitGeneric.ConfigureRead">
       <LineId Id="5" Count="0" />
