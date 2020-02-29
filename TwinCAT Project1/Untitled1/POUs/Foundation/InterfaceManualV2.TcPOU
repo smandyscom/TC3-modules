@@ -19,6 +19,7 @@ VAR
 	
 	elapsed : TON ;
 	m_elapsed :TIME;
+	
 END_VAR
 VAR CONSTANT
 	bEngagedHMI : INT := 0;
@@ -32,30 +33,30 @@ END_VAR
 writePersistance(
 		NETID:= , 
 		PORT:= 851, 
-		START:= , 
+		START:= isPaused , 
 		TMOUT:= , 
 		BUSY=> , 
 		ERR=> , 
 		ERRID=> );
-//IF writePersistance.START AND NOT writePersistance.BUSY THEN
-//	writePersistance.START := false;
-//END_IF
 //---------------------------
 // MONITOR
 //---------------------------
-CASE TO_DWORD(comm^.monitorType) OF
+IF comm^.monitorIndex >0 THEN
+	CASE TO_DWORD(comm^.monitorType) OF
 	eCategrories.SELECTION_AXIS:
-		monitorDevice := ADR(gvl.axisControls[comm^.monitorIndex+1]); // index start from 1
+		monitorDevice := ADR(gvl.axisControls[comm^.monitorIndex]); // index start from 1
 	eCategrories.SELECTION_CYLINDER:
-		monitorDevice := ADR(gvl.cylinderControls[comm^.monitorIndex+1]);
+		monitorDevice := ADR(gvl.cylinderControls[comm^.monitorIndex]);
 	eCategrories.SELECTION_VACUUM:
-		monitorDevice := ADR(gvl.vacuumControls[comm^.monitorIndex+1]); //new type 20200228
+		monitorDevice := ADR(gvl.vacuumControls[comm^.monitorIndex]); //new type 20200228
 	eCategrories.SELECTION_SIGNAL:
-		monitorDevice := ADR(gvl.signalControls[comm^.monitorIndex+1]);
+		monitorDevice := ADR(gvl.signalControls[comm^.monitorIndex]);
 	eCategrories.SELECTION_UNIT:
-		monitorDevice := ADR(gvl.units[comm^.monitorIndex+1]^);
-END_CASE
-comm^.monitorBlock := monitorDevice^.Monitor();
+		monitorDevice := ADR(gvl.units[comm^.monitorIndex]^);
+	END_CASE
+	comm^.monitorBlock := monitorDevice^.Monitor();
+END_IF
+
 
 //------------------------------
 //	Control
@@ -67,28 +68,30 @@ IF NOT  isManualEngaged THEN
 END_IF
 
 //control
-CASE comm^.commitSelection OF
-	eCategrories.SELECTION_AXIS:
-		controlDevice :=  ADR(gvl.axisControls[comm^.commitIndex+1]);
-	eCategrories.SELECTION_CYLINDER:
-		controlDevice := ADR(gvl.cylinderControls[comm^.commitIndex+1]);
-	eCategrories.SELECTION_VACUUM:
-		controlDevice := ADR(gvl.vacuumControls[comm^.commitIndex+1]); //new type 20200228
-	eCategrories.SELECTION_UNIT:
-		 
-		CASE comm^.commitMode OF
-			eModes.MODE_DOWNLOAD_DATA_BLOCK,eModes.MODE_UPLOAD_DATA_BLOCK:
-				//configuration
-				controlDevice := ADR(gvl.units[comm^.commitBlock.unit.config.unitId+1]^);
-			ELSE
-				controlDevice := ADR(gvl.units[comm^.commitIndex+1]^);
-		END_CASE
-	eCategrories.SELECTION_COMMAND_BLOCK:
-		//axis should be pre-selected
-		controlDevice := ADR(gvl.axisControls[comm^.commitBlock.command.base.axisId+1]);
-	eCategrories.SELECTION_SIGNAL:
-		controlDevice := ADR(gvl.signalControls[comm^.commitIndex+1]);
-END_CASE
+IF comm^.commitIndex>0 THEN
+	CASE comm^.commitSelection OF
+		eCategrories.SELECTION_AXIS:
+			controlDevice :=  ADR(gvl.axisControls[comm^.commitIndex]);
+		eCategrories.SELECTION_CYLINDER:
+			controlDevice := ADR(gvl.cylinderControls[comm^.commitIndex]);
+		eCategrories.SELECTION_VACUUM:
+			controlDevice := ADR(gvl.vacuumControls[comm^.commitIndex]); //new type 20200228
+		eCategrories.SELECTION_UNIT:
+			 
+			CASE comm^.commitMode OF
+				eModes.MODE_DOWNLOAD_DATA_BLOCK,eModes.MODE_UPLOAD_DATA_BLOCK:
+					//configuration
+					controlDevice := ADR(gvl.units[comm^.commitBlock.unit.config.unitId]^);
+				ELSE
+					controlDevice := ADR(gvl.units[comm^.commitIndex]^);
+			END_CASE
+		eCategrories.SELECTION_COMMAND_BLOCK:
+			//axis should be pre-selected
+			controlDevice := ADR(gvl.axisControls[comm^.commitBlock.command.base.axisId]);
+		eCategrories.SELECTION_SIGNAL:
+			controlDevice := ADR(gvl.signalControls[comm^.commitIndex]);
+	END_CASE
+END_IF
 
 CASE state OF
 	0:
@@ -139,15 +142,13 @@ elapsed(IN:= , PT:= , Q=> , ET=> );
     <LineIds Name="InterfaceManualV2">
       <LineId Id="497" Count="7" />
       <LineId Id="496" Count="0" />
-      <LineId Id="582" Count="1" />
-      <LineId Id="547" Count="0" />
       <LineId Id="389" Count="0" />
       <LineId Id="112" Count="0" />
       <LineId Id="548" Count="0" />
-      <LineId Id="113" Count="4" />
-      <LineId Id="611" Count="1" />
-      <LineId Id="419" Count="1" />
-      <LineId Id="118" Count="3" />
+      <LineId Id="639" Count="0" />
+      <LineId Id="642" Count="11" />
+      <LineId Id="640" Count="1" />
+      <LineId Id="121" Count="0" />
       <LineId Id="535" Count="0" />
       <LineId Id="538" Count="0" />
       <LineId Id="549" Count="1" />
@@ -155,7 +156,9 @@ elapsed(IN:= , PT:= , Q=> , ET=> );
       <LineId Id="554" Count="0" />
       <LineId Id="551" Count="2" />
       <LineId Id="534" Count="0" />
-      <LineId Id="122" Count="5" />
+      <LineId Id="122" Count="0" />
+      <LineId Id="654" Count="0" />
+      <LineId Id="123" Count="4" />
       <LineId Id="609" Count="1" />
       <LineId Id="128" Count="0" />
       <LineId Id="459" Count="0" />
@@ -169,6 +172,7 @@ elapsed(IN:= , PT:= , Q=> , ET=> );
       <LineId Id="421" Count="1" />
       <LineId Id="132" Count="0" />
       <LineId Id="546" Count="0" />
+      <LineId Id="657" Count="0" />
       <LineId Id="133" Count="3" />
       <LineId Id="464" Count="0" />
       <LineId Id="137" Count="1" />

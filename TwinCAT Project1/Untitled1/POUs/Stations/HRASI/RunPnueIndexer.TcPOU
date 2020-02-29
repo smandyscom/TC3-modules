@@ -54,6 +54,11 @@ CASE outputState OF
 	eSpecialStates.INITIAL_STATE_5:
 		bSerialTransition := lockCylinder^.Execute(eCylinderCommands.COMMAND_B);
 		IF bSerialTransition THEN
+			
+			FOR nCounter :=1 TO 4 BY 1 DO
+				SlotBase[nCounter].Valid := FALSE; //reset
+			END_FOR
+			
 			NextState := eSpecialStates.INITIAL_END; //terminated
 		END_IF
 	//------------------start running
@@ -120,6 +125,35 @@ lockCylinder := argLockCylinder;
 pistonCylinder := argPistonCylinder;]]></ST>
       </Implementation>
     </Method>
+    <Method Name="Initialize" Id="{2cdffb39-9857-4d32-a795-20f33e659f2a}">
+      <Declaration><![CDATA[METHOD Initialize : BOOL
+VAR_INPUT
+END_VAR
+VAR
+	nCounter : int;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//once initializing method call , redirect current state to initalizing region
+IF (TO_UINT(State) AND TO_UINT(eSpecialStates.INITIAL_REGION)) =0 THEN
+	NextState := eSpecialStates.INITIAL_BEGIN; //not in intializing region , change
+END_IF
+
+Initialize := (State = eSpecialStates.INITIAL_END);
+
+IF Initialize THEN
+	//clear all remained signal
+	FOR nCounter:=1 TO 32 BY 1 DO
+		slaveWorkingSignal[nCounter] := FALSE;
+	END_FOR
+	//clear all internal status
+	bEnStep := FALSE;
+	bTrigStep := FALSE;
+	bIsBypassed := FALSE;
+	bWorkingOverride := FALSE;
+	bMaterialOverride := FALSE;	
+END_IF]]></ST>
+      </Implementation>
+    </Method>
     <LineIds Name="RunPnueIndexer">
       <LineId Id="9" Count="0" />
       <LineId Id="16" Count="0" />
@@ -142,7 +176,9 @@ pistonCylinder := argPistonCylinder;]]></ST>
       <LineId Id="129" Count="1" />
       <LineId Id="127" Count="0" />
       <LineId Id="123" Count="0" />
-      <LineId Id="150" Count="4" />
+      <LineId Id="150" Count="2" />
+      <LineId Id="181" Count="4" />
+      <LineId Id="153" Count="1" />
       <LineId Id="19" Count="0" />
       <LineId Id="59" Count="1" />
       <LineId Id="22" Count="1" />
@@ -176,6 +212,18 @@ pistonCylinder := argPistonCylinder;]]></ST>
       <LineId Id="91" Count="0" />
       <LineId Id="90" Count="0" />
       <LineId Id="95" Count="0" />
+    </LineIds>
+    <LineIds Name="RunPnueIndexer.Initialize">
+      <LineId Id="18" Count="0" />
+      <LineId Id="20" Count="2" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="7" Count="0" />
+      <LineId Id="36" Count="0" />
+      <LineId Id="27" Count="0" />
+      <LineId Id="39" Count="2" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="43" Count="5" />
+      <LineId Id="38" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

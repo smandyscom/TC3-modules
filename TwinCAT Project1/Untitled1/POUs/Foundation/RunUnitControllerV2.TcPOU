@@ -54,7 +54,7 @@ FOR nCounter :=1 TO axisUpperBound BY 1 DO
 	//error detection
 	IF errorDevice=0 AND errorDelayDetect.Q AND gvl.axisControls[nCounter].ErrorDetect() <> 0 THEN
 		//error scaned
-		errorIndex := nCounter-1;
+		errorIndex := nCounter;
 		errorDevice := ADR(gvl.axisControls[nCounter]);
 	END_IF
 END_FOR
@@ -63,7 +63,7 @@ FOR nCounter :=1 TO cylinderUpperBound BY 1 DO
 	//error detection
 	IF errorDevice=0 AND errorDelayDetect.Q AND gvl.pnuematicControls[nCounter]^.ErrorDetect() <> 0 THEN
 		//error scaned
-		errorIndex := nCounter-1;
+		errorIndex := nCounter;
 		errorDevice := gvl.pnuematicControls[nCounter];
 	END_IF
 END_FOR
@@ -74,7 +74,7 @@ FOR nCounter :=1 TO unitUpperBound BY 1 DO
 	//error detection
 	IF errorDevice=0 AND errorDelayDetect.Q AND gvl.units[nCounter] <> 0 AND_THEN gvl.units[nCounter]^.ErrorDetect() <> 0THEN
 		//station
-		errorIndex := nCounter-1;
+		errorIndex := nCounter;
 		errorDevice := gvl.units[nCounter];
 	END_IF
 END_FOR
@@ -126,9 +126,12 @@ CASE outputState OF
 		bSerialTransition := requestInit AND NOT isEmergency;
 	eSpecialStates.MAIN_INITIALIZING:
 		bSerialTransition := marshal<>0 AND_THEN marshal^.Initialize();
+		IF bSerialTransition THEN
+			marshal^.NextState := eSpecialStates.GENERIC_GROUP_START;
+		END_IF
 	eSpecialStates.MAIN_INITIALIZED:
 		//wait emergency situation 
-		IF isEmergency THEN
+		IF isEmergency OR requestInit THEN
 			NextState := eSpecialStates.MAIN_WAIT_INITIALIZING;
 		END_IF
 END_CASE
@@ -157,7 +160,7 @@ IF bInitRetains THEN
 	NextState := eSpecialStates.INITIAL_BEGIN;
 END_IF
 
-state := eSpecialStates.MAIN_WAIT_INITIALIZING;
+state := eSpecialStates.MAIN_INITIALIZING; //as beginning
 NextState:=state;]]></ST>
       </Implementation>
     </Method>
@@ -183,7 +186,9 @@ NextState:=state;]]></ST>
       <LineId Id="1753" Count="4" />
       <LineId Id="1747" Count="1" />
       <LineId Id="1702" Count="0" />
-      <LineId Id="1705" Count="12" />
+      <LineId Id="1705" Count="5" />
+      <LineId Id="1832" Count="2" />
+      <LineId Id="1711" Count="6" />
       <LineId Id="1050" Count="0" />
     </LineIds>
     <LineIds Name="RunUnitControllerV2.FB_init">

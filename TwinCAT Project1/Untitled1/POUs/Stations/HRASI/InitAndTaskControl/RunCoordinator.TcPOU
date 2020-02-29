@@ -35,7 +35,7 @@ END_VAR
 SUPER^();
 
 isInitialized := ((outputState AND eSpecialStates.INITIAL_REGION) = 0);
-isInitialized := TRUE;
+
 
 CASE outputState OF
 	//----------------------------
@@ -44,17 +44,30 @@ CASE outputState OF
 	// 1. SCARA & Clamper & Indexer
 	//----------------------------	
 	eSpecialStates.INITIAL_BEGIN:
+		bSerialTransition:=TRUE;
 		FOR nCounter :=0 TO 23 BY 1 DO
 			IF gvl.remoteControls[nCounter] <> 0 THEN
 				bSerialTransition := bSerialTransition AND gvl.remoteControls[nCounter]^.Execute(eCylinderCommands.COMMAND_A);
 			END_IF
 		END_FOR
+	eSpecialStates.INITIAL_STATE_1:
+		bSerialTransition:=TRUE;
+		FOR nCounter :=0 TO 3 BY 1 DO
+			bSerialTransition := members[nCounter]<>0 AND_THEN members[nCounter]^.Initialize();
+		END_FOR
 		IF bSerialTransition THEN
-			NextState := eSpecialStates.INITIAL_STATE_1;
+			NextState:=eSpecialStates.INITIAL_END;
 		END_IF
 	//------------------------------------------
 	// Initialize - Group start (base procedure)
 	//------------------------------------------
+	eSpecialStates.GENERIC_GROUP_START:
+		FOR nCounter :=0 TO 2 BY 1 DO
+			IF members[nCounter]<>0 THEN
+				members[nCounter]^.NextState := eSpecialStates.GENERIC_GROUP_START;
+			END_IF
+		END_FOR
+		bSerialTransition:=TRUE;
 	eSpecialStates.GENERIC_GROUP_IDLE:
 		//---------------------
 		//	IDLE (Engineering mode): wait command / able to trigger individual process
@@ -135,7 +148,18 @@ startProductionMode := FALSE;
 startRegularCheckMode := FALSE;]]></ST>
     </Implementation>
     <LineIds Name="RunCoordinator">
-      <LineId Id="395" Count="104" />
+      <LineId Id="395" Count="16" />
+      <LineId Id="526" Count="0" />
+      <LineId Id="412" Count="4" />
+      <LineId Id="524" Count="1" />
+      <LineId Id="527" Count="2" />
+      <LineId Id="548" Count="2" />
+      <LineId Id="420" Count="2" />
+      <LineId Id="541" Count="0" />
+      <LineId Id="543" Count="3" />
+      <LineId Id="542" Count="0" />
+      <LineId Id="547" Count="0" />
+      <LineId Id="423" Count="76" />
       <LineId Id="234" Count="0" />
     </LineIds>
   </POU>

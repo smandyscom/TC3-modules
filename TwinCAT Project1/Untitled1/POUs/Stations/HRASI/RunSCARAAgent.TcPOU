@@ -95,7 +95,7 @@ ELSE
 	out_continue_6 := FALSE;
 END_IF
 
-IF out_reset_7 AND NOT in_error_3 THEN
+IF out_reset_7 AND  ErrorDetect() =0 THEN
 	out_reset_7 := FALSE;
 END_IF
 
@@ -233,8 +233,12 @@ END_VAR
 //	context_out_alarmAck := context_in_alarmCode;
 //END_IF
 
-IF in_error_3 OR in_error_3 THEN
+IF in_error_3  THEN
 	ErrorDetect := context_in_alarmCode;
+ELSIF in_eStop_4 THEN
+	ErrorDetect := 9000;
+ELSE
+	ErrorDetect := 0;
 END_IF]]></ST>
       </Implementation>
     </Method>
@@ -341,7 +345,9 @@ END_VAR
       <LineId Id="11" Count="1" />
       <LineId Id="17" Count="0" />
       <LineId Id="16" Count="0" />
-      <LineId Id="18" Count="1" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="23" Count="3" />
+      <LineId Id="19" Count="0" />
     </LineIds>
     <LineIds Name="RunScaraAgent.Monitor">
       <LineId Id="9" Count="4" />
