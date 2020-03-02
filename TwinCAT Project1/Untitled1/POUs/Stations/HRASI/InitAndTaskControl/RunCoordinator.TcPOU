@@ -3,12 +3,18 @@
   <POU Name="RunCoordinator" Id="{93db79ea-7610-40ae-89e3-5adae225f547}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunCoordinator EXTENDS RunGroupNode
 VAR_INPUT
-	startProductionMode AT%M* : BOOL;
-	startRegularCheckMode AT%M* : BOOL;
+	commStartProductionMode AT%M* : BOOL;
+	commStartRegularCheckMode AT%M* : BOOL;
+	
+	//------------
+	//	Trial mode
+	//------------
+	commStartTrialAssemble AT%M* : BOOL;
+	commStartTrialSnap AT%M* : BOOL;
 	//------------
 	// link to HMI
 	//------------
-	commPurge AT%I* : BOOL ; 
+	commPurge AT%I* : BOOL ;  //depreciated
 	commRegularCheckAck AT%I* : BOOL;
 	//------------
 	//	Control
@@ -72,7 +78,51 @@ CASE outputState OF
 		//---------------------
 		//	IDLE (Engineering mode): wait command / able to trigger individual process
 		//---------------------
-	//------------------------Working
+		IF commStartProductionMode THEN
+			//---------------------------
+			//	Production mode
+			//  1. Execute SCARA ASSEMBLE
+			//	2. When purge command raise , coordinate stations to stop
+			//---------------------------
+			clamper1^.bIsBypassed := FALSE;
+			clamper2^.bIsBypassed := FALSE;
+			
+			scara1^.PropTask := eSCARATask.task_assemble_scara1;
+			scara1^.isTaskEngaged := TRUE;
+			scara2^.PropTask := eSCARATask.task_snap_scara2;
+			scara2^.isTaskEngaged := TRUE;	
+		
+			NextState := 16#1000;
+		ELSIF commStartTrialAssemble THEN
+			//---------------------------
+			//	Trial-assemble mode
+			//---------------------------
+			clamper1^.bIsBypassed := FALSE;
+			clamper2^.bIsBypassed := TRUE;
+			scara1^.PropTask := eSCARATask.task_assemble_scara1;
+			scara1^.isTaskEngaged := TRUE;
+			scara2^.PropTask := eSCARATask.task_snap_scara2;
+			scara2^.isTaskEngaged := FALSE;
+			
+			NextState := 16#1000;
+		ELSIF commStartTrialSnap THEN
+			//---------------------------
+			//	Trial-snap mode
+			//---------------------------
+			clamper1^.bIsBypassed := TRUE;
+			clamper2^.bIsBypassed := FALSE;
+			
+			scara1^.isTaskEngaged := FALSE;
+			scara2^.PropTask := eSCARATask.task_snap_scara2;
+			scara2^.isTaskEngaged := TRUE;
+			NextState := 16#1000;
+		ELSIF commStartRegularCheckMode THEN
+			NextState := 16#300;
+		END_IF
+		
+	//------------------------
+	//Working
+	//------------------------
 	16#300:
 		//----------------------------------
 		//	Regular check mode
@@ -95,45 +145,11 @@ CASE outputState OF
 		bSerialTransition := NOT scara2^.isTaskEngaged;
 		//then AOI shuffing test
 		
-	16#500:
-		//---------------------------
-		//	Production mode
-		//  1. Execute SCARA ASSEMBLE
-		//	2. When purge command raise , coordinate stations to stop
-		//---------------------------
-		clamper1^.bIsBypassed := FALSE;
-		clamper2^.bIsBypassed := FALSE;
-		scara1^.isTaskEngaged := TRUE;
-		scara2^.isTaskEngaged := TRUE;
-		NextState := 16#1000;
-	
-	16#600:	
-		//---------------------------
-		//	Trial-assemble mode
-		//---------------------------
-		clamper1^.bIsBypassed := FALSE;
-		clamper2^.bIsBypassed := TRUE;
-		scara1^.isTaskEngaged := TRUE;
-		scara2^.isTaskEngaged := FALSE;
-		NextState := 16#1000;
-	16#700:	
-		//---------------------------
-		//	Trial-snap mode
-		//---------------------------
-		clamper1^.bIsBypassed := TRUE;
-		clamper2^.bIsBypassed := FALSE;
-		scara1^.isTaskEngaged := FALSE;
-		scara2^.isTaskEngaged := TRUE;
-		NextState := 16#1000;
-		
 		//---------------------------
 		//	Purging chain
 		//---------------------------
 	16#1000:
-		bSerialTransition := commPurge; //would transimit to loading
-		IF bSerialTransition THEN
-			THIS^.isPurged := TRUE;
-		END_IF
+		bSerialTransition := isPurged; //would be triggered by interfaceControl
 	16#1001:
 		bSerialTransition := previousNode <>0 AND_THEN previousNode^.isPurged;
 		IF bSerialTransition THEN
@@ -144,23 +160,36 @@ CASE outputState OF
 		NextState := eSpecialStates.GENERIC_GROUP_IDLE;
 END_CASE
 //one shot command clear
-startProductionMode := FALSE;
-startRegularCheckMode := FALSE;]]></ST>
+commStartProductionMode := FALSE;
+commStartRegularCheckMode := FALSE;
+commStartTrialAssemble:= FALSE;
+commStartTrialSnap :=FALSE;]]></ST>
     </Implementation>
     <LineIds Name="RunCoordinator">
-      <LineId Id="395" Count="16" />
-      <LineId Id="526" Count="0" />
-      <LineId Id="412" Count="4" />
-      <LineId Id="524" Count="1" />
-      <LineId Id="527" Count="2" />
-      <LineId Id="548" Count="2" />
-      <LineId Id="420" Count="2" />
-      <LineId Id="541" Count="0" />
-      <LineId Id="543" Count="3" />
-      <LineId Id="542" Count="0" />
-      <LineId Id="547" Count="0" />
-      <LineId Id="423" Count="76" />
+      <LineId Id="761" Count="45" />
+      <LineId Id="901" Count="10" />
+      <LineId Id="899" Count="1" />
+      <LineId Id="807" Count="0" />
+      <LineId Id="912" Count="0" />
+      <LineId Id="917" Count="4" />
+      <LineId Id="924" Count="0" />
+      <LineId Id="922" Count="0" />
+      <LineId Id="925" Count="0" />
+      <LineId Id="916" Count="0" />
+      <LineId Id="923" Count="0" />
+      <LineId Id="913" Count="1" />
+      <LineId Id="928" Count="4" />
+      <LineId Id="934" Count="0" />
+      <LineId Id="933" Count="0" />
+      <LineId Id="935" Count="0" />
+      <LineId Id="926" Count="0" />
+      <LineId Id="915" Count="0" />
+      <LineId Id="808" Count="28" />
+      <LineId Id="868" Count="4" />
+      <LineId Id="876" Count="10" />
       <LineId Id="234" Count="0" />
+      <LineId Id="898" Count="0" />
+      <LineId Id="897" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
