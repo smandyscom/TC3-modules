@@ -3,14 +3,15 @@
   <POU Name="InterfaceControlV2" Id="{5c9a5b58-14bf-4ff5-afb4-63b993847649}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK InterfaceControlV2
 VAR_INPUT
-	pbGreen : BOOL; //start
-	pbRed : BOOL;	//stop
-	pbYellow: BOOL; //error reset
+	pbStart : BOOL; //start
+	pbStop : BOOL;	//stop
+	pbErrorReset : BOOL; //error reset
 	
 	commStart AT%M* : BOOL;
 	commStop AT%M* : BOOL;
-	commErrorReset AT%M* : BOOL;
-	commErrorIgnore AT%M* : BOOL;
+	commErrorLocalAck AT%M* : BOOL; //by HMI
+	commErrorIgnore AT%M* : BOOL; // by Push-button
+	commErrorRemoteAck at%M* : bool;
 	commInit AT%M* : BOOL;
 	commPurge AT%M* : BOOL;
 END_VAR
@@ -27,10 +28,12 @@ VAR_OUTPUT
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[requestPause := commStop OR pbRed;
-requestResume := commStart OR pbGreen;
+      <ST><![CDATA[requestPause := commStop OR pbStop;
+requestResume := commStart OR pbStart;
 
-IF commErrorReset OR pbYellow THEN
+commErrorRemoteAck := pbErrorReset;
+
+IF commErrorLocalAck OR commErrorRemoteAck THEN
 	requestErrorClear := eErrorClearWays.RESET;
 ELSIF commErrorIgnore THEN
 	requestErrorClear := eErrorClearWays.IGNORE;
@@ -46,24 +49,14 @@ requestPurge := commPurge;
 //one-shot control clear 
 commStart := FALSE;
 commStop := FALSE;
-commErrorReset := FALSE;
+commErrorLocalAck := FALSE;
 commErrorIgnore:= FALSE;
 commInit:= FALSE;
 commPurge := FALSE;]]></ST>
     </Implementation>
     <LineIds Name="InterfaceControlV2">
-      <LineId Id="864" Count="1" />
-      <LineId Id="867" Count="2" />
-      <LineId Id="871" Count="0" />
-      <LineId Id="873" Count="0" />
-      <LineId Id="875" Count="0" />
-      <LineId Id="878" Count="0" />
-      <LineId Id="876" Count="0" />
-      <LineId Id="870" Count="0" />
-      <LineId Id="859" Count="0" />
-      <LineId Id="834" Count="1" />
-      <LineId Id="843" Count="2" />
-      <LineId Id="882" Count="4" />
+      <LineId Id="1127" Count="3" />
+      <LineId Id="1132" Count="19" />
       <LineId Id="853" Count="0" />
     </LineIds>
   </POU>

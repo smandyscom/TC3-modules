@@ -6716,9 +6716,7 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>MAIN.marshal.commPurge</Name>
-							<Comment><![CDATA[------------
- link to HMI
-------------]]></Comment>
+							<Comment><![CDATA[depreciated]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>

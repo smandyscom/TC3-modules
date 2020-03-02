@@ -101,7 +101,8 @@ CASE state OF
 			state := 1;
 		END_IF
 	1:
-		CASE comm^.commitMode OF
+		IF controlDevice <>0 THEN
+			CASE comm^.commitMode OF
 				//Manual execution
 				eModes.MODE_EXE_AXIS,eModes.MODE_EXE_COMMAND_BLOCK,eModes.MODE_EXE_CYLINDER,eModes.MODE_EXE_UNIT,eModes.MODE_EXE_VACUUM:
 					comm^.wordOut.bDone := controlDevice^.Control(comm^.commitBlock,comm^.commitMode); //return whether done
@@ -114,7 +115,12 @@ CASE state OF
 					comm^.wordOut.bDone := TRUE ;//done
 				ELSE
 					comm^.wordOut.bDone := TRUE ;//done
-		END_CASE
+			END_CASE
+		ELSE
+			//null device somehow
+			comm^.wordOut.bDone := TRUE;
+		END_IF
+		
 		//interrupt operation
 		IF NOT comm^.wordIn.bEngagedHMI THEN
 			controlDevice^.Stop();
@@ -177,7 +183,13 @@ elapsed(IN:= , PT:= , Q=> , ET=> );
       <LineId Id="464" Count="0" />
       <LineId Id="137" Count="1" />
       <LineId Id="333" Count="0" />
-      <LineId Id="335" Count="12" />
+      <LineId Id="684" Count="0" />
+      <LineId Id="687" Count="12" />
+      <LineId Id="685" Count="0" />
+      <LineId Id="700" Count="0" />
+      <LineId Id="702" Count="0" />
+      <LineId Id="701" Count="0" />
+      <LineId Id="686" Count="0" />
       <LineId Id="334" Count="0" />
       <LineId Id="351" Count="3" />
       <LineId Id="350" Count="0" />

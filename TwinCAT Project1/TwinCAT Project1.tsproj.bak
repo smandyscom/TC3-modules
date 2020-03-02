@@ -5765,17 +5765,6 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>MAIN.marshal.commPurge</Name>
-							<Comment><![CDATA[------------
- link to HMI
-------------]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.marshal.commRegularCheckAck</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
 							<Name>MAIN.MainIndexer.sensorPairs[0].bit0</Name>
 							<Type>BOOL</Type>
 						</Var>
@@ -6725,6 +6714,17 @@ External Setpoint Generation:
 ]]></Comment>
 							</SubVar>
 						</Var>
+						<Var>
+							<Name>MAIN.marshal.commPurge</Name>
+							<Comment><![CDATA[------------
+ link to HMI
+------------]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.marshal.commRegularCheckAck</Name>
+							<Type>BOOL</Type>
+						</Var>
 					</Vars>
 					<Vars VarGrpType="2">
 						<Name>PlcTask Outputs</Name>
@@ -6833,19 +6833,6 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>MAIN.rootController.errorCode</Name>
-							<Type>UDINT</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.marshal.State</Name>
-							<Comment><![CDATA[possible TO output on HMI]]></Comment>
-							<Type>INT</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.marshal.NextState</Name>
-							<Type>INT</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.marshal.AlarmCode</Name>
 							<Type>UDINT</Type>
 						</Var>
 						<Var>
@@ -7935,6 +7922,19 @@ External Setpoint Generation:
 						<Var>
 							<Name>GVL.axisControls[1].Axis.PlcToNc</Name>
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.marshal.State</Name>
+							<Comment><![CDATA[possible TO output on HMI]]></Comment>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.marshal.NextState</Name>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.marshal.AlarmCode</Name>
+							<Type>UDINT</Type>
 						</Var>
 					</Vars>
 					<TaskPouOids>
