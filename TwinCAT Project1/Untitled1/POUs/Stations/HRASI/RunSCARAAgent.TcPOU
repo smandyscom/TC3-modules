@@ -76,9 +76,7 @@ SUPER^();
 //transmit purged status
 context_out_perNodePurged.0 := previousNode<>0 AND_THEN previousNode^.isPurged;
 context_out_isSlotValid.0 := SlotLast<>0 AND_THEN SlotLast^.Valid;
-IF SlotBase<>0 THEN
-	SlotBase^.Valid := context_in_setSlotValid.0;
-END_IF
+
 IF NOT isTaskEngaged AND previousNode<>0 AND_THEN previousNode^.isPurged THEN
 	isPurged := TRUE;
 END_IF
@@ -103,14 +101,12 @@ CASE outputState OF
 	eSpecialStates.INITIAL_BEGIN:		
 		out_start_0 := FALSE;
 		out_stop_4 := TRUE;
-		out_pause_5 := FALSE;
-		out_continue_6 := FALSE;
 		bSerialTransition := TRUE;
 	//----------------
 	//Check no running
 	//----------------
 	eSpecialStates.INITIAL_STATE_1:
-		bSerialTransition := NOT in_running_1;
+		bSerialTransition := NOT in_running_1 AND in_ready_0;
 		IF bSerialTransition THEN
 			out_stop_4 := FALSE; //release
 		END_IF
@@ -122,19 +118,15 @@ CASE outputState OF
 		IF bSerialTransition THEN
 			//initializing process activated
 			PropTask := eSCARATask.task_init;
-			out_start_0 := TRUE;
+			
 		END_IF
 	//Start initializing , Check running
 	eSpecialStates.INITIAL_STATE_3:
-		bSerialTransition := in_running_1;
-		IF bSerialTransition THEN
-			//initializing process activated
-			PropTask := eSCARATask.task_init;
-			out_start_0 := FALSE;
-		END_IF
+		out_start_0 := TRUE;
+		bSerialTransition := in_running_1 AND NOT in_ready_0;
 	//Start initializing, Check ran
 	eSpecialStates.INITIAL_STATE_4:
-		bSerialTransition := in_ready_0;
+		bSerialTransition := NOT in_running_1 AND  in_ready_0;
 		IF bSerialTransition THEN
 			out_start_0 := FALSE;
 			NextState := eSpecialStates.INITIAL_END;
@@ -147,13 +139,15 @@ CASE outputState OF
 		// Program selected and triggered
 		//--------------
 		bSerialTransition := isTaskEngaged;
+	16#1:
+		bSerialTransition := NOT in_running_1 AND  in_ready_0;
 		IF bSerialTransition THEN
 			out_start_0 := TRUE;
 		END_IF
-	16#1:
-		bSerialTransition := in_running_1;
+		
+	16#2:
+		bSerialTransition := in_running_1 AND NOT in_ready_0;
 		IF bSerialTransition THEN
-			out_start_0 := FALSE;
 			NextState := 16#200;
 		END_IF
 		//------------------------------------------------------------------
@@ -235,6 +229,9 @@ END_VAR
 
 IF in_error_3  THEN
 	ErrorDetect := context_in_alarmCode;
+	IF ErrorDetect = 0 THEN
+		ErrorDetect :=3000;
+	END_IF
 ELSIF in_eStop_4 THEN
 	ErrorDetect := 9000;
 ELSE
@@ -310,11 +307,22 @@ END_VAR
     </Method>
     <LineIds Name="RunScaraAgent">
       <LineId Id="4644" Count="13" />
-      <LineId Id="4809" Count="1" />
-      <LineId Id="4812" Count="1" />
+      <LineId Id="4809" Count="0" />
+      <LineId Id="4813" Count="0" />
       <LineId Id="4811" Count="0" />
       <LineId Id="4814" Count="1" />
-      <LineId Id="4658" Count="75" />
+      <LineId Id="4658" Count="20" />
+      <LineId Id="4681" Count="20" />
+      <LineId Id="4879" Count="0" />
+      <LineId Id="4702" Count="0" />
+      <LineId Id="4708" Count="14" />
+      <LineId Id="4875" Count="0" />
+      <LineId Id="4881" Count="0" />
+      <LineId Id="4877" Count="1" />
+      <LineId Id="4876" Count="0" />
+      <LineId Id="4880" Count="0" />
+      <LineId Id="4726" Count="2" />
+      <LineId Id="4730" Count="3" />
       <LineId Id="4735" Count="0" />
       <LineId Id="4742" Count="0" />
       <LineId Id="4816" Count="0" />
@@ -346,6 +354,7 @@ END_VAR
       <LineId Id="17" Count="0" />
       <LineId Id="16" Count="0" />
       <LineId Id="18" Count="0" />
+      <LineId Id="31" Count="2" />
       <LineId Id="23" Count="3" />
       <LineId Id="19" Count="0" />
     </LineIds>

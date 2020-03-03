@@ -30,7 +30,7 @@ END_VAR
 END_IF
 
 //output when in on duty cyle
-output := isActivated AND (dutyCounter <= duty) AND (cycleCounter<=cycleGoal);
+output := isActivated AND (dutyCounter < duty) AND (cycleCounter<cycleGoal);
 
 IF dutyCounter = duty THEN
 	cycleCounter := cycleCounter +1;
@@ -40,7 +40,7 @@ END_IF
 IF dutyCounter >= 100 OR NOT isActivated THEN
 	dutyCounter := 0;//reset
 END_IF
-IF cycleCounter > cycleGoal OR NOT isActivated THEN
+IF cycleCounter >= cycleGoal OR NOT isActivated THEN
 	cycleCounter := 0;//reset
 END_IF
 

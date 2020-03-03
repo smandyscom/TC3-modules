@@ -27,7 +27,7 @@ VAR_INPUT
 	
 END_VAR
 VAR_OUTPUT
-	isInitialized : BOOL;
+	isInitialized AT%Q*: BOOL;
 END_VAR
 VAR
 END_VAR
@@ -40,8 +40,7 @@ END_VAR
 
 SUPER^();
 
-isInitialized := ((outputState AND eSpecialStates.INITIAL_REGION) = 0);
-
+isInitialized := ((outputState AND eSpecialStates.INITIAL_REGION) <> 16#100);
 
 CASE outputState OF
 	//----------------------------
@@ -166,7 +165,8 @@ commStartTrialAssemble:= FALSE;
 commStartTrialSnap :=FALSE;]]></ST>
     </Implementation>
     <LineIds Name="RunCoordinator">
-      <LineId Id="761" Count="45" />
+      <LineId Id="761" Count="7" />
+      <LineId Id="770" Count="36" />
       <LineId Id="901" Count="10" />
       <LineId Id="899" Count="1" />
       <LineId Id="807" Count="0" />

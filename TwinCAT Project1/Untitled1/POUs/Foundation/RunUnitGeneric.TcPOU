@@ -202,7 +202,7 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[//once initializing method call , redirect current state to initalizing region
-IF (TO_UINT(State) AND TO_UINT(eSpecialStates.INITIAL_REGION)) =0 THEN
+IF (TO_UINT(State) AND TO_UINT(eSpecialStates.INITIAL_REGION)) <> 16#0100 THEN
 	NextState := eSpecialStates.INITIAL_BEGIN; //not in intializing region , change
 END_IF
 

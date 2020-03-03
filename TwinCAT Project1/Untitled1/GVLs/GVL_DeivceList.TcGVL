@@ -17,8 +17,8 @@ VAR_GLOBAL
 	B25: INT :=9; //Rack2 Approach
 	B26: INT :=10; //Rack4 Approach
 
-	S2: INT :=11; //STOP
-	S3: INT :=12; //START
+	S2: INT :=11; //START
+	S3: INT :=12; //STOP
 	S4: INT :=13; //RESET
 	S5: INT :=14; //DOOR UNLOCK
 	S6: INT :=15; //RACK1

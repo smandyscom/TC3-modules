@@ -8,6 +8,7 @@ VAR_INPUT
 END_VAR
 VAR_OUTPUT
 	isManualEngaged : BOOL;
+	isSemiAutoEngaged : bool;
 END_VAR
 VAR	
 	monitorDevice : POINTER TO CommonBase;
@@ -66,7 +67,7 @@ isManualEngaged:= comm^.wordIn.bEngagedHMI AND isPaused;
 IF NOT  isManualEngaged THEN
 	RETURN; // no longer execute further section
 END_IF
-
+isSemiAutoEngaged := isManualEngaged AND comm^.monitorType=eCategrories.SELECTION_UNIT;
 //control
 IF comm^.commitIndex>0 THEN
 	CASE comm^.commitSelection OF

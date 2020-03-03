@@ -60,14 +60,7 @@ CASE outputState OF
 		bSerialTransition := clamper^.Execute(eCylinderCommands.COMMAND_B);
 	16#203:
 		transitionByte.0 := horizon^.Execute(eCylinderCommands.COMMAND_A);
-		//----------------------
-		//	Snapping fit special 
-		//----------------------
-		IF configSnap THEN
-			transitionByte.1 := clamper^.Execute(eCylinderCommands.COMMAND_A);
-		ELSE
-			transitionByte.1 := TRUE;	
-		END_IF
+		transitionByte.1 := TRUE;
 		
 		IF transitionByte = 16#3 THEN
 			slaveWorkingSignal[bScaraReady]:= TRUE; //trigger SCARA agent
@@ -156,7 +149,10 @@ configSnap := argConfigSnap;]]></ST>
       <LineId Id="173" Count="1" />
       <LineId Id="172" Count="0" />
       <LineId Id="169" Count="0" />
-      <LineId Id="115" Count="21" />
+      <LineId Id="115" Count="5" />
+      <LineId Id="323" Count="0" />
+      <LineId Id="128" Count="0" />
+      <LineId Id="130" Count="6" />
       <LineId Id="280" Count="2" />
       <LineId Id="137" Count="4" />
       <LineId Id="176" Count="0" />

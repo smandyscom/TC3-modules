@@ -3,6 +3,7 @@
   <POU Name="RunLoading" Id="{0885f03e-fd54-45c2-8cc3-34c2d157a6e9}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunLoading EXTENDS RunUnitSlave
 VAR_INPUT
+	//TODO , externalIsValid
 END_VAR
 VAR_OUTPUT
 END_VAR
@@ -33,7 +34,7 @@ CASE outputState OF
 			IF previousNode<>0 AND_THEN previousNode^.isPurged THEN
 				purgeRequest :=TRUE;
 			END_IF
-		
+			SlotBase^.Valid := FALSE; //always false in beginning
 			slaveWorkingSignal[1] := TRUE; // trigger scara to put
 		END_IF
 	16#201:
@@ -44,6 +45,9 @@ CASE outputState OF
 		IF bSerialTransition AND purgeRequest AND NOT SlotBase^.Valid THEN
 			//SCARA2 had received purge request and no longer loading the parts
 			isPurged := TRUE; 
+		END_IF
+		IF bSerialTransition THEN
+			SlotBase^.Valid := true; //TODO , temp bypassed
 		END_IF
 	16#203:
 		NextState := eSpecialStates.SLAVE_WORK_DONE;
@@ -101,6 +105,7 @@ existence := argExistence;]]></ST>
       <LineId Id="56" Count="1" />
       <LineId Id="66" Count="0" />
       <LineId Id="58" Count="0" />
+      <LineId Id="77" Count="2" />
       <LineId Id="33" Count="1" />
       <LineId Id="19" Count="0" />
     </LineIds>
