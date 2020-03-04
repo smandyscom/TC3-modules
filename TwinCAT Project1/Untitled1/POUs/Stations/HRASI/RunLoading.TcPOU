@@ -3,14 +3,17 @@
   <POU Name="RunLoading" Id="{0885f03e-fd54-45c2-8cc3-34c2d157a6e9}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunLoading EXTENDS RunUnitSlave
 VAR_INPUT
-	//TODO , externalIsValid
+	externalSlotValid  : BOOL;
+	isSlotValidOverride : BOOL; //eniginnering use , dry run
 END_VAR
 VAR_OUTPUT
 END_VAR
-VAR
+VAR	
 	existence : POINTER TO RunSignal;
 	
 	purgeRequest AT%Q* : BOOL; //link to SCARA2
+	
+	watchDog : TON;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -38,17 +41,22 @@ CASE outputState OF
 			slaveWorkingSignal[1] := TRUE; // trigger scara to put
 		END_IF
 	16#201:
-		bSerialTransition := NOT slaveWorkingSignal[1];
+		bSerialTransition := NOT slaveWorkingSignal[1]; //scara should set valid before reset working 
+		IF bSerialTransition THEN
+			SlotBase^.Valid := externalSlotValid OR isSlotValidOverride; //transit
+		END_IF
 	16#202:
 		//check if material status matched sensor status
-		bSerialTransition := (SlotBase^.Valid = existence^.debouncedOn);
+		bSerialTransition := (SlotBase^.Valid = existence^.debouncedOn) OR isSlotValidOverride;
 		IF bSerialTransition AND purgeRequest AND NOT SlotBase^.Valid THEN
 			//SCARA2 had received purge request and no longer loading the parts
-			isPurged := TRUE; 
+			isPurged := TRUE;
+			watchDog.IN := FALSE;
+			
+		ELSIF watchDog.Q THEN
+			//TODO ,raise alarm
 		END_IF
-		IF bSerialTransition THEN
-			SlotBase^.Valid := true; //TODO , temp bypassed
-		END_IF
+		watchDog.IN := TRUE; //activate
 	16#203:
 		NextState := eSpecialStates.SLAVE_WORK_DONE;
 END_CASE]]></ST>
@@ -99,13 +107,17 @@ existence := argExistence;]]></ST>
       <LineId Id="63" Count="0" />
       <LineId Id="25" Count="1" />
       <LineId Id="22" Count="0" />
-      <LineId Id="29" Count="1" />
+      <LineId Id="29" Count="0" />
+      <LineId Id="91" Count="2" />
+      <LineId Id="30" Count="0" />
       <LineId Id="32" Count="0" />
       <LineId Id="31" Count="0" />
       <LineId Id="56" Count="1" />
       <LineId Id="66" Count="0" />
+      <LineId Id="100" Count="1" />
+      <LineId Id="96" Count="1" />
       <LineId Id="58" Count="0" />
-      <LineId Id="77" Count="2" />
+      <LineId Id="102" Count="0" />
       <LineId Id="33" Count="1" />
       <LineId Id="19" Count="0" />
     </LineIds>

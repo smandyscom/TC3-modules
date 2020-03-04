@@ -98,7 +98,8 @@ IF out_reset_7 AND  ErrorDetect() =0 THEN
 END_IF
 
 CASE outputState OF 	
-	eSpecialStates.INITIAL_BEGIN:		
+	eSpecialStates.INITIAL_BEGIN:	
+		isTaskEngaged := FALSE;
 		out_start_0 := FALSE;
 		out_stop_4 := TRUE;
 		bSerialTransition := TRUE;
@@ -108,21 +109,22 @@ CASE outputState OF
 	eSpecialStates.INITIAL_STATE_1:
 		bSerialTransition := NOT in_running_1 AND in_ready_0;
 		IF bSerialTransition THEN
+			//initializing process activated
+			PropTask := eSCARATask.task_init;
+			
 			out_stop_4 := FALSE; //release
 		END_IF
 	//--------------
 	//Check no error and ready
 	//--------------
 	eSpecialStates.INITIAL_STATE_2:
-		bSerialTransition := (NOT in_error_3) AND in_ready_0;
+		bSerialTransition := (NOT in_error_3) AND NOT in_running_1 AND in_ready_0;
 		IF bSerialTransition THEN
-			//initializing process activated
-			PropTask := eSCARATask.task_init;
-			
+			out_start_0 := TRUE;		
 		END_IF
 	//Start initializing , Check running
 	eSpecialStates.INITIAL_STATE_3:
-		out_start_0 := TRUE;
+		//out_start_0 := TRUE;
 		bSerialTransition := in_running_1 AND NOT in_ready_0;
 	//Start initializing, Check ran
 	eSpecialStates.INITIAL_STATE_4:
@@ -228,15 +230,29 @@ END_VAR
 //END_IF
 
 IF in_error_3  THEN
-	ErrorDetect := context_in_alarmCode;
-	IF ErrorDetect = 0 THEN
-		ErrorDetect :=3000;
+//	IF ErrorDetect = 0 THEN
+//		out_reset_7 := FALSE;
+//	END_IF
+	IF context_in_alarmCode = 0 THEN
+		ErrorDetect :=3000; //default unknown alarm
+	ELSE
+		ErrorDetect := context_in_alarmCode;
 	END_IF
 ELSIF in_eStop_4 THEN
+//	IF ErrorDetect = 0 THEN
+//		out_reset_7 := FALSE;
+//	END_IF
 	ErrorDetect := 9000;
 ELSE
 	ErrorDetect := 0;
-END_IF]]></ST>
+END_IF
+
+
+//not working
+//IF ErrorDetect <>0 THEN
+//	// first time detected , reset RESET bit
+//	out_reset_7 := false;
+//END_IF]]></ST>
       </Implementation>
     </Method>
     <Method Name="Monitor" Id="{bff2329b-af0a-4b0e-a719-df2270726c4b}" FolderPath="CommonBase\">
@@ -311,8 +327,13 @@ END_VAR
       <LineId Id="4813" Count="0" />
       <LineId Id="4811" Count="0" />
       <LineId Id="4814" Count="1" />
-      <LineId Id="4658" Count="20" />
-      <LineId Id="4681" Count="20" />
+      <LineId Id="4658" Count="18" />
+      <LineId Id="4945" Count="0" />
+      <LineId Id="4677" Count="1" />
+      <LineId Id="4681" Count="6" />
+      <LineId Id="4942" Count="2" />
+      <LineId Id="4688" Count="8" />
+      <LineId Id="4699" Count="2" />
       <LineId Id="4879" Count="0" />
       <LineId Id="4702" Count="0" />
       <LineId Id="4708" Count="14" />
@@ -353,10 +374,21 @@ END_VAR
       <LineId Id="11" Count="1" />
       <LineId Id="17" Count="0" />
       <LineId Id="16" Count="0" />
+      <LineId Id="49" Count="1" />
       <LineId Id="18" Count="0" />
-      <LineId Id="31" Count="2" />
-      <LineId Id="23" Count="3" />
+      <LineId Id="31" Count="1" />
+      <LineId Id="44" Count="1" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="46" Count="2" />
+      <LineId Id="24" Count="2" />
       <LineId Id="19" Count="0" />
+      <LineId Id="42" Count="1" />
+      <LineId Id="38" Count="0" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="39" Count="0" />
+      <LineId Id="41" Count="0" />
+      <LineId Id="40" Count="0" />
     </LineIds>
     <LineIds Name="RunScaraAgent.Monitor">
       <LineId Id="9" Count="4" />

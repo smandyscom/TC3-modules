@@ -28,6 +28,7 @@ VAR_INPUT
 END_VAR
 VAR_OUTPUT
 	isInitialized AT%Q*: BOOL;
+	isIdle AT%Q* : BOOL;
 END_VAR
 VAR
 END_VAR
@@ -41,6 +42,7 @@ END_VAR
 SUPER^();
 
 isInitialized := ((outputState AND eSpecialStates.INITIAL_REGION) <> 16#100);
+isIdle := outputState = eSpecialStates.GENERIC_GROUP_IDLE;
 
 CASE outputState OF
 	//----------------------------
@@ -166,6 +168,7 @@ commStartTrialSnap :=FALSE;]]></ST>
     </Implementation>
     <LineIds Name="RunCoordinator">
       <LineId Id="761" Count="7" />
+      <LineId Id="967" Count="0" />
       <LineId Id="770" Count="36" />
       <LineId Id="901" Count="10" />
       <LineId Id="899" Count="1" />

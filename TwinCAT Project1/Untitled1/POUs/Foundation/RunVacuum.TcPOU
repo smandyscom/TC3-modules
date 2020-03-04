@@ -7,7 +7,7 @@ VAR_INPUT
 	isActiveAutoBreakStroke : BOOL;	//TODO , start breaker stroke then stop
 END_VAR
 VAR_OUTPUT
-	vacuumSensorValue AT %I* : INT;
+	vacuumSensorValue AT %I* : UINT;
 END_VAR
 VAR
 	COMMAND_CACHED : eCylinderCommands; //1 , HMI->PLC
@@ -28,7 +28,7 @@ VAR
 END_VAR
 VAR PERSISTENT
 	thresholdCurrentSet : INT; //
-	thresholdValues : ARRAY[0..3] OF INT;
+	thresholdValues : ARRAY[0..3] OF UINT;
 	
 	TMR_WATCH_DOG : TON ; //Watch dog timer
 	TMR_DELAY_TO_THRESHOLD : TON;
@@ -53,8 +53,6 @@ TMR_DELAY_TO_THRESHOLD(IN:= , PT:= , Q=> , ET=> );
 
 // once command changes , reset timer counter
 IF COMMAND_CACHED <> LAST_COMMAND THEN
-	TMR_DELAY_TO_THRESHOLD.IN := TRUE; //active A delay timer
-	
 	//reset done/warn
 	BIT_DONE := FALSE;
 	BIT_WARNING := FALSE;
@@ -73,9 +71,9 @@ CASE COMMAND_CACHED OF
 	bMatched:= TRUE;
 	
 	eCylinderCommands.COMMAND_B:
-	IF TMR_DELAY_TO_THRESHOLD.Q THEN
-		bMatched:= (thresholdMatched ) ;
-	END_IF
+	
+		bMatched:= (thresholdMatched )  AND TMR_DELAY_TO_THRESHOLD.Q;
+	
 		
 END_CASE
 
@@ -88,6 +86,9 @@ BIT_DONE := bMatched OR (NOT bMatched AND BIT_WARN_SUPPRESS AND TMR_WATCH_DOG.Q)
 BIT_WARNING := (NOT bMatched) AND (NOT BIT_WARN_SUPPRESS) AND TMR_WATCH_DOG.Q AND TMR_DELAY_TO_THRESHOLD.Q;
 // cache last command
 LAST_COMMAND := COMMAND_CACHED;
+
+//turn off once done
+TMR_DELAY_TO_THRESHOLD.IN := NOT BIT_DONE; //active A delay timer once not done
 ]]></ST>
     </Implementation>
     <Folder Name="CommonBase" Id="{119ac4ac-a070-4964-91b6-1098b43d0930}" />
@@ -264,7 +265,9 @@ END_VAR
       </Implementation>
     </Method>
     <LineIds Name="RunVacuum">
-      <LineId Id="742" Count="52" />
+      <LineId Id="742" Count="17" />
+      <LineId Id="762" Count="32" />
+      <LineId Id="828" Count="2" />
       <LineId Id="55" Count="0" />
     </LineIds>
     <LineIds Name="RunVacuum.ConfigureRead">

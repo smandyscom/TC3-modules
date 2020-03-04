@@ -6,7 +6,7 @@ VAR_INPUT
 	indexer : POINTER TO RunPnueIndexer;
 	clampers : ARRAY[0..1] OF POINTER TO RunClamper;
 	aoi : POINTER TO RunAoiInspectionV1;
-	
+	loader : POINTER TO runloading;
 END_VAR
 VAR_OUTPUT
 END_VAR
@@ -24,6 +24,7 @@ CASE outputState OF
 			bSerialTransition := bSerialTransition AND clampers[nCounter]^.Initialize();
 		END_FOR
 		bSerialTransition := bSerialTransition AND aoi^.Initialize();
+		bSerialTransition := bSerialTransition AND loader^.Initialize();
 	eSpecialStates.INITIAL_STATE_1:
 		bSerialTransition := indexer^.Initialize();
 		IF bSerialTransition THEN
@@ -38,6 +39,7 @@ CASE outputState OF
 		END_FOR
 		aoi^.NextState := eSpecialStates.GENERIC_GROUP_START;
 		indexer^.NextState := eSpecialStates.GENERIC_GROUP_START;
+		loader^.NextState := eSpecialStates.GENERIC_GROUP_START;
 		bSerialTransition := TRUE; //into void state
 END_CASE]]></ST>
     </Implementation>
@@ -45,11 +47,15 @@ END_CASE]]></ST>
       <LineId Id="13" Count="1" />
       <LineId Id="9" Count="0" />
       <LineId Id="15" Count="0" />
-      <LineId Id="18" Count="9" />
+      <LineId Id="18" Count="4" />
+      <LineId Id="51" Count="0" />
+      <LineId Id="23" Count="4" />
       <LineId Id="29" Count="3" />
       <LineId Id="34" Count="1" />
       <LineId Id="33" Count="0" />
-      <LineId Id="36" Count="2" />
+      <LineId Id="36" Count="1" />
+      <LineId Id="52" Count="0" />
+      <LineId Id="38" Count="0" />
       <LineId Id="16" Count="0" />
     </LineIds>
   </POU>
