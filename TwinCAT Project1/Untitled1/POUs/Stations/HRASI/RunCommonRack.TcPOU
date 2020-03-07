@@ -69,7 +69,7 @@ CASE outputState OF
 		// or by external signal (manual or job stop)
 		//------------------------------------------------------------------
 		FOR nCounter := 0 TO 4 DO
-			IF items[nCounter].CurrerntIndex >= Bounds[nCounter] THEN
+			IF items[nCounter].CurrerntIndex > Bounds[nCounter] THEN
 				bSerialTransition := TRUE;
 				
 			END_IF

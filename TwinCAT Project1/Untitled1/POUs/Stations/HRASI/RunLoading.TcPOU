@@ -7,17 +7,20 @@ VAR_INPUT
 	isSlotValidOverride : BOOL; //eniginnering use , dry run
 END_VAR
 VAR_OUTPUT
+	purgeRequest AT%Q* : BOOL; //link to SCARA2
 END_VAR
 VAR	
-	existence : POINTER TO RunSignal;
-	
-	purgeRequest AT%Q* : BOOL; //link to SCARA2
-	
+	existence : POINTER TO RunSignal;	
 	watchDog : TON;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[SUPER^();
+
+//signal reset
+IF previousNode<>0 AND_THEN NOT previousNode^.isPurged THEN
+		purgeRequest :=FALSE;
+END_IF
 
 //-------------------------------
 //	Slot-1 to loading bottom part
@@ -93,6 +96,10 @@ existence := argExistence;]]></ST>
     </Method>
     <LineIds Name="RunLoading">
       <LineId Id="9" Count="0" />
+      <LineId Id="122" Count="0" />
+      <LineId Id="118" Count="0" />
+      <LineId Id="120" Count="1" />
+      <LineId Id="119" Count="0" />
       <LineId Id="11" Count="0" />
       <LineId Id="10" Count="0" />
       <LineId Id="12" Count="1" />
