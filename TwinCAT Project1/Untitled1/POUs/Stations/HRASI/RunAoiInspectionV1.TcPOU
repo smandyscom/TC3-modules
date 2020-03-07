@@ -41,9 +41,11 @@ CASE outputState OF
 		// report id to SCADA?		
 		transitionByte.0 := ngCylinder^.Execute(eCylinderCommands.COMMAND_A); //alway extend
 		transitionByte.1 := NOT aoiOut1Done; //check aoi-done off
-		transitionByte.2 := NOT aoiOut2Grade; //check aoi-result as NG (fuse)
 		
-		bSerialTransition:= (transitionByte = 16#7);
+		//20200305 , aoi result would retained last status??
+		//transitionByte.2 := NOT aoiOut2Grade; //check aoi-result as NG (fuse)
+		
+		bSerialTransition:= (transitionByte = 16#3);
 	16#201:
 		IF SlotBase^.Valid THEN
 			aoiTrigger := TRUE; //set aoi-trigger on
@@ -53,24 +55,30 @@ CASE outputState OF
 			NextState := 16#203;
 		END_IF
 	16#202:
+		bSerialTransition := aoiOut1Done;
+	16#203:
+		bSerialTransition := NOT aoiOut1Done;
+	16#204:
 		//wait aoi-done on
-		IF aoiOut1Done AND NOT aoiOut2Grade THEN
+		IF  NOT aoiOut2Grade THEN
 			//-------------
 			//	NG
 			//-------------
 			SlotBase^.Valid := FALSE; //set as inexsited
 			bSerialTransition:=	TRUE;
-		ELSIF aoiOut1Done AND aoiOut2Grade THEN
+		ELSIF  aoiOut2Grade THEN
 			//--------------
 			//	OK 
 			//--------------
 			bSerialTransition := ngCylinder^.Execute(eCylinderCommands.COMMAND_B); //open gate
-		ELSE
+		ELSIF bIsBypassed THEN
+			bSerialTransition:=	TRUE;
+		else
 			//--------------------------
 			// wait until aoi_done raise
 			//--------------------------
 		END_IF
-	16#203:
+	16#205:
 		aoiTrigger := FALSE; //reset
 		
 		IF NOT SlotBase^.Valid AND previousNode <>0 AND_THEN previousNode^.isPurged THEN
@@ -113,7 +121,13 @@ ngCylinder := argNgCylinder;
       </Implementation>
     </Method>
     <LineIds Name="RunAoiInspectionV1">
-      <LineId Id="271" Count="53" />
+      <LineId Id="271" Count="22" />
+      <LineId Id="363" Count="1" />
+      <LineId Id="294" Count="10" />
+      <LineId Id="366" Count="3" />
+      <LineId Id="305" Count="13" />
+      <LineId Id="361" Count="1" />
+      <LineId Id="319" Count="5" />
       <LineId Id="341" Count="1" />
       <LineId Id="344" Count="1" />
       <LineId Id="343" Count="0" />
