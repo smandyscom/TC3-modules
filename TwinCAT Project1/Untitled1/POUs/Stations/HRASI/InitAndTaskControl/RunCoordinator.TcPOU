@@ -5,6 +5,7 @@
 VAR_INPUT
 	commStartProductionMode AT%M* : BOOL;
 	commStartRegularCheckMode AT%M* : BOOL;
+	commIsDryRun AT%M* : BOOL;
 	
 	//------------
 	//	Trial mode
@@ -31,6 +32,7 @@ VAR_OUTPUT
 	isIdle AT%Q* : BOOL;
 END_VAR
 VAR
+	dryRunDevicesList : ARRAY[0..7] OF POINTER TO executebase;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -43,6 +45,22 @@ SUPER^();
 
 isInitialized := ((outputState AND eSpecialStates.INITIAL_REGION) <> 16#100);
 isIdle := outputState = eSpecialStates.GENERIC_GROUP_IDLE;
+
+IF dryRunDevicesList[0] = 0 THEN
+	//initialize
+	dryRunDevicesList[0] := ADR(gvl.vacuumControls[A9]);
+	dryRunDevicesList[1] := ADR(gvl.vacuumControls[A10]);
+	dryRunDevicesList[2] := ADR(gvl.vacuumControls[A11]);
+	dryRunDevicesList[3] := ADR(gvl.vacuumControls[A12]);
+	
+	dryRunDevicesList[4] := ADR(gvl.vacuumControls[A13]);
+	dryRunDevicesList[5] := ADR(gvl.vacuumControls[A14]);
+
+	dryRunDevicesList[6] := ADR(gvl.vacuumControls[A20]);
+	
+	dryRunDevicesList[7] := ADR(gvl.cylinderControls[cy6]);
+	
+END_IF
 
 CASE outputState OF
 	//----------------------------
@@ -93,6 +111,12 @@ CASE outputState OF
 			scara2^.PropTask := eSCARATask.task_snap_scara2;
 			scara2^.isTaskEngaged := TRUE;	
 		
+			
+			//turn off following devices if dry run	
+			FOR nCounter:=0 TO 7 DO
+				dryRunDevicesList[nCounter]^.isShutVerification := commIsDryRun;
+			END_FOR
+			
 			NextState := 16#1000;
 		ELSIF commStartTrialAssemble THEN
 			//---------------------------
@@ -169,9 +193,24 @@ commStartTrialSnap :=FALSE;]]></ST>
     <LineIds Name="RunCoordinator">
       <LineId Id="761" Count="7" />
       <LineId Id="967" Count="0" />
+      <LineId Id="1006" Count="2" />
+      <LineId Id="1010" Count="0" />
+      <LineId Id="1012" Count="2" />
+      <LineId Id="1017" Count="0" />
+      <LineId Id="1015" Count="1" />
+      <LineId Id="1018" Count="0" />
+      <LineId Id="1011" Count="0" />
+      <LineId Id="1020" Count="1" />
+      <LineId Id="1019" Count="0" />
+      <LineId Id="1009" Count="0" />
       <LineId Id="770" Count="36" />
       <LineId Id="901" Count="10" />
       <LineId Id="899" Count="1" />
+      <LineId Id="999" Count="0" />
+      <LineId Id="1001" Count="0" />
+      <LineId Id="1025" Count="0" />
+      <LineId Id="1023" Count="1" />
+      <LineId Id="1002" Count="0" />
       <LineId Id="807" Count="0" />
       <LineId Id="912" Count="0" />
       <LineId Id="917" Count="4" />

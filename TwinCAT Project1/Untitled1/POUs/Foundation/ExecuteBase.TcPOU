@@ -4,6 +4,7 @@
     <Declaration><![CDATA[FUNCTION_BLOCK ExecuteBase EXTENDS CommonBase
 VAR_INPUT
 	isRemoteControl : BOOL;
+	isShutVerification  : BOOL; //shut verification
 END_VAR
 VAR_OUTPUT
 END_VAR
