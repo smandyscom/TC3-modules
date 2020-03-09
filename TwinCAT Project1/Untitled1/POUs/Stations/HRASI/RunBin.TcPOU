@@ -11,6 +11,8 @@ END_VAR
 VAR
 	ready AT%Q* : BOOL;
 	ack AT%I* : BOOL;
+	
+	tickTime AT%Q*: DWORD ; //in ms
 END_VAR
 VAR PERSISTENT
 	collectionLimit : UINT;
@@ -30,12 +32,18 @@ CASE outputState OF
 		bSerialTransition := (collectionCount < collectionLimit) AND  (sensor <> 0 AND_THEN sensor^.debouncedOn);
 		IF bSerialTransition THEN
 			ready := TRUE;
+			workingTimer.IN := TRUE; //start counting
 		ELSIF sensor <> 0 AND_THEN NOT sensor^.debouncedOn THEN
 			collectionCount := 0; //count reset
 		END_IF
 	1:
 		bSerialTransition := ack;
 		IF bSerialTransition THEN
+			
+			//tick time calculation
+			tickTime := TIME_TO_DWORD(workingTimer.ET);
+			workingTimer.IN := FALSE;
+		
 			collectionCount := collectionCount+1;
 			ready := FALSE;
 		END_IF
@@ -55,11 +63,15 @@ END_CASE]]></ST>
       <LineId Id="24" Count="2" />
       <LineId Id="22" Count="1" />
       <LineId Id="29" Count="1" />
+      <LineId Id="54" Count="0" />
       <LineId Id="45" Count="1" />
       <LineId Id="31" Count="0" />
       <LineId Id="27" Count="0" />
       <LineId Id="33" Count="0" />
       <LineId Id="38" Count="0" />
+      <LineId Id="49" Count="1" />
+      <LineId Id="52" Count="1" />
+      <LineId Id="51" Count="0" />
       <LineId Id="44" Count="0" />
       <LineId Id="39" Count="1" />
       <LineId Id="36" Count="1" />

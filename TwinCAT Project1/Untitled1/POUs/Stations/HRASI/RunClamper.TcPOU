@@ -13,6 +13,8 @@ VAR
 	//
 	configSnap : BOOL; //set true for instance of Snap
 	
+	//
+	tickTime AT%Q*: DWORD ; //in ms
 END_VAR
 VAR CONSTANT
 	bScaraReady : INT := 1;
@@ -24,6 +26,8 @@ END_VAR
 //Link to :
 // 1. Indexer - working signal
 // 2. Bridge - working signal dispatch  to SCARA
+
+tickTime := TIME_TO_DWORD(workingTimerCache);
 
 CASE outputState OF
 	//---------------------------
@@ -150,6 +154,7 @@ configSnap := argConfigSnap;]]></ST>
       <LineId Id="201" Count="0" />
       <LineId Id="111" Count="0" />
       <LineId Id="202" Count="1" />
+      <LineId Id="385" Count="1" />
       <LineId Id="112" Count="1" />
       <LineId Id="195" Count="2" />
       <LineId Id="194" Count="0" />

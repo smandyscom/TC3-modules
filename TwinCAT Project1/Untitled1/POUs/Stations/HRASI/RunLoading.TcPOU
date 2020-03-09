@@ -13,7 +13,9 @@ VAR
 	existence : POINTER TO RunSignal;	
 	watchDog : TON;
 END_VAR
-]]></Declaration>
+VAR PERSISTENT
+	currentId : DWORD;
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[SUPER^();
 
@@ -55,6 +57,13 @@ CASE outputState OF
 			//SCARA2 had received purge request and no longer loading the parts
 			isPurged := TRUE;
 			watchDog.IN := FALSE;
+			
+			//give material id
+			SlotBase^.Id := currentId;
+			currentId := currentId+1;
+			IF currentId >= DWORD#16#FFFFFFFF THEN
+				currentId := 0;
+			END_IF
 			
 		ELSIF watchDog.Q THEN
 			//TODO ,raise alarm
@@ -122,6 +131,9 @@ existence := argExistence;]]></ST>
       <LineId Id="56" Count="1" />
       <LineId Id="66" Count="0" />
       <LineId Id="100" Count="1" />
+      <LineId Id="137" Count="1" />
+      <LineId Id="142" Count="3" />
+      <LineId Id="139" Count="0" />
       <LineId Id="96" Count="1" />
       <LineId Id="58" Count="0" />
       <LineId Id="102" Count="0" />

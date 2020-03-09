@@ -67,15 +67,19 @@ CASE outputState OF
 	//	Initializing :
 	// 2. Off all I/O 
 	// 1. SCARA & Clamper & Indexer
-	//----------------------------	
+	//----------------------------
 	eSpecialStates.INITIAL_BEGIN:
+		bSerialTransition := gvl.cylinderControls[Cy18].Execute(eCylinderCommands.COMMAND_A);
+	eSpecialStates.INITIAL_STATE_1:
+		bSerialTransition := gvl.cylinderControls[Cy17].Execute(eCylinderCommands.COMMAND_A);
+	eSpecialStates.INITIAL_STATE_2:
 		bSerialTransition:=TRUE;
 		FOR nCounter :=0 TO 23 BY 1 DO
 			IF gvl.remoteControls[nCounter] <> 0 THEN
 				bSerialTransition := bSerialTransition AND gvl.remoteControls[nCounter]^.Execute(eCylinderCommands.COMMAND_A);
 			END_IF
 		END_FOR
-	eSpecialStates.INITIAL_STATE_1:
+	eSpecialStates.INITIAL_STATE_3:
 		bSerialTransition:=TRUE;
 		FOR nCounter :=0 TO 3 BY 1 DO
 			bSerialTransition := members[nCounter]<>0 AND_THEN members[nCounter]^.Initialize();
@@ -116,6 +120,7 @@ CASE outputState OF
 			FOR nCounter:=0 TO 7 DO
 				dryRunDevicesList[nCounter]^.isShutVerification := commIsDryRun;
 			END_FOR
+			
 			
 			NextState := 16#1000;
 		ELSIF commStartTrialAssemble THEN
@@ -203,13 +208,16 @@ commStartTrialSnap :=FALSE;]]></ST>
       <LineId Id="1020" Count="1" />
       <LineId Id="1019" Count="0" />
       <LineId Id="1009" Count="0" />
-      <LineId Id="770" Count="36" />
+      <LineId Id="770" Count="6" />
+      <LineId Id="1028" Count="3" />
+      <LineId Id="777" Count="29" />
       <LineId Id="901" Count="10" />
       <LineId Id="899" Count="1" />
       <LineId Id="999" Count="0" />
       <LineId Id="1001" Count="0" />
       <LineId Id="1025" Count="0" />
       <LineId Id="1023" Count="1" />
+      <LineId Id="1032" Count="0" />
       <LineId Id="1002" Count="0" />
       <LineId Id="807" Count="0" />
       <LineId Id="912" Count="0" />

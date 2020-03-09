@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
   <DUT Name="MaterialHeader" Id="{7f5b5b3f-1e16-4ac5-b989-293e7d15c1ee}">
     <Declaration><![CDATA[TYPE MaterialHeader :
 STRUCT
@@ -8,7 +8,7 @@ STRUCT
 	wordIn : WORD;//8 , 2,Done,bit0:engaged,bit1:done
 		reserved2 : ARRAY[9..15] OF WORD; //9-15
 	
-	id : DWORD;//16
+	id : DWORD;//16 , 32bits
 	
 		reserved3 : ARRAY[1..2] of word;//18-19
 	//Protocal ver2 , Act on->Act off
