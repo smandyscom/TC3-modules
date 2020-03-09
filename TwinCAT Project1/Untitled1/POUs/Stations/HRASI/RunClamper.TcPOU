@@ -82,11 +82,14 @@ CASE outputState OF
 		END_IF
 	16#205:
 		//send part back to indexer
-		bSerialTransition := horizon^.Execute(eCylinderCommands.COMMAND_B);
+		bSerialTransition := clamper^.Execute(eCylinderCommands.COMMAND_B);
 	16#206:
+		//send part back to indexer
+		bSerialTransition := horizon^.Execute(eCylinderCommands.COMMAND_B);
+	16#207:
 		//release part 
 		bSerialTransition := clamper^.Execute(eCylinderCommands.COMMAND_A); //release
-	16#207:
+	16#208:
 		//empty clamper extract
 		IF horizon^.Execute(eCylinderCommands.COMMAND_A) THEN
 			NextState := eSpecialStates.SLAVE_WORK_DONE;
@@ -167,6 +170,7 @@ configSnap := argConfigSnap;]]></ST>
       <LineId Id="132" Count="4" />
       <LineId Id="280" Count="2" />
       <LineId Id="345" Count="2" />
+      <LineId Id="364" Count="2" />
       <LineId Id="137" Count="4" />
       <LineId Id="176" Count="0" />
       <LineId Id="146" Count="4" />

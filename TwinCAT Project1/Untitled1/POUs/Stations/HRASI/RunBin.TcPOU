@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <POU Name="RunBin" Id="{0bf50b34-1c3e-4db6-842a-bc6f0d7033ed}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RunBin EXTENDS RunUnitGeneric
+VAR_INPUT
+	sensor : POINTER TO RunSignal;
+END_VAR
+VAR_OUTPUT
+	collectionCount AT%M*: UINT;
+END_VAR
+VAR
+	ready AT%Q* : BOOL;
+	ack AT%I* : BOOL;
+END_VAR
+VAR PERSISTENT
+	collectionLimit : UINT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[SUPER^();
+
+
+CASE outputState OF
+	eSpecialStates.INITIAL_BEGIN:
+		collectionCount := 0;
+		NextState := eSpecialStates.INITIAL_END;
+	//-----------------
+	//	START
+	//-----------------
+	eSpecialStates.GENERIC_GROUP_START:
+		bSerialTransition := (collectionCount < collectionLimit) AND  (sensor <> 0 AND_THEN sensor^.debouncedOn);
+		IF bSerialTransition THEN
+			ready := TRUE;
+		ELSIF sensor <> 0 AND_THEN NOT sensor^.debouncedOn THEN
+			collectionCount := 0; //count reset
+		END_IF
+	1:
+		bSerialTransition := ack;
+		IF bSerialTransition THEN
+			collectionCount := collectionCount+1;
+			ready := FALSE;
+		END_IF
+	2: 
+		bSerialTransition := NOT ack;
+		IF bSerialTransition THEN
+			NextState := eSpecialStates.GENERIC_GROUP_START;
+		END_IF
+END_CASE]]></ST>
+    </Implementation>
+    <LineIds Name="RunBin">
+      <LineId Id="9" Count="0" />
+      <LineId Id="11" Count="1" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="20" Count="1" />
+      <LineId Id="24" Count="2" />
+      <LineId Id="22" Count="1" />
+      <LineId Id="29" Count="1" />
+      <LineId Id="45" Count="1" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="27" Count="0" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="38" Count="0" />
+      <LineId Id="44" Count="0" />
+      <LineId Id="39" Count="1" />
+      <LineId Id="36" Count="1" />
+      <LineId Id="41" Count="2" />
+      <LineId Id="14" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

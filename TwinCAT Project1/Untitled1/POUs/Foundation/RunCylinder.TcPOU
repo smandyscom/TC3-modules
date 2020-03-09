@@ -66,11 +66,13 @@ IF COMMAND_CACHED <> LAST_COMMAND THEN
 	BIT_DONE := FALSE;
 	BIT_WARNING := FALSE;
 	
-	//output process
-	FOR nCounter:=1 TO 2 BY 1 DO
-		ACT_A[nCounter] := (COMMAND_CACHED = eCylinderCommands.COMMAND_A);
-		ACT_B[nCounter] := (COMMAND_CACHED = eCylinderCommands.COMMAND_B);
-	END_FOR
+	//output process , for nuetual command , hold current position
+	IF COMMAND_CACHED <> eCylinderCommands.NO_COMMAND THEN
+		FOR nCounter:=1 TO 2 BY 1 DO
+			ACT_A[nCounter] := (COMMAND_CACHED = eCylinderCommands.COMMAND_A);
+			ACT_B[nCounter] := (COMMAND_CACHED = eCylinderCommands.COMMAND_B);
+		END_FOR
+	END_IF
 	
 END_IF
 
@@ -278,7 +280,12 @@ END_VAR
     <LineIds Name="RunCylinder">
       <LineId Id="347" Count="1" />
       <LineId Id="144" Count="22" />
-      <LineId Id="169" Count="24" />
+      <LineId Id="169" Count="7" />
+      <LineId Id="380" Count="0" />
+      <LineId Id="383" Count="2" />
+      <LineId Id="381" Count="1" />
+      <LineId Id="180" Count="0" />
+      <LineId Id="182" Count="11" />
       <LineId Id="270" Count="1" />
       <LineId Id="196" Count="6" />
       <LineId Id="276" Count="0" />

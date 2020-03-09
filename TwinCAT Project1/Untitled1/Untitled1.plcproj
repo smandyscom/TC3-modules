@@ -243,6 +243,9 @@
     <Compile Include="POUs\Stations\HRASI\InitAndTaskControl\RunInitScaraAndRack.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Stations\HRASI\RunBin.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Stations\HRASI\RunClamper.TcPOU">
       <SubType>Code</SubType>
     </Compile>
