@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <POU Name="IncNoOverflow" Id="{d3e498aa-44d1-4c67-8aaa-89b46e344628}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION IncNoOverflow : UDINT
+VAR_INPUT
+	input : UDINT;
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF input >= 16#FFFFFFFF THEN
+	input := 0;
+ELSE
+	input := input +1;
+END_IF]]></ST>
+    </Implementation>
+    <LineIds Name="IncNoOverflow">
+      <LineId Id="7" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="11" Count="1" />
+      <LineId Id="10" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

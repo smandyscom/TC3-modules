@@ -6,13 +6,15 @@ VAR_INPUT
 	sensor : POINTER TO RunSignal;
 END_VAR
 VAR_OUTPUT
-	collectionCount AT%M*: UINT;
+	collectionCount AT%M*: UDINT;
 END_VAR
 VAR
 	ready AT%Q* : BOOL;
 	ack AT%I* : BOOL;
 	
 	tickTime AT%Q*: DWORD ; //in ms
+	
+	totalCount AT%M* : UDINT; //wonld't be reset for each batch
 END_VAR
 VAR PERSISTENT
 	collectionLimit : UINT;
@@ -33,7 +35,7 @@ CASE outputState OF
 		IF bSerialTransition THEN
 			ready := TRUE;
 			workingTimer.IN := TRUE; //start counting
-		ELSIF sensor <> 0 AND_THEN NOT sensor^.debouncedOn THEN
+		ELSIF collectionCount <> 0 AND sensor <> 0 AND_THEN NOT sensor^.debouncedOn THEN
 			collectionCount := 0; //count reset
 		END_IF
 	1:
@@ -44,7 +46,9 @@ CASE outputState OF
 			tickTime := TIME_TO_DWORD(workingTimer.ET);
 			workingTimer.IN := FALSE;
 		
-			collectionCount := collectionCount+1;
+			collectionCount := IncNoOverflow(input:= collectionCount);
+			totalCount := IncNoOverflow(input:= totalCount);
+			
 			ready := FALSE;
 		END_IF
 	2: 
@@ -73,6 +77,7 @@ END_CASE]]></ST>
       <LineId Id="52" Count="1" />
       <LineId Id="51" Count="0" />
       <LineId Id="44" Count="0" />
+      <LineId Id="74" Count="1" />
       <LineId Id="39" Count="1" />
       <LineId Id="36" Count="1" />
       <LineId Id="41" Count="2" />

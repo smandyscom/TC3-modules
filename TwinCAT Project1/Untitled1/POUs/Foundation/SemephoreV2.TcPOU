@@ -30,7 +30,7 @@ VAR PERSISTENT
 	buzzerTimerOn : TON;
 	buzzerTimerOff : TON;
 	buzzerGoal : INT := 5;
-	buzzerEnable : bool := false;
+	buzzerEnable AT%M*: BOOL := FALSE;
 END_VAR
 ]]></Declaration>
     <Implementation>

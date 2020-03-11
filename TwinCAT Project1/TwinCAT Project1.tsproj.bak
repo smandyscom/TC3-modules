@@ -1320,6 +1320,15 @@ External Setpoint Generation:
 			</ArrayInfo>
 		</DataType>
 		<DataType>
+			<Name GUID="{B06D26C8-71DC-62D0-9A93-9E8C7ADB982D}" IecBaseType="true" AutoDeleteType="true">ARRAY [0..7] OF REAL</Name>
+			<BitSize>256</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-00000000000D}">REAL</BaseType>
+			<ArrayInfo>
+				<LBound>0</LBound>
+				<Elements>8</Elements>
+			</ArrayInfo>
+		</DataType>
+		<DataType>
 			<Name GUID="{093D7F69-7F34-4B33-A94E-F0CEC813C01D}" AutoDeleteType="true">eCategrories</Name>
 			<BitSize>16</BitSize>
 			<BaseType GUID="{18071995-0000-0000-0000-000000000004}">WORD</BaseType>
@@ -5765,6 +5774,15 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
+							<Name>MAIN.marshal.commPurge</Name>
+							<Comment><![CDATA[depreciated]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.marshal.commRegularCheckAck</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
 							<Name>MAIN.MainIndexer.sensorPairs[0].bit0</Name>
 							<Type>BOOL</Type>
 						</Var>
@@ -6160,6 +6178,14 @@ External Setpoint Generation:
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
+							<Name>MAIN.okBin.ack</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.ngBin.ack</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
 							<Name>GVL.cylinderControls[1].remoteCommand</Name>
 							<Type>BYTE</Type>
 						</Var>
@@ -6453,7 +6479,7 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>GVL.vacuumControls[1].vacuumSensorValue</Name>
-							<Type>INT</Type>
+							<Type>UINT</Type>
 						</Var>
 						<Var>
 							<Name>GVL.vacuumControls[2].remoteCommand</Name>
@@ -6461,7 +6487,7 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>GVL.vacuumControls[2].vacuumSensorValue</Name>
-							<Type>INT</Type>
+							<Type>UINT</Type>
 						</Var>
 						<Var>
 							<Name>GVL.vacuumControls[3].remoteCommand</Name>
@@ -6469,7 +6495,7 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>GVL.vacuumControls[3].vacuumSensorValue</Name>
-							<Type>INT</Type>
+							<Type>UINT</Type>
 						</Var>
 						<Var>
 							<Name>GVL.vacuumControls[4].remoteCommand</Name>
@@ -6477,7 +6503,7 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>GVL.vacuumControls[4].vacuumSensorValue</Name>
-							<Type>INT</Type>
+							<Type>UINT</Type>
 						</Var>
 						<Var>
 							<Name>GVL.vacuumControls[5].remoteCommand</Name>
@@ -6485,7 +6511,7 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>GVL.vacuumControls[5].vacuumSensorValue</Name>
-							<Type>INT</Type>
+							<Type>UINT</Type>
 						</Var>
 						<Var>
 							<Name>GVL.vacuumControls[6].remoteCommand</Name>
@@ -6493,7 +6519,7 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>GVL.vacuumControls[6].vacuumSensorValue</Name>
-							<Type>INT</Type>
+							<Type>UINT</Type>
 						</Var>
 						<Var>
 							<Name>GVL.vacuumControls[7].remoteCommand</Name>
@@ -6501,7 +6527,7 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>GVL.vacuumControls[7].vacuumSensorValue</Name>
-							<Type>INT</Type>
+							<Type>UINT</Type>
 						</Var>
 						<Var>
 							<Name>GVL.vacuumControls[8].remoteCommand</Name>
@@ -6509,7 +6535,7 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>GVL.vacuumControls[8].vacuumSensorValue</Name>
-							<Type>INT</Type>
+							<Type>UINT</Type>
 						</Var>
 						<Var>
 							<Name>GVL.vacuumControls[9].remoteCommand</Name>
@@ -6517,7 +6543,7 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>GVL.vacuumControls[9].vacuumSensorValue</Name>
-							<Type>INT</Type>
+							<Type>UINT</Type>
 						</Var>
 						<Var>
 							<Name>GVL.vacuumControls[10].remoteCommand</Name>
@@ -6525,7 +6551,7 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>GVL.vacuumControls[10].vacuumSensorValue</Name>
-							<Type>INT</Type>
+							<Type>UINT</Type>
 						</Var>
 						<Var>
 							<Name>GVL.vacuumControls[11].remoteCommand</Name>
@@ -6533,7 +6559,7 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>GVL.vacuumControls[11].vacuumSensorValue</Name>
-							<Type>INT</Type>
+							<Type>UINT</Type>
 						</Var>
 						<Var>
 							<Name>GVL.vacuumControls[12].remoteCommand</Name>
@@ -6541,7 +6567,7 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>GVL.vacuumControls[12].vacuumSensorValue</Name>
-							<Type>INT</Type>
+							<Type>UINT</Type>
 						</Var>
 						<Var>
 							<Name>GVL.vacuumControls[13].remoteCommand</Name>
@@ -6549,7 +6575,7 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>GVL.vacuumControls[13].vacuumSensorValue</Name>
-							<Type>INT</Type>
+							<Type>UINT</Type>
 						</Var>
 						<Var>
 							<Name>GVL.vacuumControls[14].remoteCommand</Name>
@@ -6557,7 +6583,7 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>GVL.vacuumControls[14].vacuumSensorValue</Name>
-							<Type>INT</Type>
+							<Type>UINT</Type>
 						</Var>
 						<Var>
 							<Name>GVL.vacuumControls[15].remoteCommand</Name>
@@ -6565,7 +6591,7 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>GVL.vacuumControls[15].vacuumSensorValue</Name>
-							<Type>INT</Type>
+							<Type>UINT</Type>
 						</Var>
 						<Var>
 							<Name>GVL.vacuumControls[16].remoteCommand</Name>
@@ -6573,7 +6599,7 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>GVL.vacuumControls[16].vacuumSensorValue</Name>
-							<Type>INT</Type>
+							<Type>UINT</Type>
 						</Var>
 						<Var>
 							<Name>GVL.signalControls[1].input</Name>
@@ -6715,15 +6741,11 @@ External Setpoint Generation:
 							</SubVar>
 						</Var>
 						<Var>
-							<Name>MAIN.marshal.commPurge</Name>
-							<Comment><![CDATA[------------
- link to HMI
-------------]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.marshal.commRegularCheckAck</Name>
-							<Type>BOOL</Type>
+							<Name>GVL.snapData</Name>
+							<Comment><![CDATA[----------------------
+	Snap/Fit data
+----------------------]]></Comment>
+							<Type GUID="{B06D26C8-71DC-62D0-9A93-9E8C7ADB982D}">ARRAY [0..7] OF REAL</Type>
 						</Var>
 					</Vars>
 					<Vars VarGrpType="2">
@@ -6836,6 +6858,27 @@ External Setpoint Generation:
 							<Type>UDINT</Type>
 						</Var>
 						<Var>
+							<Name>MAIN.marshal.State</Name>
+							<Comment><![CDATA[possible TO output on HMI]]></Comment>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.marshal.NextState</Name>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.marshal.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.marshal.isInitialized</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.marshal.isIdle</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
 							<Name>MAIN.groupScara1.State</Name>
 							<Comment><![CDATA[possible TO output on HMI]]></Comment>
 							<Type>INT</Type>
@@ -6923,6 +6966,11 @@ External Setpoint Generation:
 							<Type>UDINT</Type>
 						</Var>
 						<Var>
+							<Name>MAIN.S2Clamper.tickTime</Name>
+							<Comment><![CDATA[in ms]]></Comment>
+							<Type>DWORD</Type>
+						</Var>
+						<Var>
 							<Name>MAIN.S3AoiInspection.State</Name>
 							<Comment><![CDATA[possible TO output on HMI]]></Comment>
 							<Type>INT</Type>
@@ -6951,6 +6999,11 @@ External Setpoint Generation:
 						<Var>
 							<Name>MAIN.S4Clamper.AlarmCode</Name>
 							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.S4Clamper.tickTime</Name>
+							<Comment><![CDATA[in ms]]></Comment>
+							<Type>DWORD</Type>
 						</Var>
 						<Var>
 							<Name>MAIN.Scara1.State</Name>
@@ -7027,6 +7080,15 @@ External Setpoint Generation:
 							<Type>BYTE</Type>
 						</Var>
 						<Var>
+							<Name>MAIN.Scara1.context_out_speedFactor</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.para_speed_factor</Name>
+							<Comment><![CDATA[ in percentage]]></Comment>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
 							<Name>MAIN.Scara2.State</Name>
 							<Comment><![CDATA[possible TO output on HMI]]></Comment>
 							<Type>INT</Type>
@@ -7098,6 +7160,15 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>MAIN.Scara2.context_out_perNodePurged</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.context_out_speedFactor</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.para_speed_factor</Name>
+							<Comment><![CDATA[ in percentage]]></Comment>
 							<Type>BYTE</Type>
 						</Var>
 						<Var>
@@ -7246,6 +7317,50 @@ External Setpoint Generation:
 						<Var>
 							<Name>MAIN.BridgeScara2toLoading.bridge.ready</Name>
 							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.okBin.State</Name>
+							<Comment><![CDATA[possible TO output on HMI]]></Comment>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.okBin.NextState</Name>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.okBin.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.okBin.ready</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.okBin.tickTime</Name>
+							<Comment><![CDATA[in ms]]></Comment>
+							<Type>DWORD</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.ngBin.State</Name>
+							<Comment><![CDATA[possible TO output on HMI]]></Comment>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.ngBin.NextState</Name>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.ngBin.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.ngBin.ready</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.ngBin.tickTime</Name>
+							<Comment><![CDATA[in ms]]></Comment>
+							<Type>DWORD</Type>
 						</Var>
 						<Var>
 							<Name>GVL.cylinderControls[1].remoteAcknowledge</Name>
@@ -7923,22 +8038,9 @@ External Setpoint Generation:
 							<Name>GVL.axisControls[1].Axis.PlcToNc</Name>
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
-						<Var>
-							<Name>MAIN.marshal.State</Name>
-							<Comment><![CDATA[possible TO output on HMI]]></Comment>
-							<Type>INT</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.marshal.NextState</Name>
-							<Type>INT</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.marshal.AlarmCode</Name>
-							<Type>UDINT</Type>
-						</Var>
 					</Vars>
 					<TaskPouOids>
-						<TaskPouOid Prio="20" OTCID="#x08502001"/>
+						<TaskPouOid Prio="20" OTCID="#x08502002"/>
 					</TaskPouOids>
 				</Instance>
 			</Project>
@@ -7946,7 +8048,7 @@ External Setpoint Generation:
 		<Io/>
 	</Project>
 	<Mappings>
-		<MappingInfo Identifier="{05000010-2001-0850-1000-040300205008}" Id="#x02030010" Watchdog="14000000040000000400000004000000"/>
+		<MappingInfo Identifier="{05000010-2002-0850-1000-040300205008}" Id="#x02030010" Watchdog="14000000040000000400000004000000"/>
 		<OwnerA Name="TIPC^Untitled1^Untitled1 Instance">
 			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Simu1">
 				<Link VarA="PlcTask Inputs^GVL.axisControls[1].Axis.NcToPlc" VarB="Outputs^ToPlc"/>

@@ -12,6 +12,8 @@ END_VAR
 VAR	
 	existence : POINTER TO RunSignal;	
 	watchDog : TON;
+	
+	totalCount AT%M* : UDINT; 
 END_VAR
 VAR PERSISTENT
 	currentId : DWORD;
@@ -58,17 +60,20 @@ CASE outputState OF
 			isPurged := TRUE;
 			watchDog.IN := FALSE;
 			
-			//give material id
-			SlotBase^.Id := currentId;
-			currentId := currentId+1;
-			IF currentId >= DWORD#16#FFFFFFFF THEN
-				currentId := 0;
-			END_IF
-			
-		ELSIF watchDog.Q THEN
-			//TODO ,raise alarm
+		ELSIF watchDog.Q AND SlotBase^.Valid THEN
+			AlarmCode := 500; // absense
+		ELSIF watchDog.Q AND NOT SlotBase^.Valid THEN
+			AlarmCode := 501; // abnormal
 		END_IF
 		watchDog.IN := TRUE; //activate
+		
+		IF bSerialTransition AND SlotBase^.Valid THEN
+			//give material id
+			SlotBase^.Id := currentId;
+			currentId := IncNoOverflow(input:= currentId);
+			totalCount := IncNoOverflow(input:= totalCount); //bottom part inlet count
+		END_IF
+		
 	16#203:
 		NextState := eSpecialStates.SLAVE_WORK_DONE;
 END_CASE]]></ST>
@@ -131,12 +136,19 @@ existence := argExistence;]]></ST>
       <LineId Id="56" Count="1" />
       <LineId Id="66" Count="0" />
       <LineId Id="100" Count="1" />
-      <LineId Id="137" Count="1" />
-      <LineId Id="142" Count="3" />
-      <LineId Id="139" Count="0" />
-      <LineId Id="96" Count="1" />
+      <LineId Id="96" Count="0" />
+      <LineId Id="173" Count="0" />
+      <LineId Id="97" Count="0" />
+      <LineId Id="174" Count="0" />
       <LineId Id="58" Count="0" />
       <LineId Id="102" Count="0" />
+      <LineId Id="163" Count="0" />
+      <LineId Id="165" Count="0" />
+      <LineId Id="168" Count="1" />
+      <LineId Id="166" Count="0" />
+      <LineId Id="171" Count="0" />
+      <LineId Id="167" Count="0" />
+      <LineId Id="164" Count="0" />
       <LineId Id="33" Count="1" />
       <LineId Id="19" Count="0" />
     </LineIds>

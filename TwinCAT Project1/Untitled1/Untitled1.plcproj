@@ -221,6 +221,9 @@
     <Compile Include="POUs\Foundation\RunUnitTransporterBase.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\IncNoOverflow.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\MAIN.TcPOU">
       <SubType>Code</SubType>
       <ExcludeFromBuild>false</ExcludeFromBuild>

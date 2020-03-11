@@ -26,8 +26,7 @@ VAR_INPUT
 	context_out_productType AT%Q* : BYTE;
 	context_out_isSlotValid AT%Q* : BYTE;
 	context_out_perNodePurged AT%Q* : BYTE;
-	context_out_speedFactor AT%Q* : BYTE;
-	
+	context_out_speedFactor AT%Q* : BYTE; // in percentage
 END_VAR
 VAR_OUTPUT
 	//-------------------
