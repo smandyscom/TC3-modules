@@ -94,6 +94,7 @@ END_IF
 
 IF out_reset_7 AND  ErrorDetect() =0 THEN
 	out_reset_7 := FALSE;
+	context_out_alarmAck:=0;
 END_IF
 
 CASE outputState OF 	
@@ -213,7 +214,8 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[//context_out_alarmAck := 0; // ack reset
-out_reset_7 := true;]]></ST>
+out_reset_7 := TRUE;
+context_out_alarmAck := 1;]]></ST>
       </Implementation>
     </Method>
     <Method Name="ErrorDetect" Id="{0d501c3c-1258-4947-b465-528162d76fdd}" FolderPath="CommonBase\">
@@ -228,15 +230,16 @@ END_VAR
 //	context_out_alarmAck := context_in_alarmCode;
 //END_IF
 
-IF in_error_3  THEN
+IF in_error_3 OR context_in_alarmCode<>0  THEN
 //	IF ErrorDetect = 0 THEN
 //		out_reset_7 := FALSE;
 //	END_IF
 	IF context_in_alarmCode = 0 THEN
-		ErrorDetect :=3000; //default unknown alarm
+		ErrorDetect :=8100; //default unknown alarm
 	ELSE
 		ErrorDetect := context_in_alarmCode;
 	END_IF
+		
 ELSIF in_eStop_4 THEN
 //	IF ErrorDetect = 0 THEN
 //		out_reset_7 := FALSE;
@@ -326,7 +329,9 @@ END_VAR
       <LineId Id="4813" Count="0" />
       <LineId Id="4811" Count="0" />
       <LineId Id="4814" Count="1" />
-      <LineId Id="4658" Count="18" />
+      <LineId Id="4658" Count="14" />
+      <LineId Id="5003" Count="0" />
+      <LineId Id="4673" Count="3" />
       <LineId Id="4945" Count="0" />
       <LineId Id="4677" Count="1" />
       <LineId Id="4681" Count="6" />
@@ -365,6 +370,7 @@ END_VAR
     <LineIds Name="RunScaraAgent.ErrorClear">
       <LineId Id="5" Count="0" />
       <LineId Id="10" Count="0" />
+      <LineId Id="15" Count="0" />
     </LineIds>
     <LineIds Name="RunScaraAgent.ErrorDetect">
       <LineId Id="5" Count="0" />
@@ -376,8 +382,8 @@ END_VAR
       <LineId Id="49" Count="1" />
       <LineId Id="18" Count="0" />
       <LineId Id="31" Count="1" />
+      <LineId Id="54" Count="1" />
       <LineId Id="44" Count="1" />
-      <LineId Id="33" Count="0" />
       <LineId Id="23" Count="0" />
       <LineId Id="46" Count="2" />
       <LineId Id="24" Count="2" />

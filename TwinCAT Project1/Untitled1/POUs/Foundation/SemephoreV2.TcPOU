@@ -63,7 +63,7 @@ IF  NOT isError THEN
 	buzzerCounter := 0;
 END_IF
 // error comes and timeron and counter not reached
-towerBuzzer := isError AND buzzerTimerOn.Q AND (buzzerCounter < buzzerGoal) AND buzzerEnable;]]></ST>
+towerBuzzer := isError AND buzzerTimerOn.in AND (buzzerCounter < buzzerGoal) AND buzzerEnable;]]></ST>
     </Implementation>
     <LineIds Name="SemephoreV2">
       <LineId Id="320" Count="28" />

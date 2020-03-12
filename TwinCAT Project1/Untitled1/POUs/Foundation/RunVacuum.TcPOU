@@ -59,7 +59,9 @@ IF COMMAND_CACHED <> LAST_COMMAND THEN
 	
 	//output 
 	ACT_BREAKER := (COMMAND_CACHED = eCylinderCommands.COMMAND_A);
-	ACT_GENERATOR := (COMMAND_CACHED = eCylinderCommands.COMMAND_B);	
+	ACT_GENERATOR := (COMMAND_CACHED = eCylinderCommands.COMMAND_B);
+	
+	
 END_IF
 
 
@@ -266,8 +268,12 @@ END_VAR
     </Method>
     <LineIds Name="RunVacuum">
       <LineId Id="742" Count="17" />
-      <LineId Id="762" Count="32" />
-      <LineId Id="828" Count="2" />
+      <LineId Id="762" Count="6" />
+      <LineId Id="863" Count="1" />
+      <LineId Id="769" Count="25" />
+      <LineId Id="828" Count="0" />
+      <LineId Id="866" Count="0" />
+      <LineId Id="830" Count="0" />
       <LineId Id="55" Count="0" />
     </LineIds>
     <LineIds Name="RunVacuum.ConfigureRead">

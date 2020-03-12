@@ -34,6 +34,7 @@ CASE outputState OF
 	//	Initialization : hold and push
 	//---------------------------	
 	eSpecialStates.INITIAL_BEGIN:
+		clamper^.isRemoteControl := FALSE; //off remote control
 		bSerialTransition := clamper^.Execute(eCylinderCommands.COMMAND_A);
 	eSpecialStates.INITIAL_STATE_1:
 		bSerialTransition := horizon^.Execute(eCylinderCommands.COMMAND_A);
@@ -158,6 +159,7 @@ configSnap := argConfigSnap;]]></ST>
       <LineId Id="112" Count="1" />
       <LineId Id="195" Count="2" />
       <LineId Id="194" Count="0" />
+      <LineId Id="405" Count="0" />
       <LineId Id="204" Count="13" />
       <LineId Id="198" Count="2" />
       <LineId Id="114" Count="0" />
