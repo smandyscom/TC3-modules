@@ -10,9 +10,9 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF input >= 16#FFFFFFFF THEN
-	input := 0;
+	IncNoOverflow := 0;
 ELSE
-	input := input +1;
+	IncNoOverflow := input +1;
 END_IF]]></ST>
     </Implementation>
     <LineIds Name="IncNoOverflow">

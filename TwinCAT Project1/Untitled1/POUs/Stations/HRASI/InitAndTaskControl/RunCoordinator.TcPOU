@@ -15,7 +15,6 @@ VAR_INPUT
 	//------------
 	// link to HMI
 	//------------
-	commPurge AT%I* : BOOL ;  //depreciated
 	commRegularCheckAck AT%I* : BOOL;
 	//------------
 	//	Control
@@ -28,6 +27,10 @@ VAR_INPUT
 	
 	loader : POINTER TO RunLoading;
 	aoi : POINTER TO RunAoiInspectionV1;
+	
+	bridge1 : POINTER TO RunBridge;
+	
+	racks : ARRAY[0..3] OF POINTER TO RunCommonRack;
 END_VAR
 VAR_OUTPUT
 	isInitialized AT%Q*: BOOL;
@@ -118,44 +121,67 @@ CASE outputState OF
 			scara1^.isTaskEngaged := TRUE;
 			scara2^.PropTask := eSCARATask.task_snap_scara2;
 			scara2^.isTaskEngaged := TRUE;	
-		
 			
-			//turn off following devices if dry run	
-			FOR nCounter:=0 TO 7 DO
-				dryRunDevicesList[nCounter]^.isShutVerification := commIsDryRun;
-			END_FOR
-			loader^.isSlotValidOverride := commIsDryRun;
-			aoi^.bIsBypassed := commIsDryRun;
-			
-			scara1^.context_out_speedFactor := commSpeedFactor;
-			scara2^.context_out_speedFactor := commSpeedFactor;
-			
-			NextState := 16#1000;
+			bSerialTransition := TRUE;
 		ELSIF commStartTrialAssemble THEN
 			//---------------------------
 			//	Trial-assemble mode
 			//---------------------------
 			clamper1^.bIsBypassed := FALSE;
 			clamper2^.bIsBypassed := TRUE;
+			
 			scara1^.PropTask := eSCARATask.task_assemble_scara1;
 			scara1^.isTaskEngaged := TRUE;
-			scara2^.PropTask := eSCARATask.task_snap_scara2;
-			scara2^.isTaskEngaged := FALSE;
 			
-			NextState := 16#1000;
+			scara2^.PropTask := eSCARATask.task_snap_scara2;
+			scara2^.isTaskEngaged := TRUE;
+			
+			bSerialTransition := TRUE;
 		ELSIF commStartTrialSnap THEN
 			//---------------------------
 			//	Trial-snap mode
 			//---------------------------
-			clamper1^.bIsBypassed := TRUE;
+			clamper1^.bIsBypassed := FALSE;
 			clamper2^.bIsBypassed := FALSE;
+			bridge1^.bIsBypassed := TRUE;
 			
 			scara1^.isTaskEngaged := FALSE;
+			
 			scara2^.PropTask := eSCARATask.task_snap_scara2;
 			scara2^.isTaskEngaged := TRUE;
-			NextState := 16#1000;
+			
+			//--------------
+			//	Turn off AOI
+			//--------------
+			gvl.cylinderControls[Cy16].Execute(eCylinderCommands.COMMAND_B);
+			aoi^.bIsBypassed := TRUE;
+			
+			bSerialTransition := TRUE;
 		ELSIF commStartRegularCheckMode THEN
 			NextState := 16#300;
+		END_IF
+		
+		IF bSerialTransition THEN
+			
+			//---------------------------------------------------
+			//turn off following devices if dry run	(no products)
+			//---------------------------------------------------
+			FOR nCounter:=0 TO 7 DO
+				dryRunDevicesList[nCounter]^.isShutVerification := commIsDryRun;
+			END_FOR
+			loader^.isSlotValidOverride := commIsDryRun;
+			aoi^.bIsBypassed := commIsDryRun;
+			IF commIsDryRun THEN
+				gvl.cylinderControls[Cy16].Execute(eCylinderCommands.COMMAND_B);
+			END_IF
+			
+			//-------------------
+			//speed factor renew
+			//-------------------
+			scara1^.context_out_speedFactor := commSpeedFactor;
+			scara2^.context_out_speedFactor := commSpeedFactor;
+		
+			NextState := 16#1000;
 		END_IF
 		
 	//------------------------
@@ -181,6 +207,9 @@ CASE outputState OF
 		END_IF
 	16#302:
 		bSerialTransition := NOT scara2^.isTaskEngaged;
+		IF bSerialTransition THEN
+			commStartRegularCheckMode := false;
+		END_IF
 		//then AOI shuffing test
 		
 		//---------------------------
@@ -195,13 +224,21 @@ CASE outputState OF
 		END_IF
 	16#1002:
 		bSerialTransition := previousNode <>0 AND_THEN NOT previousNode^.isPurged;
-		NextState := eSpecialStates.GENERIC_GROUP_IDLE;
+		IF bSerialTransition THEN
+			FOR nCounter:=0 TO 3 BY 1 DO
+				racks[nCounter]^.commEject := TRUE; //eject
+			END_FOR	
+		
+			commStartProductionMode := FALSE;
+			commStartTrialAssemble:= FALSE;
+			commStartTrialSnap :=FALSE;
+			
+			NextState := eSpecialStates.GENERIC_GROUP_IDLE;
+		END_IF		
 END_CASE
-//one shot command clear
-commStartProductionMode := FALSE;
-commStartRegularCheckMode := FALSE;
-commStartTrialAssemble:= FALSE;
-commStartTrialSnap :=FALSE;]]></ST>
+
+
+]]></ST>
     </Implementation>
     <LineIds Name="RunCoordinator">
       <LineId Id="761" Count="7" />
@@ -221,35 +258,62 @@ commStartTrialSnap :=FALSE;]]></ST>
       <LineId Id="777" Count="29" />
       <LineId Id="901" Count="10" />
       <LineId Id="899" Count="1" />
-      <LineId Id="999" Count="0" />
-      <LineId Id="1001" Count="0" />
-      <LineId Id="1025" Count="0" />
-      <LineId Id="1023" Count="1" />
-      <LineId Id="1066" Count="0" />
-      <LineId Id="1071" Count="1" />
-      <LineId Id="1068" Count="0" />
-      <LineId Id="1032" Count="0" />
-      <LineId Id="1002" Count="0" />
       <LineId Id="807" Count="0" />
       <LineId Id="912" Count="0" />
       <LineId Id="917" Count="4" />
       <LineId Id="924" Count="0" />
+      <LineId Id="1143" Count="0" />
       <LineId Id="922" Count="0" />
+      <LineId Id="1142" Count="0" />
       <LineId Id="925" Count="0" />
       <LineId Id="916" Count="0" />
       <LineId Id="923" Count="0" />
       <LineId Id="913" Count="1" />
       <LineId Id="928" Count="4" />
+      <LineId Id="1138" Count="0" />
       <LineId Id="934" Count="0" />
       <LineId Id="933" Count="0" />
+      <LineId Id="1141" Count="0" />
       <LineId Id="935" Count="0" />
       <LineId Id="926" Count="0" />
+      <LineId Id="1136" Count="0" />
+      <LineId Id="1147" Count="0" />
+      <LineId Id="1150" Count="1" />
+      <LineId Id="1148" Count="0" />
+      <LineId Id="1152" Count="0" />
+      <LineId Id="1149" Count="0" />
       <LineId Id="915" Count="0" />
-      <LineId Id="808" Count="28" />
+      <LineId Id="808" Count="3" />
+      <LineId Id="1121" Count="0" />
+      <LineId Id="1125" Count="0" />
+      <LineId Id="1153" Count="0" />
+      <LineId Id="1128" Count="0" />
+      <LineId Id="1154" Count="0" />
+      <LineId Id="1129" Count="4" />
+      <LineId Id="1144" Count="2" />
+      <LineId Id="1134" Count="0" />
+      <LineId Id="1155" Count="0" />
+      <LineId Id="1137" Count="0" />
+      <LineId Id="1156" Count="0" />
+      <LineId Id="1135" Count="0" />
+      <LineId Id="1126" Count="1" />
+      <LineId Id="1123" Count="1" />
+      <LineId Id="1122" Count="0" />
+      <LineId Id="812" Count="22" />
+      <LineId Id="1164" Count="2" />
+      <LineId Id="835" Count="1" />
       <LineId Id="868" Count="4" />
-      <LineId Id="876" Count="10" />
-      <LineId Id="234" Count="0" />
-      <LineId Id="898" Count="0" />
+      <LineId Id="876" Count="6" />
+      <LineId Id="1110" Count="0" />
+      <LineId Id="1113" Count="0" />
+      <LineId Id="1120" Count="0" />
+      <LineId Id="1119" Count="0" />
+      <LineId Id="1117" Count="0" />
+      <LineId Id="1163" Count="0" />
+      <LineId Id="1162" Count="0" />
+      <LineId Id="1159" Count="1" />
+      <LineId Id="1111" Count="1" />
+      <LineId Id="884" Count="2" />
       <LineId Id="897" Count="0" />
     </LineIds>
   </POU>

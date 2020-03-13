@@ -13,7 +13,7 @@ VAR_INPUT
 	commErrorIgnore AT%M* : BOOL; // by Push-button
 	commErrorRemoteAck at%M* : bool;
 	commInit AT%M* : BOOL;
-	commPurge AT%M* : BOOL;
+	commPurge AT%M* : BOOL; // memorized
 END_VAR
 VAR_OUTPUT
 	
@@ -23,7 +23,6 @@ VAR_OUTPUT
 	requestInit : BOOL;
 	requestErrorClear : eErrorClearWays;
 	
-	requestPurge : BOOL;
 		
 END_VAR
 ]]></Declaration>
@@ -44,20 +43,17 @@ END_IF
 
 //Initialization
 requestInit := commInit;
-//Purge request
-requestPurge := commPurge; 
 //one-shot control clear 
 commStart := FALSE;
 commStop := FALSE;
 commErrorLocalAck := FALSE;
 commErrorIgnore:= FALSE;
-commInit:= FALSE;
-commPurge := FALSE;]]></ST>
+commInit:= FALSE;]]></ST>
     </Implementation>
     <LineIds Name="InterfaceControlV2">
       <LineId Id="1127" Count="3" />
-      <LineId Id="1132" Count="19" />
-      <LineId Id="853" Count="0" />
+      <LineId Id="1132" Count="11" />
+      <LineId Id="1146" Count="5" />
     </LineIds>
   </POU>
 </TcPlcObject>
