@@ -75,8 +75,7 @@ CASE outputState OF
 		//------------------------------------------------------------------
 		FOR nCounter := 0 TO 4 DO
 			IF items[nCounter].CurrerntIndex > Bounds[nCounter] THEN
-				bSerialTransition := TRUE;
-				
+				bSerialTransition := TRUE;	
 			END_IF
 		END_FOR
 		bSerialTransition := bSerialTransition OR  commEject ;
@@ -146,7 +145,8 @@ approx :=argApprox;
       <LineId Id="514" Count="0" />
       <LineId Id="323" Count="3" />
       <LineId Id="415" Count="2" />
-      <LineId Id="331" Count="25" />
+      <LineId Id="331" Count="12" />
+      <LineId Id="345" Count="11" />
       <LineId Id="21" Count="0" />
       <LineId Id="387" Count="0" />
       <LineId Id="447" Count="0" />

@@ -7081,10 +7081,6 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>MAIN.Scara1.context_out_speedFactor</Name>
-							<Type>BYTE</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.Scara1.para_speed_factor</Name>
 							<Comment><![CDATA[ in percentage]]></Comment>
 							<Type>BYTE</Type>
 						</Var>
@@ -7164,10 +7160,6 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>MAIN.Scara2.context_out_speedFactor</Name>
-							<Type>BYTE</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.Scara2.para_speed_factor</Name>
 							<Comment><![CDATA[ in percentage]]></Comment>
 							<Type>BYTE</Type>
 						</Var>
@@ -8048,7 +8040,7 @@ External Setpoint Generation:
 		<Io/>
 	</Project>
 	<Mappings>
-		<MappingInfo Identifier="{05000010-2002-0850-1000-040300205008}" Id="#x02030010" Watchdog="14000000040000000400000004000000"/>
+		<MappingInfo Identifier="{05000010-2001-0850-1000-040300205008}" Id="#x02030010" Watchdog="14000000040000000400000004000000"/>
 		<OwnerA Name="TIPC^Untitled1^Untitled1 Instance">
 			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Simu1">
 				<Link VarA="PlcTask Inputs^GVL.axisControls[1].Axis.NcToPlc" VarB="Outputs^ToPlc"/>

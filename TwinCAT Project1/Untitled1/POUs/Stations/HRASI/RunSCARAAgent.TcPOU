@@ -27,6 +27,7 @@ VAR_INPUT
 	context_out_isSlotValid AT%Q* : BYTE;
 	context_out_perNodePurged AT%Q* : BYTE;
 	context_out_speedFactor AT%Q* : BYTE; // in percentage
+	context_out_isDryRun AT%Q* : BYTE;
 END_VAR
 VAR_OUTPUT
 	//-------------------
@@ -46,8 +47,8 @@ VAR_OUTPUT
 	context_in_alarmCode AT%I* : WORD;
 	context_in_stopack AT%I* : BYTE;
 	context_in_taskState AT%I* : BYTE;
-	
 	context_in_setSlotValid AT%I* : BYTE;
+	
 END_VAR
 VAR CONSTANT
 	taskInit : UINT := 1;
