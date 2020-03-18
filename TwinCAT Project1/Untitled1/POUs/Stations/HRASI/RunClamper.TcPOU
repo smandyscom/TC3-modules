@@ -35,17 +35,17 @@ CASE outputState OF
 	//---------------------------	
 	eSpecialStates.INITIAL_BEGIN:
 		clamper^.isRemoteControl := FALSE; //off remote control
-		bSerialTransition := clamper^.Execute(eCylinderCommands.COMMAND_A);
+		bSerialTransition := clamper^.Execute(eCylinderCommands.NO_COMMAND); //remain
 	eSpecialStates.INITIAL_STATE_1:
-		bSerialTransition := horizon^.Execute(eCylinderCommands.COMMAND_A);
+		bSerialTransition := horizon^.Execute(eCylinderCommands.COMMAND_B);
 	eSpecialStates.INITIAL_STATE_2:
-		bSerialTransition := horizon^.Execute(eCylinderCommands.COMMAND_B); //push
+		bSerialTransition := clamper^.Execute(eCylinderCommands.COMMAND_A); //release
 	eSpecialStates.INITIAL_STATE_3:
-		bSerialTransition := clamper^.Execute(eCylinderCommands.COMMAND_B); //hold
+		bSerialTransition := horizon^.Execute(eCylinderCommands.COMMAND_A); //back
 	eSpecialStates.INITIAL_STATE_4:
-		bSerialTransition := clamper^.Execute(eCylinderCommands.COMMAND_A);	//release 
+		bSerialTransition := TRUE;
 	eSpecialStates.INITIAL_STATE_5:
-		bSerialTransition := horizon^.Execute(eCylinderCommands.COMMAND_A);	//back 
+		bSerialTransition := TRUE;
 		IF bSerialTransition THEN
 			NextState := eSpecialStates.INITIAL_END;
 		END_IF
@@ -72,6 +72,7 @@ CASE outputState OF
 			
 			IF configSnap THEN
 				clamper^.isRemoteControl := TRUE; // gave scara remote control
+				clamper^.isShutVerification := TRUE;
 			END_IF
 			
 			bSerialTransition := TRUE;
@@ -84,6 +85,7 @@ CASE outputState OF
 		END_IF
 		IF bSerialTransition THEN
 			clamper^.isRemoteControl := FALSE; // demolish remote control
+			clamper^.isShutVerification := false;
 		END_IF
 	16#205:
 		//send part back to indexer
@@ -172,11 +174,15 @@ configSnap := argConfigSnap;]]></ST>
       <LineId Id="128" Count="0" />
       <LineId Id="130" Count="1" />
       <LineId Id="340" Count="1" />
-      <LineId Id="343" Count="1" />
+      <LineId Id="343" Count="0" />
+      <LineId Id="424" Count="0" />
+      <LineId Id="344" Count="0" />
       <LineId Id="342" Count="0" />
       <LineId Id="132" Count="4" />
       <LineId Id="280" Count="2" />
-      <LineId Id="345" Count="2" />
+      <LineId Id="345" Count="1" />
+      <LineId Id="425" Count="0" />
+      <LineId Id="347" Count="0" />
       <LineId Id="364" Count="2" />
       <LineId Id="137" Count="4" />
       <LineId Id="176" Count="0" />

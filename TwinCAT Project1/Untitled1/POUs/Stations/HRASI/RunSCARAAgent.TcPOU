@@ -86,7 +86,9 @@ END_IF
 //----------------------
 IF bPause AND NOT in_paused_2 THEN
 	out_pause_5 := TRUE;
+	out_continue_6 := FALSE;
 ELSIF NOT bPause AND in_paused_2 THEN
+	out_pause_5 := FALSE;
 	out_continue_6 := TRUE;
 ELSE
 	out_pause_5 := FALSE;
@@ -330,7 +332,11 @@ END_VAR
       <LineId Id="4813" Count="0" />
       <LineId Id="4811" Count="0" />
       <LineId Id="4814" Count="1" />
-      <LineId Id="4658" Count="14" />
+      <LineId Id="4658" Count="5" />
+      <LineId Id="5062" Count="0" />
+      <LineId Id="4664" Count="1" />
+      <LineId Id="5064" Count="0" />
+      <LineId Id="4666" Count="6" />
       <LineId Id="5003" Count="0" />
       <LineId Id="4673" Count="3" />
       <LineId Id="4945" Count="0" />

@@ -76,6 +76,13 @@ CASE outputState OF
 	// 1. SCARA & Clamper & Indexer
 	//----------------------------
 	eSpecialStates.INITIAL_BEGIN:
+		commStartProductionMode := FALSE;
+		commStartRegularCheckMode :=FALSE;
+		commIsDryRun := FALSE;
+		commStartTrialAssemble:=FALSE;
+		commStartTrialSnap:=FALSE;
+		commRegularCheckAck:=false;
+		
 		bSerialTransition := TRUE;//gvl.cylinderControls[Cy18].Execute(eCylinderCommands.COMMAND_A);
 	eSpecialStates.INITIAL_STATE_1:
 		bSerialTransition := true;//gvl.cylinderControls[Cy17].Execute(eCylinderCommands.COMMAND_A);
@@ -89,7 +96,7 @@ CASE outputState OF
 	eSpecialStates.INITIAL_STATE_3:
 		bSerialTransition:=TRUE;
 		FOR nCounter :=0 TO 2 BY 1 DO
-			bSerialTransition := members[nCounter]<>0 AND_THEN members[nCounter]^.Initialize();
+			bSerialTransition := bSerialTransition AND members[nCounter]<>0 AND_THEN members[nCounter]^.Initialize();
 		END_FOR
 		IF bSerialTransition THEN
 			NextState:=eSpecialStates.INITIAL_END;
@@ -243,7 +250,11 @@ END_CASE
 ]]></ST>
     </Implementation>
     <LineIds Name="RunCoordinator">
-      <LineId Id="1209" Count="196" />
+      <LineId Id="1209" Count="32" />
+      <LineId Id="1446" Count="2" />
+      <LineId Id="1450" Count="2" />
+      <LineId Id="1449" Count="0" />
+      <LineId Id="1242" Count="163" />
       <LineId Id="897" Count="0" />
     </LineIds>
   </POU>
