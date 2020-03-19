@@ -51,6 +51,10 @@ thresholdMatched := thresholdsMatches[thresholdCurrentSet]; // whether match the
 TMR_WATCH_DOG(IN:= , PT:= , Q=> , ET=> );
 TMR_DELAY_TO_THRESHOLD(IN:= , PT:= , Q=> , ET=> );
 
+IF NOT TMR_DELAY_TO_THRESHOLD.IN THEN
+	TMR_DELAY_TO_THRESHOLD.IN := TRUE;
+END_IF
+
 // once command changes , reset timer counter
 IF COMMAND_CACHED <> LAST_COMMAND THEN
 	//reset done/warn
@@ -61,7 +65,7 @@ IF COMMAND_CACHED <> LAST_COMMAND THEN
 	ACT_BREAKER := (COMMAND_CACHED = eCylinderCommands.COMMAND_A);
 	ACT_GENERATOR := (COMMAND_CACHED = eCylinderCommands.COMMAND_B);
 	
-	
+	TMR_DELAY_TO_THRESHOLD.IN := FALSE;
 END_IF
 
 
@@ -80,17 +84,22 @@ CASE COMMAND_CACHED OF
 END_CASE
 
 //start
-TMR_WATCH_DOG.in := NOT bMatched AND TMR_DELAY_TO_THRESHOLD.Q;
+IF NOT bMatched AND TMR_DELAY_TO_THRESHOLD.Q THEN
+	TMR_WATCH_DOG.in := TRUE;
+ELSE
+	TMR_WATCH_DOG.in := FALSE;
+END_IF
+
 
 
 // status update
-BIT_DONE := bMatched OR (NOT bMatched AND (BIT_WARN_SUPPRESS OR isShutVerification) AND TMR_WATCH_DOG.Q);
-BIT_WARNING := (NOT bMatched) AND (NOT BIT_WARN_SUPPRESS) AND TMR_WATCH_DOG.Q AND TMR_DELAY_TO_THRESHOLD.Q;
+BIT_DONE := isShutVerification OR (bMatched OR (NOT bMatched AND (BIT_WARN_SUPPRESS  ) AND TMR_WATCH_DOG.Q));
+BIT_WARNING := NOT isShutVerification AND(NOT bMatched) AND (NOT BIT_WARN_SUPPRESS) AND TMR_WATCH_DOG.Q AND TMR_DELAY_TO_THRESHOLD.Q;
 // cache last command
 LAST_COMMAND := COMMAND_CACHED;
 
 //turn off once done
-TMR_DELAY_TO_THRESHOLD.IN := NOT BIT_DONE; //active A delay timer once not done
+//TMR_DELAY_TO_THRESHOLD.IN := NOT BIT_DONE; //active A delay timer once not done
 ]]></ST>
     </Implementation>
     <Folder Name="CommonBase" Id="{119ac4ac-a070-4964-91b6-1098b43d0930}" />
@@ -267,10 +276,16 @@ END_VAR
       </Implementation>
     </Method>
     <LineIds Name="RunVacuum">
-      <LineId Id="742" Count="17" />
+      <LineId Id="742" Count="14" />
+      <LineId Id="904" Count="3" />
+      <LineId Id="757" Count="2" />
       <LineId Id="762" Count="6" />
       <LineId Id="863" Count="1" />
-      <LineId Id="769" Count="25" />
+      <LineId Id="769" Count="17" />
+      <LineId Id="899" Count="1" />
+      <LineId Id="902" Count="1" />
+      <LineId Id="901" Count="0" />
+      <LineId Id="787" Count="7" />
       <LineId Id="828" Count="0" />
       <LineId Id="866" Count="0" />
       <LineId Id="830" Count="0" />
