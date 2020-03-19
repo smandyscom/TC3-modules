@@ -17,7 +17,7 @@ VAR
 	totalCount AT%M* : UDINT; //wonld't be reset for each batch
 END_VAR
 VAR PERSISTENT
-	collectionLimit : UINT;
+	collectionLimit AT%M* : UINT;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[SUPER^();
