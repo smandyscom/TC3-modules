@@ -104,7 +104,7 @@ workingTimer(IN:=,PT:=TO_TIME(4294967295),Q=>,ET=>);
 //-------------------
 //purge status reset
 //-------------------
-IF isPurged AND previousNode<>0 AND_THEN NOT previousNode^.isPurged THEN
+IF isPurged AND (previousNode<>0 AND_THEN NOT previousNode^.isPurged) THEN
 	isPurged := FALSE;
 END_IF]]></ST>
     </Implementation>

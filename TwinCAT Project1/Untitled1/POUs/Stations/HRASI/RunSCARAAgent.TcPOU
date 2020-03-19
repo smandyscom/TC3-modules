@@ -74,20 +74,20 @@ SUPER^();
 
 
 //transmit purged status
-context_out_perNodePurged.0 := previousNode<>0 AND_THEN previousNode^.isPurged;
+context_out_perNodePurged.0 := (previousNode<>0 AND_THEN previousNode^.isPurged);
 context_out_isSlotValid.0 := SlotLast<>0 AND_THEN SlotLast^.Valid;
 
-IF NOT isTaskEngaged AND previousNode<>0 AND_THEN previousNode^.isPurged THEN
+IF NOT isTaskEngaged AND (previousNode<>0 AND_THEN previousNode^.isPurged) THEN
 	isPurged := TRUE;
 END_IF
 
 //----------------------
 //	Task running control
 //----------------------
-IF bPause AND NOT in_paused_2 THEN
+IF bPause AND NOT in_paused_2 AND in_running_1 THEN
 	out_pause_5 := TRUE;
 	out_continue_6 := FALSE;
-ELSIF NOT bPause AND in_paused_2 THEN
+ELSIF NOT bPause AND in_paused_2  THEN
 	out_pause_5 := FALSE;
 	out_continue_6 := TRUE;
 ELSE
@@ -127,8 +127,10 @@ CASE outputState OF
 		END_IF
 	//Start initializing , Check running
 	eSpecialStates.INITIAL_STATE_3:
-		//out_start_0 := TRUE;
 		bSerialTransition := in_running_1 AND NOT in_ready_0;
+		IF bSerialTransition THEN
+			out_start_0 := FALSE; //after process started , pause
+		END_IF
 	//Start initializing, Check ran
 	eSpecialStates.INITIAL_STATE_4:
 		bSerialTransition := NOT in_running_1 AND  in_ready_0;
@@ -153,6 +155,7 @@ CASE outputState OF
 	16#2:
 		bSerialTransition := in_running_1 AND NOT in_ready_0;
 		IF bSerialTransition THEN
+			out_start_0 := FALSE;
 			NextState := 16#200;
 		END_IF
 		//------------------------------------------------------------------
@@ -344,9 +347,8 @@ END_VAR
       <LineId Id="4681" Count="6" />
       <LineId Id="4942" Count="2" />
       <LineId Id="4688" Count="8" />
-      <LineId Id="4699" Count="2" />
-      <LineId Id="4879" Count="0" />
-      <LineId Id="4702" Count="0" />
+      <LineId Id="4699" Count="3" />
+      <LineId Id="5123" Count="2" />
       <LineId Id="4708" Count="14" />
       <LineId Id="4875" Count="0" />
       <LineId Id="4881" Count="0" />
@@ -354,6 +356,7 @@ END_VAR
       <LineId Id="4876" Count="0" />
       <LineId Id="4880" Count="0" />
       <LineId Id="4726" Count="2" />
+      <LineId Id="5126" Count="0" />
       <LineId Id="4730" Count="3" />
       <LineId Id="4735" Count="0" />
       <LineId Id="4742" Count="0" />

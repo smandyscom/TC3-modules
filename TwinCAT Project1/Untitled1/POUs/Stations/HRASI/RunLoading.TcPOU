@@ -22,16 +22,16 @@ END_VAR]]></Declaration>
       <ST><![CDATA[SUPER^();
 
 //signal reset
-IF previousNode<>0 AND_THEN NOT previousNode^.isPurged THEN
-		purgeRequest :=FALSE;
+IF purgeRequest AND (previousNode<>0 AND_THEN NOT previousNode^.isPurged) THEN
+	purgeRequest := FALSE;
 END_IF
 
 //-------------------------------
 //	Slot-1 to loading bottom part
 //-------------------------------
-
 CASE outputState OF
 	eSpecialStates.INITIAL_BEGIN:
+		purgeRequest := FALSE;
 		NextState := eSpecialStates.INITIAL_END;
 	//---------------------
 	//	Working
@@ -50,7 +50,7 @@ CASE outputState OF
 	16#201:
 		bSerialTransition := NOT slaveWorkingSignal[1]; //scara should set valid before reset working 
 		IF bSerialTransition THEN
-			SlotBase^.Valid := externalSlotValid OR isSlotValidOverride; //transit
+			SlotBase^.Valid := externalSlotValid ; //transit
 		END_IF
 	16#202:
 		//check if material status matched sensor status
@@ -112,14 +112,15 @@ existence := argExistence;]]></ST>
       <LineId Id="9" Count="0" />
       <LineId Id="122" Count="0" />
       <LineId Id="118" Count="0" />
-      <LineId Id="120" Count="1" />
+      <LineId Id="191" Count="1" />
       <LineId Id="119" Count="0" />
       <LineId Id="11" Count="0" />
       <LineId Id="10" Count="0" />
       <LineId Id="12" Count="1" />
-      <LineId Id="17" Count="0" />
       <LineId Id="16" Count="0" />
-      <LineId Id="43" Count="4" />
+      <LineId Id="43" Count="0" />
+      <LineId Id="193" Count="0" />
+      <LineId Id="44" Count="3" />
       <LineId Id="18" Count="0" />
       <LineId Id="20" Count="1" />
       <LineId Id="24" Count="0" />

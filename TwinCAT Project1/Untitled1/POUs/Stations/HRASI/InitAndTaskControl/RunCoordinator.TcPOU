@@ -65,7 +65,7 @@ IF dryRunDevicesList[0] = 0 THEN
 
 	dryRunDevicesList[6] := ADR(gvl.vacuumControls[A20]);
 	
-	dryRunDevicesList[7] := ADR(gvl.cylinderControls[cy6]);
+	dryRunDevicesList[7] := ADR(gvl.cylinderControls[cy6]); //top part clamper
 	
 END_IF
 
@@ -81,7 +81,8 @@ CASE outputState OF
 		commIsDryRun := FALSE;
 		commStartTrialAssemble:=FALSE;
 		commStartTrialSnap:=FALSE;
-		commRegularCheckAck:=false;
+		commRegularCheckAck:=FALSE;
+		isPurged := FALSE;
 		
 		bSerialTransition := TRUE;//gvl.cylinderControls[Cy18].Execute(eCylinderCommands.COMMAND_A);
 	eSpecialStates.INITIAL_STATE_1:
@@ -174,7 +175,9 @@ CASE outputState OF
 			//turn off following devices if dry run	(no products)
 			//---------------------------------------------------
 			FOR nCounter:=0 TO 7 DO
-				dryRunDevicesList[nCounter]^.isShutVerification := commIsDryRun;
+				IF dryRunDevicesList[nCounter]<>0 THEN
+					dryRunDevicesList[nCounter]^.isShutVerification := commIsDryRun;
+				END_IF	
 			END_FOR
 			loader^.isSlotValidOverride := commIsDryRun;
 			aoi^.bIsBypassed := commIsDryRun;
@@ -227,12 +230,12 @@ CASE outputState OF
 	16#1000:
 		bSerialTransition := isPurged; //would be triggered by interfaceControl
 	16#1001:
-		bSerialTransition := previousNode <>0 AND_THEN previousNode^.isPurged;
+		bSerialTransition := scara2^.isPurged AND scara1^.isPurged;
 		IF bSerialTransition THEN
 			THIS^.isPurged := FALSE; //going to reset
 		END_IF
 	16#1002:
-		bSerialTransition := previousNode <>0 AND_THEN NOT previousNode^.isPurged;
+		bSerialTransition := NOT scara2^.isPurged AND NOT scara1^.isPurged;
 		IF bSerialTransition THEN
 			FOR nCounter:=0 TO 3 BY 1 DO
 				racks[nCounter]^.commEject := TRUE; //eject
@@ -253,8 +256,11 @@ END_CASE
       <LineId Id="1209" Count="32" />
       <LineId Id="1446" Count="2" />
       <LineId Id="1450" Count="2" />
+      <LineId Id="1536" Count="0" />
       <LineId Id="1449" Count="0" />
-      <LineId Id="1242" Count="163" />
+      <LineId Id="1242" Count="90" />
+      <LineId Id="1493" Count="2" />
+      <LineId Id="1334" Count="71" />
       <LineId Id="897" Count="0" />
     </LineIds>
   </POU>

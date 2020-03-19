@@ -16,7 +16,7 @@ VAR
 	aoiTrigger AT%Q* : BOOL;
 	//internal
 	
-	//TODO , id trigger
+	commIdTrigger AT%Q* : DWORD;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -54,7 +54,7 @@ CASE outputState OF
 			bSerialTransition := TRUE;
 		ELSE
 			//no material , leave	
-			NextState := 16#203;
+			NextState := 16#205;
 		END_IF
 	16#202:
 		bSerialTransition := aoiOut1Done;
@@ -85,6 +85,9 @@ CASE outputState OF
 		
 		IF NOT SlotBase^.Valid AND previousNode <>0 AND_THEN previousNode^.isPurged THEN
 			isPurged := true; // i am purged
+		END_IF
+		IF SlotBase^.Valid THEN
+			commIdTrigger := SlotBase^.Id; //trigger the data logger
 		END_IF
 		
 		NextState := eSpecialStates.SLAVE_WORK_DONE;
@@ -133,6 +136,8 @@ ngCylinder := argNgCylinder;
       <LineId Id="341" Count="1" />
       <LineId Id="344" Count="1" />
       <LineId Id="343" Count="0" />
+      <LineId Id="405" Count="1" />
+      <LineId Id="387" Count="0" />
       <LineId Id="325" Count="0" />
       <LineId Id="14" Count="0" />
     </LineIds>

@@ -55,7 +55,7 @@ CASE outputState OF
 		bSerialTransition := lockCylinder^.Execute(eCylinderCommands.COMMAND_B);
 		IF bSerialTransition THEN
 			
-			FOR nCounter :=1 TO 4 BY 1 DO
+			FOR nCounter :=0 TO SlotCount-1 BY 1 DO
 				SlotBase[nCounter].Valid := FALSE; //reset
 			END_FOR
 			

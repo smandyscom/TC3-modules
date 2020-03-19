@@ -15,6 +15,7 @@ VAR
 	
 	//
 	tickTime AT%Q*: DWORD ; //in ms
+	commIdTrigger AT%Q* : DWORD;
 END_VAR
 VAR CONSTANT
 	bScaraReady : INT := 1;
@@ -115,6 +116,9 @@ CASE outputState OF
 		IF NOT SlotBase^.Valid AND previousNode<>0 AND_THEN previousNode^.isPurged THEN
 			isPurged := TRUE;
 		END_IF
+		IF SlotBase^.Valid THEN
+			commIdTrigger := SlotBase^.Id; //trigger the data logger
+		END_IF
 END_CASE]]></ST>
     </Implementation>
     <Method Name="FB_init" Id="{37c62737-651a-4f40-81e3-f79b76fcc99a}">
@@ -191,6 +195,8 @@ configSnap := argConfigSnap;]]></ST>
       <LineId Id="261" Count="2" />
       <LineId Id="260" Count="0" />
       <LineId Id="299" Count="4" />
+      <LineId Id="446" Count="1" />
+      <LineId Id="445" Count="0" />
       <LineId Id="29" Count="0" />
     </LineIds>
     <LineIds Name="RunClamper.FB_init">

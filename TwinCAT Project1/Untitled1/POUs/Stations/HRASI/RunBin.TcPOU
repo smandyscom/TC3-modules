@@ -35,7 +35,7 @@ CASE outputState OF
 		IF bSerialTransition THEN
 			ready := TRUE;
 			workingTimer.IN := TRUE; //start counting
-		ELSIF collectionCount <> 0 AND sensor <> 0 AND_THEN NOT sensor^.debouncedOn THEN
+		ELSIF collectionCount <> 0 AND (sensor <> 0 AND_THEN NOT sensor^.debouncedOn) THEN
 			collectionCount := 0; //count reset
 		END_IF
 	1:
@@ -50,6 +50,9 @@ CASE outputState OF
 			totalCount := IncNoOverflow(input:= totalCount);
 			
 			ready := FALSE;
+		ELSIF sensor <> 0 AND_THEN NOT sensor^.debouncedOn THEN
+			ready := FALSE;
+			NextState := 0; //re=scan
 		END_IF
 	2: 
 		bSerialTransition := NOT ack;
@@ -78,7 +81,11 @@ END_CASE]]></ST>
       <LineId Id="51" Count="0" />
       <LineId Id="44" Count="0" />
       <LineId Id="74" Count="1" />
-      <LineId Id="39" Count="1" />
+      <LineId Id="39" Count="0" />
+      <LineId Id="93" Count="0" />
+      <LineId Id="95" Count="0" />
+      <LineId Id="94" Count="0" />
+      <LineId Id="40" Count="0" />
       <LineId Id="36" Count="1" />
       <LineId Id="41" Count="2" />
       <LineId Id="14" Count="0" />
