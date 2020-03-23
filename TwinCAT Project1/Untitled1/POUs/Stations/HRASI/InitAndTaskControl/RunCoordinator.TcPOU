@@ -38,9 +38,18 @@ VAR_OUTPUT
 END_VAR
 VAR
 	dryRunDevicesList : ARRAY[0..7] OF POINTER TO executebase;
+	
+	//Vacuum breaker
+	backSecureBreaker AT%Q* : BOOL;
+	filterBreaker AT%Q* : BOOL;
+	
 END_VAR
 VAR PERSISTENT 
 	commSpeedFactor AT%M* : BYTE;
+	timerBreak : ton;
+END_VAR
+VAR CONSTANT 
+	ERR_VACUUM_JAMMED : DWORD := 600;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[//Initialization sequences:
@@ -72,8 +81,8 @@ END_IF
 CASE outputState OF
 	//----------------------------
 	//	Initializing :
-	// 2. Off all I/O 
-	// 1. SCARA & Clamper & Indexer
+	// 1. Off all I/O 
+	// 2. SCARA & Clamper & Indexer
 	//----------------------------
 	eSpecialStates.INITIAL_BEGIN:
 		commStartProductionMode := FALSE;
@@ -84,20 +93,53 @@ CASE outputState OF
 		commRegularCheckAck:=FALSE;
 		isPurged := FALSE;
 		
-		bSerialTransition := TRUE;//gvl.cylinderControls[Cy18].Execute(eCylinderCommands.COMMAND_A);
+		THIS^.TurnDryRun(FALSE);
+		
+		bSerialTransition := TRUE;
+	//-----------------------------
+	// Off remote I/O devices
+	//-----------------------------
 	eSpecialStates.INITIAL_STATE_1:
-		bSerialTransition := true;//gvl.cylinderControls[Cy17].Execute(eCylinderCommands.COMMAND_A);
-	eSpecialStates.INITIAL_STATE_2:
 		bSerialTransition:=TRUE;
 		FOR nCounter :=0 TO 23 BY 1 DO
 			IF gvl.remoteControls[nCounter] <> 0 THEN
 				bSerialTransition := bSerialTransition AND gvl.remoteControls[nCounter]^.Execute(eCylinderCommands.COMMAND_A);
 			END_IF
 		END_FOR
+		//Vacuum break , clean the air path
+		IF bSerialTransition THEN
+			//activate brakers
+			THIS^.ActivateBreakers();
+		END_IF
+	eSpecialStates.INITIAL_STATE_2:
+		bSerialTransition := timerBreak.Q;
+		IF bSerialTransition THEN
+			THIS^.InactivateBreakers();
+		END_IF
+	//-----------------------------
+	//	Then check is vacuum jammed
+	//-----------------------------
 	eSpecialStates.INITIAL_STATE_3:
-		//------------
-		//	INITIALIZE SCARA/RACK FIRST
-		//------------
+		bSerialTransition:=TRUE;
+		timerBreak.IN := TRUE; //for fake vacuum stabalized
+		THIS^.TurnVerifyVacuums(eCylinderCommands.COMMAND_B);
+	eSpecialStates.INITIAL_STATE_4:
+		bSerialTransition:=timerBreak.Q;
+		IF bSerialTransition THEN
+			FOR nCounter:=0 TO 6 BY 1 DO
+				//should be all off
+				IF gvl.verifyVacuums[nCounter]<>0 THEN
+					bSerialTransition := bSerialTransition AND NOT gvl.verifyVacuums[nCounter]^.Execute(eCylinderCommands.COMMAND_B);
+				END_IF
+			END_FOR
+			IF NOT bSerialTransition THEN
+				THIS^.AlarmCode := ERR_VACUUM_JAMMED;
+			END_IF
+		END_IF
+	//------------
+	//	MACHNICAL INITIALIZE : SCARA/RACK FIRST
+	//------------	
+	eSpecialStates.INITIAL_STATE_5:	
 		bSerialTransition:=TRUE;
 		FOR nCounter :=0 TO 1 BY 1 DO
 			bSerialTransition := bSerialTransition AND members[nCounter]<>0 AND_THEN members[nCounter]^.Initialize();
@@ -105,7 +147,7 @@ CASE outputState OF
 		IF bSerialTransition THEN
 			NextState:=eSpecialStates.INITIAL_END;
 		END_IF
-	eSpecialStates.INITIAL_STATE_4:
+	eSpecialStates.INITIAL_STATE_6:
 		//------------
 		//	THEN INDEX (in case of collision of clampers
 		//------------
@@ -182,21 +224,7 @@ CASE outputState OF
 		
 		IF bSerialTransition THEN
 			
-			//---------------------------------------------------
-			//turn off following devices if dry run	(no products)
-			//---------------------------------------------------
-			FOR nCounter:=0 TO 7 DO
-				IF dryRunDevicesList[nCounter]<>0 THEN
-					dryRunDevicesList[nCounter]^.isShutVerification := commIsDryRun;
-				END_IF	
-			END_FOR
-			loader^.isSlotValidOverride := commIsDryRun;
-			aoi^.bIsBypassed := commIsDryRun;
-			scara1^.context_out_isDryRun.0 := commIsDryRun;
-			scara2^.context_out_isDryRun.0 := commIsDryRun;
-			IF commIsDryRun THEN
-				gvl.cylinderControls[Cy16].Execute(eCylinderCommands.COMMAND_B);
-			END_IF
+			THIS^.TurnDryRun(commIsDryRun); //activate dry run
 			
 			//-------------------
 			//speed factor renew
@@ -263,25 +291,119 @@ END_CASE
 
 ]]></ST>
     </Implementation>
+    <Action Name="ActivateBreakers" Id="{93a2c463-6878-45a2-8e7f-aa67bfe411c0}">
+      <Implementation>
+        <ST><![CDATA[backSecureBreaker := TRUE;
+filterBreaker := TRUE;
+timerBreak.IN := TRUE;]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="InactivateBreakers" Id="{706ff647-c785-4b6a-9f16-bb1bc74a41fe}">
+      <Implementation>
+        <ST><![CDATA[backSecureBreaker := FALSE;
+filterBreaker := FALSE;
+timerBreak.IN := false;]]></ST>
+      </Implementation>
+    </Action>
+    <Method Name="TurnDryRun" Id="{370f1dbe-3fb6-4750-a260-8c1e5a6329a0}">
+      <Declaration><![CDATA[METHOD TurnDryRun : BOOL
+VAR_INPUT
+	isEnabled : bool;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//---------------------------------------------------
+//turn off following devices if dry run	(no products)
+//---------------------------------------------------
+FOR nCounter:=0 TO 7 DO
+	IF dryRunDevicesList[nCounter]<>0 THEN
+		dryRunDevicesList[nCounter]^.isShutVerification := isEnabled;
+	END_IF	
+END_FOR
+loader^.isSlotValidOverride := isEnabled;
+aoi^.bIsBypassed := isEnabled;
+scara1^.context_out_isDryRun.0 := isEnabled;
+scara2^.context_out_isDryRun.0 := isEnabled;
+IF isEnabled THEN
+	gvl.cylinderControls[Cy16].Execute(eCylinderCommands.COMMAND_B);
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TurnVerifyVacuums" Id="{aa2d0e34-9f20-4a77-a93c-86b863ba07fd}">
+      <Declaration><![CDATA[METHOD TurnVerifyVacuums : BOOL
+VAR_INPUT
+	command : eCylinderCommands;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[FOR nCounter:=0 TO 6 BY 1 DO
+	IF gvl.verifyVacuums[nCounter]<>0 THEN
+		gvl.verifyVacuums[nCounter]^.Execute(command);
+	END_IF	
+END_FOR]]></ST>
+      </Implementation>
+    </Method>
     <LineIds Name="RunCoordinator">
       <LineId Id="1209" Count="32" />
       <LineId Id="1446" Count="2" />
       <LineId Id="1450" Count="2" />
       <LineId Id="1536" Count="0" />
       <LineId Id="1449" Count="0" />
-      <LineId Id="1242" Count="9" />
+      <LineId Id="1694" Count="0" />
+      <LineId Id="1696" Count="0" />
+      <LineId Id="1242" Count="0" />
+      <LineId Id="1649" Count="2" />
+      <LineId Id="1245" Count="6" />
+      <LineId Id="1707" Count="0" />
+      <LineId Id="1652" Count="1" />
+      <LineId Id="1655" Count="0" />
+      <LineId Id="1654" Count="0" />
+      <LineId Id="1657" Count="3" />
+      <LineId Id="1656" Count="0" />
+      <LineId Id="1672" Count="1" />
+      <LineId Id="1671" Count="0" />
+      <LineId Id="1664" Count="0" />
+      <LineId Id="1668" Count="0" />
+      <LineId Id="1684" Count="0" />
+      <LineId Id="1667" Count="0" />
+      <LineId Id="1669" Count="0" />
+      <LineId Id="1674" Count="0" />
+      <LineId Id="1686" Count="0" />
+      <LineId Id="1689" Count="0" />
+      <LineId Id="1697" Count="0" />
+      <LineId Id="1690" Count="2" />
+      <LineId Id="1687" Count="0" />
+      <LineId Id="1698" Count="2" />
+      <LineId Id="1688" Count="0" />
+      <LineId Id="1705" Count="1" />
+      <LineId Id="1704" Count="0" />
       <LineId Id="1577" Count="0" />
-      <LineId Id="1585" Count="2" />
       <LineId Id="1579" Count="5" />
       <LineId Id="1578" Count="0" />
       <LineId Id="1252" Count="0" />
       <LineId Id="1589" Count="1" />
       <LineId Id="1588" Count="0" />
       <LineId Id="1253" Count="0" />
-      <LineId Id="1257" Count="75" />
-      <LineId Id="1493" Count="2" />
-      <LineId Id="1334" Count="71" />
+      <LineId Id="1257" Count="71" />
+      <LineId Id="1693" Count="0" />
+      <LineId Id="1342" Count="63" />
       <LineId Id="897" Count="0" />
+    </LineIds>
+    <LineIds Name="RunCoordinator.ActivateBreakers">
+      <LineId Id="1" Count="2" />
+    </LineIds>
+    <LineIds Name="RunCoordinator.InactivateBreakers">
+      <LineId Id="2" Count="0" />
+      <LineId Id="1" Count="0" />
+      <LineId Id="3" Count="0" />
+    </LineIds>
+    <LineIds Name="RunCoordinator.TurnDryRun">
+      <LineId Id="7" Count="13" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="RunCoordinator.TurnVerifyVacuums">
+      <LineId Id="7" Count="3" />
+      <LineId Id="5" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
