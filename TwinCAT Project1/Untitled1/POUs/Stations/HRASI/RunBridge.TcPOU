@@ -3,6 +3,7 @@
   <POU Name="RunBridge" Id="{8efd5c53-7e74-4af7-97a5-3ec0eb5ea0d4}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunBridge EXTENDS RunUnitSlave
 VAR_INPUT
+	fakeAck AT%M* : BOOL;
 END_VAR
 VAR_OUTPUT
 END_VAR
@@ -22,6 +23,7 @@ CASE outputState OF
 	//--------------------------------	
 	eSpecialStates.INITIAL_BEGIN:
 		bridge.ready := FALSE;
+		fakeAck:=FALSE;
 		bSerialTransition := NOT bridge.ack AND NOT bridge.valid;
 		IF bSerialTransition THEN
 			NextState := eSpecialStates.INITIAL_END;
@@ -33,8 +35,9 @@ CASE outputState OF
 		bridge.ready := TRUE;
 		bSerialTransition := TRUE;
 	16#201:
-		bSerialTransition := bridge.ack;
+		bSerialTransition := bridge.ack OR fakeAck;
 		IF bSerialTransition THEN
+			fakeAck := FALSE; //auto-reset
 			bridge.ready := FALSE;
 		END_IF
 	16#202:
@@ -48,13 +51,16 @@ END_CASE]]></ST>
       <LineId Id="11" Count="2" />
       <LineId Id="39" Count="2" />
       <LineId Id="43" Count="1" />
+      <LineId Id="66" Count="0" />
       <LineId Id="50" Count="0" />
       <LineId Id="52" Count="1" />
       <LineId Id="55" Count="0" />
       <LineId Id="38" Count="0" />
       <LineId Id="46" Count="1" />
       <LineId Id="9" Count="0" />
-      <LineId Id="15" Count="10" />
+      <LineId Id="15" Count="4" />
+      <LineId Id="65" Count="0" />
+      <LineId Id="20" Count="5" />
       <LineId Id="14" Count="0" />
     </LineIds>
   </POU>

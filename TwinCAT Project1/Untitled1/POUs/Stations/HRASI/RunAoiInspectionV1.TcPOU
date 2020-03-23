@@ -3,6 +3,8 @@
   <POU Name="RunAoiInspectionV1" Id="{7255faf6-adcd-46ad-a421-c808180e9942}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunAoiInspectionV1 EXTENDS RunUnitSlave
 VAR_INPUT
+	ngBinReady : BOOL;
+	ngCounter : POINTER TO UDINT;
 END_VAR
 VAR_OUTPUT
 END_VAR
@@ -79,14 +81,20 @@ CASE outputState OF
 			//	NG
 			//-------------
 			SlotBase^.Valid := FALSE; //set as inexsited
-			bSerialTransition:=	TRUE;
+			bSerialTransition:=	ngBinReady;
 			
-			serialNGCounter := serialNGCounter+1;
-			IF  serialNGCounter >=  serialNGGoal THEN
-				THIS^.AlarmCode := ERR_CONSECUTIVE_NG;
-				serialNGCounter := 0; //reset
+			IF bSerialTransition THEN
+				serialNGCounter := serialNGCounter+1;
+				IF  serialNGCounter >=  serialNGGoal THEN
+					THIS^.AlarmCode := ERR_CONSECUTIVE_NG;
+					serialNGCounter := 0; //reset
+				END_IF
+				
+				IF ngCounter<>0 THEN
+					ngCounter^ := ngCounter^ +1; //count-up
+				END_IF			
 			END_IF
-			
+						
 		ELSIF  aoiOut2Grade THEN
 			//--------------
 			//	OK 
@@ -154,11 +162,14 @@ ngCylinder := argNgCylinder;
       <LineId Id="366" Count="3" />
       <LineId Id="424" Count="2" />
       <LineId Id="305" Count="7" />
-      <LineId Id="455" Count="1" />
-      <LineId Id="458" Count="1" />
-      <LineId Id="461" Count="0" />
+      <LineId Id="455" Count="0" />
+      <LineId Id="470" Count="0" />
+      <LineId Id="473" Count="3" />
+      <LineId Id="471" Count="0" />
+      <LineId Id="477" Count="0" />
+      <LineId Id="479" Count="2" />
+      <LineId Id="472" Count="0" />
       <LineId Id="460" Count="0" />
-      <LineId Id="457" Count="0" />
       <LineId Id="313" Count="4" />
       <LineId Id="462" Count="2" />
       <LineId Id="318" Count="0" />

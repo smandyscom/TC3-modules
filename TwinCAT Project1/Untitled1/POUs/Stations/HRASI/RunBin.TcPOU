@@ -4,14 +4,13 @@
     <Declaration><![CDATA[FUNCTION_BLOCK RunBin EXTENDS RunUnitGeneric
 VAR_INPUT
 	sensor : POINTER TO RunSignal;
-END_VAR
-VAR_OUTPUT
+	ack AT%I* : BOOL;
 	collectionCount AT%M*: UDINT;
 END_VAR
-VAR
+VAR_OUTPUT
 	ready AT%Q* : BOOL;
-	ack AT%I* : BOOL;
-	
+END_VAR
+VAR	
 	tickTime AT%Q*: DWORD ; //in ms
 	
 	totalCount AT%M* : UDINT; //wonld't be reset for each batch
@@ -22,6 +21,13 @@ END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[SUPER^();
 
+//------------------
+//the "READY" status
+//------------------ 
+ready := (collectionCount < collectionLimit) AND  (sensor <> 0 AND_THEN sensor^.debouncedOn);
+IF NOT ready AND (collectionCount <> 0 AND (sensor <> 0 AND_THEN  sensor^.debouncedOff)) THEN
+	collectionCount := 0; //count reset
+END_IF
 
 CASE outputState OF
 	eSpecialStates.INITIAL_BEGIN:
@@ -31,14 +37,14 @@ CASE outputState OF
 	//	START
 	//-----------------
 	eSpecialStates.GENERIC_GROUP_START:
-		bSerialTransition := (collectionCount < collectionLimit) AND  (sensor <> 0 AND_THEN sensor^.debouncedOn);
-		IF bSerialTransition THEN
-			ready := TRUE;
-			workingTimer.IN := TRUE; //start counting
-		ELSIF collectionCount <> 0 AND (sensor <> 0 AND_THEN NOT sensor^.debouncedOn) THEN
-			collectionCount := 0; //count reset
-		END_IF
-	1:
+//		bSerialTransition := (collectionCount < collectionLimit) AND  (sensor <> 0 AND_THEN sensor^.debouncedOn);
+//		IF bSerialTransition THEN
+//			ready := TRUE;
+//			workingTimer.IN := TRUE; //start counting
+//		ELSIF collectionCount <> 0 AND (sensor <> 0 AND_THEN NOT sensor^.debouncedOn) THEN
+//			collectionCount := 0; //count reset
+//		END_IF
+//	1:
 		bSerialTransition := ack;
 		IF bSerialTransition THEN
 			
@@ -49,12 +55,13 @@ CASE outputState OF
 			collectionCount := IncNoOverflow(input:= collectionCount);
 			totalCount := IncNoOverflow(input:= totalCount);
 			
-			ready := FALSE;
-		ELSIF sensor <> 0 AND_THEN NOT sensor^.debouncedOn THEN
-			ready := FALSE;
-			NextState := 0; //re=scan
+//			ready := FALSE;
+////		ELSIF sensor <> 0 AND_THEN NOT sensor^.debouncedOn THEN
+//		ELSE
+//			ready := FALSE;
+//			NextState := 0; //re=scan
 		END_IF
-	2: 
+	1: 
 		bSerialTransition := NOT ack;
 		IF bSerialTransition THEN
 			NextState := eSpecialStates.GENERIC_GROUP_START;
@@ -63,7 +70,13 @@ END_CASE]]></ST>
     </Implementation>
     <LineIds Name="RunBin">
       <LineId Id="9" Count="0" />
-      <LineId Id="11" Count="1" />
+      <LineId Id="121" Count="0" />
+      <LineId Id="118" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="122" Count="0" />
+      <LineId Id="116" Count="1" />
+      <LineId Id="119" Count="1" />
+      <LineId Id="12" Count="0" />
       <LineId Id="10" Count="0" />
       <LineId Id="13" Count="0" />
       <LineId Id="20" Count="1" />
@@ -83,6 +96,7 @@ END_CASE]]></ST>
       <LineId Id="74" Count="1" />
       <LineId Id="39" Count="0" />
       <LineId Id="93" Count="0" />
+      <LineId Id="115" Count="0" />
       <LineId Id="95" Count="0" />
       <LineId Id="94" Count="0" />
       <LineId Id="40" Count="0" />
