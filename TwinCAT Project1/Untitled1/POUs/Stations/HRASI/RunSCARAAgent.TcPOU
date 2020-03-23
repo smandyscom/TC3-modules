@@ -59,7 +59,9 @@ VAR CONSTANT
 	taskEngCalibration : UINT :=4;
 	taskEngPickAndDrip : UINT:=5;
 END_VAR
-]]></Declaration>
+VAR PERSISTENT
+	timer : TON;
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[//mission:
 //2. sequence start/stop as Remote I/O
@@ -95,7 +97,8 @@ ELSE
 	out_continue_6 := FALSE;
 END_IF
 
-IF out_reset_7 AND  ErrorDetect() =0 THEN
+IF timer.Q THEN
+	timer.IN := FALSE;
 	out_reset_7 := FALSE;
 	context_out_alarmAck:=0;
 END_IF
@@ -108,7 +111,7 @@ CASE outputState OF
 		bSerialTransition := TRUE;
 	//----------------
 	//Check no running
-	//----------------
+	//----------------		
 	eSpecialStates.INITIAL_STATE_1:
 		bSerialTransition := NOT in_running_1 AND in_ready_0;
 		IF bSerialTransition THEN
@@ -116,23 +119,31 @@ CASE outputState OF
 			PropTask := eSCARATask.task_init;
 			
 			out_stop_4 := FALSE; //release
+			
+			// Forced reset error
+			THIS^.ErrorClear(eErrorClearWays.RESET);
 		END_IF
+	//-------------------
+	// Forced reset error done
+	//-------------------
+	eSpecialStates.INITIAL_STATE_2:
+		bSerialTransition := timer.Q; 
 	//--------------
 	//Check no error and ready
 	//--------------
-	eSpecialStates.INITIAL_STATE_2:
+	eSpecialStates.INITIAL_STATE_3:
 		bSerialTransition := (NOT in_error_3) AND NOT in_running_1 AND in_ready_0;
 		IF bSerialTransition THEN
 			out_start_0 := TRUE;		
 		END_IF
 	//Start initializing , Check running
-	eSpecialStates.INITIAL_STATE_3:
+	eSpecialStates.INITIAL_STATE_4:
 		bSerialTransition := in_running_1 AND NOT in_ready_0;
 		IF bSerialTransition THEN
 			out_start_0 := FALSE; //after process started , pause
 		END_IF
 	//Start initializing, Check ran
-	eSpecialStates.INITIAL_STATE_4:
+	eSpecialStates.INITIAL_STATE_5:
 		bSerialTransition := NOT in_running_1 AND  in_ready_0;
 		IF bSerialTransition THEN
 			out_start_0 := FALSE;
@@ -221,7 +232,10 @@ END_VAR
       <Implementation>
         <ST><![CDATA[//context_out_alarmAck := 0; // ack reset
 out_reset_7 := TRUE;
-context_out_alarmAck := 1;]]></ST>
+context_out_alarmAck := 1;
+
+timer.IN := TRUE; //activate  timer
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="ErrorDetect" Id="{0d501c3c-1258-4947-b465-528162d76fdd}" FolderPath="CommonBase\">
@@ -230,37 +244,25 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[//ErrorDetect := context_in_alarmCode;
-
-//IF context_in_alarmCode <> 0 THEN
-//	context_out_alarmAck := context_in_alarmCode;
-//END_IF
+        <ST><![CDATA[
 
 IF in_error_3 OR context_in_alarmCode<>0  THEN
-//	IF ErrorDetect = 0 THEN
-//		out_reset_7 := FALSE;
-//	END_IF
+
 	IF context_in_alarmCode = 0 THEN
-		ErrorDetect :=8100; //default unknown alarm
+		ErrorDetect :=eSCARAError.ERR_GENERIC_ERROR; //default unknown alarm
 	ELSE
 		ErrorDetect := context_in_alarmCode;
 	END_IF
 		
 ELSIF in_eStop_4 THEN
-//	IF ErrorDetect = 0 THEN
-//		out_reset_7 := FALSE;
-//	END_IF
-	ErrorDetect := 9000;
+
+	ErrorDetect := eSCARAError.ERR_EMG;
 ELSE
+	//Healthy , no error
 	ErrorDetect := 0;
 END_IF
 
-
-//not working
-//IF ErrorDetect <>0 THEN
-//	// first time detected , reset RESET bit
-//	out_reset_7 := false;
-//END_IF]]></ST>
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="Monitor" Id="{bff2329b-af0a-4b0e-a719-df2270726c4b}" FolderPath="CommonBase\">
@@ -339,14 +341,21 @@ END_VAR
       <LineId Id="5062" Count="0" />
       <LineId Id="4664" Count="1" />
       <LineId Id="5064" Count="0" />
-      <LineId Id="4666" Count="6" />
-      <LineId Id="5003" Count="0" />
-      <LineId Id="4673" Count="3" />
+      <LineId Id="4666" Count="3" />
+      <LineId Id="5190" Count="2" />
+      <LineId Id="5194" Count="1" />
+      <LineId Id="5193" Count="0" />
+      <LineId Id="4674" Count="2" />
       <LineId Id="4945" Count="0" />
       <LineId Id="4677" Count="1" />
       <LineId Id="4681" Count="6" />
       <LineId Id="4942" Count="2" />
-      <LineId Id="4688" Count="8" />
+      <LineId Id="4688" Count="0" />
+      <LineId Id="5203" Count="0" />
+      <LineId Id="5206" Count="1" />
+      <LineId Id="4689" Count="0" />
+      <LineId Id="5198" Count="4" />
+      <LineId Id="4690" Count="6" />
       <LineId Id="4699" Count="3" />
       <LineId Id="5123" Count="2" />
       <LineId Id="4708" Count="14" />
@@ -381,29 +390,26 @@ END_VAR
       <LineId Id="5" Count="0" />
       <LineId Id="10" Count="0" />
       <LineId Id="15" Count="0" />
+      <LineId Id="21" Count="0" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="20" Count="0" />
     </LineIds>
     <LineIds Name="RunScaraAgent.ErrorDetect">
-      <LineId Id="5" Count="0" />
-      <LineId Id="10" Count="0" />
-      <LineId Id="9" Count="0" />
-      <LineId Id="11" Count="1" />
+      <LineId Id="12" Count="0" />
       <LineId Id="17" Count="0" />
       <LineId Id="16" Count="0" />
-      <LineId Id="49" Count="1" />
       <LineId Id="18" Count="0" />
       <LineId Id="31" Count="1" />
       <LineId Id="54" Count="1" />
       <LineId Id="44" Count="1" />
       <LineId Id="23" Count="0" />
-      <LineId Id="46" Count="2" />
-      <LineId Id="24" Count="2" />
+      <LineId Id="48" Count="0" />
+      <LineId Id="24" Count="1" />
+      <LineId Id="62" Count="0" />
+      <LineId Id="26" Count="0" />
       <LineId Id="19" Count="0" />
-      <LineId Id="42" Count="1" />
-      <LineId Id="38" Count="0" />
-      <LineId Id="37" Count="0" />
-      <LineId Id="39" Count="0" />
-      <LineId Id="41" Count="0" />
-      <LineId Id="40" Count="0" />
+      <LineId Id="59" Count="0" />
+      <LineId Id="61" Count="0" />
     </LineIds>
     <LineIds Name="RunScaraAgent.Monitor">
       <LineId Id="9" Count="4" />

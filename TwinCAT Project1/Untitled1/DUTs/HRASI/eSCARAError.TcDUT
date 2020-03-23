@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <DUT Name="eSCARAError" Id="{65b77697-a820-4b8c-9be0-ce25a35f5e82}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE eSCARAError :
+(
+	ERR_NOR:=0,
+	ERR_PART_REMAINED:=400,
+	ERR_PART_MISSING:=401,
+	ERR_CONSECUTIVE_NG:=8001,
+	ERR_TOP_MISPLACED:=8000,
+	ERR_BOTTOM_UP_SIDE_DOWN:=8002,
+	ERR_USER_ACK:=8010,
+	ERR_GENERIC_ERROR:=8500,
+	ERR_SYSTEM_ERROR:=4000,
+	ERR_IDLE:=500,
+	ERR_EMG:=1,
+	ERR_INCORRECT_AIR:=10,
+	ERR_SAFETY:=8501
+) DWORD;
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

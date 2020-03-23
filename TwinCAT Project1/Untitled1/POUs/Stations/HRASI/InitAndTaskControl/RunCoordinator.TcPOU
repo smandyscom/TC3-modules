@@ -95,10 +95,21 @@ CASE outputState OF
 			END_IF
 		END_FOR
 	eSpecialStates.INITIAL_STATE_3:
+		//------------
+		//	INITIALIZE SCARA/RACK FIRST
+		//------------
 		bSerialTransition:=TRUE;
-		FOR nCounter :=0 TO 2 BY 1 DO
+		FOR nCounter :=0 TO 1 BY 1 DO
 			bSerialTransition := bSerialTransition AND members[nCounter]<>0 AND_THEN members[nCounter]^.Initialize();
 		END_FOR
+		IF bSerialTransition THEN
+			NextState:=eSpecialStates.INITIAL_END;
+		END_IF
+	eSpecialStates.INITIAL_STATE_4:
+		//------------
+		//	THEN INDEX (in case of collision of clampers
+		//------------
+		bSerialTransition:=members[nCounter]<>0 AND_THEN members[2]^.Initialize();
 		IF bSerialTransition THEN
 			NextState:=eSpecialStates.INITIAL_END;
 		END_IF
@@ -258,7 +269,16 @@ END_CASE
       <LineId Id="1450" Count="2" />
       <LineId Id="1536" Count="0" />
       <LineId Id="1449" Count="0" />
-      <LineId Id="1242" Count="90" />
+      <LineId Id="1242" Count="9" />
+      <LineId Id="1577" Count="0" />
+      <LineId Id="1585" Count="2" />
+      <LineId Id="1579" Count="5" />
+      <LineId Id="1578" Count="0" />
+      <LineId Id="1252" Count="0" />
+      <LineId Id="1589" Count="1" />
+      <LineId Id="1588" Count="0" />
+      <LineId Id="1253" Count="0" />
+      <LineId Id="1257" Count="75" />
       <LineId Id="1493" Count="2" />
       <LineId Id="1334" Count="71" />
       <LineId Id="897" Count="0" />
