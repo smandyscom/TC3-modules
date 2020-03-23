@@ -17,8 +17,16 @@ VAR
 	//internal
 	
 	commIdTrigger AT%Q* : DWORD;
+	
+	//
+	serialNGCounter : INT;
 END_VAR
-]]></Declaration>
+VAR PERSISTENT
+	serialNGGoal AT%M* : INT ;
+END_VAR
+VAR CONSTANT
+	ERR_CONSECUTIVE_NG : DWORD := 8001;
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[SUPER^();
 
@@ -29,6 +37,7 @@ CASE outputState OF
 	eSpecialStates.INITIAL_BEGIN:	
 		bSerialTransition := ngCylinder^.Execute(eCylinderCommands.COMMAND_A);
 		IF bSerialTransition THEN
+			serialNGCounter := 0;
 			aoiTrigger := FALSE;
 		END_IF
 	eSpecialStates.INITIAL_STATE_1:
@@ -71,11 +80,21 @@ CASE outputState OF
 			//-------------
 			SlotBase^.Valid := FALSE; //set as inexsited
 			bSerialTransition:=	TRUE;
+			
+			serialNGCounter := serialNGCounter+1;
+			IF  serialNGCounter >=  serialNGGoal THEN
+				THIS^.AlarmCode := ERR_CONSECUTIVE_NG;
+				serialNGCounter := 0; //reset
+			END_IF
+			
 		ELSIF  aoiOut2Grade THEN
 			//--------------
 			//	OK 
 			//--------------
 			bSerialTransition := ngCylinder^.Execute(eCylinderCommands.COMMAND_B); //open gate
+			IF bSerialTransition THEN
+				serialNGCounter := 0; //reset
+			END_IF
 		ELSIF bIsBypassed THEN
 			bSerialTransition:=	TRUE;
 		else
@@ -127,12 +146,22 @@ ngCylinder := argNgCylinder;
       </Implementation>
     </Method>
     <LineIds Name="RunAoiInspectionV1">
-      <LineId Id="271" Count="22" />
+      <LineId Id="271" Count="8" />
+      <LineId Id="451" Count="0" />
+      <LineId Id="280" Count="13" />
       <LineId Id="363" Count="1" />
       <LineId Id="294" Count="10" />
       <LineId Id="366" Count="3" />
       <LineId Id="424" Count="2" />
-      <LineId Id="305" Count="13" />
+      <LineId Id="305" Count="7" />
+      <LineId Id="455" Count="1" />
+      <LineId Id="458" Count="1" />
+      <LineId Id="461" Count="0" />
+      <LineId Id="460" Count="0" />
+      <LineId Id="457" Count="0" />
+      <LineId Id="313" Count="4" />
+      <LineId Id="462" Count="2" />
+      <LineId Id="318" Count="0" />
       <LineId Id="361" Count="1" />
       <LineId Id="319" Count="5" />
       <LineId Id="341" Count="1" />
