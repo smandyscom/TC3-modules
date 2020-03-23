@@ -11,12 +11,16 @@ VAR_OUTPUT
 END_VAR
 VAR	
 	existence : POINTER TO RunSignal;	
-	watchDog : TON;
+	//watchDog : TON;
 	
 	totalCount AT%M* : UDINT; 
 END_VAR
 VAR PERSISTENT
 	currentId : DWORD;
+END_VAR
+VAR CONSTANT
+	ERR_PART_REMAINED : DWORD :=400;
+	ERR_PART_MISSING : DWORD:=401;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[SUPER^();
@@ -46,6 +50,8 @@ CASE outputState OF
 			END_IF
 			SlotBase^.Valid := FALSE; //always false in beginning
 			slaveWorkingSignal[1] := TRUE; // trigger scara to put
+		ELSIF existence^.debouncedOn THEN
+			THIS^.AlarmCode := ERR_PART_REMAINED;
 		END_IF
 	16#201:
 		bSerialTransition := NOT slaveWorkingSignal[1]; //scara should set valid before reset working 
@@ -58,15 +64,13 @@ CASE outputState OF
 		IF bSerialTransition AND purgeRequest AND NOT SlotBase^.Valid THEN
 			//SCARA2 had received purge request and no longer loading the parts
 			isPurged := TRUE;
-			watchDog.IN := FALSE;
 			
-		ELSIF watchDog.Q AND SlotBase^.Valid THEN
-			AlarmCode := 500; // absense
-		ELSIF watchDog.Q AND NOT SlotBase^.Valid THEN
-			AlarmCode := 501; // abnormal
+		ELSIF  SlotBase^.Valid AND existence^.debouncedOff  THEN
+			AlarmCode := ERR_PART_MISSING; // absense
+		ELSIF  NOT SlotBase^.Valid  AND existence^.debouncedOn  THEN
+			AlarmCode := ERR_PART_REMAINED; // abnormal
 		END_IF
-		watchDog.IN := TRUE; //activate
-		
+				
 		IF bSerialTransition AND SlotBase^.Valid THEN
 			//give material id
 			SlotBase^.Id := currentId;
@@ -127,7 +131,9 @@ existence := argExistence;]]></ST>
       <LineId Id="61" Count="1" />
       <LineId Id="64" Count="1" />
       <LineId Id="63" Count="0" />
-      <LineId Id="25" Count="1" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="210" Count="1" />
+      <LineId Id="26" Count="0" />
       <LineId Id="22" Count="0" />
       <LineId Id="29" Count="0" />
       <LineId Id="91" Count="2" />
@@ -136,14 +142,13 @@ existence := argExistence;]]></ST>
       <LineId Id="31" Count="0" />
       <LineId Id="56" Count="1" />
       <LineId Id="66" Count="0" />
-      <LineId Id="100" Count="1" />
+      <LineId Id="101" Count="0" />
       <LineId Id="96" Count="0" />
       <LineId Id="173" Count="0" />
       <LineId Id="97" Count="0" />
       <LineId Id="174" Count="0" />
       <LineId Id="58" Count="0" />
       <LineId Id="102" Count="0" />
-      <LineId Id="163" Count="0" />
       <LineId Id="165" Count="0" />
       <LineId Id="168" Count="1" />
       <LineId Id="166" Count="0" />

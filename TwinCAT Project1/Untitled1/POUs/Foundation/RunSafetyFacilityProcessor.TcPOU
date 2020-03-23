@@ -13,6 +13,7 @@ VAR_OUTPUT
 	outPause : BOOL; //require auto-mode controller to stop
 	outEmergency : BOOL; // require auto-mode controller to initialize
 	outSafeGuard : BOOL; //light : safegurad  not working
+	outAirAbnormal : bool; //light : air abnormal
 END_VAR
 VAR
 	safeAck AT%Q* : BIT;
