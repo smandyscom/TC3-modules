@@ -128,7 +128,7 @@ CASE outputState OF
 	// Forced reset error done
 	//-------------------
 	eSpecialStates.INITIAL_STATE_2:
-		bSerialTransition := timer.Q; 
+		bSerialTransition := NOT out_reset_7; 
 	//--------------
 	//Check no error and ready
 	//--------------
