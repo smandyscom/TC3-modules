@@ -58,6 +58,7 @@ END_VAR]]></Declaration>
 // 3. Group3 - SCARA2 and rack3,4
 
 SUPER^();
+timerBreak();
 
 isInitialized := ((outputState AND eSpecialStates.INITIAL_REGION) <> 16#100);
 isIdle := outputState = eSpecialStates.GENERIC_GROUP_IDLE;
@@ -123,6 +124,7 @@ CASE outputState OF
 		bSerialTransition:=TRUE;
 		timerBreak.IN := TRUE; //for fake vacuum stabalized
 		THIS^.TurnVerifyVacuums(eCylinderCommands.COMMAND_B);
+		NextState := eSpecialStates.INITIAL_STATE_5;
 	eSpecialStates.INITIAL_STATE_4:
 		bSerialTransition:=timerBreak.Q;
 		IF bSerialTransition THEN
@@ -261,8 +263,10 @@ CASE outputState OF
 		IF bSerialTransition THEN
 			commStartRegularCheckMode := false;
 		END_IF
-		//then AOI shuffing test
-		
+		//------------------------
+		//AOI shuffing test
+		//------------------------
+	
 		//---------------------------
 		//	Purging chain
 		//---------------------------
@@ -344,7 +348,9 @@ END_FOR]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="RunCoordinator">
-      <LineId Id="1209" Count="32" />
+      <LineId Id="1209" Count="5" />
+      <LineId Id="1760" Count="0" />
+      <LineId Id="1215" Count="26" />
       <LineId Id="1446" Count="2" />
       <LineId Id="1450" Count="2" />
       <LineId Id="1536" Count="0" />
@@ -366,6 +372,7 @@ END_FOR]]></ST>
       <LineId Id="1668" Count="0" />
       <LineId Id="1684" Count="0" />
       <LineId Id="1667" Count="0" />
+      <LineId Id="1762" Count="0" />
       <LineId Id="1669" Count="0" />
       <LineId Id="1674" Count="0" />
       <LineId Id="1686" Count="0" />
@@ -386,7 +393,11 @@ END_FOR]]></ST>
       <LineId Id="1253" Count="0" />
       <LineId Id="1257" Count="71" />
       <LineId Id="1693" Count="0" />
-      <LineId Id="1342" Count="63" />
+      <LineId Id="1342" Count="35" />
+      <LineId Id="1709" Count="0" />
+      <LineId Id="1378" Count="0" />
+      <LineId Id="1710" Count="0" />
+      <LineId Id="1379" Count="26" />
       <LineId Id="897" Count="0" />
     </LineIds>
     <LineIds Name="RunCoordinator.ActivateBreakers">

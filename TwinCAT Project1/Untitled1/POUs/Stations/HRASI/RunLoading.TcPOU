@@ -56,7 +56,7 @@ CASE outputState OF
 	16#201:
 		bSerialTransition := NOT slaveWorkingSignal[1]; //scara should set valid before reset working 
 		IF bSerialTransition THEN
-			SlotBase^.Valid := externalSlotValid ; //transit
+			SlotBase^.Valid := externalSlotValid OR isSlotValidOverride ; //transit
 		END_IF
 	16#202:
 		//check if material status matched sensor status
@@ -65,9 +65,9 @@ CASE outputState OF
 			//SCARA2 had received purge request and no longer loading the parts
 			isPurged := TRUE;
 			
-		ELSIF  SlotBase^.Valid AND existence^.debouncedOff  THEN
+		ELSIF (NOT isSlotValidOverride) AND   SlotBase^.Valid AND existence^.debouncedOff  THEN
 			AlarmCode := ERR_PART_MISSING; // absense
-		ELSIF  NOT SlotBase^.Valid  AND existence^.debouncedOn  THEN
+		ELSIF (NOT isSlotValidOverride) AND (NOT SlotBase^.Valid  AND existence^.debouncedOn)  THEN
 			AlarmCode := ERR_PART_REMAINED; // abnormal
 		END_IF
 				
