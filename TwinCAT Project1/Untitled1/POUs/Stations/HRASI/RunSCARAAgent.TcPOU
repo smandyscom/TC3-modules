@@ -73,7 +73,7 @@ END_VAR]]></Declaration>
 //Continue when ready on
 
 SUPER^();
-
+timer();
 
 //transmit purged status
 context_out_perNodePurged.0 := (previousNode<>0 AND_THEN previousNode^.isPurged);
@@ -100,6 +100,7 @@ END_IF
 IF timer.Q THEN
 	timer.IN := FALSE;
 	out_reset_7 := FALSE;
+	out_stop_4 := FALSE;
 	context_out_alarmAck:=0;
 END_IF
 
@@ -235,7 +236,10 @@ out_reset_7 := TRUE;
 context_out_alarmAck := 1;
 
 timer.IN := TRUE; //activate  timer
-]]></ST>
+
+IF in_eStop_4 THEN
+	out_stop_4 := true; //addtionally make sure procedure stopped
+END_IF]]></ST>
       </Implementation>
     </Method>
     <Method Name="ErrorDetect" Id="{0d501c3c-1258-4947-b465-528162d76fdd}" FolderPath="CommonBase\">
@@ -344,7 +348,9 @@ END_VAR
       <LineId Id="5064" Count="0" />
       <LineId Id="4666" Count="3" />
       <LineId Id="5190" Count="2" />
-      <LineId Id="5194" Count="1" />
+      <LineId Id="5194" Count="0" />
+      <LineId Id="5334" Count="0" />
+      <LineId Id="5195" Count="0" />
       <LineId Id="5193" Count="0" />
       <LineId Id="4674" Count="2" />
       <LineId Id="4945" Count="0" />
@@ -393,7 +399,9 @@ END_VAR
       <LineId Id="15" Count="0" />
       <LineId Id="21" Count="0" />
       <LineId Id="23" Count="0" />
+      <LineId Id="28" Count="0" />
       <LineId Id="20" Count="0" />
+      <LineId Id="29" Count="1" />
     </LineIds>
     <LineIds Name="RunScaraAgent.ErrorDetect">
       <LineId Id="12" Count="0" />

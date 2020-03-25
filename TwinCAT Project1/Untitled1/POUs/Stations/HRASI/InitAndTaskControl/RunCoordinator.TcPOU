@@ -126,18 +126,10 @@ CASE outputState OF
 		THIS^.TurnVerifyVacuums(eCylinderCommands.COMMAND_B);
 		NextState := eSpecialStates.INITIAL_STATE_5;
 	eSpecialStates.INITIAL_STATE_4:
-		bSerialTransition:=timerBreak.Q;
-		IF bSerialTransition THEN
-			FOR nCounter:=0 TO 6 BY 1 DO
-				//should be all off
-				IF gvl.verifyVacuums[nCounter]<>0 THEN
-					bSerialTransition := bSerialTransition AND NOT gvl.verifyVacuums[nCounter]^.Execute(eCylinderCommands.COMMAND_B);
-				END_IF
-			END_FOR
-			IF NOT bSerialTransition THEN
-				THIS^.AlarmCode := ERR_VACUUM_JAMMED;
-			END_IF
-		END_IF
+		bSerialTransition:=timerBreak.Q AND_THEN THIS^.TurnVerifyVacuums(eCylinderCommands.COMMAND_B);
+		IF NOT THIS^.TurnVerifyVacuums(eCylinderCommands.COMMAND_B) THEN
+			THIS^.AlarmCode := ERR_VACUUM_JAMMED;
+		END_IF	
 	//------------
 	//	MACHNICAL INITIALIZE : SCARA/RACK FIRST
 	//------------	
@@ -340,9 +332,10 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[FOR nCounter:=0 TO 6 BY 1 DO
+        <ST><![CDATA[TurnVerifyVacuums := FALSE; //return , true : none of vacuum generated,  false : any of vacuum generated
+FOR nCounter:=0 TO 6 BY 1 DO
 	IF gvl.verifyVacuums[nCounter]<>0 THEN
-		gvl.verifyVacuums[nCounter]^.Execute(command);
+		TurnVerifyVacuums := TurnVerifyVacuums OR gvl.verifyVacuums[nCounter]^.Execute(command);
 	END_IF	
 END_FOR]]></ST>
       </Implementation>
@@ -375,13 +368,8 @@ END_FOR]]></ST>
       <LineId Id="1762" Count="0" />
       <LineId Id="1669" Count="0" />
       <LineId Id="1674" Count="0" />
-      <LineId Id="1686" Count="0" />
-      <LineId Id="1689" Count="0" />
-      <LineId Id="1697" Count="0" />
-      <LineId Id="1690" Count="2" />
-      <LineId Id="1687" Count="0" />
-      <LineId Id="1698" Count="2" />
-      <LineId Id="1688" Count="0" />
+      <LineId Id="1819" Count="0" />
+      <LineId Id="1699" Count="1" />
       <LineId Id="1705" Count="1" />
       <LineId Id="1704" Count="0" />
       <LineId Id="1577" Count="0" />
@@ -413,6 +401,7 @@ END_FOR]]></ST>
       <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="RunCoordinator.TurnVerifyVacuums">
+      <LineId Id="15" Count="0" />
       <LineId Id="7" Count="3" />
       <LineId Id="5" Count="0" />
     </LineIds>
