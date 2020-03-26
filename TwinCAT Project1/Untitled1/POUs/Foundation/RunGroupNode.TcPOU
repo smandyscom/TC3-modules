@@ -14,21 +14,21 @@ END_VAR
 
 CASE outputState OF 
 	//------------Initialize
-	eSpecialStates.INITIAL_STATE_1:
-		// group node start initializing
-		bSerialTransition := TRUE;
+//	eSpecialStates.INITIAL_STATE_7:
+//		// group node start initializing
+//		bSerialTransition := TRUE;
 		
-		//scan if all initialized
-		FOR nCounter := 0 TO 7 DO
-			IF members[nCounter] <> 0 THEN
-				bSerialTransition := bSerialTransition AND members[nCounter]^.Initialize();
-			END_IF		
-		END_FOR
+//		//scan if all initialized
+//		FOR nCounter := 0 TO 7 DO
+//			IF members[nCounter] <> 0 THEN
+//				bSerialTransition := bSerialTransition AND members[nCounter]^.Initialize();
+//			END_IF		
+//		END_FOR
 		
-		// wait upper to inform starting
-		IF bSerialTransition THEN
-			NextState:=eSpecialStates.INITIAL_END;
-		END_IF
+//		// wait upper to inform starting
+//		IF bSerialTransition THEN
+//			NextState:=eSpecialStates.INITIAL_END;
+//		END_IF
 
 	eSpecialStates.GENERIC_GROUP_START:
 		//then wait command to trigger all station into working state

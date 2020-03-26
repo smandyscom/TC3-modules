@@ -25,6 +25,9 @@ VAR
 	BIT_WARNING : BOOL; //0	
 	BIT_WARN_SUPPRESS : BOOL; //3 , (Control)
 	BIT_DONE : BOOL; //5 (Threshold matched)
+	
+	isMatched : BOOL;
+	isStrokeReach : BOOL;
 END_VAR
 VAR PERSISTENT
 	thresholdCurrentSet : INT; //
@@ -32,6 +35,7 @@ VAR PERSISTENT
 	
 	TMR_WATCH_DOG : TON ; //Watch dog timer
 	TMR_DELAY_TO_THRESHOLD : TON;
+	TMR_DELAY_TO_OFF : TON;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -50,6 +54,7 @@ thresholdMatched := thresholdsMatches[thresholdCurrentSet]; // whether match the
 //Run timers
 TMR_WATCH_DOG(IN:= , PT:= , Q=> , ET=> );
 TMR_DELAY_TO_THRESHOLD(IN:= , PT:= , Q=> , ET=> );
+TMR_DELAY_TO_OFF(IN:= , PT:= , Q=> , ET=> );
 
 IF NOT TMR_DELAY_TO_THRESHOLD.IN THEN
 	TMR_DELAY_TO_THRESHOLD.IN := TRUE;
@@ -65,7 +70,8 @@ IF COMMAND_CACHED <> LAST_COMMAND THEN
 	ACT_BREAKER := (COMMAND_CACHED = eCylinderCommands.COMMAND_A);
 	ACT_GENERATOR := (COMMAND_CACHED = eCylinderCommands.COMMAND_B);
 	
-	TMR_DELAY_TO_THRESHOLD.IN := FALSE;
+	TMR_DELAY_TO_THRESHOLD.IN := (COMMAND_CACHED=eCylinderCommands.COMMAND_B);
+	TMR_DELAY_TO_OFF.IN := (COMMAND_CACHED=eCylinderCommands.COMMAND_A);
 END_IF
 
 
@@ -74,11 +80,11 @@ bMatched := FALSE;
 // Check if match
 CASE COMMAND_CACHED OF
 	eCylinderCommands.NO_COMMAND,eCylinderCommands.COMMAND_A:
-	bMatched:= TRUE;
+		bMatched:= TRUE;
 	
 	eCylinderCommands.COMMAND_B:
 	
-		bMatched:= (thresholdMatched )  AND TMR_DELAY_TO_THRESHOLD.Q;
+		bMatched:= (thresholdMatched ) ; //AND TMR_DELAY_TO_THRESHOLD.Q;
 	
 		
 END_CASE
@@ -90,16 +96,18 @@ ELSE
 	TMR_WATCH_DOG.in := FALSE;
 END_IF
 
-
-
+isMatched :=  bMatched OR (NOT bMatched AND BIT_WARN_SUPPRESS );
+isStrokeReach :=  (COMMAND_CACHED=eCylinderCommands.COMMAND_B AND TMR_DELAY_TO_THRESHOLD.Q) OR (COMMAND_CACHED=eCylinderCommands.COMMAND_A AND TMR_DELAY_TO_OFF.Q)  OR COMMAND_CACHED=eCylinderCommands.NO_COMMAND;
 // status update
-BIT_DONE := isShutVerification OR (bMatched OR (NOT bMatched AND (BIT_WARN_SUPPRESS  ) AND TMR_WATCH_DOG.Q));
-BIT_WARNING := NOT isShutVerification AND(NOT bMatched) AND (NOT BIT_WARN_SUPPRESS) AND TMR_WATCH_DOG.Q AND TMR_DELAY_TO_THRESHOLD.Q;
+//BIT_DONE := isShutVerification OR (bMatched OR (NOT bMatched AND (BIT_WARN_SUPPRESS  ) AND TMR_WATCH_DOG.Q));
+//BIT_WARNING := NOT isShutVerification AND(NOT bMatched) AND (NOT BIT_WARN_SUPPRESS) AND TMR_WATCH_DOG.Q AND TMR_DELAY_TO_THRESHOLD.Q;
+BIT_DONE := isShutVerification OR isMatched AND isStrokeReach;
+BIT_WARNING := NOT isShutVerification AND NOT isMatched AND TMR_WATCH_DOG.Q ;
+
+
 // cache last command
 LAST_COMMAND := COMMAND_CACHED;
 
-//turn off once done
-//TMR_DELAY_TO_THRESHOLD.IN := NOT BIT_DONE; //active A delay timer once not done
 ]]></ST>
     </Implementation>
     <Folder Name="CommonBase" Id="{119ac4ac-a070-4964-91b6-1098b43d0930}" />
@@ -277,18 +285,21 @@ END_VAR
     </Method>
     <LineIds Name="RunVacuum">
       <LineId Id="742" Count="14" />
+      <LineId Id="984" Count="0" />
       <LineId Id="904" Count="3" />
       <LineId Id="757" Count="2" />
       <LineId Id="762" Count="6" />
       <LineId Id="863" Count="1" />
+      <LineId Id="983" Count="0" />
       <LineId Id="769" Count="17" />
       <LineId Id="899" Count="1" />
       <LineId Id="902" Count="1" />
       <LineId Id="901" Count="0" />
-      <LineId Id="787" Count="7" />
-      <LineId Id="828" Count="0" />
+      <LineId Id="787" Count="5" />
+      <LineId Id="945" Count="1" />
+      <LineId Id="943" Count="1" />
+      <LineId Id="793" Count="1" />
       <LineId Id="866" Count="0" />
-      <LineId Id="830" Count="0" />
       <LineId Id="55" Count="0" />
     </LineIds>
     <LineIds Name="RunVacuum.ConfigureRead">

@@ -24,7 +24,7 @@ END_VAR]]></Declaration>
 //------------------
 //the "READY" status
 //------------------ 
-ready := (collectionCount < collectionLimit) AND  (sensor <> 0 AND_THEN sensor^.debouncedOn);
+ready := (collectionCount < collectionLimit) AND  (sensor <> 0 AND_THEN sensor^.debouncedOn) AND NOT ack;
 IF NOT ready AND (collectionCount <> 0 AND (sensor <> 0 AND_THEN  sensor^.debouncedOff)) THEN
 	collectionCount := 0; //count reset
 END_IF

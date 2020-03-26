@@ -71,7 +71,8 @@ IF  safeGuardRelease AND pbEngagedSafeGuard THEN
 	requestSafeGuardRelease := FALSE;
 ELSIF NOT safeGuardRelease AND pbReleaseSafeGuard  AND NOT pbEngagedSafeGuard THEN
 	requestSafeGuardRelease := TRUE;
-ELSE
+ELSIF NOT isPaused then
+	requestSafeGuardRelease := FALSE;
 	//hold current status
 END_IF
 safeGuardRelease := requestSafeGuardRelease AND isPaused; //should pause firstly
@@ -89,7 +90,9 @@ outSafeGuard := NOT safeGuardRelease;]]></ST>
       <LineId Id="178" Count="0" />
       <LineId Id="45" Count="0" />
       <LineId Id="117" Count="0" />
-      <LineId Id="121" Count="1" />
+      <LineId Id="121" Count="0" />
+      <LineId Id="232" Count="0" />
+      <LineId Id="122" Count="0" />
       <LineId Id="118" Count="0" />
       <LineId Id="9" Count="0" />
       <LineId Id="42" Count="0" />

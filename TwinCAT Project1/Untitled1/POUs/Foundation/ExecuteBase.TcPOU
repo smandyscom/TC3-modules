@@ -19,6 +19,8 @@ END_VAR
       <ST><![CDATA[IF isRemoteControl THEN
 	IF Execute(argCommand := BYTE_TO_WORD(remoteCommand)) THEN
 		remoteAcknowledge := remoteCommand;
+	ELSE
+		remoteAcknowledge := 0;
 	END_IF
 END_IF]]></ST>
     </Implementation>
@@ -35,7 +37,9 @@ END_VAR
     <LineIds Name="ExecuteBase">
       <LineId Id="9" Count="0" />
       <LineId Id="20" Count="0" />
-      <LineId Id="32" Count="1" />
+      <LineId Id="32" Count="0" />
+      <LineId Id="47" Count="1" />
+      <LineId Id="33" Count="0" />
       <LineId Id="21" Count="0" />
     </LineIds>
     <LineIds Name="ExecuteBase.Execute">

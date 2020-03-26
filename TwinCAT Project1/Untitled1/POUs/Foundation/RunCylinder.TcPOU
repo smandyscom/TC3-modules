@@ -23,6 +23,8 @@ VAR
 	
 	BIT_DONE : BIT; //5
 	
+	isMatched : BOOL;
+	isStrokeReach : BOOL;
 END_VAR
 VAR PERSISTENT
 	A_SENSOR_USED_COUNT : INT := 0;
@@ -51,12 +53,6 @@ FOR nCounter := 1 TO B_SENSOR_USED_COUNT BY 1 DO
 	BIT_B_MATCH := (BIT_B_MATCH AND SENSOR_B[nCounter]);
 END_FOR
 
-// if watch dog had been reset due to command changed in previous scan
-// restart
-//IF NOT TMR_WATCH_DOG.IN THEN
-//	TMR_WATCH_DOG.IN := TRUE;
-//END_IF
-
 // once command changes , reset timer counter
 IF COMMAND_CACHED <> LAST_COMMAND THEN
 	TMR_DELAY_TO_A.IN := (COMMAND_CACHED=eCylinderCommands.COMMAND_A); //active A delay timer
@@ -82,17 +78,17 @@ bMatched := FALSE;
 // Check if match
 CASE COMMAND_CACHED OF
 	eCylinderCommands.NO_COMMAND:
-	bMatched:= TRUE;
+		bMatched:= TRUE;
 	
 	eCylinderCommands.COMMAND_A:
-	IF TMR_DELAY_TO_A.Q THEN
+	//IF TMR_DELAY_TO_A.Q THEN
 		bMatched:= (BIT_A_MATCH OR (A_SENSOR_USED_COUNT=0)) AND ((NOT BIT_B_MATCH) OR (B_SENSOR_USED_COUNT=0));
-	END_IF
+	//END_IF
 	
 	eCylinderCommands.COMMAND_B:
-	IF TMR_DELAY_TO_B.Q THEN
+	//IF TMR_DELAY_TO_B.Q THEN
 		bMatched:= ((NOT BIT_A_MATCH) OR (A_SENSOR_USED_COUNT=0)) AND (BIT_B_MATCH OR (B_SENSOR_USED_COUNT=0) );
-	END_IF
+	//END_IF
 		
 END_CASE
 
@@ -104,9 +100,14 @@ ELSE
 END_IF
 
 // status update
-BIT_DONE :=  isShutVerification OR bMatched OR (NOT bMatched AND (BIT_WARN_SUPPRESS ) AND TMR_WATCH_DOG.Q);
-BIT_WARNING := NOT isShutVerification AND(NOT bMatched) AND (NOT BIT_WARN_SUPPRESS) AND TMR_WATCH_DOG.Q AND (TMR_DELAY_TO_B.Q OR TMR_DELAY_TO_A.Q);
+//BIT_DONE :=  isShutVerification OR bMatched OR (NOT bMatched AND (BIT_WARN_SUPPRESS ) AND TMR_WATCH_DOG.Q);
+//BIT_WARNING := NOT isShutVerification AND(NOT bMatched) AND (NOT BIT_WARN_SUPPRESS) AND TMR_WATCH_DOG.Q AND (TMR_DELAY_TO_B.Q OR TMR_DELAY_TO_A.Q);
 
+isMatched := bMatched OR (NOT bMatched AND BIT_WARN_SUPPRESS );
+isStrokeReach := (TMR_DELAY_TO_B.Q AND COMMAND_CACHED=eCylinderCommands.COMMAND_B) OR  (TMR_DELAY_TO_A.Q AND COMMAND_CACHED=eCylinderCommands.COMMAND_A) OR COMMAND_CACHED=eCylinderCommands.NO_COMMAND;
+
+BIT_DONE :=  isShutVerification OR (isMatched AND isStrokeReach);
+BIT_WARNING := NOT isShutVerification AND NOT isMatched AND TMR_WATCH_DOG.Q ;
 
 // cache last command
 LAST_COMMAND := COMMAND_CACHED;
@@ -278,23 +279,7 @@ END_VAR
       </Implementation>
     </Method>
     <LineIds Name="RunCylinder">
-      <LineId Id="347" Count="1" />
-      <LineId Id="144" Count="22" />
-      <LineId Id="169" Count="7" />
-      <LineId Id="380" Count="0" />
-      <LineId Id="383" Count="2" />
-      <LineId Id="381" Count="1" />
-      <LineId Id="180" Count="0" />
-      <LineId Id="182" Count="11" />
-      <LineId Id="270" Count="1" />
-      <LineId Id="196" Count="6" />
-      <LineId Id="276" Count="0" />
-      <LineId Id="272" Count="2" />
-      <LineId Id="277" Count="0" />
-      <LineId Id="280" Count="0" />
-      <LineId Id="275" Count="0" />
-      <LineId Id="203" Count="7" />
-      <LineId Id="234" Count="4" />
+      <LineId Id="571" Count="79" />
       <LineId Id="9" Count="0" />
     </LineIds>
     <LineIds Name="RunCylinder.ConfigureRead">
