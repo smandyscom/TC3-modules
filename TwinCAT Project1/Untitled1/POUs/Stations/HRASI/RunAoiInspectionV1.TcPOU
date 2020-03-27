@@ -59,10 +59,12 @@ CASE outputState OF
 		//transitionByte.2 := NOT aoiOut2Grade; //check aoi-result as NG (fuse)
 		
 		bSerialTransition:= (transitionByte = 16#3);
+		IF bSerialTransition THEN
+			atomicOperation := TRUE;
+		END_IF
 	16#201:
 		IF SlotBase^.Valid THEN
 			aoiTrigger := TRUE; //set aoi-trigger on
-			atomicOperation := TRUE;
 			bSerialTransition := TRUE;
 		ELSE
 			//no material , leave	
@@ -160,9 +162,9 @@ ngCylinder := argNgCylinder;
       <LineId Id="451" Count="0" />
       <LineId Id="280" Count="13" />
       <LineId Id="363" Count="1" />
-      <LineId Id="294" Count="5" />
-      <LineId Id="509" Count="0" />
-      <LineId Id="300" Count="4" />
+      <LineId Id="294" Count="2" />
+      <LineId Id="538" Count="2" />
+      <LineId Id="297" Count="7" />
       <LineId Id="366" Count="3" />
       <LineId Id="424" Count="0" />
       <LineId Id="510" Count="0" />
