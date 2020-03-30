@@ -65,7 +65,7 @@ isIdle := outputState = eSpecialStates.GENERIC_GROUP_IDLE;
 
 IF dryRunDevicesList[0] = 0 THEN
 	//initialize
-	dryRunDevicesList[0] := ADR(gvl.vacuumControls[A9]);
+	dryRunDevicesList[0] := ADR(gvl.vacuumControls[A9]); 
 	dryRunDevicesList[1] := ADR(gvl.vacuumControls[A10]);
 	dryRunDevicesList[2] := ADR(gvl.vacuumControls[A11]);
 	dryRunDevicesList[3] := ADR(gvl.vacuumControls[A12]);
