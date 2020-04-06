@@ -205,13 +205,8 @@ CASE outputState OF
 			scara2^.PropTask := eSCARATask.task_snap_scara2;
 			scara2^.isTaskEngaged := TRUE;
 			
-			//--------------
-			//	Turn off AOI
-			//--------------
-			gvl.cylinderControls[Cy16].Execute(eCylinderCommands.COMMAND_B);
-			aoi^.bIsBypassed := TRUE;
 			
-			bSerialTransition := TRUE;
+			bSerialTransition := gvl.cylinderControls[Cy16].Execute(eCylinderCommands.COMMAND_B);
 		ELSIF commStartRegularCheckMode THEN
 			NextState := 16#300;
 		END_IF
@@ -222,6 +217,12 @@ CASE outputState OF
 			
 			IF commStartTrialAssemble THEN
 				gvl.cylinderControls[Cy6].isShutVerification := TRUE;
+			END_IF
+			IF commStartTrialSnap THEN	
+				//--------------
+				//	Turn off AOI
+				//--------------
+				aoi^.bIsBypassed := TRUE;
 			END_IF
 			
 			//-------------------
@@ -390,11 +391,17 @@ END_CASE]]></ST>
       <LineId Id="1253" Count="0" />
       <LineId Id="1257" Count="43" />
       <LineId Id="1873" Count="1" />
-      <LineId Id="1301" Count="27" />
+      <LineId Id="1301" Count="13" />
+      <LineId Id="1320" Count="1" />
+      <LineId Id="1932" Count="0" />
+      <LineId Id="1323" Count="5" />
       <LineId Id="1693" Count="0" />
       <LineId Id="1342" Count="0" />
       <LineId Id="1875" Count="0" />
       <LineId Id="1877" Count="1" />
+      <LineId Id="1930" Count="0" />
+      <LineId Id="1936" Count="2" />
+      <LineId Id="1933" Count="1" />
       <LineId Id="1876" Count="0" />
       <LineId Id="1343" Count="34" />
       <LineId Id="1709" Count="0" />

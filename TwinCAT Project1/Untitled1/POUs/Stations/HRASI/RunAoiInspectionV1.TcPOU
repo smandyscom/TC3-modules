@@ -107,9 +107,7 @@ CASE outputState OF
 			IF bSerialTransition THEN
 				serialNGCounter := 0; //reset
 			END_IF
-		ELSIF bIsBypassed THEN
-			bSerialTransition:=	TRUE;
-		else
+		ELSE
 			//--------------------------
 			// wait until aoi_done raise
 			//--------------------------
@@ -180,8 +178,7 @@ ngCylinder := argNgCylinder;
       <LineId Id="460" Count="0" />
       <LineId Id="313" Count="4" />
       <LineId Id="462" Count="2" />
-      <LineId Id="318" Count="0" />
-      <LineId Id="361" Count="1" />
+      <LineId Id="362" Count="0" />
       <LineId Id="319" Count="5" />
       <LineId Id="341" Count="1" />
       <LineId Id="344" Count="1" />

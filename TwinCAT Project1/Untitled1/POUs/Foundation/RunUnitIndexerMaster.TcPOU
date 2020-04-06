@@ -20,6 +20,10 @@ END_VAR]]></Declaration>
 //	S16#10 : mechanical control of movement
 //---------------
 
+IF NOT workingTimer.IN THEN
+	 workingTimer.IN := TRUE;
+END_IF
+
 CASE outputState OF
 	16#0:
 		//-------------------------
@@ -29,6 +33,8 @@ CASE outputState OF
 			slaveWorkingSignal[nCounter] := slaveLinkageStatus[nCounter];
 		END_FOR
 		bSerialTransition := TRUE;
+		
+		workingTimer.IN := FALSE; //reset
 	16#1:	
 		//------------------------------------------
 		//check material synchronization to Databse
@@ -131,9 +137,12 @@ SlotCount :=  TO_INT((SlotLast-SlotBase)/SIZEOF(RunMaterial) + 1);]]></ST>
       <LineId Id="568" Count="2" />
       <LineId Id="572" Count="0" />
       <LineId Id="571" Count="0" />
+      <LineId Id="631" Count="3" />
       <LineId Id="461" Count="2" />
       <LineId Id="573" Count="2" />
-      <LineId Id="464" Count="4" />
+      <LineId Id="464" Count="3" />
+      <LineId Id="635" Count="1" />
+      <LineId Id="468" Count="0" />
       <LineId Id="542" Count="0" />
       <LineId Id="469" Count="1" />
       <LineId Id="543" Count="0" />
