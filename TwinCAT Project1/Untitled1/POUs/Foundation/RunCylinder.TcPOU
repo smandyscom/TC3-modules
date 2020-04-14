@@ -128,8 +128,8 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-ConfigureRead.cylinder.sensorAUsedCount := TO_WORD(A_SENSOR_USED_COUNT);
-ConfigureRead.cylinder.sensorBUsedCount := TO_WORD(B_SENSOR_USED_COUNT);
+//ConfigureRead.cylinder.sensorAUsedCount := TO_WORD(A_SENSOR_USED_COUNT);
+//ConfigureRead.cylinder.sensorBUsedCount := TO_WORD(B_SENSOR_USED_COUNT);
 
 ConfigureRead.cylinder.timerSetValue := TO_WORD(TMR_WATCH_DOG.PT);
 ConfigureRead.cylinder.timerSetValue := TO_WORD(TMR_DELAY_TO_A.PT);
@@ -144,8 +144,8 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[A_SENSOR_USED_COUNT := TO_INT(input.cylinder.sensorAUsedCount);
-B_SENSOR_USED_COUNT := TO_INT(input.cylinder.sensorBUsedCount);
+        <ST><![CDATA[//A_SENSOR_USED_COUNT := TO_INT(input.cylinder.sensorAUsedCount);
+//B_SENSOR_USED_COUNT := TO_INT(input.cylinder.sensorBUsedCount);
 
 TMR_WATCH_DOG.PT := TO_TIME(input.cylinder.timerSetValue);
 TMR_DELAY_TO_A.PT := TO_TIME(input.cylinder.timerSetValue);

@@ -119,13 +119,11 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[//TODO , reserved
+        <ST><![CDATA[
+ConfigureRead.vacuum.threshold := TO_WORD(thresholdValues[0]);
+ConfigureRead.vacuum.timerSetValue := TO_WORD(TMR_DELAY_TO_THRESHOLD.PT);
 
-//ConfigureRead.vacuum. := TO_WORD(thresholdCount);
-//ConfigureRead.vacuum.sensorBUsedCount := TO_WORD(B_SENSOR_USED_COUNT);
-
-//ConfigureRead.vacuum.timerSetValue := TO_WORD(TMR_WATCH_DOG.PT);
-//ConfigureRead.vacuum.timerSetValue := TO_WORD(TMR_DELAY_TO_THRESHOLD.PT);]]></ST>
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="ConfigureWrite" Id="{354f81a0-763a-4230-9004-ca0ad8533224}" FolderPath="CommonBase\">
@@ -136,13 +134,9 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[//TODO , reserved
-//A_SENSOR_USED_COUNT := TO_INT(input.cylinder.sensorAUsedCount);
-//B_SENSOR_USED_COUNT := TO_INT(input.cylinder.sensorBUsedCount);
-
-//TMR_WATCH_DOG.PT := TO_TIME(input.cylinder.timerSetValue);
-//TMR_DELAY_TO_A.PT := TO_TIME(input.cylinder.timerSetValue);
-//TMR_DELAY_TO_B.PT := TO_TIME(input.cylinder.timerSetValue);
+        <ST><![CDATA[
+TMR_DELAY_TO_THRESHOLD.PT := TO_TIME(input.vacuum.timerSetValue);
+thresholdValues[0] := input.vacuum.threshold;
 ]]></ST>
       </Implementation>
     </Method>
@@ -271,7 +265,9 @@ Monitor.vacuum.statusWord.bit5Done := BIT_DONE;
 //Monitor.vacuum.statusWord.bit6TmrAOn := TMR_DELAY_TO_A.Q;
 //Monitor.vacuum.statusWord.bit7TmrBOn := TMR_DELAY_TO_B.Q;
 
-Monitor.vacuum.lastCommand := LAST_COMMAND;]]></ST>
+Monitor.vacuum.lastCommand := LAST_COMMAND;
+//Monitor.vacuum.
+Monitor.vacuum.vacuumValue := vacuumSensorValue;]]></ST>
       </Implementation>
     </Method>
     <Method Name="TypeCode" Id="{9902b8dd-9d89-448a-8c17-b989a9c65a67}" FolderPath="CommonBase\">
@@ -303,20 +299,15 @@ END_VAR
       <LineId Id="55" Count="0" />
     </LineIds>
     <LineIds Name="RunVacuum.ConfigureRead">
-      <LineId Id="17" Count="0" />
       <LineId Id="29" Count="0" />
       <LineId Id="5" Count="0" />
       <LineId Id="19" Count="0" />
-      <LineId Id="21" Count="0" />
-      <LineId Id="20" Count="0" />
-      <LineId Id="22" Count="0" />
+      <LineId Id="21" Count="1" />
     </LineIds>
     <LineIds Name="RunVacuum.ConfigureWrite">
-      <LineId Id="22" Count="0" />
-      <LineId Id="5" Count="0" />
-      <LineId Id="13" Count="1" />
+      <LineId Id="14" Count="0" />
       <LineId Id="12" Count="0" />
-      <LineId Id="15" Count="1" />
+      <LineId Id="28" Count="0" />
       <LineId Id="11" Count="0" />
     </LineIds>
     <LineIds Name="RunVacuum.Control">
@@ -360,6 +351,7 @@ END_VAR
       <LineId Id="26" Count="0" />
       <LineId Id="41" Count="0" />
       <LineId Id="40" Count="0" />
+      <LineId Id="76" Count="1" />
     </LineIds>
     <LineIds Name="RunVacuum.TypeCode">
       <LineId Id="5" Count="0" />

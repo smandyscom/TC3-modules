@@ -6942,6 +6942,10 @@ External Setpoint Generation:
 							<Type GUID="{604191F1-C292-416F-BD1E-CFD75694CE5A}">ARRAY [0..3] OF BOOL</Type>
 						</Var>
 						<Var>
+							<Name>MAIN.MainIndexer.tickTime</Name>
+							<Type>DWORD</Type>
+						</Var>
+						<Var>
 							<Name>MAIN.S1BottomLoader.State</Name>
 							<Comment><![CDATA[possible TO output on HMI]]></Comment>
 							<Type>INT</Type>
@@ -8060,7 +8064,7 @@ External Setpoint Generation:
 						</Var>
 					</Vars>
 					<TaskPouOids>
-						<TaskPouOid Prio="20" OTCID="#x08502001"/>
+						<TaskPouOid Prio="20" OTCID="#x08502002"/>
 					</TaskPouOids>
 				</Instance>
 			</Project>
@@ -8068,7 +8072,7 @@ External Setpoint Generation:
 		<Io/>
 	</Project>
 	<Mappings>
-		<MappingInfo Identifier="{05000010-2001-0850-1000-040300205008}" Id="#x02030010" Watchdog="14000000040000000400000004000000"/>
+		<MappingInfo Identifier="{05000010-2002-0850-1000-040300205008}" Id="#x02030010" Watchdog="14000000040000000400000004000000"/>
 		<OwnerA Name="TIPC^Untitled1^Untitled1 Instance">
 			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Simu1">
 				<Link VarA="PlcTask Inputs^GVL.axisControls[1].Axis.NcToPlc" VarB="Outputs^ToPlc"/>

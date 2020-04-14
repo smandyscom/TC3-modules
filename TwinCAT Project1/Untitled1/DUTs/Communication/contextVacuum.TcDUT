@@ -9,8 +9,8 @@ STRUCT
 	timerCountValue : WORD; //3
 	reserved1 : ARRAY[1..4] OF WORD; //4..7
 	//context
-	timerDelayThreshold : WORD; //8
-	reserved2 : WORD; //9
+	threshold : WORD; //8
+	vacuumValue : WORD; //9
 	reserved3 : ARRAY[1..6] OF WORD; //10-15
 	timerSetValue : WORD; //16
 	reserved4 : WORD; //17
