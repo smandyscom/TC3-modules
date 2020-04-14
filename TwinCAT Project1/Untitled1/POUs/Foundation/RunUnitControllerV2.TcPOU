@@ -55,20 +55,21 @@ END_VAR]]></Declaration>
 //---------------------------
 //	System LEVEL
 //---------------------------
-IF isEmergency AND errorDevice=0 THEN
+IF isEmergency AND errorDevice=0 AND errorDelayDetect.Q THEN
 	//Emergency pressed
 	errorDevice := THIS;
 	THIS^.AlarmCode := ERR_EMG;
-END_IF
-IF isSafetyFault AND errorDevice=0 THEN
+ELSIF isSafetyFault AND errorDevice=0 AND errorDelayDetect.Q THEN
 	//Safety
 	errorDevice := THIS;
 	THIS^.AlarmCode := ERR_SAFETY;
-END_IF
-IF isAirIncorrect AND errorDevice=0 THEN
+ELSIF isAirIncorrect AND errorDevice=0 AND errorDelayDetect.Q THEN
 	//Air supply
 	errorDevice := THIS;
 	THIS^.AlarmCode := ERR_INCORRECT_AIR;
+END_IF
+IF errorDevice=THIS THEN
+	errorIndex := 1; // behalf of marshal
 END_IF
 //----------------------------------------
 // 	COMPONENT LEVEL:
@@ -115,6 +116,7 @@ IF errorDevice <>0 THEN
 	//reset error handling
 	IF requestErrorClear <> eErrorClearWays.NO_ACTION THEN
 		errorDevice^.ErrorClear(requestErrorClear); //call error clear function
+		errorDevice^.PropIsWarning := false; //always reset
 		errorDevice := 0 ;// cut link
 	END_IF
 	
@@ -128,7 +130,7 @@ END_IF
 //-------------------------------------------------
 // START/STOP (internal pause due to process error
 //-------------------------------------------------
-IF errorDevice <>0 THEN
+IF errorDevice <>0 AND_THEN NOT errorDevice^.PropIsWarning THEN
 	bPause := TRUE; //forced stop
 ELSE
 	//leave current status
@@ -195,18 +197,19 @@ NextState:=state;]]></ST>
       <LineId Id="1903" Count="0" />
       <LineId Id="1910" Count="0" />
       <LineId Id="1905" Count="1" />
-      <LineId Id="1904" Count="0" />
       <LineId Id="1915" Count="0" />
       <LineId Id="1923" Count="1" />
-      <LineId Id="1916" Count="1" />
+      <LineId Id="1916" Count="0" />
       <LineId Id="1921" Count="0" />
       <LineId Id="1925" Count="1" />
       <LineId Id="1922" Count="0" />
       <LineId Id="1920" Count="0" />
+      <LineId Id="1964" Count="2" />
       <LineId Id="1617" Count="37" />
       <LineId Id="1731" Count="0" />
       <LineId Id="1656" Count="2" />
       <LineId Id="1734" Count="2" />
+      <LineId Id="1967" Count="0" />
       <LineId Id="1738" Count="0" />
       <LineId Id="1732" Count="1" />
       <LineId Id="1660" Count="5" />

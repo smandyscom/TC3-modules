@@ -96,7 +96,7 @@
     <Compile Include="DUTs\HRASI\defItem.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\HRASI\eSCARAError.TcDUT">
+    <Compile Include="DUTs\HRASI\eErrorReasons.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\HRASI\eSCARATask.TcTLEO">

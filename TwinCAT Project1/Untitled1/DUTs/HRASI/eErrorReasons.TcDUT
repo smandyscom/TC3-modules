@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
-  <DUT Name="eSCARAError" Id="{65b77697-a820-4b8c-9be0-ce25a35f5e82}">
+  <DUT Name="eErrorReasons" Id="{65b77697-a820-4b8c-9be0-ce25a35f5e82}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
 {attribute 'strict'}
-TYPE eSCARAError :
+TYPE eErrorReasons :
 (
 	ERR_NOR:=0,
 	ERR_PART_REMAINED:=400,
@@ -17,7 +17,8 @@ TYPE eSCARAError :
 	ERR_IDLE:=500,
 	ERR_EMG:=1,
 	ERR_INCORRECT_AIR:=10,
-	ERR_SAFETY:=8501
+	ERR_SAFETY:=8501,
+	ERR_VACUUM_JAMMED:=600
 ) DWORD;
 END_TYPE
 ]]></Declaration>

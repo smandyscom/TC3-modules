@@ -44,11 +44,15 @@ VAR
 	
 	//do not stop in atomic operation
 	atomicOperation : BOOL := FALSE;
+	
+
 END_VAR
 VAR PERSISTENT
 	//station specific settings area (user settings
 	slaveLinkageStatus : ARRAY[1..32] OF BOOL; // configuration
 	//miscsParameters : ARRAY[1..8] of int;
+	
+	timeoutTimer : ton; //common facility to detect time out event
 END_VAR
 VAR CONSTANT 
 	bit0EnStep : INT := 0;

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.16">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
   <POU Name="RunUnitTransporterBase" Id="{05eb4ac2-43a3-44ce-8012-78838d9522d6}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunUnitTransporterBase EXTENDS RunUnitGeneric
 VAR_INPUT	
@@ -37,8 +37,6 @@ VAR PERSISTENT
 	varNameSyncAckowledged : STRING;
 	varNameSyncMatIdSync : STRING;
 	varNameSyncMatValidSync : STRING;
-	
-	timeoutTimer : TON;	
 END_VAR
 ]]></Declaration>
     <Implementation>

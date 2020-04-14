@@ -1311,21 +1311,21 @@ External Setpoint Generation:
 			</Relations>
 		</DataType>
 		<DataType>
-			<Name GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..4] OF BOOL</Name>
-			<BitSize>32</BitSize>
-			<BaseType GUID="{18071995-0000-0000-0000-000000000030}">BOOL</BaseType>
-			<ArrayInfo>
-				<LBound>1</LBound>
-				<Elements>4</Elements>
-			</ArrayInfo>
-		</DataType>
-		<DataType>
 			<Name GUID="{B06D26C8-71DC-62D0-9A93-9E8C7ADB982D}" IecBaseType="true" AutoDeleteType="true">ARRAY [0..7] OF REAL</Name>
 			<BitSize>256</BitSize>
 			<BaseType GUID="{18071995-0000-0000-0000-00000000000D}">REAL</BaseType>
 			<ArrayInfo>
 				<LBound>0</LBound>
 				<Elements>8</Elements>
+			</ArrayInfo>
+		</DataType>
+		<DataType>
+			<Name GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..4] OF BOOL</Name>
+			<BitSize>32</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000030}">BOOL</BaseType>
+			<ArrayInfo>
+				<LBound>1</LBound>
+				<Elements>4</Elements>
 			</ArrayInfo>
 		</DataType>
 		<DataType>
@@ -5774,6 +5774,13 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
+							<Name>GVL.snapData</Name>
+							<Comment><![CDATA[----------------------
+	Snap/Fit data
+----------------------]]></Comment>
+							<Type GUID="{B06D26C8-71DC-62D0-9A93-9E8C7ADB982D}">ARRAY [0..7] OF REAL</Type>
+						</Var>
+						<Var>
 							<Name>MAIN.marshal.commRegularCheckAck</Name>
 							<Comment><![CDATA[------------
  link to HMI
@@ -5931,6 +5938,15 @@ External Setpoint Generation:
 						<Var>
 							<Name>MAIN.Scara2.context_in_setSlotValid</Name>
 							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.BridgeScara1toClamper.bridge.ack</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.BridgeScara1toClamper.bridge.valid</Name>
+							<Comment><![CDATA[ whether material presented after work done]]></Comment>
+							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>MAIN.Rack1.rackEngaged</Name>
@@ -6147,15 +6163,6 @@ External Setpoint Generation:
 							<Name>MAIN.Rack4.items[4].Counter</Name>
 							<Comment><![CDATA[successful picked item amount	]]></Comment>
 							<Type>BYTE</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.BridgeScara1toClamper.bridge.ack</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.BridgeScara1toClamper.bridge.valid</Name>
-							<Comment><![CDATA[ whether material presented after work done]]></Comment>
-							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>MAIN.BridgeScara2toClamper.bridge.ack</Name>
@@ -6472,6 +6479,102 @@ External Setpoint Generation:
 							<Type GUID="{CF887A53-7490-A600-6B5D-04343BF0EA04}">ARRAY [1..4] OF BOOL</Type>
 						</Var>
 						<Var>
+							<Name>GVL.signalControls[1].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[2].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[3].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[4].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[5].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[6].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[7].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[8].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[9].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[10].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[11].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[12].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[13].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[14].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[15].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[16].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[17].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[18].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[19].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[20].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[21].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[22].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[23].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.signalControls[24].input</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
 							<Name>GVL.vacuumControls[1].remoteCommand</Name>
 							<Type>BYTE</Type>
 						</Var>
@@ -6600,102 +6703,6 @@ External Setpoint Generation:
 							<Type>UINT</Type>
 						</Var>
 						<Var>
-							<Name>GVL.signalControls[1].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[2].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[3].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[4].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[5].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[6].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[7].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[8].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[9].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[10].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[11].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[12].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[13].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[14].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[15].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[16].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[17].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[18].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[19].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[20].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[21].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[22].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[23].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.signalControls[24].input</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
 							<Name>GVL.axisControls[1].Axis.NcToPlc</Name>
 							<Type GUID="{6A65C767-34E5-42BF-AD87-E1A503EAC7BE}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 							<SubVar>
@@ -6737,13 +6744,6 @@ External Setpoint Generation:
 3: axis is a slave axis
 ]]></Comment>
 							</SubVar>
-						</Var>
-						<Var>
-							<Name>GVL.snapData</Name>
-							<Comment><![CDATA[----------------------
-	Snap/Fit data
-----------------------]]></Comment>
-							<Type GUID="{B06D26C8-71DC-62D0-9A93-9E8C7ADB982D}">ARRAY [0..7] OF REAL</Type>
 						</Var>
 					</Vars>
 					<Vars VarGrpType="2">
@@ -7196,6 +7196,23 @@ External Setpoint Generation:
 							<Type>BYTE</Type>
 						</Var>
 						<Var>
+							<Name>MAIN.BridgeScara1toClamper.State</Name>
+							<Comment><![CDATA[possible TO output on HMI]]></Comment>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.BridgeScara1toClamper.NextState</Name>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.BridgeScara1toClamper.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.BridgeScara1toClamper.bridge.ready</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
 							<Name>MAIN.Rack1.State</Name>
 							<Comment><![CDATA[possible TO output on HMI]]></Comment>
 							<Type>INT</Type>
@@ -7289,23 +7306,6 @@ External Setpoint Generation:
 							<Comment><![CDATA[---------------------------------
 	Over Fieldbus linked with SCARA
 ---------------------------------]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.BridgeScara1toClamper.State</Name>
-							<Comment><![CDATA[possible TO output on HMI]]></Comment>
-							<Type>INT</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.BridgeScara1toClamper.NextState</Name>
-							<Type>INT</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.BridgeScara1toClamper.AlarmCode</Name>
-							<Type>UDINT</Type>
-						</Var>
-						<Var>
-							<Name>MAIN.BridgeScara1toClamper.bridge.ready</Name>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
@@ -7675,198 +7675,6 @@ External Setpoint Generation:
 							<Type GUID="{7871B701-39A2-2AF7-8AA0-D8DEC11CCCE9}">ARRAY [1..2] OF BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.vacuumControls[1].remoteAcknowledge</Name>
-							<Type>BYTE</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[1].ACT_GENERATOR</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[1].ACT_BREAKER</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[2].remoteAcknowledge</Name>
-							<Type>BYTE</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[2].ACT_GENERATOR</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[2].ACT_BREAKER</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[3].remoteAcknowledge</Name>
-							<Type>BYTE</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[3].ACT_GENERATOR</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[3].ACT_BREAKER</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[4].remoteAcknowledge</Name>
-							<Type>BYTE</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[4].ACT_GENERATOR</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[4].ACT_BREAKER</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[5].remoteAcknowledge</Name>
-							<Type>BYTE</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[5].ACT_GENERATOR</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[5].ACT_BREAKER</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[6].remoteAcknowledge</Name>
-							<Type>BYTE</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[6].ACT_GENERATOR</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[6].ACT_BREAKER</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[7].remoteAcknowledge</Name>
-							<Type>BYTE</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[7].ACT_GENERATOR</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[7].ACT_BREAKER</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[8].remoteAcknowledge</Name>
-							<Type>BYTE</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[8].ACT_GENERATOR</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[8].ACT_BREAKER</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[9].remoteAcknowledge</Name>
-							<Type>BYTE</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[9].ACT_GENERATOR</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[9].ACT_BREAKER</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[10].remoteAcknowledge</Name>
-							<Type>BYTE</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[10].ACT_GENERATOR</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[10].ACT_BREAKER</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[11].remoteAcknowledge</Name>
-							<Type>BYTE</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[11].ACT_GENERATOR</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[11].ACT_BREAKER</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[12].remoteAcknowledge</Name>
-							<Type>BYTE</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[12].ACT_GENERATOR</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[12].ACT_BREAKER</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[13].remoteAcknowledge</Name>
-							<Type>BYTE</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[13].ACT_GENERATOR</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[13].ACT_BREAKER</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[14].remoteAcknowledge</Name>
-							<Type>BYTE</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[14].ACT_GENERATOR</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[14].ACT_BREAKER</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[15].remoteAcknowledge</Name>
-							<Type>BYTE</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[15].ACT_GENERATOR</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[15].ACT_BREAKER</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[16].remoteAcknowledge</Name>
-							<Type>BYTE</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[16].ACT_GENERATOR</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>GVL.vacuumControls[16].ACT_BREAKER</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
 							<Name>GVL.signalControls[1].debouncedOn</Name>
 							<Type>BOOL</Type>
 						</Var>
@@ -8056,6 +7864,198 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>GVL.signalControls[24].debouncedOff</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[1].remoteAcknowledge</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[1].ACT_GENERATOR</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[1].ACT_BREAKER</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[2].remoteAcknowledge</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[2].ACT_GENERATOR</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[2].ACT_BREAKER</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[3].remoteAcknowledge</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[3].ACT_GENERATOR</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[3].ACT_BREAKER</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[4].remoteAcknowledge</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[4].ACT_GENERATOR</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[4].ACT_BREAKER</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[5].remoteAcknowledge</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[5].ACT_GENERATOR</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[5].ACT_BREAKER</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[6].remoteAcknowledge</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[6].ACT_GENERATOR</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[6].ACT_BREAKER</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[7].remoteAcknowledge</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[7].ACT_GENERATOR</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[7].ACT_BREAKER</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[8].remoteAcknowledge</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[8].ACT_GENERATOR</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[8].ACT_BREAKER</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[9].remoteAcknowledge</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[9].ACT_GENERATOR</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[9].ACT_BREAKER</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[10].remoteAcknowledge</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[10].ACT_GENERATOR</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[10].ACT_BREAKER</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[11].remoteAcknowledge</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[11].ACT_GENERATOR</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[11].ACT_BREAKER</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[12].remoteAcknowledge</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[12].ACT_GENERATOR</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[12].ACT_BREAKER</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[13].remoteAcknowledge</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[13].ACT_GENERATOR</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[13].ACT_BREAKER</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[14].remoteAcknowledge</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[14].ACT_GENERATOR</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[14].ACT_BREAKER</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[15].remoteAcknowledge</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[15].ACT_GENERATOR</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[15].ACT_BREAKER</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[16].remoteAcknowledge</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[16].ACT_GENERATOR</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>GVL.vacuumControls[16].ACT_BREAKER</Name>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>

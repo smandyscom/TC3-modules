@@ -77,7 +77,7 @@ ELSIF NOT isPaused then
 END_IF
 safeGuardRelease := requestSafeGuardRelease AND isPaused; //should pause firstly
 
-outPause := safeComErr OR NOT airChoke OR  not safeGuardSatus OR not eStop OR NOT airValue1Status OR NOT airValue2Status AND NOT outPauseBypass;
+outPause := (safeComErr OR NOT airChoke OR  NOT safeGuardSatus OR NOT eStop OR NOT airValue1Status OR NOT airValue2Status) AND NOT outPauseBypass;
 outEmergency := NOT eStop AND NOT outEmergencyBypass;
 outSafeGuard := NOT safeGuardRelease;]]></ST>
     </Implementation>
