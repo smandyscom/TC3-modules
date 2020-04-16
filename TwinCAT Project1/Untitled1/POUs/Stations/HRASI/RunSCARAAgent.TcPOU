@@ -252,13 +252,13 @@ END_VAR
 
 IF in_eStop_4 THEN
 
-	ErrorDetect := eSCARAError.ERR_EMG;
+	ErrorDetect := eErrorReasons.ERR_EMG;
 ELSIF in_safeGuard_5 THEN
-	ErrorDetect := eSCARAError.ERR_SAFETY;
+	ErrorDetect := eErrorReasons.ERR_SAFETY;
 	
 ELSIF in_error_3 OR context_in_alarmCode<>0 THEN
 	IF context_in_alarmCode = 0 THEN
-		ErrorDetect :=eSCARAError.ERR_GENERIC_ERROR; //default unknown alarm
+		ErrorDetect := eErrorReasons.ERR_GENERIC_ERROR; //default unknown alarm
 	ELSE
 		ErrorDetect := context_in_alarmCode; //user defined error code
 	END_IF

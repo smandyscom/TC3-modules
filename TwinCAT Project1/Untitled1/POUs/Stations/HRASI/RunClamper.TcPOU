@@ -73,7 +73,7 @@ CASE outputState OF
 			
 			IF configSnap THEN
 				clamper^.isRemoteControl := TRUE; // gave scara remote control
-				clamper^.isShutVerification := TRUE;
+//				clamper^.isShutVerification := TRUE;
 			END_IF
 			
 			bSerialTransition := TRUE;
@@ -86,7 +86,7 @@ CASE outputState OF
 		END_IF
 		IF bSerialTransition THEN
 			clamper^.isRemoteControl := FALSE; // demolish remote control
-			clamper^.isShutVerification := FALSE;
+//			clamper^.isShutVerification := FALSE;
 			
 			commIdTrigger := SlotBase^.Id; //trigger the data logger
 		END_IF
