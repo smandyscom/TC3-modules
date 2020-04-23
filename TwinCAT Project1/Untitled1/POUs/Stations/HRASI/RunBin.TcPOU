@@ -28,6 +28,15 @@ ready := (collectionCount < collectionLimit) AND  (sensor <> 0 AND_THEN sensor^.
 IF NOT ready AND (collectionCount <> 0 AND (sensor <> 0 AND_THEN  sensor^.debouncedOff)) THEN
 	collectionCount := 0; //count reset
 END_IF
+IF NOT ready AND NOT timeoutTimer.IN THEN
+	timeoutTimer.IN := TRUE;
+ELSIF NOT ready AND  timeoutTimer.Q  AND AlarmCode=0 THEN
+	AlarmCode := eErrorReasons.ERR_IDLE;
+	isWarning := TRUE;
+	timeoutTimer.IN := FALSE;
+ELSIF ready THEN
+	timeoutTimer.IN := FALSE;
+END_IF
 
 CASE outputState OF
 	eSpecialStates.INITIAL_BEGIN:
@@ -37,14 +46,6 @@ CASE outputState OF
 	//	START
 	//-----------------
 	eSpecialStates.GENERIC_GROUP_START:
-//		bSerialTransition := (collectionCount < collectionLimit) AND  (sensor <> 0 AND_THEN sensor^.debouncedOn);
-//		IF bSerialTransition THEN
-//			ready := TRUE;
-//			workingTimer.IN := TRUE; //start counting
-//		ELSIF collectionCount <> 0 AND (sensor <> 0 AND_THEN NOT sensor^.debouncedOn) THEN
-//			collectionCount := 0; //count reset
-//		END_IF
-//	1:
 		bSerialTransition := ack;
 		IF bSerialTransition THEN
 			
@@ -55,11 +56,6 @@ CASE outputState OF
 			collectionCount := IncNoOverflow(input:= collectionCount);
 			totalCount := IncNoOverflow(input:= totalCount);
 			
-//			ready := FALSE;
-////		ELSIF sensor <> 0 AND_THEN NOT sensor^.debouncedOn THEN
-//		ELSE
-//			ready := FALSE;
-//			NextState := 0; //re=scan
 		END_IF
 	1: 
 		bSerialTransition := NOT ack;
@@ -76,29 +72,25 @@ END_CASE]]></ST>
       <LineId Id="122" Count="0" />
       <LineId Id="116" Count="1" />
       <LineId Id="119" Count="1" />
+      <LineId Id="139" Count="1" />
+      <LineId Id="142" Count="2" />
+      <LineId Id="164" Count="0" />
+      <LineId Id="161" Count="1" />
+      <LineId Id="141" Count="0" />
       <LineId Id="12" Count="0" />
       <LineId Id="10" Count="0" />
       <LineId Id="13" Count="0" />
       <LineId Id="20" Count="1" />
       <LineId Id="24" Count="2" />
-      <LineId Id="22" Count="1" />
-      <LineId Id="29" Count="1" />
-      <LineId Id="54" Count="0" />
-      <LineId Id="45" Count="1" />
-      <LineId Id="31" Count="0" />
-      <LineId Id="27" Count="0" />
+      <LineId Id="22" Count="0" />
       <LineId Id="33" Count="0" />
       <LineId Id="38" Count="0" />
       <LineId Id="49" Count="1" />
       <LineId Id="52" Count="1" />
       <LineId Id="51" Count="0" />
       <LineId Id="44" Count="0" />
-      <LineId Id="74" Count="1" />
-      <LineId Id="39" Count="0" />
-      <LineId Id="93" Count="0" />
-      <LineId Id="115" Count="0" />
-      <LineId Id="95" Count="0" />
-      <LineId Id="94" Count="0" />
+      <LineId Id="74" Count="0" />
+      <LineId Id="163" Count="0" />
       <LineId Id="40" Count="0" />
       <LineId Id="36" Count="1" />
       <LineId Id="41" Count="2" />

@@ -68,6 +68,15 @@ CASE outputState OF
 		bSerialTransition := approx^.debouncedOn AND button^.onTimeElapsed > T#100MS; //wait until rack closed
 		IF approx^.debouncedOn THEN
 			signal.Activate(0);//set light constant on
+			timeouttimer.IN := TRUE;
+		END_IF
+		IF approx^.debouncedOn AND NOT bSerialTransition  AND timeouttimer.Q THEN
+			AlarmCode := eErrorReasons.ERR_IDLE;
+			isWarning := TRUE;
+			timeouttimer.IN := FALSE; //re-cycle next warning
+		END_IF
+		IF bSerialTransition THEN
+			timeouttimer.IN := FALSE; //leave with reset
 		END_IF
 	16#3:
 		bSerialTransition := fixer^.Execute(eCylinderCommands.COMMAND_B); //lock
@@ -158,7 +167,14 @@ approx :=argApprox;
       <LineId Id="477" Count="0" />
       <LineId Id="514" Count="0" />
       <LineId Id="323" Count="3" />
-      <LineId Id="415" Count="2" />
+      <LineId Id="415" Count="1" />
+      <LineId Id="595" Count="0" />
+      <LineId Id="417" Count="0" />
+      <LineId Id="592" Count="1" />
+      <LineId Id="599" Count="0" />
+      <LineId Id="629" Count="0" />
+      <LineId Id="594" Count="0" />
+      <LineId Id="596" Count="2" />
       <LineId Id="331" Count="2" />
       <LineId Id="553" Count="0" />
       <LineId Id="334" Count="9" />

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.10">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
   <POU Name="CommonBase" Id="{0ec98e57-59b2-46ad-8038-cac0ed0e74a9}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK CommonBase
 VAR_INPUT
@@ -7,7 +7,8 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-	default : int := 16#ff; //for base class , minimun requires one field to locate address
+	default : INT := 16#FF; //for base class , minimun requires one field to locate address
+	isWarning : BOOL; //whether warning state, if it was , no need to stop machine
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -74,6 +75,26 @@ END_VAR
         <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
+    <Property Name="PropIsWarning" Id="{d356bf07-970d-4f35-b61b-5ea534d13955}">
+      <Declaration><![CDATA[PROPERTY PropIsWarning : BOOL]]></Declaration>
+      <Get Name="Get" Id="{555fbce1-9d4e-418a-ae70-54753fd7ce76}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[// whether warning , if it was , no need to stop
+PropIsWarning := isWarning;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{60337d15-a949-436a-8bb8-69d0b649ff45}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[isWarning := PropIsWarning;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
     <Method Name="Stop" Id="{23e1061a-1dcf-48fd-bd32-abbb323b4a0b}">
       <Declaration><![CDATA[METHOD Stop : BOOL
 VAR_INPUT
@@ -112,6 +133,13 @@ END_VAR
     </LineIds>
     <LineIds Name="CommonBase.Monitor">
       <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="CommonBase.PropIsWarning.Get">
+      <LineId Id="2" Count="0" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="CommonBase.PropIsWarning.Set">
+      <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="CommonBase.Stop">
       <LineId Id="5" Count="0" />

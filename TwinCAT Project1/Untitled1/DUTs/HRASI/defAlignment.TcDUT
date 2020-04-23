@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.0">
+  <DUT Name="defAlignment" Id="{1b6471dd-646e-4818-85d6-044a857f3c72}">
+    <Declaration><![CDATA[TYPE defAlignment :
+STRUCT
+	//-----------------
+	//	Input from I/O
+	//-----------------	
+	ioJobComplete AT%I*:BOOL;
+	ioAcqComplete AT%I*:BOOL;
+	//-----------------
+	//	Output to I/O
+	//-----------------	
+	ioTrigger AT%Q*:BOOL;
+	//-----------------
+	//	Input from SCARA
+	//-----------------
+	alignTrigger AT%I*: BOOL;
+	alignSelection AT%I*: BYTE;
+	//-----------------
+	//	Output to SCARA
+	//-----------------
+	alignJobComplete AT%Q*: BOOL;
+	alignJobResult AT%Q*: BYTE;
+	
+	alignX AT%Q*: REAL;
+	alignY AT%Q*: REAL;
+	alignU AT%Q*: REAL;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
