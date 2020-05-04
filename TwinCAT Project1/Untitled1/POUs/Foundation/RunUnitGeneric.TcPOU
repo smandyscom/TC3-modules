@@ -104,7 +104,7 @@ bTrigStep := FALSE;
 
 //Timer
 workingTimer(IN:=,PT:=TO_TIME(4294967295),Q=>,ET=>);
-
+timeoutTimer(IN:=,PT:=,Q=>,ET=>);
 //-------------------
 //purge status reset
 //-------------------
@@ -160,7 +160,8 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[AlarmCode := 0; //code reset to 0]]></ST>
+        <ST><![CDATA[AlarmCode := 0; //code reset to 0
+timeoutTimer.IN := false; //reset]]></ST>
       </Implementation>
     </Method>
     <Method Name="ErrorDetect" Id="{f4463e33-7efc-4b67-a80e-02e00ed76350}" FolderPath="CommonBase\">
@@ -297,6 +298,7 @@ END_VAR
     </LineIds>
     <LineIds Name="RunUnitGeneric.ErrorClear">
       <LineId Id="5" Count="0" />
+      <LineId Id="10" Count="0" />
     </LineIds>
     <LineIds Name="RunUnitGeneric.ErrorDetect">
       <LineId Id="5" Count="0" />

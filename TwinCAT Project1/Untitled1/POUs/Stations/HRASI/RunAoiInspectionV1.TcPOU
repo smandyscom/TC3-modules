@@ -16,6 +16,7 @@ VAR
 	aoiOut2Grade AT%I* : BOOL ; //ok/ng
 	
 	aoiTrigger AT%Q* : BOOL;
+	aoiOnline AT%M* : BOOL;
 	//internal
 	
 	commIdTrigger AT%Q* : DWORD;
@@ -31,6 +32,14 @@ VAR CONSTANT
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[SUPER^();
+
+//----------------
+//	AOI OFFLINE 
+//-----------------
+timeouttimer.IN := NOT aoiOnline;
+IF timeouttimer.Q AND NOT aoiOnline THEN
+	AlarmCode:= eErrorReasons.ERR_OFFLINE;
+END_IF
 
 CASE outputState OF
 	//--------------------------------
@@ -156,7 +165,12 @@ ngCylinder := argNgCylinder;
       </Implementation>
     </Method>
     <LineIds Name="RunAoiInspectionV1">
-      <LineId Id="271" Count="8" />
+      <LineId Id="271" Count="0" />
+      <LineId Id="574" Count="0" />
+      <LineId Id="569" Count="0" />
+      <LineId Id="575" Count="1" />
+      <LineId Id="570" Count="3" />
+      <LineId Id="272" Count="7" />
       <LineId Id="451" Count="0" />
       <LineId Id="280" Count="13" />
       <LineId Id="363" Count="1" />

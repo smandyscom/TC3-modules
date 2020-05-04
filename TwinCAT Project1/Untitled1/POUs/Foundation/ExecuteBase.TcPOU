@@ -5,6 +5,7 @@
 VAR_INPUT
 	isRemoteControl : BOOL;
 	isShutVerification  : BOOL; //shut verification
+	isShutAlarm : bool; //no alarm even warning
 END_VAR
 VAR_OUTPUT
 END_VAR

@@ -21,6 +21,7 @@ VAR_OUTPUT
 	errorType AT%Q* : eCategrories;
 	errorIndex AT%Q* : DINT;
 	errorCode AT%Q* : UDINT;
+	
 END_VAR
 VAR		
 	//error
@@ -55,22 +56,22 @@ END_VAR]]></Declaration>
 //---------------------------
 //	System LEVEL
 //---------------------------
-IF isEmergency AND errorDevice=0 AND errorDelayDetect.Q THEN
+IF isEmergency   THEN
 	//Emergency pressed
-	errorDevice := THIS;
-	THIS^.AlarmCode := ERR_EMG;
-ELSIF isSafetyFault AND errorDevice=0 AND errorDelayDetect.Q THEN
+	//errorDevice := marshal;
+	marshal^.AlarmCode := ERR_EMG;
+ELSIF isSafetyFault THEN
 	//Safety
-	errorDevice := THIS;
-	THIS^.AlarmCode := ERR_SAFETY;
-ELSIF isAirIncorrect AND errorDevice=0 AND errorDelayDetect.Q THEN
+	//errorDevice := marshal;
+	marshal^.AlarmCode := ERR_SAFETY;
+ELSIF isAirIncorrect  THEN
 	//Air supply
-	errorDevice := THIS;
-	THIS^.AlarmCode := ERR_INCORRECT_AIR;
+	//errorDevice := marshal;
+	marshal^.AlarmCode := ERR_INCORRECT_AIR;
 END_IF
-IF errorDevice=THIS THEN
-	errorIndex := 1; // behalf of marshal
-END_IF
+//IF errorDevice=marshal THEN
+//	errorIndex := 1; // behalf of marshal
+//END_IF
 //----------------------------------------
 // 	COMPONENT LEVEL:
 //	running all devices/detect errors
@@ -107,7 +108,7 @@ END_FOR
 
 
 //routines
-errorDelayDetect(IN:= (errorDevice = 0), PT:= T#100MS, Q=> , ET=> );	//after reset , wait 100ms to detect
+errorDelayDetect(IN:= (errorDevice = 0), PT:= T#200MS, Q=> , ET=> );	//after reset , wait 100ms to detect
 IF errorDevice <>0 THEN
 	//error index had been specified
 	errorType := errorDevice^.TypeCode();
@@ -126,7 +127,7 @@ ELSE
 	errorIndex := 0;
 	errorCode := 0;
 END_IF
-
+AlarmCode := SHL(TO_UDINT(errorType),24) +  TO_UDINT(SHL(errorIndex,16)) + TO_UDINT(errorCode);
 //-------------------------------------------------
 // START/STOP (internal pause due to process error
 //-------------------------------------------------

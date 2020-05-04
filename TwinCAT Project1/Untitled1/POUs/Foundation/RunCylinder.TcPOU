@@ -188,7 +188,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[ErrorDetect := 0;
-IF BIT_WARNING THEN
+IF BIT_WARNING AND NOT isShutAlarm THEN
 	ErrorDetect := COMMAND_CACHED; //distinguish different error 
 END_IF]]></ST>
       </Implementation>

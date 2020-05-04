@@ -90,6 +90,9 @@
     <Compile Include="DUTs\Definitions\eSpecialStates.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\HRASI\defAlignment.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\HRASI\defHandshake.TcDUT">
       <SubType>Code</SubType>
     </Compile>
