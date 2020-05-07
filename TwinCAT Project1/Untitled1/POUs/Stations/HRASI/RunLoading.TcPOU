@@ -82,6 +82,21 @@ CASE outputState OF
 		NextState := eSpecialStates.SLAVE_WORK_DONE;
 END_CASE]]></ST>
     </Implementation>
+    <Method Name="ErrorClear" Id="{9da716e2-ef53-4bff-b7ca-5059a13fe31d}">
+      <Declaration><![CDATA[METHOD ErrorClear : BOOL
+VAR_INPUT
+	input : eErrorClearWays;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AlarmCode := 0; //code reset to 0
+timeoutTimer.IN := FALSE; //reset
+
+IF AlarmCode = ERR_PART_MISSING THEN
+	SlotBase^.Valid := false; //just let it go
+END_IF]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="FB_init" Id="{73f2038d-f762-4ac2-a699-acb024b4c517}">
       <Declaration><![CDATA[METHOD FB_init : BOOL
 VAR_INPUT
@@ -157,6 +172,13 @@ existence := argExistence;]]></ST>
       <LineId Id="164" Count="0" />
       <LineId Id="33" Count="1" />
       <LineId Id="19" Count="0" />
+    </LineIds>
+    <LineIds Name="RunLoading.ErrorClear">
+      <LineId Id="5" Count="0" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="17" Count="1" />
     </LineIds>
     <LineIds Name="RunLoading.FB_init">
       <LineId Id="16" Count="6" />

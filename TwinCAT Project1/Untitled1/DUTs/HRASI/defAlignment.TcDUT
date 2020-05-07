@@ -21,7 +21,7 @@ STRUCT
 	//	Output to SCARA
 	//-----------------
 	alignJobComplete AT%Q*: BOOL;
-	alignJobResult AT%Q*: BYTE;
+	alignAcqComplete AT%Q*: BOOL;
 	
 	alignX AT%Q*: REAL;
 	alignY AT%Q*: REAL;

@@ -38,6 +38,14 @@ END_VAR]]></Declaration>
 SUPER^();
 signal();
 
+IF NOT rackReady AND NOT approx^.debouncedOn THEN
+	signal.Activate(0);//100% set light flicking
+ELSIF NOT rackReady AND  approx^.debouncedOn THEN
+	signal.Activate(2);//25% flicking
+ELSIF rackReady THEN
+	signal.Deactivate();
+END_IF
+
 IF button^.onTimeElapsed > T#2S THEN
 	commEject := TRUE;
 END_IF
@@ -63,11 +71,11 @@ CASE outputState OF
 		rackReady := FALSE; //released
 		commEject := FALSE;
 		bSerialTransition := fixer^.Execute(eCylinderCommands.COMMAND_A)AND button^.debouncedOff; //relase
-		signal.Activate(100);//50% set light flicking
+		
 	16#2:
 		bSerialTransition := approx^.debouncedOn AND button^.onTimeElapsed > T#100MS; //wait until rack closed
 		IF approx^.debouncedOn THEN
-			signal.Activate(0);//set light constant on
+			
 			timeouttimer.IN := TRUE;
 		END_IF
 		IF approx^.debouncedOn AND NOT bSerialTransition  AND timeouttimer.Q THEN
@@ -80,7 +88,7 @@ CASE outputState OF
 	16#3:
 		bSerialTransition := fixer^.Execute(eCylinderCommands.COMMAND_B); //lock
 		IF bSerialTransition THEN
-			signal.Deactivate();
+			
 			rackReady := TRUE;
 		END_IF
 	16#4:
@@ -150,6 +158,12 @@ approx :=argApprox;
     </Method>
     <LineIds Name="RunCommonRack">
       <LineId Id="299" Count="4" />
+      <LineId Id="629" Count="1" />
+      <LineId Id="635" Count="0" />
+      <LineId Id="631" Count="0" />
+      <LineId Id="636" Count="0" />
+      <LineId Id="633" Count="1" />
+      <LineId Id="632" Count="0" />
       <LineId Id="520" Count="3" />
       <LineId Id="519" Count="0" />
       <LineId Id="304" Count="4" />
