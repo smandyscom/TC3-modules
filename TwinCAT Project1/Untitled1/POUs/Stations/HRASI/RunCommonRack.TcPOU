@@ -5,6 +5,7 @@
 VAR_INPUT
 	//isEject : BOOL; //link to coordinator
 	commEject AT%M* : BOOL; // link to HMI
+	isIdleDetection : BOOL;
 END_VAR
 VAR_OUTPUT
 END_VAR
@@ -78,7 +79,7 @@ CASE outputState OF
 			
 			timeouttimer.IN := TRUE;
 		END_IF
-		IF approx^.debouncedOn AND NOT bSerialTransition  AND timeouttimer.Q THEN
+		IF approx^.debouncedOn AND NOT bSerialTransition  AND timeouttimer.Q and isIdleDetection THEN
 			AlarmCode := eErrorReasons.ERR_IDLE;
 			isWarning := TRUE;
 		END_IF

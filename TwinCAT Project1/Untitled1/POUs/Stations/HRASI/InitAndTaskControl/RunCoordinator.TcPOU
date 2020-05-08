@@ -96,6 +96,7 @@ CASE outputState OF
 		
 		THIS^.TurnDryRun(FALSE);
 		
+		
 		bSerialTransition := TRUE;
 	//-----------------------------
 	// Off remote I/O devices
@@ -156,6 +157,8 @@ CASE outputState OF
 				members[nCounter]^.NextState := eSpecialStates.GENERIC_GROUP_START;
 			END_IF
 		END_FOR
+		THIS^.TurnRackIdleDetection(FALSE);
+		
 		bSerialTransition:=TRUE;
 	eSpecialStates.GENERIC_GROUP_IDLE:
 		//---------------------
@@ -224,6 +227,8 @@ CASE outputState OF
 				//--------------
 				aoi^.bIsBypassed := TRUE;
 			END_IF
+			
+			THIS^.TurnRackIdleDetection(TRUE);
 			
 			//-------------------
 			//speed factor renew
@@ -330,6 +335,20 @@ IF isEnabled THEN
 END_IF]]></ST>
       </Implementation>
     </Method>
+    <Method Name="TurnRackIdleDetection" Id="{470ad944-b4ac-4565-8ea7-fdec4ed01d4b}">
+      <Declaration><![CDATA[METHOD TurnRackIdleDetection : BOOL
+VAR_INPUT
+	value : bool;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[FOR nCounter:=0 TO 3 BY 1 DO
+	IF racks[nCounter] <>0 THEN
+		racks[nCounter]^.isIdleDetection := value;
+	END_IF		
+END_FOR]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="TurnVerifyVacuums" Id="{aa2d0e34-9f20-4a77-a93c-86b863ba07fd}">
       <Declaration><![CDATA[METHOD TurnVerifyVacuums : BOOL
 VAR_INPUT
@@ -362,6 +381,7 @@ END_CASE]]></ST>
       <LineId Id="1449" Count="0" />
       <LineId Id="1694" Count="0" />
       <LineId Id="1696" Count="0" />
+      <LineId Id="1997" Count="0" />
       <LineId Id="1242" Count="0" />
       <LineId Id="1649" Count="2" />
       <LineId Id="1245" Count="6" />
@@ -389,7 +409,9 @@ END_CASE]]></ST>
       <LineId Id="1589" Count="1" />
       <LineId Id="1588" Count="0" />
       <LineId Id="1253" Count="0" />
-      <LineId Id="1257" Count="43" />
+      <LineId Id="1257" Count="11" />
+      <LineId Id="2004" Count="1" />
+      <LineId Id="1269" Count="31" />
       <LineId Id="1873" Count="1" />
       <LineId Id="1301" Count="13" />
       <LineId Id="1320" Count="1" />
@@ -403,6 +425,8 @@ END_CASE]]></ST>
       <LineId Id="1936" Count="2" />
       <LineId Id="1933" Count="1" />
       <LineId Id="1876" Count="0" />
+      <LineId Id="1996" Count="0" />
+      <LineId Id="1994" Count="0" />
       <LineId Id="1343" Count="34" />
       <LineId Id="1709" Count="0" />
       <LineId Id="1378" Count="0" />
@@ -424,6 +448,10 @@ END_CASE]]></ST>
     </LineIds>
     <LineIds Name="RunCoordinator.TurnDryRun">
       <LineId Id="7" Count="13" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="RunCoordinator.TurnRackIdleDetection">
+      <LineId Id="7" Count="3" />
       <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="RunCoordinator.TurnVerifyVacuums">
