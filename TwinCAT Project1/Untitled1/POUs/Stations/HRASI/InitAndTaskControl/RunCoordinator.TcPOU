@@ -269,13 +269,13 @@ CASE outputState OF
 		//---------------------------
 	16#1000:
 		bSerialTransition := isPurged; //would be triggered by interfaceControl
-	16#1001:
-		bSerialTransition := scara2^.isPurged AND scara1^.isPurged;
+	16#1000:
+		bSerialTransition := scara2^.context_out_perNodePurged2.0;
 		IF bSerialTransition THEN
 			THIS^.isPurged := FALSE; //going to reset
 		END_IF
 	16#1002:
-		bSerialTransition := NOT scara2^.isPurged AND NOT scara1^.isPurged;
+		bSerialTransition := NOT scara2^.context_out_perNodePurged2.0 ;
 		IF bSerialTransition THEN
 			FOR nCounter:=0 TO 3 BY 1 DO
 				racks[nCounter]^.commEject := TRUE; //eject
@@ -407,7 +407,11 @@ END_CASE]]></ST>
       <LineId Id="1709" Count="0" />
       <LineId Id="1378" Count="0" />
       <LineId Id="1710" Count="0" />
-      <LineId Id="1379" Count="26" />
+      <LineId Id="1379" Count="5" />
+      <LineId Id="1988" Count="1" />
+      <LineId Id="1991" Count="1" />
+      <LineId Id="1990" Count="0" />
+      <LineId Id="1390" Count="15" />
       <LineId Id="897" Count="0" />
     </LineIds>
     <LineIds Name="RunCoordinator.ActivateBreakers">

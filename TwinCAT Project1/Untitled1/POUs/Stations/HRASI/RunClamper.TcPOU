@@ -69,11 +69,11 @@ CASE outputState OF
 		transitionByte.1 := TRUE;
 		
 		IF transitionByte = 16#3 THEN
+			
 			slaveWorkingSignal[bScaraReady]:= TRUE; //trigger SCARA agent
 			
 			IF configSnap THEN
 				clamper^.isRemoteControl := TRUE; // gave scara remote control
-//				clamper^.isShutVerification := TRUE;
 			END_IF
 			
 			bSerialTransition := TRUE;
@@ -86,8 +86,6 @@ CASE outputState OF
 		END_IF
 		IF bSerialTransition THEN
 			clamper^.isRemoteControl := FALSE; // demolish remote control
-//			clamper^.isShutVerification := FALSE;
-			
 			commIdTrigger := SlotBase^.Id; //trigger the data logger
 		END_IF
 	16#205:
@@ -176,17 +174,16 @@ configSnap := argConfigSnap;]]></ST>
       <LineId Id="115" Count="5" />
       <LineId Id="323" Count="0" />
       <LineId Id="128" Count="0" />
-      <LineId Id="130" Count="1" />
+      <LineId Id="130" Count="0" />
+      <LineId Id="489" Count="0" />
+      <LineId Id="131" Count="0" />
       <LineId Id="340" Count="1" />
-      <LineId Id="343" Count="0" />
-      <LineId Id="424" Count="0" />
-      <LineId Id="344" Count="0" />
+      <LineId Id="343" Count="1" />
       <LineId Id="342" Count="0" />
       <LineId Id="132" Count="4" />
       <LineId Id="280" Count="2" />
       <LineId Id="345" Count="1" />
-      <LineId Id="425" Count="0" />
-      <LineId Id="467" Count="1" />
+      <LineId Id="468" Count="0" />
       <LineId Id="347" Count="0" />
       <LineId Id="364" Count="2" />
       <LineId Id="137" Count="4" />

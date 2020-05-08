@@ -22,10 +22,10 @@ VAR_INPUT
 	//	CONTEXT 
 	//------------------
 	context_out_alarmAck AT%Q* : WORD;
-	context_out_purgeReq AT%Q* : BYTE;	// the purge request
+	context_out_perNodePurged2 AT%Q* : BYTE;	// the purge request
 	context_out_productType AT%Q* : BYTE;
 	context_out_isSlotValid AT%Q* : BYTE;
-	context_out_perNodePurged AT%Q* : BYTE;
+	context_out_perNodePurged1 AT%Q* : BYTE;
 	context_out_speedFactor AT%Q* : BYTE; // in percentage
 	context_out_isDryRun AT%Q* : BYTE;
 END_VAR
@@ -45,7 +45,9 @@ VAR_OUTPUT
 	//	CONTEXT 
 	//------------------
 	context_in_alarmCode AT%I* : WORD;
-	context_in_stopack AT%I* : BYTE;
+	context_in_purgeack1 AT%I* : BYTE;
+	context_in_purgeack2 AT%I* : BYTE;
+	
 	context_in_taskState AT%I* : BYTE;
 	context_in_setSlotValid AT%I* : BYTE;
 	
@@ -76,12 +78,9 @@ SUPER^();
 timer();
 
 //transmit purged status
-context_out_perNodePurged.0 := (previousNode<>0 AND_THEN previousNode^.isPurged);
+context_out_perNodePurged1.0 := (previousNode<>0 AND_THEN previousNode^.isPurged);
 context_out_isSlotValid.0 := SlotLast<>0 AND_THEN SlotLast^.Valid;
-
-IF NOT isTaskEngaged AND (previousNode<>0 AND_THEN previousNode^.isPurged) THEN
-	isPurged := TRUE;
-END_IF
+isPurged := context_in_purgeack1.0 ;// reflect purge ack status
 
 //----------------------
 //	Task running control
@@ -337,47 +336,7 @@ END_VAR
       </Implementation>
     </Method>
     <LineIds Name="RunScaraAgent">
-      <LineId Id="4644" Count="13" />
-      <LineId Id="4809" Count="0" />
-      <LineId Id="4813" Count="0" />
-      <LineId Id="4811" Count="0" />
-      <LineId Id="4814" Count="1" />
-      <LineId Id="4658" Count="5" />
-      <LineId Id="5062" Count="0" />
-      <LineId Id="4664" Count="1" />
-      <LineId Id="5064" Count="0" />
-      <LineId Id="4666" Count="3" />
-      <LineId Id="5190" Count="2" />
-      <LineId Id="5194" Count="0" />
-      <LineId Id="5334" Count="0" />
-      <LineId Id="5195" Count="0" />
-      <LineId Id="5193" Count="0" />
-      <LineId Id="4674" Count="2" />
-      <LineId Id="4945" Count="0" />
-      <LineId Id="4677" Count="1" />
-      <LineId Id="4681" Count="6" />
-      <LineId Id="4942" Count="2" />
-      <LineId Id="4688" Count="0" />
-      <LineId Id="5203" Count="0" />
-      <LineId Id="5206" Count="1" />
-      <LineId Id="4689" Count="0" />
-      <LineId Id="5198" Count="4" />
-      <LineId Id="4690" Count="6" />
-      <LineId Id="4699" Count="3" />
-      <LineId Id="5123" Count="2" />
-      <LineId Id="4708" Count="14" />
-      <LineId Id="4875" Count="0" />
-      <LineId Id="4881" Count="0" />
-      <LineId Id="4877" Count="1" />
-      <LineId Id="4876" Count="0" />
-      <LineId Id="4880" Count="0" />
-      <LineId Id="4726" Count="2" />
-      <LineId Id="5126" Count="0" />
-      <LineId Id="4730" Count="3" />
-      <LineId Id="4735" Count="0" />
-      <LineId Id="4742" Count="0" />
-      <LineId Id="4816" Count="0" />
-      <LineId Id="4743" Count="5" />
+      <LineId Id="5751" Count="114" />
       <LineId Id="437" Count="0" />
     </LineIds>
     <LineIds Name="RunScaraAgent.ConfigureRead">

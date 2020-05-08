@@ -7,7 +7,7 @@ VAR_INPUT
 	isSlotValidOverride AT%M* : BOOL; //eniginnering use , dry run
 END_VAR
 VAR_OUTPUT
-	purgeRequest AT%Q* : BOOL; //link to SCARA2
+	//purgeRequest AT%Q* : BOOL; //link to SCARA2
 END_VAR
 VAR	
 	existence : POINTER TO RunSignal;	
@@ -26,16 +26,16 @@ END_VAR]]></Declaration>
       <ST><![CDATA[SUPER^();
 
 //signal reset
-IF purgeRequest AND (previousNode<>0 AND_THEN NOT previousNode^.isPurged) THEN
-	purgeRequest := FALSE;
-END_IF
+//IF purgeRequest AND (previousNode<>0 AND_THEN NOT previousNode^.isPurged) THEN
+//	purgeRequest := FALSE;
+//END_IF
 
 //-------------------------------
 //	Slot-1 to loading bottom part
 //-------------------------------
 CASE outputState OF
 	eSpecialStates.INITIAL_BEGIN:
-		purgeRequest := FALSE;
+//		purgeRequest := FALSE;
 		NextState := eSpecialStates.INITIAL_END;
 	//---------------------
 	//	Working
@@ -45,11 +45,12 @@ CASE outputState OF
 		bSerialTransition := existence^.debouncedOff;
 		IF bSerialTransition THEN
 			
-			IF previousNode<>0 AND_THEN previousNode^.isPurged THEN
-				purgeRequest :=TRUE;
-			END_IF
+//			IF previousNode<>0 AND_THEN previousNode^.isPurged THEN
+//				purgeRequest :=TRUE;
+//			END_IF
 			SlotBase^.Valid := FALSE; //always false in beginning
 			slaveWorkingSignal[1] := TRUE; // trigger scara to put
+			
 		ELSIF existence^.debouncedOn THEN
 			THIS^.AlarmCode := ERR_PART_REMAINED;
 		END_IF
@@ -61,8 +62,8 @@ CASE outputState OF
 	16#202:
 		//check if material status matched sensor status
 		bSerialTransition := (SlotBase^.Valid = existence^.debouncedOn) OR isSlotValidOverride;
-		IF bSerialTransition AND purgeRequest AND NOT SlotBase^.Valid THEN
-			//SCARA2 had received purge request and no longer loading the parts
+		
+		IF bSerialTransition AND (previousNode<>0 AND_THEN previousNode^.isPurged) AND NOT SlotBase^.Valid THEN
 			isPurged := TRUE;
 			
 		ELSIF (NOT isSlotValidOverride) AND   SlotBase^.Valid AND existence^.debouncedOff  THEN
@@ -147,6 +148,7 @@ existence := argExistence;]]></ST>
       <LineId Id="64" Count="1" />
       <LineId Id="63" Count="0" />
       <LineId Id="25" Count="0" />
+      <LineId Id="232" Count="0" />
       <LineId Id="210" Count="1" />
       <LineId Id="26" Count="0" />
       <LineId Id="22" Count="0" />
@@ -155,7 +157,8 @@ existence := argExistence;]]></ST>
       <LineId Id="30" Count="0" />
       <LineId Id="32" Count="0" />
       <LineId Id="31" Count="0" />
-      <LineId Id="56" Count="1" />
+      <LineId Id="233" Count="0" />
+      <LineId Id="56" Count="0" />
       <LineId Id="66" Count="0" />
       <LineId Id="101" Count="0" />
       <LineId Id="96" Count="0" />
