@@ -69,9 +69,7 @@ ELSIF isAirIncorrect  THEN
 	//errorDevice := marshal;
 	marshal^.AlarmCode := ERR_INCORRECT_AIR;
 END_IF
-//IF errorDevice=marshal THEN
-//	errorIndex := 1; // behalf of marshal
-//END_IF
+
 //----------------------------------------
 // 	COMPONENT LEVEL:
 //	running all devices/detect errors
@@ -113,13 +111,16 @@ IF errorDevice <>0 THEN
 	//error index had been specified
 	errorType := errorDevice^.TypeCode();
 	errorCode := errorDevice^.ErrorDetect();
+	THIS^.PropIsWarning := errorDevice^.PropIsWarning;
 	
 	//reset error handling
 	IF requestErrorClear <> eErrorClearWays.NO_ACTION THEN
 		errorDevice^.ErrorClear(requestErrorClear); //call error clear function
 		errorDevice^.PropIsWarning := false; //always reset
 		errorDevice := 0 ;// cut link
+		THIS^.PropIsWarning := FALSE;
 	END_IF
+	
 	
 ELSE
 	//reset
@@ -128,6 +129,7 @@ ELSE
 	errorCode := 0;
 END_IF
 AlarmCode := SHL(TO_UDINT(errorType),24) +  TO_UDINT(SHL(errorIndex,16)) + TO_UDINT(errorCode);
+
 //-------------------------------------------------
 // START/STOP (internal pause due to process error
 //-------------------------------------------------
@@ -205,16 +207,20 @@ NextState:=state;]]></ST>
       <LineId Id="1925" Count="1" />
       <LineId Id="1922" Count="0" />
       <LineId Id="1920" Count="0" />
-      <LineId Id="1964" Count="2" />
+      <LineId Id="1966" Count="0" />
       <LineId Id="1617" Count="37" />
       <LineId Id="1731" Count="0" />
       <LineId Id="1656" Count="2" />
+      <LineId Id="2047" Count="0" />
       <LineId Id="1734" Count="2" />
       <LineId Id="1967" Count="0" />
       <LineId Id="1738" Count="0" />
+      <LineId Id="2048" Count="0" />
       <LineId Id="1732" Count="1" />
+      <LineId Id="2045" Count="0" />
       <LineId Id="1660" Count="5" />
       <LineId Id="1745" Count="0" />
+      <LineId Id="2006" Count="0" />
       <LineId Id="1744" Count="0" />
       <LineId Id="1669" Count="0" />
       <LineId Id="1758" Count="0" />

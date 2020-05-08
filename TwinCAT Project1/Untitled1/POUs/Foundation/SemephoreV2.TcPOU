@@ -5,6 +5,7 @@
 VAR_INPUT
 	isPaused : BOOL;
 	isError : BOOL;
+	isWarning : BOOL;
 	isInitializing : BOOL;
 	//------------------
 	//	Pushbutton lighter

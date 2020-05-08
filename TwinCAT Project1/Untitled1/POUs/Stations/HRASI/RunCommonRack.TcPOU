@@ -79,7 +79,7 @@ CASE outputState OF
 			
 			timeouttimer.IN := TRUE;
 		END_IF
-		IF approx^.debouncedOn AND NOT bSerialTransition  AND timeouttimer.Q and isIdleDetection THEN
+		IF approx^.debouncedOn AND NOT bSerialTransition  AND timeouttimer.Q AND isIdleDetection THEN
 			AlarmCode := eErrorReasons.ERR_IDLE;
 			isWarning := TRUE;
 		END_IF
