@@ -275,12 +275,12 @@ CASE outputState OF
 	16#1000:
 		bSerialTransition := isPurged; //would be triggered by interfaceControl
 	16#1001:
-		bSerialTransition := scara2^.context_out_perNodePurged2.0;
+		bSerialTransition := scara2^.context_in_purgeack2.0;
 		IF bSerialTransition THEN
 			THIS^.isPurged := FALSE; //going to reset
 		END_IF
 	16#1002:
-		bSerialTransition := NOT scara2^.context_out_perNodePurged2.0 ;
+		bSerialTransition := NOT scara2^.context_in_purgeack2.0 ;
 		IF bSerialTransition THEN
 			FOR nCounter:=0 TO 3 BY 1 DO
 				racks[nCounter]^.commEject := TRUE; //eject

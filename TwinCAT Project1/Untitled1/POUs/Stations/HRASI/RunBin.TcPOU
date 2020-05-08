@@ -31,9 +31,9 @@ END_IF
 IF NOT ready AND NOT timeoutTimer.IN THEN
 	timeoutTimer.IN := TRUE;
 ELSIF NOT ready AND  timeoutTimer.Q  AND AlarmCode=0 THEN
-	AlarmCode := eErrorReasons.ERR_IDLE;
-	isWarning := TRUE;
+	WarningCode := eErrorReasons.ERR_IDLE;
 ELSIF ready THEN
+	WarningCode := 0;
 	timeoutTimer.IN := FALSE;
 END_IF
 
@@ -72,8 +72,10 @@ END_CASE]]></ST>
       <LineId Id="116" Count="1" />
       <LineId Id="119" Count="1" />
       <LineId Id="139" Count="1" />
-      <LineId Id="142" Count="2" />
-      <LineId Id="161" Count="1" />
+      <LineId Id="142" Count="1" />
+      <LineId Id="161" Count="0" />
+      <LineId Id="180" Count="0" />
+      <LineId Id="162" Count="0" />
       <LineId Id="141" Count="0" />
       <LineId Id="12" Count="0" />
       <LineId Id="10" Count="0" />

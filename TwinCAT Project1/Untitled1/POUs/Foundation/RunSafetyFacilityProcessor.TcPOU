@@ -77,9 +77,11 @@ ELSIF NOT isPaused then
 END_IF
 safeGuardRelease := requestSafeGuardRelease AND isPaused; //should pause firstly
 
-outPause := (safeComErr OR NOT airChoke OR  NOT safeGuardSatus OR NOT eStop OR NOT airValue1Status OR NOT airValue2Status) AND NOT outPauseBypass;
-outEmergency := NOT eStop AND NOT outEmergencyBypass;
-outSafeGuard := NOT safeGuardRelease;]]></ST>
+outPause := (safeComErr  OR  NOT safeGuardSatus OR NOT eStop OR NOT airValue1Status OR NOT airValue2Status) AND NOT outPauseBypass;
+
+outAirAbnormal := NOT airValue1Status OR NOT airValue2Status;
+outEmergency := (safeComErr  OR NOT eStop) AND NOT outEmergencyBypass;
+outSafeGuard := NOT safeGuardSatus;]]></ST>
     </Implementation>
     <LineIds Name="RunSafetyFacilityProcessor">
       <LineId Id="52" Count="2" />
@@ -97,6 +99,8 @@ outSafeGuard := NOT safeGuardRelease;]]></ST>
       <LineId Id="9" Count="0" />
       <LineId Id="42" Count="0" />
       <LineId Id="41" Count="0" />
+      <LineId Id="287" Count="0" />
+      <LineId Id="286" Count="0" />
       <LineId Id="64" Count="0" />
       <LineId Id="124" Count="0" />
     </LineIds>

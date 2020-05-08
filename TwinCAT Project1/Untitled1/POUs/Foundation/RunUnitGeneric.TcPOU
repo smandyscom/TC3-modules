@@ -23,6 +23,7 @@ VAR_OUTPUT
 	State AT%Q* : INT := 0;
 	NextState AT%Q* : INT := 0;
 	AlarmCode AT%Q* : UDINT := 0;
+	WarningCode AT%Q* : UDINT := 0;
 END_VAR
 VAR	
 	Parent : POINTER TO RunUnitGeneric;

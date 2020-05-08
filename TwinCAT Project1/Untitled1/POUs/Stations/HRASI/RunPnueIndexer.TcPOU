@@ -28,6 +28,8 @@ END_VAR
     <Implementation>
       <ST><![CDATA[SUPER^(); //run indexer master
 
+tickTime := TIME_TO_DWORD(workingTimerCache);
+
 CASE outputState OF
 	//---------------------------
 	//	Initialization : revolve n times
@@ -85,7 +87,7 @@ CASE outputState OF
 		bSerialTransition := lockCylinder^.Execute(eCylinderCommands.COMMAND_B);
 		IF bSerialTransition THEN
 			
-			tickTime := TIME_TO_DWORD(workingTimerCache);
+			
 		
 			fixtures.ReleaseAll(); //release all fixture
 			NextState := 16#0F; //join master sequence
@@ -159,6 +161,7 @@ END_IF]]></ST>
     </Method>
     <LineIds Name="RunPnueIndexer">
       <LineId Id="9" Count="0" />
+      <LineId Id="235" Count="1" />
       <LineId Id="16" Count="0" />
       <LineId Id="15" Count="0" />
       <LineId Id="103" Count="1" />

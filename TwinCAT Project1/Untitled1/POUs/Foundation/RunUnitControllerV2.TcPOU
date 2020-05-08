@@ -56,54 +56,63 @@ END_VAR]]></Declaration>
 //---------------------------
 //	System LEVEL
 //---------------------------
-IF isEmergency   THEN
+IF isEmergency AND errorDelayDetect.Q   THEN
 	//Emergency pressed
 	//errorDevice := marshal;
 	marshal^.AlarmCode := ERR_EMG;
-ELSIF isSafetyFault THEN
+	errorIndex := 1;
+	errorDevice := marshal;
+ELSIF isSafetyFault AND errorDelayDetect.Q THEN
 	//Safety
 	//errorDevice := marshal;
 	marshal^.AlarmCode := ERR_SAFETY;
-ELSIF isAirIncorrect  THEN
+	errorIndex := 1;
+	errorDevice := marshal;
+ELSIF isAirIncorrect AND errorDelayDetect.Q  THEN
 	//Air supply
 	//errorDevice := marshal;
 	marshal^.AlarmCode := ERR_INCORRECT_AIR;
+	errorIndex := 1;
+	errorDevice := marshal;
+ELSE
+	//----------------------------------------
+	// 	COMPONENT LEVEL:
+	//	running all devices/detect errors
+	//----------------------------------------
+	FOR nCounter :=1 TO axisUpperBound BY 1 DO
+		//error detection
+		IF errorDevice=0 AND errorDelayDetect.Q AND gvl.axisControls[nCounter].ErrorDetect() <> 0 THEN
+			//error scaned
+			errorIndex := nCounter;
+			errorDevice := ADR(gvl.axisControls[nCounter]);
+		END_IF
+	END_FOR
+	FOR nCounter :=1 TO cylinderUpperBound BY 1 DO
+		//error detection
+		IF errorDevice=0 AND errorDelayDetect.Q AND gvl.pnuematicControls[nCounter]^.ErrorDetect() <> 0 THEN
+			//error scaned
+			errorIndex := nCounter;
+			errorDevice := gvl.pnuematicControls[nCounter];
+		END_IF
+	END_FOR
+	FOR nCounter :=1 TO unitUpperBound BY 1 DO
+		//error detection
+		IF errorDevice=0 AND errorDelayDetect.Q AND gvl.units[nCounter] <> 0 AND_THEN gvl.units[nCounter]^.ErrorDetect() <> 0THEN
+			//station
+			errorIndex := nCounter;
+			errorDevice := gvl.units[nCounter];
+		END_IF
+	END_FOR
 END_IF
-
-//----------------------------------------
-// 	COMPONENT LEVEL:
-//	running all devices/detect errors
-//----------------------------------------
 FOR nCounter :=1 TO axisUpperBound BY 1 DO
 	gvl.axisControls[nCounter]();
-	//error detection
-	IF errorDevice=0 AND errorDelayDetect.Q AND gvl.axisControls[nCounter].ErrorDetect() <> 0 THEN
-		//error scaned
-		errorIndex := nCounter;
-		errorDevice := ADR(gvl.axisControls[nCounter]);
-	END_IF
 END_FOR
 FOR nCounter :=1 TO cylinderUpperBound BY 1 DO
 	gvl.pnuematicControls[nCounter]^();
-	//error detection
-	IF errorDevice=0 AND errorDelayDetect.Q AND gvl.pnuematicControls[nCounter]^.ErrorDetect() <> 0 THEN
-		//error scaned
-		errorIndex := nCounter;
-		errorDevice := gvl.pnuematicControls[nCounter];
-	END_IF
 END_FOR
 FOR nCounter :=1 TO signalUpperBound BY 1 DO
 	gvl.signalControls[nCounter]();
 END_FOR
-FOR nCounter :=1 TO unitUpperBound BY 1 DO
-	//error detection
-	IF errorDevice=0 AND errorDelayDetect.Q AND gvl.units[nCounter] <> 0 AND_THEN gvl.units[nCounter]^.ErrorDetect() <> 0THEN
-		//station
-		errorIndex := nCounter;
-		errorDevice := gvl.units[nCounter];
-	END_IF
-END_FOR
-
 
 //routines
 errorDelayDetect(IN:= (errorDevice = 0), PT:= T#200MS, Q=> , ET=> );	//after reset , wait 100ms to detect
@@ -111,14 +120,11 @@ IF errorDevice <>0 THEN
 	//error index had been specified
 	errorType := errorDevice^.TypeCode();
 	errorCode := errorDevice^.ErrorDetect();
-	THIS^.PropIsWarning := errorDevice^.PropIsWarning;
 	
 	//reset error handling
 	IF requestErrorClear <> eErrorClearWays.NO_ACTION THEN
 		errorDevice^.ErrorClear(requestErrorClear); //call error clear function
-		errorDevice^.PropIsWarning := false; //always reset
 		errorDevice := 0 ;// cut link
-		THIS^.PropIsWarning := FALSE;
 	END_IF
 	
 	
@@ -133,7 +139,7 @@ AlarmCode := SHL(TO_UDINT(errorType),24) +  TO_UDINT(SHL(errorIndex,16)) + TO_UD
 //-------------------------------------------------
 // START/STOP (internal pause due to process error
 //-------------------------------------------------
-IF errorDevice <>0 AND_THEN NOT errorDevice^.PropIsWarning THEN
+IF errorDevice <>0  THEN
 	bPause := TRUE; //forced stop
 ELSE
 	//leave current status
@@ -200,22 +206,36 @@ NextState:=state;]]></ST>
       <LineId Id="1903" Count="0" />
       <LineId Id="1910" Count="0" />
       <LineId Id="1905" Count="1" />
+      <LineId Id="2096" Count="0" />
+      <LineId Id="2049" Count="0" />
       <LineId Id="1915" Count="0" />
       <LineId Id="1923" Count="1" />
       <LineId Id="1916" Count="0" />
+      <LineId Id="2097" Count="0" />
+      <LineId Id="2050" Count="0" />
       <LineId Id="1921" Count="0" />
       <LineId Id="1925" Count="1" />
       <LineId Id="1922" Count="0" />
+      <LineId Id="2098" Count="0" />
+      <LineId Id="2051" Count="1" />
+      <LineId Id="2054" Count="4" />
+      <LineId Id="2060" Count="7" />
+      <LineId Id="2069" Count="6" />
+      <LineId Id="2079" Count="6" />
+      <LineId Id="2053" Count="0" />
       <LineId Id="1920" Count="0" />
-      <LineId Id="1966" Count="0" />
-      <LineId Id="1617" Count="37" />
+      <LineId Id="2086" Count="0" />
+      <LineId Id="2088" Count="1" />
+      <LineId Id="2087" Count="0" />
+      <LineId Id="2090" Count="1" />
+      <LineId Id="2093" Count="1" />
+      <LineId Id="2092" Count="0" />
+      <LineId Id="1651" Count="3" />
       <LineId Id="1731" Count="0" />
-      <LineId Id="1656" Count="2" />
+      <LineId Id="1656" Count="1" />
       <LineId Id="2047" Count="0" />
       <LineId Id="1734" Count="2" />
-      <LineId Id="1967" Count="0" />
       <LineId Id="1738" Count="0" />
-      <LineId Id="2048" Count="0" />
       <LineId Id="1732" Count="1" />
       <LineId Id="2045" Count="0" />
       <LineId Id="1660" Count="5" />

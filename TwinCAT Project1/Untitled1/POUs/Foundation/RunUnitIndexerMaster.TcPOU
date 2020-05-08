@@ -34,6 +34,7 @@ CASE outputState OF
 		END_FOR
 		bSerialTransition := TRUE;
 		
+		THIS^.workingTimerCache := THIS^.workingTimer.ET;
 		workingTimer.IN := FALSE; //reset
 	16#1:	
 		//------------------------------------------
@@ -141,7 +142,9 @@ SlotCount :=  TO_INT((SlotLast-SlotBase)/SIZEOF(RunMaterial) + 1);]]></ST>
       <LineId Id="461" Count="2" />
       <LineId Id="573" Count="2" />
       <LineId Id="464" Count="3" />
-      <LineId Id="635" Count="1" />
+      <LineId Id="635" Count="0" />
+      <LineId Id="647" Count="0" />
+      <LineId Id="636" Count="0" />
       <LineId Id="468" Count="0" />
       <LineId Id="542" Count="0" />
       <LineId Id="469" Count="1" />
