@@ -116,6 +116,7 @@ CASE outputState OF
 	eSpecialStates.INITIAL_STATE_2:
 		bSerialTransition := timerBreak.Q;
 		IF bSerialTransition THEN
+			timerBreak.IN := FALSE;
 			THIS^.InactivateBreakers();
 		END_IF
 	//-----------------------------
@@ -130,6 +131,7 @@ CASE outputState OF
 			THIS^.AlarmCode := ERR_VACUUM_JAMMED;
 		END_IF	
 		IF bSerialTransition THEN
+			timerBreak.IN := FALSE;
 			THIS^.TurnVerifyVacuums(eCylinderCommands.COMMAND_A);
 		END_IF
 	//------------
@@ -356,10 +358,10 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[TurnVerifyVacuums := FALSE; //return , true : none of vacuum generated,  false : any of vacuum generated
+        <ST><![CDATA[TurnVerifyVacuums := TRUE; //return , true : none of vacuum generated,  false : any of vacuum generated
 FOR nCounter:=0 TO 6 BY 1 DO
 	IF gvl.verifyVacuums[nCounter]<>0 THEN
-		TurnVerifyVacuums := TurnVerifyVacuums OR gvl.verifyVacuums[nCounter]^.Execute(command);
+		TurnVerifyVacuums := TurnVerifyVacuums AND NOT gvl.verifyVacuums[nCounter]^.Execute(command);
 	END_IF	
 END_FOR
 
@@ -389,7 +391,9 @@ END_CASE]]></ST>
       <LineId Id="1652" Count="1" />
       <LineId Id="1655" Count="0" />
       <LineId Id="1654" Count="0" />
-      <LineId Id="1657" Count="3" />
+      <LineId Id="1657" Count="2" />
+      <LineId Id="2055" Count="0" />
+      <LineId Id="1660" Count="0" />
       <LineId Id="1656" Count="0" />
       <LineId Id="1672" Count="1" />
       <LineId Id="1671" Count="0" />
@@ -400,7 +404,9 @@ END_CASE]]></ST>
       <LineId Id="1674" Count="0" />
       <LineId Id="1819" Count="0" />
       <LineId Id="1699" Count="1" />
-      <LineId Id="1821" Count="2" />
+      <LineId Id="1821" Count="0" />
+      <LineId Id="2056" Count="0" />
+      <LineId Id="1822" Count="1" />
       <LineId Id="1705" Count="1" />
       <LineId Id="1704" Count="0" />
       <LineId Id="1577" Count="0" />

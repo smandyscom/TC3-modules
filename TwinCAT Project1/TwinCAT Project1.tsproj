@@ -5866,7 +5866,11 @@ External Setpoint Generation:
 							<Type>WORD</Type>
 						</Var>
 						<Var>
-							<Name>MAIN.Scara1.context_in_stopack</Name>
+							<Name>MAIN.Scara1.context_in_purgeack1</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.context_in_purgeack2</Name>
 							<Type>BYTE</Type>
 						</Var>
 						<Var>
@@ -5921,7 +5925,11 @@ External Setpoint Generation:
 							<Type>WORD</Type>
 						</Var>
 						<Var>
-							<Name>MAIN.Scara2.context_in_stopack</Name>
+							<Name>MAIN.Scara2.context_in_purgeack1</Name>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.context_in_purgeack2</Name>
 							<Type>BYTE</Type>
 						</Var>
 						<Var>
@@ -6863,6 +6871,10 @@ External Setpoint Generation:
 							<Type>UDINT</Type>
 						</Var>
 						<Var>
+							<Name>MAIN.rootController.WarningCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
 							<Name>MAIN.rootController.errorType</Name>
 							<Comment><![CDATA[------------------------
 	Error handling channel
@@ -6888,6 +6900,10 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>MAIN.marshal.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.marshal.WarningCode</Name>
 							<Type>UDINT</Type>
 						</Var>
 						<Var>
@@ -6921,6 +6937,10 @@ External Setpoint Generation:
 							<Type>UDINT</Type>
 						</Var>
 						<Var>
+							<Name>MAIN.groupScara1.WarningCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
 							<Name>MAIN.groupScara2.State</Name>
 							<Comment><![CDATA[possible TO output on HMI]]></Comment>
 							<Type>INT</Type>
@@ -6931,6 +6951,10 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>MAIN.groupScara2.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.groupScara2.WarningCode</Name>
 							<Type>UDINT</Type>
 						</Var>
 						<Var>
@@ -6947,6 +6971,10 @@ External Setpoint Generation:
 							<Type>UDINT</Type>
 						</Var>
 						<Var>
+							<Name>MAIN.groupCentral.WarningCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
 							<Name>MAIN.MainIndexer.State</Name>
 							<Comment><![CDATA[possible TO output on HMI]]></Comment>
 							<Type>INT</Type>
@@ -6957,6 +6985,10 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>MAIN.MainIndexer.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.MainIndexer.WarningCode</Name>
 							<Type>UDINT</Type>
 						</Var>
 						<Var>
@@ -6981,9 +7013,8 @@ External Setpoint Generation:
 							<Type>UDINT</Type>
 						</Var>
 						<Var>
-							<Name>MAIN.S1BottomLoader.purgeRequest</Name>
-							<Comment><![CDATA[link to SCARA2]]></Comment>
-							<Type>BOOL</Type>
+							<Name>MAIN.S1BottomLoader.WarningCode</Name>
+							<Type>UDINT</Type>
 						</Var>
 						<Var>
 							<Name>MAIN.S2Clamper.State</Name>
@@ -6996,6 +7027,10 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>MAIN.S2Clamper.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.S2Clamper.WarningCode</Name>
 							<Type>UDINT</Type>
 						</Var>
 						<Var>
@@ -7021,6 +7056,10 @@ External Setpoint Generation:
 							<Type>UDINT</Type>
 						</Var>
 						<Var>
+							<Name>MAIN.S3AoiInspection.WarningCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
 							<Name>MAIN.S3AoiInspection.aoiTrigger</Name>
 							<Type>BOOL</Type>
 						</Var>
@@ -7043,6 +7082,10 @@ External Setpoint Generation:
 							<Type>UDINT</Type>
 						</Var>
 						<Var>
+							<Name>MAIN.S4Clamper.WarningCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
 							<Name>MAIN.S4Clamper.tickTime</Name>
 							<Comment><![CDATA[in ms]]></Comment>
 							<Type>DWORD</Type>
@@ -7062,6 +7105,10 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>MAIN.Scara1.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara1.WarningCode</Name>
 							<Type>UDINT</Type>
 						</Var>
 						<Var>
@@ -7109,7 +7156,7 @@ External Setpoint Generation:
 							<Type>WORD</Type>
 						</Var>
 						<Var>
-							<Name>MAIN.Scara1.context_out_purgeReq</Name>
+							<Name>MAIN.Scara1.context_out_perNodePurged2</Name>
 							<Comment><![CDATA[ the purge request]]></Comment>
 							<Type>BYTE</Type>
 						</Var>
@@ -7122,7 +7169,7 @@ External Setpoint Generation:
 							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>MAIN.Scara1.context_out_perNodePurged</Name>
+							<Name>MAIN.Scara1.context_out_perNodePurged1</Name>
 							<Type>BYTE</Type>
 						</Var>
 						<Var>
@@ -7145,6 +7192,10 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>MAIN.Scara2.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Scara2.WarningCode</Name>
 							<Type>UDINT</Type>
 						</Var>
 						<Var>
@@ -7192,7 +7243,7 @@ External Setpoint Generation:
 							<Type>WORD</Type>
 						</Var>
 						<Var>
-							<Name>MAIN.Scara2.context_out_purgeReq</Name>
+							<Name>MAIN.Scara2.context_out_perNodePurged2</Name>
 							<Comment><![CDATA[ the purge request]]></Comment>
 							<Type>BYTE</Type>
 						</Var>
@@ -7205,7 +7256,7 @@ External Setpoint Generation:
 							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>MAIN.Scara2.context_out_perNodePurged</Name>
+							<Name>MAIN.Scara2.context_out_perNodePurged1</Name>
 							<Type>BYTE</Type>
 						</Var>
 						<Var>
@@ -7228,6 +7279,10 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>MAIN.Rack1.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack1.WarningCode</Name>
 							<Type>UDINT</Type>
 						</Var>
 						<Var>
@@ -7255,6 +7310,10 @@ External Setpoint Generation:
 							<Type>UDINT</Type>
 						</Var>
 						<Var>
+							<Name>MAIN.Rack2.WarningCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
 							<Name>MAIN.Rack2.signal.output</Name>
 							<Type>BOOL</Type>
 						</Var>
@@ -7276,6 +7335,10 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>MAIN.Rack3.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack3.WarningCode</Name>
 							<Type>UDINT</Type>
 						</Var>
 						<Var>
@@ -7303,6 +7366,10 @@ External Setpoint Generation:
 							<Type>UDINT</Type>
 						</Var>
 						<Var>
+							<Name>MAIN.Rack4.WarningCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
 							<Name>MAIN.Rack4.signal.output</Name>
 							<Type>BOOL</Type>
 						</Var>
@@ -7327,6 +7394,10 @@ External Setpoint Generation:
 							<Type>UDINT</Type>
 						</Var>
 						<Var>
+							<Name>MAIN.BridgeScara1toClamper.WarningCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
 							<Name>MAIN.BridgeScara1toClamper.bridge.ready</Name>
 							<Type>BOOL</Type>
 						</Var>
@@ -7341,6 +7412,10 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>MAIN.BridgeScara2toClamper.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.BridgeScara2toClamper.WarningCode</Name>
 							<Type>UDINT</Type>
 						</Var>
 						<Var>
@@ -7361,6 +7436,10 @@ External Setpoint Generation:
 							<Type>UDINT</Type>
 						</Var>
 						<Var>
+							<Name>MAIN.BridgeScara2toLoading.WarningCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
 							<Name>MAIN.BridgeScara2toLoading.bridge.ready</Name>
 							<Type>BOOL</Type>
 						</Var>
@@ -7375,6 +7454,10 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>MAIN.okBin.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.okBin.WarningCode</Name>
 							<Type>UDINT</Type>
 						</Var>
 						<Var>
@@ -7397,6 +7480,10 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>MAIN.ngBin.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.ngBin.WarningCode</Name>
 							<Type>UDINT</Type>
 						</Var>
 						<Var>
@@ -8099,8 +8186,8 @@ External Setpoint Generation:
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>GVL.align.alignJobResult</Name>
-							<Type>BYTE</Type>
+							<Name>GVL.align.alignAcqComplete</Name>
+							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>GVL.align.alignX</Name>
@@ -8116,7 +8203,7 @@ External Setpoint Generation:
 						</Var>
 					</Vars>
 					<TaskPouOids>
-						<TaskPouOid Prio="20" OTCID="#x08502002"/>
+						<TaskPouOid Prio="20" OTCID="#x08502001"/>
 					</TaskPouOids>
 				</Instance>
 			</Project>
@@ -8124,7 +8211,7 @@ External Setpoint Generation:
 		<Io/>
 	</Project>
 	<Mappings>
-		<MappingInfo Identifier="{05000010-2002-0850-1000-040300205008}" Id="#x02030010" Watchdog="14000000040000000400000004000000"/>
+		<MappingInfo Identifier="{05000010-2001-0850-1000-040300205008}" Id="#x02030010" Watchdog="14000000040000000400000004000000"/>
 		<OwnerA Name="TIPC^Untitled1^Untitled1 Instance">
 			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Simu1">
 				<Link VarA="PlcTask Inputs^GVL.axisControls[1].Axis.NcToPlc" VarB="Outputs^ToPlc"/>
