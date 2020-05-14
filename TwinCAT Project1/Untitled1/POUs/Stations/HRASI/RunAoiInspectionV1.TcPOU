@@ -17,6 +17,7 @@ VAR
 	
 	aoiTrigger AT%Q* : BOOL;
 	aoiOnline AT%M* : BOOL;
+	lastAoiOnline : BOOL;
 	//internal
 	
 	commIdTrigger AT%Q* : DWORD;
@@ -36,9 +37,12 @@ END_VAR]]></Declaration>
 //----------------
 //	AOI OFFLINE 
 //-----------------
-timeouttimer.IN := NOT aoiOnline;
+timeouttimer.IN := (lastAoiOnline = aoiOnline);
+lastAoiOnline := aoiOnline;
 IF timeouttimer.Q AND NOT aoiOnline THEN
 	AlarmCode:= eErrorReasons.ERR_OFFLINE;
+ELSIF timeouttimer.Q AND aoiOnline THEN
+	//aoiOnline := FALSE; //as heart beating mech?
 END_IF
 
 CASE outputState OF
@@ -81,6 +85,7 @@ CASE outputState OF
 		END_IF
 	16#202:
 		bSerialTransition := aoiOut1Done;
+		//TODO , if timeout
 	16#203:
 		bSerialTransition := NOT aoiOut1Done;
 		IF bSerialTransition THEN 
@@ -169,7 +174,11 @@ ngCylinder := argNgCylinder;
       <LineId Id="574" Count="0" />
       <LineId Id="569" Count="0" />
       <LineId Id="575" Count="1" />
-      <LineId Id="570" Count="3" />
+      <LineId Id="570" Count="0" />
+      <LineId Id="639" Count="0" />
+      <LineId Id="571" Count="1" />
+      <LineId Id="634" Count="1" />
+      <LineId Id="573" Count="0" />
       <LineId Id="272" Count="7" />
       <LineId Id="451" Count="0" />
       <LineId Id="280" Count="13" />
@@ -177,7 +186,9 @@ ngCylinder := argNgCylinder;
       <LineId Id="294" Count="2" />
       <LineId Id="538" Count="2" />
       <LineId Id="297" Count="7" />
-      <LineId Id="366" Count="3" />
+      <LineId Id="366" Count="1" />
+      <LineId Id="640" Count="0" />
+      <LineId Id="368" Count="1" />
       <LineId Id="424" Count="0" />
       <LineId Id="510" Count="0" />
       <LineId Id="425" Count="1" />

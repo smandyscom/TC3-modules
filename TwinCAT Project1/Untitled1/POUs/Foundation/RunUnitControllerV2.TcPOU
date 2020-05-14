@@ -27,6 +27,8 @@ VAR
 	//error
 	errorDevice : POINTER TO CommonBase := 0; //null reference	
 	errorDelayDetect : TON;	
+	
+	needInit : BOOL;
 END_VAR
 VAR PERSISTENT
 	axisUpperBound : INT;
@@ -156,10 +158,21 @@ IF NOT isManual THEN
 	END_FOR
 END_IF
 
+//-------------------
+//	Check whether init condition
+//, TODO or fatal situation
+//-------------------
+IF NOT needInit AND isEmergency THEN
+	needInit := TRUE;
+END_IF
+
 SUPER^(); //state machine driven
 CASE outputState OF
 	eSpecialStates.MAIN_WAIT_INITIALIZING:
 		bSerialTransition := requestInit AND NOT isEmergency;
+		IF bSerialTransition THEN
+			needInit := FALSE; //reset
+		END_IF
 	eSpecialStates.MAIN_INITIALIZING:
 		bSerialTransition := marshal<>0 AND_THEN marshal^.Initialize();
 		IF bSerialTransition THEN
@@ -167,7 +180,7 @@ CASE outputState OF
 		END_IF
 	eSpecialStates.MAIN_INITIALIZED:
 		//wait emergency situation 
-		IF isEmergency OR requestInit THEN
+		IF needInit OR requestInit THEN
 			NextState := eSpecialStates.MAIN_WAIT_INITIALIZING;
 		END_IF
 END_CASE
@@ -253,8 +266,13 @@ NextState:=state;]]></ST>
       <LineId Id="1694" Count="0" />
       <LineId Id="1753" Count="4" />
       <LineId Id="1747" Count="1" />
+      <LineId Id="2142" Count="2" />
+      <LineId Id="2149" Count="0" />
+      <LineId Id="2145" Count="3" />
       <LineId Id="1702" Count="0" />
-      <LineId Id="1705" Count="5" />
+      <LineId Id="1705" Count="3" />
+      <LineId Id="2150" Count="2" />
+      <LineId Id="1709" Count="1" />
       <LineId Id="1832" Count="2" />
       <LineId Id="1711" Count="6" />
       <LineId Id="1050" Count="0" />

@@ -6,7 +6,6 @@ VAR_INPUT
 	commStartProductionMode AT%M* : BOOL;
 	commStartRegularCheckMode AT%M* : BOOL;
 	commIsDryRun AT%M* : BOOL;
-	
 	//------------
 	//	Trial mode
 	//------------
@@ -294,6 +293,7 @@ CASE outputState OF
 			
 			NextState := eSpecialStates.GENERIC_GROUP_IDLE;
 		END_IF		
+	
 END_CASE
 
 
@@ -441,7 +441,11 @@ END_CASE]]></ST>
       <LineId Id="1988" Count="1" />
       <LineId Id="1991" Count="1" />
       <LineId Id="1990" Count="0" />
-      <LineId Id="1390" Count="15" />
+      <LineId Id="1390" Count="10" />
+      <LineId Id="2108" Count="0" />
+      <LineId Id="1402" Count="0" />
+      <LineId Id="2106" Count="0" />
+      <LineId Id="1403" Count="2" />
       <LineId Id="897" Count="0" />
     </LineIds>
     <LineIds Name="RunCoordinator.ActivateBreakers">

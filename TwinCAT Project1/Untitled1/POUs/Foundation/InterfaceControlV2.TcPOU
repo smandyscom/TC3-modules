@@ -48,7 +48,7 @@ commStart := FALSE;
 commStop := FALSE;
 commErrorLocalAck := FALSE;
 commErrorIgnore:= FALSE;
-commInit:= FALSE;]]></ST>
+//commInit:= FALSE;]]></ST>
     </Implementation>
     <LineIds Name="InterfaceControlV2">
       <LineId Id="1127" Count="3" />
