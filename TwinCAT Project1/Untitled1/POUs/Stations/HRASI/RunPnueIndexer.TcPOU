@@ -3,6 +3,8 @@
   <POU Name="RunPnueIndexer" Id="{0282178a-e4a8-43e2-88ce-00a99b488386}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunPnueIndexer EXTENDS RunUnitIndexerMaster
 VAR_INPUT
+	sensorPairs : ARRAY[0..3] OF defSensorPair; //define stations sensor flag signatures
+	fixtures : helperOutputSelection;
 END_VAR
 VAR_OUTPUT
 END_VAR
@@ -11,8 +13,7 @@ VAR
 	lockCylinder : POINTER TO RunCylinder;
 	pistonCylinder : POINTER TO RunCylinder;
 	
-	sensorPairs : ARRAY[0..3] OF defSensorPair; //define stations sensor flag signatures
-	fixtures : helperOutputSelection;
+	
 	
 	//----------------
 	//	Initialization

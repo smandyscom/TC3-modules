@@ -7,6 +7,8 @@ VAR_INPUT
 	isError : BOOL;
 	isWarning : BOOL;
 	isInitializing : BOOL;
+	
+	isDoorOpen : BOOL;
 	//------------------
 	//	Pushbutton lighter
 	//------------------
@@ -42,6 +44,7 @@ towerGreen := NOT towerRed AND NOT towerYellow;
 lightGreen := NOT isPaused;
 lightRed := NOT lightGreen;
 lightYellow := isError;
+lightWhite := isDoorOpen;
 
 //buzser (fliper
 buzzerTimerOn(IN:= , PT:= , Q=>, ET=> );
@@ -67,7 +70,9 @@ END_IF
 towerBuzzer := isError AND buzzerTimerOn.in AND (buzzerCounter < buzzerGoal) AND buzzerEnable;]]></ST>
     </Implementation>
     <LineIds Name="SemephoreV2">
-      <LineId Id="320" Count="28" />
+      <LineId Id="320" Count="6" />
+      <LineId Id="383" Count="0" />
+      <LineId Id="327" Count="21" />
       <LineId Id="127" Count="0" />
     </LineIds>
   </POU>

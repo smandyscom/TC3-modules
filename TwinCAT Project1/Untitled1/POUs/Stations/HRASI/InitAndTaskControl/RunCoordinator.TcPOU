@@ -94,7 +94,7 @@ CASE outputState OF
 		isPurged := FALSE;
 		
 		THIS^.TurnDryRun(FALSE);
-		
+		loader^.isWorking := FALSE;
 		
 		bSerialTransition := TRUE;
 	//-----------------------------
@@ -159,6 +159,7 @@ CASE outputState OF
 			END_IF
 		END_FOR
 		THIS^.TurnRackIdleDetection(FALSE);
+		loader^.isWorking := FALSE;
 		
 		bSerialTransition:=TRUE;
 	eSpecialStates.GENERIC_GROUP_IDLE:
@@ -230,7 +231,7 @@ CASE outputState OF
 			END_IF
 			
 			THIS^.TurnRackIdleDetection(TRUE);
-			
+			loader^.isWorking := TRUE;
 			//-------------------
 			//speed factor renew
 			//-------------------
@@ -416,7 +417,9 @@ END_CASE]]></ST>
       <LineId Id="1588" Count="0" />
       <LineId Id="1253" Count="0" />
       <LineId Id="1257" Count="11" />
-      <LineId Id="2004" Count="1" />
+      <LineId Id="2004" Count="0" />
+      <LineId Id="2157" Count="0" />
+      <LineId Id="2005" Count="0" />
       <LineId Id="1269" Count="31" />
       <LineId Id="1873" Count="1" />
       <LineId Id="1301" Count="13" />

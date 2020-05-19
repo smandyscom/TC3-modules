@@ -53,7 +53,7 @@ VAR PERSISTENT
 	slaveLinkageStatus : ARRAY[1..32] OF BOOL; // configuration
 	//miscsParameters : ARRAY[1..8] of int;
 	
-	timeoutTimer : ton; //common facility to detect time out event
+	timeoutTimer at%M* : ton; //common facility to detect time out event
 END_VAR
 VAR CONSTANT 
 	bit0EnStep : INT := 0;
@@ -85,7 +85,7 @@ END_IF
 IF NextState <> State THEN
 	transitionByte := 0;
 	bSerialTransition := FALSE;
-	AlarmCode := 0;
+	//AlarmCode := 0;
 	
 	State := NextState; //release and go
 END_IF

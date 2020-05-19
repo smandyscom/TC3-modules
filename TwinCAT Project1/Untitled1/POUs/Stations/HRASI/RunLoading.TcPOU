@@ -5,6 +5,10 @@
 VAR_INPUT
 	externalSlotValid  : BOOL;
 	isSlotValidOverride AT%M* : BOOL; //eniginnering use , dry run
+	isWorking : bool;
+	
+	refSensorPairs : POINTER TO ARRAY[0..3] OF defSensorPair; //define stations sensor flag signatures
+	refFixtures : pointer to helperOutputSelection;
 END_VAR
 VAR_OUTPUT
 	//purgeRequest AT%Q* : BOOL; //link to SCARA2
@@ -22,11 +26,6 @@ END_VAR
     <Implementation>
       <ST><![CDATA[SUPER^();
 
-//signal reset
-//IF purgeRequest AND (previousNode<>0 AND_THEN NOT previousNode^.isPurged) THEN
-//	purgeRequest := FALSE;
-//END_IF
-
 //-------------------------------
 //	Slot-1 to loading bottom part
 //-------------------------------
@@ -42,19 +41,25 @@ CASE outputState OF
 		bSerialTransition := existence^.debouncedOff;
 		IF bSerialTransition THEN
 			
-//			IF previousNode<>0 AND_THEN previousNode^.isPurged THEN
-//				purgeRequest :=TRUE;
-//			END_IF
 			SlotBase^.Valid := FALSE; //always false in beginning
 			slaveWorkingSignal[1] := TRUE; // trigger scara to put
-			
+					
 		ELSIF existence^.debouncedOn THEN
 			THIS^.AlarmCode := eErrorReasons.ERR_PART_MISSING;
 		END_IF
 	16#201:
 		bSerialTransition := NOT slaveWorkingSignal[1]; //scara should set valid before reset working 
 		IF bSerialTransition THEN
+			//Off back secure
+			IF refFixtures <> 0 THEN
+				refFixtures^.Trigger(refSensorPairs^[0],FALSE); 
+			END_IF
 			SlotBase^.Valid := externalSlotValid OR isSlotValidOverride ; //transit
+		ELSE
+			//Activate back secure
+			IF refFixtures <> 0 THEN
+				refFixtures^.Trigger(refSensorPairs^[0],isWorking); 
+			END_IF
 		END_IF
 	16#202:
 		//check if material status matched sensor status
@@ -128,10 +133,6 @@ existence := argExistence;]]></ST>
     </Method>
     <LineIds Name="RunLoading">
       <LineId Id="9" Count="0" />
-      <LineId Id="122" Count="0" />
-      <LineId Id="118" Count="0" />
-      <LineId Id="191" Count="1" />
-      <LineId Id="119" Count="0" />
       <LineId Id="11" Count="0" />
       <LineId Id="10" Count="0" />
       <LineId Id="12" Count="1" />
@@ -142,16 +143,22 @@ existence := argExistence;]]></ST>
       <LineId Id="18" Count="0" />
       <LineId Id="20" Count="1" />
       <LineId Id="24" Count="0" />
-      <LineId Id="61" Count="1" />
-      <LineId Id="64" Count="1" />
+      <LineId Id="61" Count="0" />
       <LineId Id="63" Count="0" />
       <LineId Id="25" Count="0" />
-      <LineId Id="232" Count="0" />
+      <LineId Id="254" Count="0" />
       <LineId Id="210" Count="1" />
       <LineId Id="26" Count="0" />
       <LineId Id="22" Count="0" />
       <LineId Id="29" Count="0" />
-      <LineId Id="91" Count="2" />
+      <LineId Id="91" Count="0" />
+      <LineId Id="261" Count="2" />
+      <LineId Id="260" Count="0" />
+      <LineId Id="92" Count="0" />
+      <LineId Id="285" Count="0" />
+      <LineId Id="287" Count="2" />
+      <LineId Id="286" Count="0" />
+      <LineId Id="93" Count="0" />
       <LineId Id="30" Count="0" />
       <LineId Id="32" Count="0" />
       <LineId Id="31" Count="0" />
