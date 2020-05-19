@@ -55,6 +55,18 @@ END_VAR]]></Declaration>
 //Difference to V1 
 //1. Hierarchy initializing
 
+//----------------------
+//	Components level
+//----------------------
+FOR nCounter :=1 TO axisUpperBound BY 1 DO
+	gvl.axisControls[nCounter]();
+END_FOR
+FOR nCounter :=1 TO cylinderUpperBound BY 1 DO
+	gvl.pnuematicControls[nCounter]^();
+END_FOR
+FOR nCounter :=1 TO signalUpperBound BY 1 DO
+	gvl.signalControls[nCounter]();
+END_FOR
 //---------------------------
 //	System LEVEL
 //---------------------------
@@ -106,15 +118,7 @@ ELSE
 		END_IF
 	END_FOR
 END_IF
-FOR nCounter :=1 TO axisUpperBound BY 1 DO
-	gvl.axisControls[nCounter]();
-END_FOR
-FOR nCounter :=1 TO cylinderUpperBound BY 1 DO
-	gvl.pnuematicControls[nCounter]^();
-END_FOR
-FOR nCounter :=1 TO signalUpperBound BY 1 DO
-	gvl.signalControls[nCounter]();
-END_FOR
+
 
 //routines
 errorDelayDetect(IN:= (errorDevice = 0), PT:= T#200MS, Q=> , ET=> );	//after reset , wait 100ms to detect
@@ -215,6 +219,9 @@ NextState:=state;]]></ST>
     </Method>
     <LineIds Name="RunUnitControllerV2">
       <LineId Id="1605" Count="10" />
+      <LineId Id="2204" Count="0" />
+      <LineId Id="2201" Count="2" />
+      <LineId Id="2193" Count="7" />
       <LineId Id="1865" Count="3" />
       <LineId Id="1903" Count="0" />
       <LineId Id="1910" Count="0" />
@@ -237,11 +244,6 @@ NextState:=state;]]></ST>
       <LineId Id="2079" Count="6" />
       <LineId Id="2053" Count="0" />
       <LineId Id="1920" Count="0" />
-      <LineId Id="2086" Count="0" />
-      <LineId Id="2088" Count="1" />
-      <LineId Id="2087" Count="0" />
-      <LineId Id="2090" Count="1" />
-      <LineId Id="2093" Count="1" />
       <LineId Id="2092" Count="0" />
       <LineId Id="1651" Count="3" />
       <LineId Id="1731" Count="0" />

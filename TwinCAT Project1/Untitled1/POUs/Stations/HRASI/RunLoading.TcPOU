@@ -18,10 +18,7 @@ END_VAR
 VAR PERSISTENT
 	currentId : DWORD;
 END_VAR
-VAR CONSTANT
-	ERR_PART_REMAINED : DWORD :=400;
-	ERR_PART_MISSING : DWORD:=401;
-END_VAR]]></Declaration>
+]]></Declaration>
     <Implementation>
       <ST><![CDATA[SUPER^();
 
@@ -52,7 +49,7 @@ CASE outputState OF
 			slaveWorkingSignal[1] := TRUE; // trigger scara to put
 			
 		ELSIF existence^.debouncedOn THEN
-			THIS^.AlarmCode := ERR_PART_REMAINED;
+			THIS^.AlarmCode := eErrorReasons.ERR_PART_MISSING;
 		END_IF
 	16#201:
 		bSerialTransition := NOT slaveWorkingSignal[1]; //scara should set valid before reset working 
@@ -67,9 +64,9 @@ CASE outputState OF
 			isPurged := TRUE;
 			
 		ELSIF (NOT isSlotValidOverride) AND   SlotBase^.Valid AND existence^.debouncedOff  THEN
-			AlarmCode := ERR_PART_MISSING; // absense
+			AlarmCode := eErrorReasons.ERR_PART_MISSING; // absense
 		ELSIF (NOT isSlotValidOverride) AND (NOT SlotBase^.Valid  AND existence^.debouncedOn)  THEN
-			AlarmCode := ERR_PART_REMAINED; // abnormal
+			AlarmCode := eErrorReasons.ERR_PART_REMAINED; // abnormal
 		END_IF
 				
 		IF bSerialTransition AND SlotBase^.Valid THEN
@@ -90,7 +87,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF AlarmCode = ERR_PART_MISSING THEN
+        <ST><![CDATA[IF AlarmCode = eErrorReasons.ERR_PART_MISSING THEN
 	SlotBase^.Valid := false; //just let it go
 END_IF
 AlarmCode := 0; //code reset to 0
