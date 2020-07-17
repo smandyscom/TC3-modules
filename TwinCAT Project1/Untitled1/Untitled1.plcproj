@@ -13,6 +13,12 @@
     <Implicit_KindOfTask>{06850080-36fc-4e3d-8271-e07f1379a169}</Implicit_KindOfTask>
     <Implicit_Jitter_Distribution>{85c12751-fbb9-4831-a375-dc92ef884890}</Implicit_Jitter_Distribution>
     <LibraryReferences>{a3ee82cf-dd82-4766-9d9c-b0f1c9a4fad4}</LibraryReferences>
+    <DownloadApplicationInfo>true</DownloadApplicationInfo>
+    <Company>
+    </Company>
+    <Released>true</Released>
+    <ProjectVersion>1.2.0</ProjectVersion>
+    <CombineIds>true</CombineIds>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="DUTs\Communication\Axis\commAxis.TcDUT">
