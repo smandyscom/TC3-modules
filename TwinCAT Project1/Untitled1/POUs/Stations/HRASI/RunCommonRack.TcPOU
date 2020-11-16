@@ -22,7 +22,7 @@ VAR
 	rackReady AT%Q*: BOOL;
 	rackEngaged AT%I*: BOOL;	
 
-	items : ARRAY[0..4] OF defItem;
+	items : ARRAY[0..5] OF defItem; // 5th material - Exceed Prefilter
 	
 	//---------------------------------
 	//	Internal
@@ -30,7 +30,7 @@ VAR
 	nCounter : INT;
 END_VAR
 VAR_STAT PERSISTENT
-	Bounds : ARRAY[0..4] OF BYTE;
+	Bounds : ARRAY[0..5] OF BYTE; // 5th material - Exceed Prefilter
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[
@@ -96,7 +96,7 @@ CASE outputState OF
 		//	Check if any item reached the bound. then set rackReady as false
 		// or by external signal (manual or job stop)
 		//------------------------------------------------------------------
-		FOR nCounter := 0 TO 4 DO
+		FOR nCounter := 0 TO 5 DO
 			IF items[nCounter].CurrerntIndex > Bounds[nCounter] THEN
 				bSerialTransition := TRUE;	
 			END_IF
