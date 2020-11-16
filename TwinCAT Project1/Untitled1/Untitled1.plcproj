@@ -16,7 +16,7 @@
     <DownloadApplicationInfo>true</DownloadApplicationInfo>
     <Company>
     </Company>
-    <Released>true</Released>
+    <Released>false</Released>
     <ProjectVersion>1.2.0</ProjectVersion>
     <CombineIds>true</CombineIds>
   </PropertyGroup>
