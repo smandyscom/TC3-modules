@@ -4,23 +4,16 @@
     <Declaration><![CDATA[FUNCTION_BLOCK RunDimmerControl EXTENDS RunUnitGeneric
 VAR_INPUT
 	mode : INT; //idle = 0, commissioning = 1(switch mode change is forbidden);
+	
+	//Application layer
+	command_intensity AT%Q* : ARRAY[0..7] OF BYTE;
+	command_mode AT%Q* : ARRAY[0..7] OF BOOL;
 END_VAR
 VAR_OUTPUT
-END_VAR
-VAR
-	bCommandChanged : BOOL;	
-
-	//Application layer
-	//intesity-command,
-	//intesity-ack
-	command_intensity : ARRAY[0..7] OF BYTE;
-	command_mode : ARRAY[0..7] OF BOOL;
-	
-	//mode-command,
-	//mode-ack,
 	status_intensity : ARRAY[0..7] OF BYTE;
 	status_mode : ARRAY[0..7] OF BOOL;
-
+END_VAR
+VAR
 	// I/O layer
 	// (* I/O variables for a PC-COM port *)
     stIn_PcCom AT %I* : PcComInData; (* linked to the port in the TwinCAT System Manager *)
@@ -73,30 +66,61 @@ END_VAR
 
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
+      <ST><![CDATA[SUPER^();
 
-//initialize , query current status and intensity
-
-
-//command , send when application variable changed
+timer(PT:=T#20MS);
 
 //routine-query
 CASE outputState OF
-	
+	//--------------------------------
+	//	Initialization , query then update STATUS and COMMAND buffer
+	//--------------------------------	
+	eSpecialStates.INITIAL_BEGIN:
+		dataSend[BYTE_0_PRE] := DATA_PREFIX;		
+		dataSend[BYTE_1_REQ_ACK] := DATA_QUERY;		
+		dataSend[BYTE_2_OPT] := 0; //query mode first
+		dataSend[BYTE_3_POST] := DATA_POSTFIX;	
+		bSerialTransition := THIS^.send;
+	eSpecialStates.INITIAL_STATE_1:
+		bSerialTransition := fbReceive.DataReceived;
+		IF bSerialTransition THEN
+			//update MODE
+			FOR nCounter:=0 TO SIZEOF(command_mode)-1 DO
+				command_mode[nCounter] := status_mode[nCounter];
+			END_FOR
+			
+			queryCounter := 0;
+		END_IF
+	eSpecialStates.INITIAL_STATE_2:
+		queryCounter := queryCounter+1;
+		dataSend[BYTE_2_OPT] := queryCounter;
+		IF queryCounter <= channelNum THEN
+			bSerialTransition := TRUE;
+		ELSE
+			NextState := eSpecialStates.INITIAL_END; // all updated
+		END_IF
+	eSpecialStates.INITIAL_STATE_3:
+		bSerialTransition := THIS^.send;
+	eSpecialStates.INITIAL_STATE_4:
+		bSerialTransition := fbReceive.DataReceived;
+		IF bSerialTransition THEN
+			//update intensity
+			command_intensity[queryCounter-1] := status_intensity[queryCounter-1];
+			NextState :=  eSpecialStates.INITIAL_STATE_2;
+		END_IF
 	//----------------------------
 	//	Working
 	//----------------------------
-	eSpecialStates.SLAVE_ENTER_PROCEDURE:
+	eSpecialStates.GENERIC_GROUP_START:
 		//IDLE , check if command changed compared to status
-		bCommandChanged := FALSE;
 		
 		IF mode=0 THEN
-			//scan configuration 
+			//Manual mode : scan configuration 
 			FOR nCounter :=0 TO channelNum DO
 				IF NOT bSerialTransition THEN
 					bSerialTransition := (command_mode[nCounter] <> status_mode[nCounter]);
-					dataSend[BYTE_1_REQ_ACK] := DATA_REQ_MODE_HEAD;	
-					dataSend[BYTE_2_OPT] :=  TO_BYTE(command_mode[nCounter]);
+					dataSend[BYTE_1_REQ_ACK] := TO_BYTE(DATA_REQ_MODE_HEAD+nCounter);	
+					dataSend[BYTE_2_OPT] :=  TO_BYTE(command_mode[nCounter]); // 1 : rotate switch , 0 : COMM
 					queryCounter := 0;
 				END_IF		
 			END_FOR
@@ -105,53 +129,44 @@ CASE outputState OF
 		FOR nCounter :=0 TO channelNum DO
 			IF NOT bSerialTransition THEN
 				bSerialTransition :=(command_intensity[nCounter] <> status_intensity[nCounter]);
-				dataSend[BYTE_1_REQ_ACK] := DATA_REQ_INTENSITY_HEAD;	
+				dataSend[BYTE_1_REQ_ACK] := TO_BYTE(DATA_REQ_INTENSITY_HEAD+nCounter); // channel index	
 				dataSend[BYTE_2_OPT] :=  command_intensity[nCounter];
 				queryCounter := TO_BYTE(nCounter +1); // channel no.
 			END_IF			
 		END_FOR
 		
-		IF bCommandChanged THEN
-			//------------------
-			// Command Preparation
-			//------------------
-		END_IF
+	16#1:
+		//
+		bSerialTransition := THIS^.send;
+	16#2:
+		//if per command is query , have to await dataReceived
+		bSerialTransition := (NOT (dataSend[BYTE_1_REQ_ACK] = DATA_QUERY)) OR ((dataSend[BYTE_1_REQ_ACK] = DATA_QUERY) AND fbReceive.DataReceived);
 		
-		// change dataSend to Query or Command
-		IF bSerialTransition THEN
-			timer.IN := TRUE;
-		END_IF
-				
-	
+		//TODO , ERR : what if data not receive and time out?
+	16#3:
+		CASE queryCounter OF
+			0:
+				// Mode changing had been selected , should be all mode matched
+				FOR nCounter:=0 TO SIZEOF(command_mode)-1 DO
+					bSerialTransition := bSerialTransition AND (command_mode[nCounter] = status_mode[nCounter]);
+				END_FOR
+			ELSE
+				// Intensity changing had been selected
+				// queryCounter is one-based
+				bSerialTransition := command_intensity[queryCounter-1] = status_intensity[queryCounter-1];
+		END_CASE
 		
-		
-	16#202:
-		// Sender
-		IF timer.Q THEN
-			fbSend(pSendData := ADR(datasend),
-				Length := SIZEOF(datasend),
-				TXbuffer := TxBufferPcCom);
-			timer.IN := FALSE; // reset
-		END_IF
-		IF timer.Q AND fbSend.Error = ComError_t.COMERROR_NOERROR AND NOT fbSend.Busy THEN
-			bSerialTransition := TRUE;
-		ELSIF timer.Q AND NOT fbSend.Busy AND fbSend.Error <> ComError_t.COMERROR_NOERROR THEN
-			timer.IN := TRUE; // restart
-		END_IF
-	
-	16#201:
-		
-		
-		IF queryCounter < channelNum THEN
-			// send
-			bSerialTransition := TRUE;
-		ELSE
-			//------------------
-			// Query Preparation
-			//------------------
+		IF bSerialTransition THEN		
+			NextState := eSpecialStates.GENERIC_GROUP_START;
+		ELSIF dataSend[BYTE_1_REQ_ACK]<>DATA_QUERY THEN
+			//-----------------------------------
+			// Query Preparation , to update data
+			//-----------------------------------
 			dataSend[BYTE_1_REQ_ACK] := DATA_QUERY;		
 			dataSend[BYTE_2_OPT] := queryCounter;
-			NextState := 16#202;
+			NextState := 16#201;
+		ELSE
+			//TODO , ERR : data had been updated but inconsist to command
 		END_IF
 		
 END_CASE
@@ -175,6 +190,8 @@ IF fbReceive.DataReceived THEN
 	ELSIF dataReceive[BYTE_1_REQ_ACK] <= channelNum THEN
 		// Intensity , update intensity status , valid if within channel number
 		status_intensity[dataReceive[BYTE_1_REQ_ACK]] := dataReceive[BYTE_2_OPT];
+	ELSE
+		// ERR : out of range
 	END_IF
 	
 	//afterward , clean receiving buffer
@@ -204,8 +221,57 @@ IF fbPcComCtrl.Error THEN
 	ePcComCtrlErrorID := fbPcComCtrl.ErrorID;
 END_IF]]></ST>
     </Implementation>
+    <Method Name="send" Id="{793840da-b12a-08ac-1bde-dd5217ee53ce}">
+      <Declaration><![CDATA[METHOD send : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT timer.IN THEN
+	timer.IN := TRUE;
+END_IF
+		// Sender
+		IF timer.Q THEN
+			fbSend(pSendData := ADR(datasend),
+				Length := SIZEOF(datasend),
+				TXbuffer := TxBufferPcCom);
+			timer.IN := FALSE; // reset
+		END_IF
+		IF timer.Q AND fbSend.Error = ComError_t.COMERROR_NOERROR AND NOT fbSend.Busy THEN
+			send := TRUE;
+		ELSIF timer.Q AND NOT fbSend.Busy AND fbSend.Error <> ComError_t.COMERROR_NOERROR THEN
+			timer.IN := FALSE; // restart
+		END_IF]]></ST>
+      </Implementation>
+    </Method>
     <LineIds Name="RunDimmerControl">
-      <LineId Id="223" Count="15" />
+      <LineId Id="223" Count="1" />
+      <LineId Id="655" Count="0" />
+      <LineId Id="229" Count="2" />
+      <LineId Id="614" Count="3" />
+      <LineId Id="629" Count="0" />
+      <LineId Id="622" Count="0" />
+      <LineId Id="628" Count="0" />
+      <LineId Id="630" Count="1" />
+      <LineId Id="623" Count="0" />
+      <LineId Id="232" Count="0" />
+      <LineId Id="632" Count="1" />
+      <LineId Id="635" Count="2" />
+      <LineId Id="656" Count="1" />
+      <LineId Id="634" Count="0" />
+      <LineId Id="638" Count="0" />
+      <LineId Id="640" Count="0" />
+      <LineId Id="639" Count="0" />
+      <LineId Id="642" Count="1" />
+      <LineId Id="645" Count="1" />
+      <LineId Id="644" Count="0" />
+      <LineId Id="641" Count="0" />
+      <LineId Id="647" Count="3" />
+      <LineId Id="653" Count="0" />
+      <LineId Id="651" Count="0" />
+      <LineId Id="654" Count="0" />
+      <LineId Id="652" Count="0" />
+      <LineId Id="233" Count="4" />
       <LineId Id="475" Count="0" />
       <LineId Id="461" Count="0" />
       <LineId Id="463" Count="0" />
@@ -223,19 +289,27 @@ END_IF]]></ST>
       <LineId Id="493" Count="0" />
       <LineId Id="487" Count="0" />
       <LineId Id="468" Count="0" />
-      <LineId Id="466" Count="0" />
-      <LineId Id="239" Count="0" />
-      <LineId Id="478" Count="1" />
-      <LineId Id="240" Count="0" />
-      <LineId Id="244" Count="6" />
-      <LineId Id="454" Count="0" />
-      <LineId Id="480" Count="1" />
-      <LineId Id="254" Count="13" />
+      <LineId Id="585" Count="0" />
+      <LineId Id="254" Count="0" />
+      <LineId Id="588" Count="0" />
+      <LineId Id="627" Count="0" />
+      <LineId Id="267" Count="0" />
+      <LineId Id="602" Count="1" />
+      <LineId Id="610" Count="1" />
       <LineId Id="496" Count="0" />
-      <LineId Id="501" Count="5" />
+      <LineId Id="501" Count="0" />
+      <LineId Id="592" Count="0" />
+      <LineId Id="594" Count="0" />
+      <LineId Id="607" Count="2" />
+      <LineId Id="599" Count="2" />
+      <LineId Id="605" Count="0" />
+      <LineId Id="593" Count="0" />
+      <LineId Id="502" Count="1" />
+      <LineId Id="505" Count="1" />
       <LineId Id="510" Count="3" />
       <LineId Id="509" Count="0" />
       <LineId Id="508" Count="0" />
+      <LineId Id="612" Count="1" />
       <LineId Id="494" Count="1" />
       <LineId Id="268" Count="9" />
       <LineId Id="441" Count="0" />
@@ -243,6 +317,7 @@ END_IF]]></ST>
       <LineId Id="442" Count="2" />
       <LineId Id="282" Count="1" />
       <LineId Id="439" Count="0" />
+      <LineId Id="658" Count="1" />
       <LineId Id="284" Count="0" />
       <LineId Id="445" Count="1" />
       <LineId Id="448" Count="2" />
@@ -251,6 +326,12 @@ END_IF]]></ST>
       <LineId Id="440" Count="0" />
       <LineId Id="286" Count="17" />
       <LineId Id="62" Count="0" />
+    </LineIds>
+    <LineIds Name="RunDimmerControl.send">
+      <LineId Id="6" Count="0" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="8" Count="11" />
+      <LineId Id="5" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
