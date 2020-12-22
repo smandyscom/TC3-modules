@@ -276,6 +276,9 @@
     <Compile Include="POUs\Stations\HRASI\RunBridge.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Stations\HRASI\RunDimmerControl.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Stations\HRASI\RunLoading.TcPOU">
       <SubType>Code</SubType>
     </Compile>
