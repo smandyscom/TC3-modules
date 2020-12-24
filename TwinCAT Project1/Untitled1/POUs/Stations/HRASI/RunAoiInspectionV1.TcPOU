@@ -5,6 +5,8 @@
 VAR_INPUT
 	ngBinReady : BOOL;
 	ngCounter : POINTER TO UDINT;
+	
+	productType : BYTE;
 END_VAR
 VAR_OUTPUT
 END_VAR
