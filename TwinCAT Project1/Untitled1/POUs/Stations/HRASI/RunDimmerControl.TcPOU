@@ -30,8 +30,8 @@ VAR
 	
 	dataSend : ARRAY[0..15] OF BYTE;
 	
-	dataPrefix : BYTE;
-	dataSufix : byte;
+	dataPrefix : BYTE := 16#FF;
+	dataSufix : BYTE := 16#FE;
 	dataReceive : ARRAY[0..15] OF BYTE;
 	
 	
@@ -40,7 +40,7 @@ VAR
 	
 	timer : TON;
 	
-	nCounter : INT;
+	nCounter : INT := 0;
 	queryCounter :BYTE;  // 0: ask mode, 1-channelNum : ask intensity
 END_VAR
 VAR CONSTANT
@@ -79,12 +79,30 @@ CASE outputState OF
 	//	Initialization , query then update STATUS and COMMAND buffer
 	//--------------------------------	
 	eSpecialStates.INITIAL_BEGIN:
+		// Forcely initialize mode
+		bSerialTransition := nCounter < channelNum;
+		IF NOT bSerialTransition THEN
+			// goal reached
+			NextState := eSpecialStates.INITIAL_STATE_2;
+		END_IF
+	eSpecialStates.INITIAL_STATE_1:
 		dataSend[BYTE_0_PRE] := DATA_PREFIX;		
-		dataSend[BYTE_1_REQ_ACK] := DATA_QUERY;		
-		dataSend[BYTE_2_OPT] := 0; //query mode first
+		dataSend[BYTE_1_REQ_ACK] := TO_BYTE(DATA_REQ_MODE_HEAD+nCounter);		
+		dataSend[BYTE_2_OPT] := TO_BYTE(MODE_COMM); //set mode first
 		dataSend[BYTE_3_POST] := DATA_POSTFIX;	
 		bSerialTransition := THIS^.send();
-	eSpecialStates.INITIAL_STATE_1:
+		IF bSerialTransition THEN
+			nCounter := nCounter+1;
+			NextState := eSpecialStates.INITIAL_BEGIN;
+		END_IF
+		
+	eSpecialStates.INITIAL_STATE_2:
+		dataSend[BYTE_0_PRE] := DATA_PREFIX;		
+		dataSend[BYTE_1_REQ_ACK] := DATA_QUERY;		
+		dataSend[BYTE_2_OPT] := 0; //query mode 
+		dataSend[BYTE_3_POST] := DATA_POSTFIX;	
+		bSerialTransition := THIS^.send();
+	eSpecialStates.INITIAL_STATE_3:
 		bSerialTransition := fbReceive.DataReceived;
 		IF bSerialTransition THEN
 			//update MODE
@@ -94,7 +112,7 @@ CASE outputState OF
 			
 			queryCounter := 0;
 		END_IF
-	eSpecialStates.INITIAL_STATE_2:
+	eSpecialStates.INITIAL_STATE_4:
 		queryCounter := queryCounter+1;
 		dataSend[BYTE_2_OPT] := queryCounter;
 		IF queryCounter <= channelNum THEN
@@ -102,14 +120,14 @@ CASE outputState OF
 		ELSE
 			NextState := eSpecialStates.INITIAL_END; // all updated
 		END_IF
-	eSpecialStates.INITIAL_STATE_3:
+	eSpecialStates.INITIAL_STATE_5:
 		bSerialTransition := THIS^.send();
-	eSpecialStates.INITIAL_STATE_4:
+	eSpecialStates.INITIAL_STATE_6:
 		bSerialTransition := fbReceive.DataReceived;
 		IF bSerialTransition THEN
 			//update intensity
 			command_intensity[queryCounter-1] := status_intensity[queryCounter-1];
-			NextState :=  eSpecialStates.INITIAL_STATE_2;
+			NextState :=  eSpecialStates.INITIAL_STATE_4;
 		END_IF
 	//----------------------------
 	//	Working
@@ -231,25 +249,38 @@ END_VAR
         <ST><![CDATA[IF NOT timer.IN THEN
 	timer.IN := TRUE;
 END_IF
-		// Sender
-		IF timer.Q THEN
-			fbSend(pSendData := ADR(datasend),
-				Length := SIZEOF(datasend),
-				TXbuffer := TxBufferPcCom);
-			timer.IN := FALSE; // reset
-		END_IF
-		IF timer.Q AND fbSend.Error = ComError_t.COMERROR_NOERROR AND NOT fbSend.Busy THEN
-			send := TRUE;
-		ELSIF timer.Q AND NOT fbSend.Busy AND fbSend.Error <> ComError_t.COMERROR_NOERROR THEN
-			timer.IN := FALSE; // restart
-		END_IF]]></ST>
+// Sender
+IF timer.Q THEN
+	fbSend(pSendData := ADR(datasend),
+			Length := SIZEOF(datasend),
+			TXbuffer := TxBufferPcCom);
+	timer.IN := FALSE; // reset
+END_IF
+IF timer.Q AND NOT fbSend.Busy AND fbSend.Error = ComError_t.COMERROR_NOERROR  THEN
+	send := TRUE;
+ELSIF timer.Q AND NOT fbSend.Busy AND fbSend.Error <> ComError_t.COMERROR_NOERROR THEN
+	timer.IN := FALSE; // restart
+END_IF]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="RunDimmerControl">
       <LineId Id="223" Count="1" />
       <LineId Id="655" Count="0" />
       <LineId Id="229" Count="2" />
-      <LineId Id="614" Count="3" />
+      <LineId Id="614" Count="2" />
+      <LineId Id="731" Count="0" />
+      <LineId Id="749" Count="0" />
+      <LineId Id="740" Count="1" />
+      <LineId Id="747" Count="0" />
+      <LineId Id="742" Count="1" />
+      <LineId Id="750" Count="0" />
+      <LineId Id="757" Count="2" />
+      <LineId Id="756" Count="0" />
+      <LineId Id="751" Count="1" />
+      <LineId Id="755" Count="0" />
+      <LineId Id="753" Count="1" />
+      <LineId Id="737" Count="0" />
+      <LineId Id="617" Count="0" />
       <LineId Id="629" Count="0" />
       <LineId Id="622" Count="0" />
       <LineId Id="628" Count="0" />
