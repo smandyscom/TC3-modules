@@ -211,6 +211,14 @@ SlotLast := argSlotLast;
 //
 IF bInitRetains THEN
 	NextState := eSpecialStates.INITIAL_BEGIN;
+	
+	// Semi-statically setup running index bound
+	axisUpperBound := SIZEOF(gvl.axisControls)/SIZEOF(gvl.axisControls[1]);
+	cylinderUpperBound := SIZEOF(gvl.cylinderControls)/SIZEOF(gvl.cylinderControls[1]);
+	signalUpperBound := SIZEOF(gvl.signalControls)/SIZEOF(gvl.signalControls[1]);
+	unitUpperBound := SIZEOF(gvl.units)/SIZEOF(gvl.units[1]);
+	slotUpperBound := SIZEOF(gvl.materialSlots)/SIZEOF(gvl.materialSlots[1]);
+	
 END_IF
 
 state := eSpecialStates.MAIN_INITIALIZING; //as beginning
@@ -280,7 +288,12 @@ NextState:=state;]]></ST>
       <LineId Id="1050" Count="0" />
     </LineIds>
     <LineIds Name="RunUnitControllerV2.FB_init">
-      <LineId Id="12" Count="7" />
+      <LineId Id="12" Count="6" />
+      <LineId Id="90" Count="1" />
+      <LineId Id="94" Count="3" />
+      <LineId Id="93" Count="0" />
+      <LineId Id="92" Count="0" />
+      <LineId Id="19" Count="0" />
       <LineId Id="43" Count="0" />
       <LineId Id="42" Count="0" />
       <LineId Id="79" Count="0" />

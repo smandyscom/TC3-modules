@@ -7,11 +7,13 @@ VAR_INPUT
 	
 	//Application layer
 	command_intensity AT%Q* : ARRAY[0..7] OF BYTE;
-	command_mode AT%Q* : ARRAY[0..7] OF BOOL;
+	command_mode AT%Q* : ARRAY[0..7] OF BOOL; // 1: manual , 0: commuication
 END_VAR
 VAR_OUTPUT
 	status_intensity : ARRAY[0..7] OF BYTE;
 	status_mode : ARRAY[0..7] OF BOOL;
+	
+	ePcComCtrlErrorID	: ComError_t;
 END_VAR
 VAR
 	// I/O layer
@@ -22,8 +24,6 @@ VAR
     TxBufferPcCom : ComBuffer; (* Transmit data buffer; used with all receive function blocks *)
 	
 	fbPcComCtrl			: SerialLineControl; // Gate to communicate with I/O layer
-	bPcComCtrlError: BOOL;
-	ePcComCtrlErrorID	: ComError_t;
 	
 	// Upper layer
 	command : INT;
@@ -59,6 +59,9 @@ VAR CONSTANT
 	
 	DATA_ACK_MODE : BYTE := 16#0;
 	
+	MODE_COMM : BOOL := FALSE;
+	MODE_MAN : BOOL := true;
+	
 END_VAR
 VAR PERSISTENT
 	channelNum : INT := 4;	
@@ -80,7 +83,7 @@ CASE outputState OF
 		dataSend[BYTE_1_REQ_ACK] := DATA_QUERY;		
 		dataSend[BYTE_2_OPT] := 0; //query mode first
 		dataSend[BYTE_3_POST] := DATA_POSTFIX;	
-		bSerialTransition := THIS^.send;
+		bSerialTransition := THIS^.send();
 	eSpecialStates.INITIAL_STATE_1:
 		bSerialTransition := fbReceive.DataReceived;
 		IF bSerialTransition THEN
@@ -100,7 +103,7 @@ CASE outputState OF
 			NextState := eSpecialStates.INITIAL_END; // all updated
 		END_IF
 	eSpecialStates.INITIAL_STATE_3:
-		bSerialTransition := THIS^.send;
+		bSerialTransition := THIS^.send();
 	eSpecialStates.INITIAL_STATE_4:
 		bSerialTransition := fbReceive.DataReceived;
 		IF bSerialTransition THEN
@@ -116,7 +119,7 @@ CASE outputState OF
 		
 		IF mode=0 THEN
 			//Manual mode : scan configuration 
-			FOR nCounter :=0 TO channelNum DO
+			FOR nCounter :=0 TO channelNum-1 DO
 				IF NOT bSerialTransition THEN
 					bSerialTransition := (command_mode[nCounter] <> status_mode[nCounter]);
 					dataSend[BYTE_1_REQ_ACK] := TO_BYTE(DATA_REQ_MODE_HEAD+nCounter);	
@@ -125,10 +128,10 @@ CASE outputState OF
 				END_IF		
 			END_FOR
 		END_IF
-		//scan if intensity changed
-		FOR nCounter :=0 TO channelNum DO
+		//scan if intensity changed and in communication mode
+		FOR nCounter :=0 TO channelNum-1 DO
 			IF NOT bSerialTransition THEN
-				bSerialTransition :=(command_intensity[nCounter] <> status_intensity[nCounter]);
+				bSerialTransition :=(command_intensity[nCounter] <> status_intensity[nCounter]) AND (status_mode[nCounter] = MODE_COMM);
 				dataSend[BYTE_1_REQ_ACK] := TO_BYTE(DATA_REQ_INTENSITY_HEAD+nCounter); // channel index	
 				dataSend[BYTE_2_OPT] :=  command_intensity[nCounter];
 				queryCounter := TO_BYTE(nCounter +1); // channel no.
@@ -137,7 +140,7 @@ CASE outputState OF
 		
 	16#1:
 		//
-		bSerialTransition := THIS^.send;
+		bSerialTransition := THIS^.send();
 	16#2:
 		//if per command is query , have to await dataReceived
 		bSerialTransition := (NOT (dataSend[BYTE_1_REQ_ACK] = DATA_QUERY)) OR ((dataSend[BYTE_1_REQ_ACK] = DATA_QUERY) AND fbReceive.DataReceived);
@@ -147,6 +150,7 @@ CASE outputState OF
 		CASE queryCounter OF
 			0:
 				// Mode changing had been selected , should be all mode matched
+				bSerialTransition := TRUE;
 				FOR nCounter:=0 TO SIZEOF(command_mode)-1 DO
 					bSerialTransition := bSerialTransition AND (command_mode[nCounter] = status_mode[nCounter]);
 				END_FOR
@@ -164,7 +168,7 @@ CASE outputState OF
 			//-----------------------------------
 			dataSend[BYTE_1_REQ_ACK] := DATA_QUERY;		
 			dataSend[BYTE_2_OPT] := queryCounter;
-			NextState := 16#201;
+			NextState := 16#1;
 		ELSE
 			//TODO , ERR : data had been updated but inconsist to command
 		END_IF
@@ -184,20 +188,20 @@ IF fbReceive.DataReceived THEN
 	// process incoming message
 	IF dataReceive[BYTE_1_REQ_ACK] = 0 THEN
 		// MODE , update mode status
-		FOR nCounter:=0 TO channelNum DO
+		FOR nCounter:=0 TO channelNum-1 DO
 			status_mode[nCounter] := (dataReceive[BYTE_2_OPT] AND SHL(16#01,nCounter)) <> 0;
 		END_FOR
 	ELSIF dataReceive[BYTE_1_REQ_ACK] <= channelNum THEN
 		// Intensity , update intensity status , valid if within channel number
-		status_intensity[dataReceive[BYTE_1_REQ_ACK]] := dataReceive[BYTE_2_OPT];
+		status_intensity[dataReceive[BYTE_1_REQ_ACK]-1] := dataReceive[BYTE_2_OPT];
 	ELSE
 		// ERR : out of range
 	END_IF
 	
 	//afterward , clean receiving buffer
-	FOR nCounter:=0 TO SIZEOF(dataReceive)-1 DO
-		dataReceive[nCounter]:=0;
-	END_FOR
+//	FOR nCounter:=0 TO SIZEOF(dataReceive)-1 DO
+//		dataReceive[nCounter]:=0;
+//	END_FOR
 	
 ELSE
 	// Receiving	
@@ -216,10 +220,7 @@ fbPcComCtrl(
 	ErrorID=> , 
 	TxBuffer:= TxBufferPcCom, 
 	RxBuffer:= RxBufferPcCom );
-IF fbPcComCtrl.Error THEN
-	bPcComCtrlError := TRUE;
-	ePcComCtrlErrorID := fbPcComCtrl.ErrorID;
-END_IF]]></ST>
+ePcComCtrlErrorID := fbPcComCtrl.ErrorID;]]></ST>
     </Implementation>
     <Method Name="send" Id="{793840da-b12a-08ac-1bde-dd5217ee53ce}">
       <Declaration><![CDATA[METHOD send : BOOL
@@ -300,6 +301,7 @@ END_IF
       <LineId Id="501" Count="0" />
       <LineId Id="592" Count="0" />
       <LineId Id="594" Count="0" />
+      <LineId Id="725" Count="0" />
       <LineId Id="607" Count="2" />
       <LineId Id="599" Count="2" />
       <LineId Id="605" Count="0" />
@@ -324,7 +326,7 @@ END_IF
       <LineId Id="447" Count="0" />
       <LineId Id="285" Count="0" />
       <LineId Id="440" Count="0" />
-      <LineId Id="286" Count="17" />
+      <LineId Id="286" Count="14" />
       <LineId Id="62" Count="0" />
     </LineIds>
     <LineIds Name="RunDimmerControl.send">
