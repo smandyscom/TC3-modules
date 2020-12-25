@@ -1329,6 +1329,31 @@ External Setpoint Generation:
 			</ArrayInfo>
 		</DataType>
 		<DataType>
+			<Name GUID="{EF21F4B1-94E5-4F11-968A-202ECF9F6F47}" Namespace="Tc2_SerialCom" AutoDeleteType="true">PcComInData</Name>
+			<Comment><![CDATA[ This data type is corresponding to the
+   PC COM-Port data structure used in
+   the TwinCAT SystemManager. 
+   (KL-6xxx emulation mode with 64 data bytes)
+]]></Comment>
+			<BitSize>528</BitSize>
+			<SubItem>
+				<Name>SerStatus</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000004}">WORD</Type>
+				<BitSize>16</BitSize>
+				<BitOffs>0</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>D</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000001}">BYTE</Type>
+				<ArrayInfo>
+					<LBound>0</LBound>
+					<Elements>64</Elements>
+				</ArrayInfo>
+				<BitSize>512</BitSize>
+				<BitOffs>16</BitOffs>
+			</SubItem>
+		</DataType>
+		<DataType>
 			<Name GUID="{093D7F69-7F34-4B33-A94E-F0CEC813C01D}" AutoDeleteType="true">eCategrories</Name>
 			<BitSize>16</BitSize>
 			<BaseType GUID="{18071995-0000-0000-0000-000000000004}">WORD</BaseType>
@@ -1377,8 +1402,51 @@ add 2019.11.30]]></Comment>
 				<Elements>2</Elements>
 			</ArrayInfo>
 		</DataType>
+		<DataType>
+			<Name GUID="{B06D26C8-71DC-62D0-9A93-9E8C7ADB9821}" IecBaseType="true" AutoDeleteType="true">ARRAY [0..7] OF BYTE</Name>
+			<BitSize>64</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000001}">BYTE</BaseType>
+			<ArrayInfo>
+				<LBound>0</LBound>
+				<Elements>8</Elements>
+			</ArrayInfo>
+		</DataType>
+		<DataType>
+			<Name GUID="{B06D26C8-71DC-62D0-9A93-9E8C7ADB9810}" IecBaseType="true" AutoDeleteType="true">ARRAY [0..7] OF BOOL</Name>
+			<BitSize>64</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000030}">BOOL</BaseType>
+			<ArrayInfo>
+				<LBound>0</LBound>
+				<Elements>8</Elements>
+			</ArrayInfo>
+		</DataType>
+		<DataType>
+			<Name GUID="{D14B30D7-18A5-4E6F-8584-279BC490D7E5}" Namespace="Tc2_SerialCom" AutoDeleteType="true">PcComOutData</Name>
+			<Comment><![CDATA[ This data type is corresponding to the
+   PC COM-Port data structure used in
+   the TwinCAT SystemManager. 
+   (KL-6xxx emulation mode with 64 data bytes)
+]]></Comment>
+			<BitSize>528</BitSize>
+			<SubItem>
+				<Name>SerCtrl</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000004}">WORD</Type>
+				<BitSize>16</BitSize>
+				<BitOffs>0</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>D</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000001}">BYTE</Type>
+				<ArrayInfo>
+					<LBound>0</LBound>
+					<Elements>64</Elements>
+				</ArrayInfo>
+				<BitSize>512</BitSize>
+				<BitOffs>16</BitOffs>
+			</SubItem>
+		</DataType>
 	</DataTypes>
-	<Project ProjectGUID="{D120B6BC-AD5B-445D-915C-3D83448743C8}" Target64Bit="true" ShowHideConfigurations="#x306">
+	<Project ProjectGUID="{D120B6BC-AD5B-445D-915C-3D83448743C8}" TargetNetId="5.42.34.140.1.1" ShowHideConfigurations="#x306">
 		<System>
 			<Settings MaxCpus="4"/>
 			<Tasks>
@@ -5700,7 +5768,7 @@ External Setpoint Generation:
 			</NC>
 		</Motion>
 		<Plc>
-			<Project GUID="{EBF730F5-EB70-496D-B80F-3EF457609040}" Name="Untitled1" PrjFilePath="Untitled1\Untitled1.plcproj" TmcFilePath="Untitled1\Untitled1.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
+			<Project GUID="{EBF730F5-EB70-496D-B80F-3EF457609040}" Name="Untitled1" PrjFilePath="Untitled1\Untitled1.plcproj" TmcFilePath="Untitled1\Untitled1.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e">
 				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="Untitled1\Untitled1.tmc">
 					<Name>Untitled1 Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
@@ -5995,6 +6063,16 @@ External Setpoint Generation:
 							<Type>BYTE</Type>
 						</Var>
 						<Var>
+							<Name>MAIN.Rack1.items[5].CurrerntIndex</Name>
+							<Comment><![CDATA[curent working index]]></Comment>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack1.items[5].Counter</Name>
+							<Comment><![CDATA[successful picked item amount	]]></Comment>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
 							<Name>MAIN.Rack2.rackEngaged</Name>
 							<Type>BOOL</Type>
 						</Var>
@@ -6045,6 +6123,16 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>MAIN.Rack2.items[4].Counter</Name>
+							<Comment><![CDATA[successful picked item amount	]]></Comment>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack2.items[5].CurrerntIndex</Name>
+							<Comment><![CDATA[curent working index]]></Comment>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack2.items[5].Counter</Name>
 							<Comment><![CDATA[successful picked item amount	]]></Comment>
 							<Type>BYTE</Type>
 						</Var>
@@ -6103,6 +6191,16 @@ External Setpoint Generation:
 							<Type>BYTE</Type>
 						</Var>
 						<Var>
+							<Name>MAIN.Rack3.items[5].CurrerntIndex</Name>
+							<Comment><![CDATA[curent working index]]></Comment>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack3.items[5].Counter</Name>
+							<Comment><![CDATA[successful picked item amount	]]></Comment>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
 							<Name>MAIN.Rack4.rackEngaged</Name>
 							<Type>BOOL</Type>
 						</Var>
@@ -6153,6 +6251,16 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>MAIN.Rack4.items[4].Counter</Name>
+							<Comment><![CDATA[successful picked item amount	]]></Comment>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack4.items[5].CurrerntIndex</Name>
+							<Comment><![CDATA[curent working index]]></Comment>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.Rack4.items[5].Counter</Name>
 							<Comment><![CDATA[successful picked item amount	]]></Comment>
 							<Type>BYTE</Type>
 						</Var>
@@ -6774,6 +6882,11 @@ External Setpoint Generation:
 						<Var>
 							<Name>GVL.align.alignSelection</Name>
 							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.DimmerControl.stIn_PcCom</Name>
+							<Comment><![CDATA[ linked to the port in the TwinCAT System Manager ]]></Comment>
+							<Type GUID="{EF21F4B1-94E5-4F11-968A-202ECF9F6F47}" Namespace="Tc2_SerialCom">PcComInData</Type>
 						</Var>
 					</Vars>
 					<Vars VarGrpType="2">
@@ -8201,6 +8314,38 @@ External Setpoint Generation:
 							<Name>GVL.align.alignU</Name>
 							<Type>REAL</Type>
 						</Var>
+						<Var>
+							<Name>MAIN.DimmerControl.State</Name>
+							<Comment><![CDATA[possible TO output on HMI]]></Comment>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.DimmerControl.NextState</Name>
+							<Type>INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.DimmerControl.AlarmCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.DimmerControl.WarningCode</Name>
+							<Type>UDINT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.DimmerControl.command_intensity</Name>
+							<Comment><![CDATA[Application layer]]></Comment>
+							<Type GUID="{B06D26C8-71DC-62D0-9A93-9E8C7ADB9821}">ARRAY [0..7] OF BYTE</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.DimmerControl.command_mode</Name>
+							<Comment><![CDATA[ 1: manual , 0: commuication]]></Comment>
+							<Type GUID="{B06D26C8-71DC-62D0-9A93-9E8C7ADB9810}">ARRAY [0..7] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.DimmerControl.stOut_PcCom</Name>
+							<Comment><![CDATA[ linked to the port in the TwinCAT System Manager ]]></Comment>
+							<Type GUID="{D14B30D7-18A5-4E6F-8584-279BC490D7E5}" Namespace="Tc2_SerialCom">PcComOutData</Type>
+						</Var>
 					</Vars>
 					<TaskPouOids>
 						<TaskPouOid Prio="20" OTCID="#x08502001"/>
@@ -8208,11 +8353,157 @@ External Setpoint Generation:
 				</Instance>
 			</Project>
 		</Plc>
-		<Io/>
+		<Io>
+			<Device Id="1" DevType="11" AmsPort="28673">
+				<Name>Device 1 (COM Port)</Name>
+				<AddressInfo>
+					<Io>
+						<Port>1016</Port>
+					</Io>
+				</AddressInfo>
+				<Image Id="2" AddrType="1" ImageType="3">
+					<Name>Image</Name>
+				</Image>
+				<Serial Baud="19200" Port="1016" StopBit="1" RsType="1" UPSDisableSysShutdown="true" WaitTimeToShutdown="60" DataSize="64" BufSize="4096" DataBit="8" SyncMode="true" FifoSize="16" ComPortNo="1" Timeout="300"/>
+			</Device>
+		</Io>
 	</Project>
 	<Mappings>
-		<MappingInfo Identifier="{05000010-2001-0850-1000-040300205008}" Id="#x02030010" Watchdog="14000000040000000400000004000000"/>
+		<MappingInfo Identifier="{00000000-2001-0850-0020-500820000403}" Id="#x02030010"/>
+		<MappingInfo Identifier="{05000010-2001-0850-1000-040300205008}" Id="#x02030020" Watchdog="14000000040000000400000004000000"/>
 		<OwnerA Name="TIPC^Untitled1^Untitled1 Instance">
+			<OwnerB Name="TIID^Device 1 (COM Port)">
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[0]" VarB="Inputs^Data1"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[10]" VarB="Inputs^Data11"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[11]" VarB="Inputs^Data12"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[12]" VarB="Inputs^Data13"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[13]" VarB="Inputs^Data14"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[14]" VarB="Inputs^Data15"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[15]" VarB="Inputs^Data16"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[16]" VarB="Inputs^Data17"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[17]" VarB="Inputs^Data18"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[18]" VarB="Inputs^Data19"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[19]" VarB="Inputs^Data20"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[1]" VarB="Inputs^Data2"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[20]" VarB="Inputs^Data21"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[21]" VarB="Inputs^Data22"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[22]" VarB="Inputs^Data23"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[23]" VarB="Inputs^Data24"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[24]" VarB="Inputs^Data25"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[25]" VarB="Inputs^Data26"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[26]" VarB="Inputs^Data27"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[27]" VarB="Inputs^Data28"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[28]" VarB="Inputs^Data29"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[29]" VarB="Inputs^Data30"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[2]" VarB="Inputs^Data3"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[30]" VarB="Inputs^Data31"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[31]" VarB="Inputs^Data32"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[32]" VarB="Inputs^Data33"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[33]" VarB="Inputs^Data34"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[34]" VarB="Inputs^Data35"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[35]" VarB="Inputs^Data36"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[36]" VarB="Inputs^Data37"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[37]" VarB="Inputs^Data38"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[38]" VarB="Inputs^Data39"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[39]" VarB="Inputs^Data40"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[3]" VarB="Inputs^Data4"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[40]" VarB="Inputs^Data41"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[41]" VarB="Inputs^Data42"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[42]" VarB="Inputs^Data43"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[43]" VarB="Inputs^Data44"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[44]" VarB="Inputs^Data45"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[45]" VarB="Inputs^Data46"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[46]" VarB="Inputs^Data47"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[47]" VarB="Inputs^Data48"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[48]" VarB="Inputs^Data49"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[49]" VarB="Inputs^Data50"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[4]" VarB="Inputs^Data5"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[50]" VarB="Inputs^Data51"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[51]" VarB="Inputs^Data52"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[52]" VarB="Inputs^Data53"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[53]" VarB="Inputs^Data54"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[54]" VarB="Inputs^Data55"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[55]" VarB="Inputs^Data56"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[56]" VarB="Inputs^Data57"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[57]" VarB="Inputs^Data58"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[58]" VarB="Inputs^Data59"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[59]" VarB="Inputs^Data60"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[5]" VarB="Inputs^Data6"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[60]" VarB="Inputs^Data61"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[61]" VarB="Inputs^Data62"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[62]" VarB="Inputs^Data63"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[63]" VarB="Inputs^Data64"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[6]" VarB="Inputs^Data7"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[7]" VarB="Inputs^Data8"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[8]" VarB="Inputs^Data9"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^D[9]" VarB="Inputs^Data10"/>
+				<Link VarA="PlcTask Inputs^MAIN.DimmerControl.stIn_PcCom^SerStatus" VarB="Inputs^Status"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[0]" VarB="Outputs^Data1"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[10]" VarB="Outputs^Data11"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[11]" VarB="Outputs^Data12"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[12]" VarB="Outputs^Data13"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[13]" VarB="Outputs^Data14"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[14]" VarB="Outputs^Data15"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[15]" VarB="Outputs^Data16"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[16]" VarB="Outputs^Data17"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[17]" VarB="Outputs^Data18"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[18]" VarB="Outputs^Data19"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[19]" VarB="Outputs^Data20"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[1]" VarB="Outputs^Data2"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[20]" VarB="Outputs^Data21"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[21]" VarB="Outputs^Data22"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[22]" VarB="Outputs^Data23"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[23]" VarB="Outputs^Data24"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[24]" VarB="Outputs^Data25"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[25]" VarB="Outputs^Data26"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[26]" VarB="Outputs^Data27"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[27]" VarB="Outputs^Data28"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[28]" VarB="Outputs^Data29"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[29]" VarB="Outputs^Data30"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[2]" VarB="Outputs^Data3"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[30]" VarB="Outputs^Data31"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[31]" VarB="Outputs^Data32"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[32]" VarB="Outputs^Data33"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[33]" VarB="Outputs^Data34"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[34]" VarB="Outputs^Data35"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[35]" VarB="Outputs^Data36"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[36]" VarB="Outputs^Data37"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[37]" VarB="Outputs^Data38"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[38]" VarB="Outputs^Data39"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[39]" VarB="Outputs^Data40"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[3]" VarB="Outputs^Data4"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[40]" VarB="Outputs^Data41"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[41]" VarB="Outputs^Data42"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[42]" VarB="Outputs^Data43"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[43]" VarB="Outputs^Data44"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[44]" VarB="Outputs^Data45"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[45]" VarB="Outputs^Data46"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[46]" VarB="Outputs^Data47"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[47]" VarB="Outputs^Data48"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[48]" VarB="Outputs^Data49"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[49]" VarB="Outputs^Data50"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[4]" VarB="Outputs^Data5"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[50]" VarB="Outputs^Data51"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[51]" VarB="Outputs^Data52"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[52]" VarB="Outputs^Data53"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[53]" VarB="Outputs^Data54"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[54]" VarB="Outputs^Data55"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[55]" VarB="Outputs^Data56"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[56]" VarB="Outputs^Data57"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[57]" VarB="Outputs^Data58"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[58]" VarB="Outputs^Data59"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[59]" VarB="Outputs^Data60"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[5]" VarB="Outputs^Data6"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[60]" VarB="Outputs^Data61"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[61]" VarB="Outputs^Data62"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[62]" VarB="Outputs^Data63"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[63]" VarB="Outputs^Data64"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[6]" VarB="Outputs^Data7"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[7]" VarB="Outputs^Data8"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[8]" VarB="Outputs^Data9"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^D[9]" VarB="Outputs^Data10"/>
+				<Link VarA="PlcTask Outputs^MAIN.DimmerControl.stOut_PcCom^SerCtrl" VarB="Outputs^Ctrl"/>
+			</OwnerB>
 			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^Simu1">
 				<Link VarA="PlcTask Inputs^GVL.axisControls[1].Axis.NcToPlc" VarB="Outputs^ToPlc"/>
 				<Link VarA="PlcTask Outputs^GVL.axisControls[1].Axis.PlcToNc" VarB="Inputs^FromPlc"/>
