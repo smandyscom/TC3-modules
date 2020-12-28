@@ -7,8 +7,13 @@ VAR_INPUT
 	ngCounter : POINTER TO UDINT;
 	
 	productType : BYTE;
+	
+	statusCoaxial : BYTE;
+	statusStripper : BYTE;
 END_VAR
 VAR_OUTPUT
+	commandCoaxial : BYTE;
+	commandStripper : BYTE;
 END_VAR
 VAR
 	//devices
@@ -30,6 +35,9 @@ VAR
 END_VAR
 VAR PERSISTENT
 	serialNGGoal AT%M* : INT ;
+	
+	intensitySoaxial : BYTE := 0;
+	intensityStrip : BYTE := 0;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -43,6 +51,7 @@ IF timeouttimer.Q AND NOT aoiOnline THEN
 	AlarmCode:= eErrorReasons.ERR_OFFLINE;
 END_IF
 aoiTimeoutTimer(PT:= T#5S);
+dimmerSwitchTimer(PT:= T#100MS);
 
 CASE outputState OF
 	//--------------------------------
@@ -177,7 +186,9 @@ ngCylinder := argNgCylinder;
       <LineId Id="707" Count="5" />
       <LineId Id="714" Count="1" />
       <LineId Id="718" Count="0" />
-      <LineId Id="720" Count="44" />
+      <LineId Id="720" Count="0" />
+      <LineId Id="858" Count="0" />
+      <LineId Id="721" Count="43" />
       <LineId Id="816" Count="0" />
       <LineId Id="765" Count="43" />
       <LineId Id="815" Count="0" />
