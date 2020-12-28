@@ -18,6 +18,8 @@ VAR
 	aoiOut2Grade AT%I* : BOOL ; //ok/ng
 	
 	aoiTrigger AT%Q* : BOOL;
+	aoiBGSxEnable AT%Q* : BOOL; // 1: enable BGSx inspection , 0: disenable as regular V-Top
+	
 	aoiOnline AT%M* : BOOL;
 	//internal
 	
