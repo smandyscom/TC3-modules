@@ -43,8 +43,8 @@ END_VAR
 VAR PERSISTENT
 	serialNGGoal AT%M* : INT ;
 	
-	intensityCoaxial : BYTE := 0;
-	intensityStrip : BYTE := 0;
+	intensityCoaxial AT%M* : BYTE := 0;
+	intensityStrip AT%M* : BYTE := 0;
 END_VAR
 VAR CONSTANT
 	CHECK_REGULAR : INT := 0;

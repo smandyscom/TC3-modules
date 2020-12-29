@@ -3,15 +3,15 @@
   <POU Name="RunDimmerControl" Id="{9f52cc66-4117-07fc-19a5-b7ef7ea78928}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK RunDimmerControl EXTENDS RunUnitGeneric
 VAR_INPUT
-	mode : INT; //idle = 0, commissioning = 1(switch mode change is forbidden);
+	mode : bool; //idle = 0, commissioning = 1(switch mode change is forbidden);
 	
 	//Application layer
 	command_intensity AT%Q* : ARRAY[0..7] OF BYTE;
 	command_mode AT%Q* : ARRAY[0..7] OF BOOL; // 1: manual , 0: commuication
 END_VAR
 VAR_OUTPUT
-	status_intensity : ARRAY[0..7] OF BYTE;
-	status_mode : ARRAY[0..7] OF BOOL;
+	status_intensity AT%I* : ARRAY[0..7] OF BYTE;
+	status_mode AT%I* : ARRAY[0..7] OF BOOL;
 	
 	ePcComCtrlErrorID	: ComError_t;
 END_VAR
