@@ -6,10 +6,11 @@ VAR_INPUT
 	ngBinReady : BOOL;
 	ngCounter : POINTER TO UDINT;
 	
-	productType : BYTE;
+	productType : BYTE; // input , 0:S 1:V 2: BGSx
 	
 	statusCoaxial : BYTE;
 	statusStripper : BYTE;
+	
 END_VAR
 VAR_OUTPUT
 	commandCoaxial : BYTE;
@@ -22,22 +23,32 @@ VAR
 	aoiOut1Done AT%I* : BOOL ; //done
 	aoiOut2Grade AT%I* : BOOL ; //ok/ng
 	
-	aoiTrigger AT%Q* : BOOL;
-	aoiBGSxEnable AT%Q* : BOOL; // 1: enable BGSx inspection , 0: disenable as regular V-Top
-	
+	aoiTrigger AT%Q* : BOOL;	
 	aoiOnline AT%M* : BOOL;
+	aoiBGSxEnable AT%Q* : BOOL; // 1: enable BGSx inspection , 0: disenable as regular V-Top
 	//internal
 	
 	commIdTrigger AT%Q* : DWORD;
+	
 	aoiTimeoutTimer : ton;
+	aoiSwitchingTimer : ton;
+	aoiOverallGrade : BOOL;
 	//
 	serialNGCounter : INT;
+	
+	//
+	currentCheck : INT := CHECK_REGULAR;
+	targetCheck : INT := CHECK_BGSx;
 END_VAR
 VAR PERSISTENT
 	serialNGGoal AT%M* : INT ;
 	
-	intensitySoaxial : BYTE := 0;
+	intensityCoaxial : BYTE := 0;
 	intensityStrip : BYTE := 0;
+END_VAR
+VAR CONSTANT
+	CHECK_REGULAR : INT := 0;
+	CHECK_BGSx : INT :=1;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -50,8 +61,8 @@ timeouttimer.IN := (NOT  aoiOnline);
 IF timeouttimer.Q AND NOT aoiOnline THEN
 	AlarmCode:= eErrorReasons.ERR_OFFLINE;
 END_IF
-aoiTimeoutTimer(PT:= T#5S);
-dimmerSwitchTimer(PT:= T#100MS);
+aoiTimeoutTimer(PT:= T#2S);
+aoiSwitchingTimer(pt :=T#100MS);
 
 CASE outputState OF
 	//--------------------------------
@@ -76,44 +87,101 @@ CASE outputState OF
 		transitionByte.0 := ngCylinder^.Execute(eCylinderCommands.COMMAND_A); //alway extend
 		transitionByte.1 := NOT aoiOut1Done; //check aoi-done off
 		
-		//20200305 , aoi result would retained last status??
-		//transitionByte.2 := NOT aoiOut2Grade; //check aoi-result as NG (fuse)
-		
 		bSerialTransition:= (transitionByte = 16#3);
 		IF bSerialTransition THEN
 			atomicOperation := TRUE;
+			
+			currentCheck := CHECK_REGULAR; //reset
+			targetCheck  := CHECK_REGULAR;
+			IF productType = 2 THEN
+				targetCheck := CHECK_BGSx;
+			END_IF
+			
+			IF NOT SlotBase^.Valid THEN
+				NextState := 16#230; //no material , leave	
+			END_IF
+		ELSE
+			//--------------------------
+			//await mechanism switching	
+			//--------------------------
 		END_IF
+	
+	//--------------------------------
+	//	Cyclic Trigger-Get Result : Start
+	//--------------------------------
 	16#201:
-		IF SlotBase^.Valid THEN
+		IF NOT aoiSwitchingTimer.IN THEN
+			aoiSwitchingTimer.IN := TRUE;
+		END_IF
+		aoiTrigger := FALSE; //reset
+	
+		CASE currentCheck OF
+			CHECK_REGULAR :
+				aoiBGSxEnable := FALSE;
+				bSerialTransition := THIS^.switchDimmer(TRUE,FALSE) AND aoiSwitchingTimer.Q; // turn coaxial on , strip off
+			CHECK_BGSx :
+				aoiBGSxEnable := TRUE;
+				bSerialTransition := THIS^.switchDimmer(FALSE,TRUE) AND aoiSwitchingTimer.Q; // turn coaxial off , strip on
+		END_CASE
+	
+		IF bSerialTransition THEN
 			aoiTrigger := TRUE; //set aoi-trigger on
 			aoiTimeoutTimer.IN := TRUE;
-			bSerialTransition := TRUE;
+			aoiSwitchingTimer.IN := FALSE; //reset for re-enter
 		ELSE
-			//no material , leave	
-			NextState := 16#205;
+			//await dimmer switching
 		END_IF
+		
 	16#202:
-		bSerialTransition := aoiOut1Done;
-		IF aoiTimeoutTimer.Q AND NOT bSerialTransition THEN
+		bSerialTransition := aoiOut1Done OR aoiTimeoutTimer.Q;
+		IF aoiTimeoutTimer.Q THEN
 			AlarmCode := eErrorReasons.ERR_OFFLINE;
-			NextState := 16#204;
+			aoiOverallGrade := FALSE; // once timeout , should be set as NG to be safe
 		END_IF
 	16#203:
 		bSerialTransition := NOT aoiOut1Done;
 		IF bSerialTransition THEN 
-			atomicOperation := false;
+			aoiTimeoutTimer.IN := FALSE; //reset
+			aoiOverallGrade := aoiOverallGrade AND aoiOut2Grade; // inclusive
+			
+			IF currentCheck = targetCheck THEN
+				atomicOperation := FALSE;
+				nextstate := 16#220;			  // conclude and output
+			ELSE
+				currentCheck := currentCheck +1 ; // do next check
+				nextstate := 16#201;
+			END_IF
+		END_IF
+	//--------------------------------
+	//	Cyclic Trigger-Get Result : End
+	//--------------------------------
+	
+	
+		//-------------------------
+		//	Output
+		//-------------------------
+	16#220:
+		IF commIdTrigger <> SlotBase^.Id THEN
 			commIdTrigger := SlotBase^.Id; //trigger the data logger
 		END_IF
-	16#204:
-		//wait aoi-done on
-		IF  aoiTimeoutTimer.Q OR NOT aoiOut2Grade THEN
-			//-------------
-			//	NG
-			//-------------
-			SlotBase^.Valid := FALSE; //set as inexsited
-			bSerialTransition:=	ngBinReady;
+		
+		//--------------------------
+		//	OK : open gate
+		//	NG : await until NG bin ready
+		//--------------------------
+		bSerialTransition := (aoiOverallGrade AND_THEN ngCylinder^.Execute(eCylinderCommands.COMMAND_B)) 
+							OR ( (NOT aoiOverallGrade) AND_THEN ngBinReady);
+		
+		IF bSerialTransition THEN
+			nextstate := 16#230;
 			
-			IF bSerialTransition THEN
+			//-------------------------
+			//	Data handling and warning
+			//-------------------------
+			IF aoiOverallGrade THEN
+				serialNGCounter := 0; //reset
+			ELSE
+				SlotBase^.Valid := FALSE; //set as inexsited	
 				serialNGCounter := serialNGCounter+1;
 				IF  serialNGCounter >=  serialNGGoal THEN
 					THIS^.AlarmCode := eErrorReasons.ERR_CONSECUTIVE_NG;
@@ -121,32 +189,21 @@ CASE outputState OF
 				END_IF
 				
 				IF ngCounter<>0 THEN
-					ngCounter^ := ngCounter^ +1; //count-up
-				END_IF			
-			END_IF
-						
-		ELSIF  aoiOut2Grade THEN
-			//--------------
-			//	OK 
-			//--------------
-			bSerialTransition := ngCylinder^.Execute(eCylinderCommands.COMMAND_B); //open gate
-			IF bSerialTransition THEN
-				serialNGCounter := 0; //reset
+					ngCounter^ := ngCounter^ +1; //count-up NG bin counter
+				END_IF		
 			END_IF
 		ELSE
-			//--------------------------
-			// wait until aoi_done raise
-			//--------------------------
+			//await machansim working
 		END_IF
-	16#205:
-		aoiTrigger := FALSE; //reset
-		aoiTimeoutTimer.IN := FALSE; //reset
-		
+		//-------------------------
+		// Task closed
+		//------------------------	
+	16#230:
+			
 		IF NOT SlotBase^.Valid AND previousNode <>0 AND_THEN previousNode^.isPurged THEN
 			isPurged := true; // i am purged
 		END_IF
-		
-		
+			
 		NextState := eSpecialStates.SLAVE_WORK_DONE;
 END_CASE]]></ST>
     </Implementation>
@@ -182,17 +239,115 @@ ngCylinder := argNgCylinder;
 ]]></ST>
       </Implementation>
     </Method>
+    <Method Name="switchDimmer" Id="{42412d7e-0abc-04d1-36f3-38dfcdb4eb06}">
+      <Declaration><![CDATA[METHOD switchDimmer : BOOL
+VAR_INPUT
+	enableCoaxial : BOOL;
+	enableStrip : BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF enableCoaxial THEN
+	commandCoaxial := intensityCoaxial;
+ELSE
+	commandCoaxial := 0;
+END_IF
+
+IF enableStrip THEN
+	commandStripper := intensityStrip;
+ELSE
+	commandStripper := 0;
+END_IF
+
+
+//when status matched command means matched
+switchDimmer := (commandCoaxial = statusCoaxial) AND (commandStripper = statusStripper);]]></ST>
+      </Implementation>
+    </Method>
     <LineIds Name="RunAoiInspectionV1">
-      <LineId Id="707" Count="5" />
-      <LineId Id="714" Count="1" />
-      <LineId Id="718" Count="0" />
-      <LineId Id="720" Count="0" />
-      <LineId Id="858" Count="0" />
-      <LineId Id="721" Count="43" />
-      <LineId Id="816" Count="0" />
-      <LineId Id="765" Count="43" />
-      <LineId Id="815" Count="0" />
-      <LineId Id="809" Count="5" />
+      <LineId Id="1223" Count="9" />
+      <LineId Id="1363" Count="0" />
+      <LineId Id="1233" Count="22" />
+      <LineId Id="1257" Count="0" />
+      <LineId Id="1262" Count="2" />
+      <LineId Id="1364" Count="0" />
+      <LineId Id="1416" Count="3" />
+      <LineId Id="1415" Count="0" />
+      <LineId Id="1353" Count="0" />
+      <LineId Id="1355" Count="0" />
+      <LineId Id="1358" Count="0" />
+      <LineId Id="1357" Count="0" />
+      <LineId Id="1354" Count="0" />
+      <LineId Id="1413" Count="0" />
+      <LineId Id="1359" Count="0" />
+      <LineId Id="1414" Count="0" />
+      <LineId Id="1265" Count="1" />
+      <LineId Id="1429" Count="2" />
+      <LineId Id="1267" Count="0" />
+      <LineId Id="1365" Count="0" />
+      <LineId Id="1367" Count="1" />
+      <LineId Id="1456" Count="0" />
+      <LineId Id="1366" Count="0" />
+      <LineId Id="1332" Count="0" />
+      <LineId Id="1334" Count="0" />
+      <LineId Id="1361" Count="0" />
+      <LineId Id="1337" Count="0" />
+      <LineId Id="1336" Count="0" />
+      <LineId Id="1360" Count="0" />
+      <LineId Id="1338" Count="0" />
+      <LineId Id="1335" Count="0" />
+      <LineId Id="1333" Count="0" />
+      <LineId Id="1341" Count="0" />
+      <LineId Id="1345" Count="1" />
+      <LineId Id="1369" Count="0" />
+      <LineId Id="1351" Count="1" />
+      <LineId Id="1343" Count="0" />
+      <LineId Id="1275" Count="4" />
+      <LineId Id="1458" Count="0" />
+      <LineId Id="1281" Count="4" />
+      <LineId Id="1420" Count="0" />
+      <LineId Id="1459" Count="0" />
+      <LineId Id="1421" Count="0" />
+      <LineId Id="1435" Count="0" />
+      <LineId Id="1422" Count="0" />
+      <LineId Id="1424" Count="1" />
+      <LineId Id="1467" Count="0" />
+      <LineId Id="1423" Count="0" />
+      <LineId Id="1287" Count="0" />
+      <LineId Id="1433" Count="1" />
+      <LineId Id="1432" Count="0" />
+      <LineId Id="1321" Count="0" />
+      <LineId Id="1370" Count="0" />
+      <LineId Id="1374" Count="0" />
+      <LineId Id="1376" Count="1" />
+      <LineId Id="1375" Count="0" />
+      <LineId Id="1392" Count="0" />
+      <LineId Id="1395" Count="0" />
+      <LineId Id="1394" Count="0" />
+      <LineId Id="1390" Count="0" />
+      <LineId Id="1463" Count="2" />
+      <LineId Id="1461" Count="0" />
+      <LineId Id="1460" Count="0" />
+      <LineId Id="1468" Count="0" />
+      <LineId Id="1380" Count="0" />
+      <LineId Id="1426" Count="1" />
+      <LineId Id="1436" Count="0" />
+      <LineId Id="1452" Count="2" />
+      <LineId Id="1437" Count="0" />
+      <LineId Id="1442" Count="0" />
+      <LineId Id="1439" Count="0" />
+      <LineId Id="1441" Count="0" />
+      <LineId Id="1444" Count="7" />
+      <LineId Id="1443" Count="0" />
+      <LineId Id="1440" Count="0" />
+      <LineId Id="1438" Count="0" />
+      <LineId Id="1466" Count="0" />
+      <LineId Id="1428" Count="0" />
+      <LineId Id="1371" Count="2" />
+      <LineId Id="1322" Count="0" />
+      <LineId Id="1324" Count="0" />
+      <LineId Id="1326" Count="3" />
+      <LineId Id="1331" Count="0" />
       <LineId Id="14" Count="0" />
     </LineIds>
     <LineIds Name="RunAoiInspectionV1.FB_init">
@@ -202,6 +357,22 @@ ngCylinder := argNgCylinder;
       <LineId Id="41" Count="0" />
       <LineId Id="38" Count="0" />
       <LineId Id="40" Count="0" />
+    </LineIds>
+    <LineIds Name="RunAoiInspectionV1.switchDimmer">
+      <LineId Id="5" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="8" Count="0" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="20" Count="1" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="18" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
