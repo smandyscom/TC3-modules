@@ -10,6 +10,8 @@ VAR_INPUT
 	
 	okbin : POINTER TO RunBin;
 	ngbin : POINTER TO RunBin;
+	
+	dimmer : POINTER TO RunUnitGeneric;
 END_VAR
 VAR_OUTPUT
 END_VAR
@@ -30,6 +32,8 @@ CASE outputState OF
 		bSerialTransition := bSerialTransition AND loader^.Initialize();
 		bSerialTransition := bSerialTransition AND okbin<>0 AND_THEN okbin^.Initialize();
 		bSerialTransition := bSerialTransition AND ngbin<>0 AND_THEN ngbin^.Initialize();
+		bSerialTransition := bSerialTransition AND dimmer<>0 AND_THEN dimmer^.Initialize();
+		
 	eSpecialStates.INITIAL_STATE_1:
 		bSerialTransition := indexer^.Initialize();
 		IF bSerialTransition THEN
@@ -48,6 +52,7 @@ CASE outputState OF
 		
 		ngbin^.NextState := eSpecialStates.GENERIC_GROUP_START;
 		okbin^.NextState := eSpecialStates.GENERIC_GROUP_START;
+		dimmer^.NextState := eSpecialStates.GENERIC_GROUP_START;
 		
 		bSerialTransition := TRUE; //into void state
 END_CASE]]></ST>
@@ -59,6 +64,7 @@ END_CASE]]></ST>
       <LineId Id="18" Count="4" />
       <LineId Id="51" Count="0" />
       <LineId Id="68" Count="1" />
+      <LineId Id="91" Count="1" />
       <LineId Id="23" Count="4" />
       <LineId Id="29" Count="3" />
       <LineId Id="34" Count="1" />
@@ -67,6 +73,7 @@ END_CASE]]></ST>
       <LineId Id="52" Count="0" />
       <LineId Id="70" Count="1" />
       <LineId Id="73" Count="0" />
+      <LineId Id="93" Count="0" />
       <LineId Id="72" Count="0" />
       <LineId Id="38" Count="0" />
       <LineId Id="16" Count="0" />
