@@ -61,7 +61,7 @@ timeouttimer.IN := (NOT  aoiOnline);
 IF timeouttimer.Q AND NOT aoiOnline THEN
 	AlarmCode:= eErrorReasons.ERR_OFFLINE;
 END_IF
-aoiTimeoutTimer(PT:= T#2S);
+aoiTimeoutTimer(PT:= T#5S);
 aoiSwitchingTimer(pt :=T#100MS);
 
 CASE outputState OF
