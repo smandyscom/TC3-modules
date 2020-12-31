@@ -20,7 +20,7 @@ VAR
 	//devices
 	ngCylinder : POINTER TO RunCylinder; // normal close cylinder
 	
-	aoiOut1Done AT%I* : BOOL ; //done
+	aoiOut1Done AT%I* : BOOL ; //done , if error comes , this line wont be on
 	aoiOut2Grade AT%I* : BOOL ; //ok/ng
 	
 	aoiTrigger AT%Q* : BOOL;	
@@ -90,6 +90,7 @@ CASE outputState OF
 		bSerialTransition:= (transitionByte = 16#3);
 		IF bSerialTransition THEN
 			atomicOperation := TRUE;
+			aoiOverallGrade := TRUE; //preset
 			
 			currentCheck := CHECK_REGULAR; //reset
 			targetCheck  := CHECK_REGULAR;
@@ -113,7 +114,7 @@ CASE outputState OF
 		IF NOT aoiSwitchingTimer.IN THEN
 			aoiSwitchingTimer.IN := TRUE;
 		END_IF
-		aoiTrigger := FALSE; //reset
+		
 	
 		CASE currentCheck OF
 			CHECK_REGULAR :
@@ -135,12 +136,13 @@ CASE outputState OF
 	16#202:
 		bSerialTransition := aoiOut1Done OR aoiTimeoutTimer.Q;
 		IF aoiTimeoutTimer.Q THEN
-			AlarmCode := eErrorReasons.ERR_OFFLINE;
+			AlarmCode := eErrorReasons.ERR_PART_MISSING;
 			aoiOverallGrade := FALSE; // once timeout , should be set as NG to be safe
 		END_IF
 	16#203:
 		bSerialTransition := NOT aoiOut1Done;
 		IF bSerialTransition THEN 
+			aoiTrigger := FALSE; //reset
 			aoiTimeoutTimer.IN := FALSE; //reset
 			aoiOverallGrade := aoiOverallGrade AND aoiOut2Grade; // inclusive
 			
@@ -184,7 +186,7 @@ CASE outputState OF
 				SlotBase^.Valid := FALSE; //set as inexsited	
 				serialNGCounter := serialNGCounter+1;
 				IF  serialNGCounter >=  serialNGGoal THEN
-					THIS^.AlarmCode := eErrorReasons.ERR_CONSECUTIVE_NG;
+					AlarmCode := eErrorReasons.ERR_CONSECUTIVE_NG;
 					serialNGCounter := 0; //reset
 				END_IF
 				
@@ -270,6 +272,7 @@ switchDimmer := (commandCoaxial = statusCoaxial) AND (commandStripper = statusSt
       <LineId Id="1233" Count="22" />
       <LineId Id="1257" Count="0" />
       <LineId Id="1262" Count="2" />
+      <LineId Id="1518" Count="0" />
       <LineId Id="1364" Count="0" />
       <LineId Id="1416" Count="3" />
       <LineId Id="1415" Count="0" />
@@ -304,7 +307,9 @@ switchDimmer := (commandCoaxial = statusCoaxial) AND (commandStripper = statusSt
       <LineId Id="1343" Count="0" />
       <LineId Id="1275" Count="4" />
       <LineId Id="1458" Count="0" />
-      <LineId Id="1281" Count="4" />
+      <LineId Id="1281" Count="3" />
+      <LineId Id="1519" Count="0" />
+      <LineId Id="1285" Count="0" />
       <LineId Id="1420" Count="0" />
       <LineId Id="1459" Count="0" />
       <LineId Id="1421" Count="0" />
