@@ -16,9 +16,15 @@ VAR
 	//
 	tickTime AT%Q*: DWORD ; //in ms
 	commIdTrigger AT%Q* : DWORD;
+	
+	//
+	alignCounter : INT;
 END_VAR
 VAR CONSTANT
 	bScaraReady : INT := 1;
+END_VAR
+VAR PERSISTENT
+	alignIteration : INT := 0;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -55,15 +61,27 @@ CASE outputState OF
 	//----------------------------
 	eSpecialStates.SLAVE_ENTER_PROCEDURE:
 		IF bMaterialOverride THEN
+			alignCounter := 0; //reset
 			bSerialTransition := TRUE;
 		ELSE
 			NextState := 16#207; //bypass
 		END_IF
 	16#201:
 		//Indexer in position , horizonin
-		bSerialTransition := horizon^.Execute(eCylinderCommands.COMMAND_B);
+		bSerialTransition := horizon^.Execute(eCylinderCommands.COMMAND_B) AND clamper^.Execute(eCylinderCommands.COMMAND_A);
 	16#202:
-		bSerialTransition := clamper^.Execute(eCylinderCommands.COMMAND_B);
+		transitionByte.0 := clamper^.Execute(eCylinderCommands.COMMAND_B);
+		transitionByte.1 := alignCounter >= alignIteration;
+		
+		IF transitionByte = 1 THEN
+			alignCounter := alignCounter+1;
+			NextState := 16#201; // realign
+		ELSIF transitionByte = 3 THEN
+			 bSerialTransition := TRUE ; // go ahead
+		ELSE
+			// clamper mechanical movement
+		END_IF
+	
 	16#203:
 		transitionByte.0 := horizon^.Execute(eCylinderCommands.COMMAND_A);
 		transitionByte.1 := TRUE;
@@ -167,11 +185,18 @@ configSnap := argConfigSnap;]]></ST>
       <LineId Id="204" Count="13" />
       <LineId Id="198" Count="2" />
       <LineId Id="114" Count="0" />
-      <LineId Id="170" Count="1" />
+      <LineId Id="170" Count="0" />
+      <LineId Id="522" Count="0" />
+      <LineId Id="171" Count="0" />
       <LineId Id="173" Count="1" />
       <LineId Id="172" Count="0" />
       <LineId Id="169" Count="0" />
-      <LineId Id="115" Count="5" />
+      <LineId Id="115" Count="2" />
+      <LineId Id="523" Count="2" />
+      <LineId Id="518" Count="1" />
+      <LineId Id="526" Count="4" />
+      <LineId Id="520" Count="1" />
+      <LineId Id="119" Count="1" />
       <LineId Id="323" Count="0" />
       <LineId Id="128" Count="0" />
       <LineId Id="130" Count="0" />
