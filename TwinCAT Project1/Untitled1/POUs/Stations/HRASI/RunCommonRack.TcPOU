@@ -34,7 +34,7 @@ VAR_STAT PERSISTENT
 	// LCM(84,81,72) = 4536
 	// LCM(84,81) = 2268
 	// LCM(81,72) = 648  , 8 x F3/F2/F1 , 9 x EP , about 2 hours
-	Bounds : ARRAY[0..5] OF BYTE := [81,88,81,40,40,72]; // 5th material - Exceed Prefilter
+	Bounds : ARRAY[0..5] OF BYTE := [84,88,81,40,40,72]; // 5th material - Exceed Prefilter
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[
