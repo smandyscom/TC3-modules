@@ -61,7 +61,7 @@ timeouttimer.IN := (NOT  aoiOnline);
 IF timeouttimer.Q AND NOT aoiOnline THEN
 	AlarmCode:= eErrorReasons.ERR_OFFLINE;
 END_IF
-aoiTimeoutTimer(PT:= T#5S);
+aoiTimeoutTimer(PT:= T#30S);
 aoiSwitchingTimer(pt :=T#100MS);
 
 CASE outputState OF
@@ -98,7 +98,7 @@ CASE outputState OF
 				targetCheck := CHECK_BGSx;
 			END_IF
 			
-			IF NOT SlotBase^.Valid THEN
+			IF NOT bMaterialOverride THEN
 				NextState := 16#230; //no material , leave	
 			END_IF
 		ELSE
@@ -139,10 +139,13 @@ CASE outputState OF
 			AlarmCode := eErrorReasons.ERR_PART_MISSING;
 			aoiOverallGrade := FALSE; // once timeout , should be set as NG to be safe
 		END_IF
+		IF bSerialTransition THEN
+			aoiTrigger := FALSE; //reset
+		END_IF
 	16#203:
 		bSerialTransition := NOT aoiOut1Done;
 		IF bSerialTransition THEN 
-			aoiTrigger := FALSE; //reset
+			
 			aoiTimeoutTimer.IN := FALSE; //reset
 			aoiOverallGrade := aoiOverallGrade AND aoiOut2Grade; // inclusive
 			
@@ -307,7 +310,9 @@ switchDimmer := (commandCoaxial = statusCoaxial) AND (commandStripper = statusSt
       <LineId Id="1343" Count="0" />
       <LineId Id="1275" Count="4" />
       <LineId Id="1458" Count="0" />
-      <LineId Id="1281" Count="3" />
+      <LineId Id="1281" Count="0" />
+      <LineId Id="1572" Count="2" />
+      <LineId Id="1282" Count="2" />
       <LineId Id="1519" Count="0" />
       <LineId Id="1285" Count="0" />
       <LineId Id="1420" Count="0" />

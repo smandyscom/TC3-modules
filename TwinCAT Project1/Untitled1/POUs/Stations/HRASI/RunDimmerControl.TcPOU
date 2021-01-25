@@ -135,7 +135,7 @@ CASE outputState OF
 	eSpecialStates.GENERIC_GROUP_START:
 		//IDLE , check if command changed compared to status
 		
-		IF mode=0 THEN
+		IF not mode THEN
 			//Manual mode : scan configuration 
 			FOR nCounter :=0 TO channelNum-1 DO
 				IF NOT bSerialTransition THEN
